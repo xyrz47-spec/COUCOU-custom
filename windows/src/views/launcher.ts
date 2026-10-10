@@ -123,7 +123,9 @@ export function buildLauncher(actions: ViewActions): ViewHost {
 
   function tile(item: LauncherItem, index: number): HTMLElement {
     // A mini Mochi until the icon comes, and for good when there is none.
-    const pill = createMiniBot(tilePill(item), 32);
+    // Under the pointer he dances; an icon hops instead (style.css).
+    let hovered = false;
+    const pill = createMiniBot(tilePill(item), 32, () => hovered);
     const art = h("div", { class: "launch-art mochi" }, pill);
     const wear = (picture: HTMLElement) => {
       const canvas = pill.querySelector("canvas");
@@ -147,7 +149,7 @@ export function buildLauncher(actions: ViewActions): ViewHost {
         if (canvas) wear(canvas);
       });
     }
-    return h(
+    const button = h(
       "button",
       {
         class: "launch-tile",
@@ -160,6 +162,16 @@ export function buildLauncher(actions: ViewActions): ViewHost {
       art,
       h("span", { class: "launch-name", text: item.name || item.target }),
     );
+    // The colour the tile lights up in under the pointer, as "r, g, b".
+    const colour = parseInt(tileColor(item.target).slice(1), 16);
+    button.style.setProperty("--tile", `${(colour >> 16) & 255}, ${(colour >> 8) & 255}, ${colour & 255}`);
+    button.addEventListener("mouseenter", () => {
+      hovered = true;
+    });
+    button.addEventListener("mouseleave", () => {
+      hovered = false;
+    });
+    return button;
   }
 
   return {
