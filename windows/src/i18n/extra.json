@@ -4107,6 +4107,30 @@
    "ru": "Навыки не найдены.",
    "id": "Skill tidak ditemukan.",
    "ko": "스킬이 없습니다."
+  },
+  "Lyrics": {
+   "zh-Hans": "歌词",
+   "hi": "बोल",
+   "es": "Letra",
+   "ar": "كلمات الأغنية",
+   "fr": "Paroles",
+   "bn": "গানের কথা",
+   "pt-BR": "Letra",
+   "ru": "Текст песни",
+   "id": "Lirik",
+   "ko": "가사 보기"
+  },
+  "{title} {artist} lyrics": {
+   "zh-Hans": "{title} {artist} 歌词",
+   "hi": "{title} {artist} बोल",
+   "es": "{title} {artist} letra",
+   "ar": "{title} {artist} كلمات",
+   "fr": "{title} {artist} paroles",
+   "bn": "{title} {artist} গানের কথা",
+   "pt-BR": "{title} {artist} letra",
+   "ru": "{title} {artist} текст песни",
+   "id": "{title} {artist} lirik",
+   "ko": "{title} {artist} 가사"
   }
  }
 }

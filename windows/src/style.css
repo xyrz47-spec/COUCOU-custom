@@ -3052,3 +3052,13 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   0%, 100% { transform: scaleY(0.25); }
   50% { transform: scaleY(1); }
 }
+
+/* The lyrics button of the big player (views/spotify.ts). */
+.np-lyrics {
+  display: none;
+  margin-right: 14px;
+}
+
+.overview.player .np-lyrics {
+  display: grid;
+}

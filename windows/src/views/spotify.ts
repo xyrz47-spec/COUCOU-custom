@@ -318,9 +318,20 @@ export function buildSpotifyCard(): SpotifyCardHost {
     (f) => setVolume(f * 100),
   );
   const volumeBox = h("div", { class: "np-volume" }, volIcon, volume.el);
+  // The big player only (style.css): the song's lyrics, looked up in the
+  // browser. Coucou fetches and shows none itself.
+  const lyrics = iconButton(ICONS.lyrics, 10, 2.2, () => {
+    const track = Spotify.state.track;
+    if (!track || isAd(track)) return;
+    const query = t("{title} {artist} lyrics", { title: track.title, artist: track.artist }).trim();
+    void Bridge.openUrl(`https://www.google.com/search?q=${encodeURIComponent(query)}`);
+  });
+  lyrics.classList.add("np-lyrics");
+  lyrics.style.color = "#C5C8CD";
   const controls = h("div", { class: "np-controls" },
     h("div", { class: "np-buttons" }, shuffle, prev, play, next, repeat),
     h("div", { class: "grow" }),
+    lyrics,
     volumeBox,
   );
   const playingEl = h("div", { class: "np-card" }, head, progressRow, controls);
@@ -407,6 +418,8 @@ export function buildSpotifyCard(): SpotifyCardHost {
     shuffle.title = s.shuffle ? t("Shuffle on") : t("Shuffle off");
     repeat.style.color = s.repeat ? green : "#6B7079";
     repeat.title = s.repeat ? t("Repeat on") : t("Repeat off");
+    lyrics.title = t("Lyrics");
+    lyrics.style.display = isAd(track) ? "none" : "";
     prev.title = t("Previous");
     next.title = t("Next");
     if (playIcon !== s.playing) {

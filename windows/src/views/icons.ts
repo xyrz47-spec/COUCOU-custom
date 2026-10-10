@@ -25,6 +25,8 @@ export const ICONS = {
   // arrow.up.left.and.arrow.down.right / the same pointing in (stroke)
   expand: "M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7",
   shrink: "M20 10h-6V4M4 14h6v6M14 10l6-6M10 14l-6 6",
+  // text.alignleft (stroke): lines of a song
+  lyrics: "M4 6.5h16M4 12h16M4 17.5h10",
   // chevron.up
   chevronUp: "M5.5 15 12 8.5 18.5 15",
   // checkmark
