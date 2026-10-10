@@ -153,6 +153,18 @@ export const Bridge = {
   /** Renames the skill's SKILL.md out of Claude Code's sight, or back. Throws when it could not. */
   skillSetEnabled: (path: string, enabled: boolean) => callOrThrow<void>("skill_set_enabled", { path, enabled }),
   skillReveal: (path: string) => call<void>("skill_reveal", { path }),
+  /** Skills matching `query` on skills.sh (skill_store.rs). Throws when the search could not be made. */
+  skillsSearch: (query: string, verifiedOnly: boolean) =>
+    callOrThrow<FoundSkill[]>("skills_search", { query, verifiedOnly }),
+  /** The projects a skill can be added to: the folders Claude Code has worked in. */
+  skillsProjects: () => call<string[]>("skills_projects"),
+  /** Adds a found skill to the user's skills (`dest` "") or a project's. Throws with the reason. */
+  skillInstall: (source: string, skillId: string, dest: string) =>
+    callOrThrow<string>("skill_install", { source, skillId, dest }),
+  /** Copies an installed skill to the user's skills ("") or a project's. */
+  skillCopy: (path: string, dest: string) => callOrThrow<string>("skill_copy", { path, dest }),
+  /** Sends an installed skill's folder to the system's bin. */
+  skillRemove: (path: string) => callOrThrow<void>("skill_remove", { path }),
 
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
@@ -279,6 +291,17 @@ export interface SkillInfo {
   /** The skill's folder. */
   path: string;
   enabled: boolean;
+}
+
+/** A skill found on skills.sh (src-tauri/src/skill_store.rs). */
+export interface FoundSkill {
+  /** `owner/repo` on GitHub. */
+  source: string;
+  skillId: string;
+  name: string;
+  installs: number;
+  /** From one of the publishers skill_store.rs lists. */
+  verified: boolean;
 }
 
 export interface SkillGroup {

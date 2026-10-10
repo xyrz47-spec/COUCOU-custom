@@ -25,6 +25,7 @@ import { buildWardrobe } from "./wardrobe";
 import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
 import { buildLauncher } from "./launcher";
+import { buildSkills } from "./skills";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
 import type { ViewCommand } from "../island/shortcuts";
@@ -113,6 +114,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const tabChat = h("button", { class: "tab", title: tl("Ask"), onclick: () => go("prompt") }, svg(ICONS.bubble, 13));
   const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 13));
   const tabApps = h("button", { class: "tab", title: tl("Launcher"), onclick: () => go("launcher") }, svg(ICONS.grid, 13));
+  const tabSkills = h("button", { class: "tab", title: tl("Skills"), onclick: () => go("skills") }, svg(ICONS.sparkle, 13));
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 14));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 14));
@@ -131,7 +133,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { id: "header" },
-    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, tabApps),
+    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, tabApps, tabSkills),
     h("div", { class: "header-actions" }, planPills, gearBtn, soundBtn),
   );
   const headerActions = el.lastElementChild as HTMLElement;
@@ -144,6 +146,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
       tabChat.classList.toggle("on", v === "prompt");
       tabDrop.classList.toggle("on", v === "upload");
       tabApps.classList.toggle("on", v === "launcher");
+      tabSkills.classList.toggle("on", v === "skills");
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
       gearBtn.append(svg(v === "settings" ? ICONS.gearFill : ICONS.gear, 14));
@@ -208,9 +211,29 @@ function buildOverview(actions: ViewActions): ViewHost {
     },
   });
   let playerIcon: boolean | null = null;
+  /** The size of Spotify's card at the last sync, to see it change. */
+  let wasBig: boolean | null = null;
   const left = card(null, leftBody, jump, playerToggle);
   const pills = h("div", { class: "pills" });
-  const right = card(null, pills);
+  // Past four, the pills are on pages of four: the arrows turn them, so every
+  // pill can be reached with the mouse alone.
+  const PILLS_PER_PAGE = 4;
+  let pillPage = 0;
+  let pillPages = 1;
+  const turn = (delta: number) => {
+    pillPage = (pillPage + delta + pillPages) % pillPages;
+    actions.blip();
+    State.notify();
+  };
+  const pageLabel = h("span", {});
+  const pager = h(
+    "div",
+    { class: "pill-pager" },
+    h("button", { onclick: () => turn(-1) }, svg(ICONS.chevronUp, 8, { stroke: 2.8 })),
+    pageLabel,
+    h("button", { onclick: () => turn(1) }, svg(ICONS.chevronDown, 8, { stroke: 2.8 })),
+  );
+  const right = card(null, pills, pager);
   // Opened from a plan pill in the header: stands in for the left card.
   const plan = new PlanCard();
   let planTimer: number | null = null;
@@ -402,7 +425,12 @@ function buildOverview(actions: ViewActions): ViewHost {
       jump.style.display = detailOpen || mode === "plan" || mode === "diff" ? "none" : "";
       // The big player takes the whole island: the pills step aside (style.css).
       const big = mode === "spotify" && State.spotifyPlayerShown;
-      el.classList.toggle("player", big);
+      if (wasBig !== null && wasBig !== big && mode === "spotify") {
+        morphCover(leftBody, () => el.classList.toggle("player", big));
+      } else {
+        el.classList.toggle("player", big);
+      }
+      wasBig = big;
       // The button is there for a song, on the card of either size.
       const song = mode === "spotify" && Spotify.state.track != null;
       playerToggle.style.display = song ? "" : "none";
@@ -420,8 +448,14 @@ function buildOverview(actions: ViewActions): ViewHost {
       highlightRow(rows, State.cardSelection, State.cardSelection !== shownSelection);
       shownSelection = State.cardSelection;
 
-      const others = State.otherTasks.slice(0, 4);
-      const pillKey = others.map((t) => `${t.id}:${t.color}:${t.pillBadge ?? ""}`).join("|");
+      const everyPill = State.otherTasks;
+      pillPages = Math.max(1, Math.ceil(everyPill.length / PILLS_PER_PAGE));
+      pillPage = Math.min(pillPage, pillPages - 1);
+      const others = everyPill.slice(pillPage * PILLS_PER_PAGE, (pillPage + 1) * PILLS_PER_PAGE);
+      pager.style.display = pillPages > 1 ? "" : "none";
+      right.classList.toggle("paged", pillPages > 1);
+      pageLabel.textContent = `${pillPage + 1}/${pillPages}`;
+      const pillKey = `${pillPage}~` + others.map((t) => `${t.id}:${t.color}:${t.pillBadge ?? ""}`).join("|");
       if (pillKey !== pillIds) {
         pillIds = pillKey;
         clear(pills);
@@ -439,6 +473,25 @@ function buildOverview(actions: ViewActions): ViewHost {
       spotifyPill?.sync();
     },
   };
+}
+
+/**
+ * The cover travels between the small card and the big player: it is measured
+ * where it is, the layout changes, and it is drawn from the old place and size
+ * to the new ones. Where a page cannot animate, the layout just changes.
+ */
+function morphCover(scope: HTMLElement, change: () => void) {
+  const art = typeof scope.querySelector === "function" ? scope.querySelector<HTMLElement>(".np-art") : null;
+  const first = art?.getBoundingClientRect?.();
+  change();
+  if (!art || !first || typeof art.animate !== "function") return;
+  const last = art.getBoundingClientRect();
+  if (!first.width || !last.width) return;
+  const from = `translate(${first.left - last.left}px, ${first.top - last.top}px) scale(${first.width / last.width}, ${first.height / last.height})`;
+  art.animate(
+    [{ transformOrigin: "top left", transform: from }, { transformOrigin: "top left", transform: "none" }],
+    { duration: 460, easing: "cubic-bezier(0.2, 0.9, 0.25, 1)" },
+  );
 }
 
 /**
@@ -779,6 +832,13 @@ function buildSettings(actions: ViewActions): ViewHost {
       svg(ICONS.timer, 12),
       autoLabel,
       h("div", { class: "seg" }, ...segButtons),
+      // Any number of seconds, one at a time, with the mouse alone.
+      h(
+        "div",
+        { class: "stepper" },
+        h("button", { onclick: () => actions.setAutoClose(Math.max(3, Math.round(State.settings.autoCloseInterval) - 1)) }, "−"),
+        h("button", { onclick: () => actions.setAutoClose(Math.min(120, Math.round(State.settings.autoCloseInterval) + 1)) }, "+"),
+      ),
     ),
     h(
       "div",
@@ -853,6 +913,7 @@ export function buildViews(
   map.set("recap", buildRecap(actions));
   map.set("wardrobe", buildWardrobe(actions));
   map.set("launcher", buildLauncher(actions));
+  map.set("skills", buildSkills(actions));
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));

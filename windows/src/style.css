@@ -3201,3 +3201,374 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   height: 34px;
   object-fit: cover;
 }
+
+/* ── A batch of small things ───────────────────────────────────────────────────
+   The launcher's tiles leave Mochi his place on the left, as the overview's
+   card does. */
+.launcher .launch-grid {
+  padding: 0 10px 0 112px;
+}
+
+.launcher .launch-empty {
+  padding-left: 104px;
+}
+
+/* Pills past the fourth are on pages (views.ts): two arrows and "1/2" in a
+   strip at the card's right edge. */
+.pill-pager {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 5px;
+  width: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font: 600 8.5px var(--font);
+  font-variant-numeric: tabular-nums;
+  color: var(--dim-3);
+}
+
+.pill-pager button {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--dim);
+  display: grid;
+  place-items: center;
+  cursor: default;
+  transition: background 0.15s, color 0.15s, transform 0.2s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.pill-pager button:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--ink);
+  transform: scale(1.12);
+}
+
+.card.paged .pills {
+  padding-right: 26px;
+}
+
+/* A song title too long for its pill, moving along under the pointer (views/spotify.ts). */
+.pill .lbl.scrolling {
+  text-overflow: clip;
+  text-align: left;
+}
+
+/* Auto-close, a second at a time (the island's settings view). */
+.stepper {
+  display: flex;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.stepper button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #252830;
+  color: var(--ink);
+  font: 600 12px/1 var(--font);
+  cursor: default;
+}
+
+.stepper button:hover {
+  background: #343844;
+}
+
+.stepper button:active {
+  transform: scale(0.9);
+}
+
+/* ── Skills (views/skills.ts) ──────────────────────────────────────────────────
+   The fifth tab: a row to choose with (installed or find, a search field, the
+   folder skills go to), a row of fields to pick from, and the list. */
+.skills .card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px 8px;
+}
+
+.sk-top,
+.sk-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sk-bar {
+  min-height: 20px;
+}
+
+.sk-seg {
+  flex: 0 0 auto;
+  margin-left: 0;
+}
+
+.sk-search,
+.sk-where {
+  height: 24px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  color: var(--ink);
+  outline: none;
+}
+
+.sk-search {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 9px;
+  background: rgba(255, 255, 255, 0.05);
+  font: 400 11.5px var(--font);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.sk-search:focus,
+.sk-where:focus {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.sk-where {
+  flex: 0 0 136px;
+  width: 136px;
+  padding: 0 6px;
+  background: #1b1d22;
+  font: 400 11px var(--font);
+  color-scheme: dark;
+}
+
+.sk-chips {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.sk-chip {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--dim);
+  font: 400 10px var(--font);
+  cursor: default;
+}
+
+.sk-chip:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--ink);
+}
+
+.sk-count {
+  font: 400 10px var(--font);
+  color: var(--dim-3);
+  white-space: nowrap;
+}
+
+.sk-check {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dim-3);
+  font: 400 10.5px var(--font);
+  white-space: nowrap;
+  cursor: default;
+}
+
+.sk-check::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--dim-3);
+  border-radius: 3px;
+}
+
+.sk-check.on {
+  color: var(--ink);
+}
+
+.sk-check.on::before {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+.sk-note {
+  font: 400 10.5px var(--font);
+  color: var(--dim);
+}
+
+.sk-note.err {
+  color: #f4505e;
+}
+
+.sk-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  border-top: 1px solid var(--hairline);
+}
+
+.sk-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sk-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sk-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sk-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font: 600 11.5px var(--font);
+  color: var(--ink);
+}
+
+.sk-name > span:first-child {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sk-row.off .sk-name {
+  color: var(--dim-3);
+}
+
+.sk-tag {
+  flex: 0 0 auto;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--dim);
+  font: 400 9px var(--font);
+}
+
+.sk-tag.ok {
+  background: rgba(34, 197, 94, 0.14);
+  color: #22c55e;
+}
+
+.sk-desc {
+  font: 400 10.5px var(--font);
+  color: var(--dim-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sk-desc:empty {
+  display: none;
+}
+
+/* What can be done to an installed skill shows under the pointer; "Add" always does. */
+.sk-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.sk-row:hover .sk-actions,
+.sk-actions:has(.primary) {
+  opacity: 1;
+}
+
+.sk-btn {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--dim);
+  font: 400 10.5px var(--font);
+  white-space: nowrap;
+  cursor: default;
+}
+
+.sk-btn:hover {
+  background: rgba(255, 255, 255, 0.17);
+  color: var(--ink);
+}
+
+.sk-btn.primary {
+  background: var(--ink);
+  color: #0b0c0e;
+  font-weight: 600;
+}
+
+.sk-btn.primary:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--dim);
+}
+
+.sk-btn.danger:hover,
+.sk-btn.armed {
+  background: rgba(244, 80, 94, 0.2);
+  color: #f4505e;
+}
+
+.sk-switch {
+  flex: 0 0 28px;
+  position: relative;
+  width: 28px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  cursor: default;
+}
+
+.sk-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.18s;
+}
+
+.sk-switch.on {
+  background: #22c55e;
+}
+
+.sk-switch.on::after {
+  transform: translateX(12px);
+}
+
+.sk-empty {
+  padding: 28px 0;
+  text-align: center;
+  font: 400 11.5px var(--font);
+  color: var(--dim-3);
+}

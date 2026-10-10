@@ -111,7 +111,8 @@ export function buildLauncher(actions: ViewActions): ViewHost {
     h("span", { text: tl("Add websites and apps in Settings.") }),
     h("button", { class: "link-btn", text: tl("Add"), onclick: () => void Bridge.openLauncherAdd() }),
   );
-  const el = h("div", { class: "view launcher" }, grid, empty);
+  // One card, like the overview's left one: Mochi stands in its left part.
+  const el = h("div", { class: "view launcher" }, h("div", { class: "card" }, grid, empty));
   // The rows run sideways: the wheel moves along them.
   grid.addEventListener("wheel", (e) => {
     if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;

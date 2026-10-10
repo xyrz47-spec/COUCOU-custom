@@ -147,6 +147,17 @@ export function buildSpotifyPill(task: AgentTask, onTap: () => void): SpotifyPil
     pill.style.boxShadow = `0 2px 10px ${color}59`;
     label.style.color = lighter(color, 0.3);
     sync();
+    // A title too long for the pill moves along, slowly, until its end shows.
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(() => {
+        const hidden = label.scrollWidth - label.clientWidth;
+        if (!hovered || !(hidden > 2)) return;
+        const travel = hidden + 10;
+        label.classList.add("scrolling");
+        label.style.transition = `text-indent ${travel / 26}s linear 0.4s`;
+        label.style.textIndent = `-${travel}px`;
+      });
+    }
   });
   pill.addEventListener("mouseleave", () => {
     hovered = false;
@@ -154,6 +165,9 @@ export function buildSpotifyPill(task: AgentTask, onTap: () => void): SpotifyPil
     pill.style.borderColor = `${color}24`;
     pill.style.boxShadow = "";
     label.style.color = "";
+    label.classList.remove("scrolling");
+    label.style.transition = "";
+    label.style.textIndent = "";
     sync();
   });
   sync();

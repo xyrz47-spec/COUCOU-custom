@@ -151,7 +151,7 @@ export function editorLabel(editorCommand: string): string | null {
 }
 
 /** How many declared pills may sit next to the main one. */
-export const MAX_DECLARED = 4;
+export const MAX_DECLARED = 8;
 
 /** The OS this page runs on. Only the Windows webview says "Windows". */
 export const HOST_OS: HostOs =

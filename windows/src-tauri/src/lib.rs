@@ -30,6 +30,7 @@ mod secrets;
 mod session_window;
 mod settings;
 mod shortcuts;
+mod skill_store;
 mod skills;
 mod sounds;
 mod spotify;
@@ -866,6 +867,11 @@ pub fn run() {
             skills::skills_list,
             skills::skill_set_enabled,
             skills::skill_reveal,
+            skill_store::skills_search,
+            skill_store::skills_projects,
+            skill_store::skill_install,
+            skill_store::skill_copy,
+            skill_store::skill_remove,
             launcher::launcher_open,
             launcher::launcher_icon,
             launcher::launcher_favicon,

@@ -41,7 +41,7 @@ pub struct SkillGroup {
     pub skills: Vec<Skill>,
 }
 
-fn user_root() -> PathBuf {
+pub(crate) fn user_root() -> PathBuf {
     platform::home_dir().join(".claude").join("skills")
 }
 
@@ -63,6 +63,27 @@ fn session_cwd(dir: &Path) -> Option<PathBuf> {
         }
     }
     None
+}
+
+/// The folders Claude Code has worked in that are still there, sorted: the
+/// projects a skill can be added to (skill_store.rs).
+pub(crate) fn project_dirs() -> Vec<PathBuf> {
+    let mut projects: Vec<PathBuf> = Vec::new();
+    if let Ok(entries) = fs::read_dir(platform::home_dir().join(".claude").join("projects")) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if !path.is_dir() {
+                continue;
+            }
+            if let Some(cwd) = session_cwd(&path) {
+                if cwd.is_dir() && !projects.contains(&cwd) {
+                    projects.push(cwd);
+                }
+            }
+        }
+    }
+    projects.sort();
+    projects
 }
 
 /// Every folder skills are looked for in: the user's, then each project's that has one.
@@ -169,7 +190,7 @@ fn read_skills(root: &Path) -> Vec<Skill> {
 }
 
 /// `dir` is a skill's folder, directly inside one of the folders listed.
-fn known_skill(dir: &Path) -> bool {
+pub(crate) fn known_skill(dir: &Path) -> bool {
     let Some(parent) = dir.parent().and_then(|p| p.canonicalize().ok()) else { return false };
     dir.is_dir() && roots().iter().any(|(_, root)| root.canonicalize().is_ok_and(|r| r == parent))
 }

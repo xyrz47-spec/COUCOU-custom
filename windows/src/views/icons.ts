@@ -29,6 +29,9 @@ export const ICONS = {
   shrink: "M20 10h-6V4M4 14h6v6M14 10l6-6M10 14l-6 6",
   // chevron.up
   chevronUp: "M5.5 15 12 8.5 18.5 15",
+  chevronDown: "M5.5 9 12 15.5 18.5 9",
+  // sparkle: a four-pointed star
+  sparkle: "M12 2.8 14.3 9.7 21.2 12l-6.9 2.3L12 21.2l-2.3-6.9L2.8 12l6.9-2.3L12 2.8z",
   // checkmark
   check: "M5 12.5 9.5 17 19 7.5",
   // arrow.up (send)

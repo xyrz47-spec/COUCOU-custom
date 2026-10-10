@@ -1089,7 +1089,7 @@ export class Island {
     // desktop, he isn't here at all.
     const away = State.mochiOnDesktop;
     // The big Spotify player takes the whole card: Mochi steps aside for it.
-    const player = State.spotifyPlayerShown || (State.mode === "expanded" && State.view === "launcher");
+    const player = State.spotifyPlayerShown || (State.mode === "expanded" && State.view === "skills");
     const visible = p.opacity > 0 && !greetingActive && !this.uploadActive && !away && !player;
     this.botCanvas.style.opacity = visible ? "1" : "0";
 
@@ -1230,12 +1230,15 @@ export class Island {
     // The chat is the only view with a text field, so it is the only time the
     // island is allowed to take keyboard focus.
     if (this.lastSyncedView !== State.view) {
-      const wasChat = this.lastSyncedView === "prompt";
+      // …and the skills tab, for its search field.
+      const typing = (view: IslandViewName | null) => view === "prompt" || view === "skills";
+      const wasTyping = typing(this.lastSyncedView);
       this.lastSyncedView = State.view;
-      if (State.view === "prompt") {
+      if (typing(State.view)) {
+        const view = State.view;
         void Bridge.focusWindow(true);
-        window.setTimeout(() => this.views.get("prompt")?.focus?.(), 120);
-      } else if (wasChat) {
+        window.setTimeout(() => this.views.get(view)?.focus?.(), 120);
+      } else if (wasTyping) {
         void Bridge.focusWindow(false);
       }
     }

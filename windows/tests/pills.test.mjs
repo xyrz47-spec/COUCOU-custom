@@ -170,14 +170,16 @@ test("a declaration from an older or edited settings file is made usable", () =>
     "integration_claude");
 });
 
-test("up to four pills next to the main one, never the main one itself", () => {
+test("up to MAX_DECLARED pills next to the main one, never the main one itself", () => {
   const d = {
     mainPill: "integration_claude",
     activeIntegrations: ["integration_n8n", "integration_github", "integration_stripe"],
   };
   const four = toggleDeclared(d, "agent_gemini", "linux");
-  assert.equal(four.length, MAX_DECLARED);
-  assert.equal(toggleDeclared({ ...d, activeIntegrations: four }, "ai_anthropic", "linux"), null);
+  assert.equal(four.length, 4);
+  // The overview shows them four to a page (views.ts): the limit is two pages.
+  const full = Array.from({ length: MAX_DECLARED }, (_, i) => four[i] ?? `agent_more${i}`);
+  assert.equal(toggleDeclared({ ...d, activeIntegrations: full }, "ai_anthropic", "linux"), null);
   assert.equal(toggleDeclared(d, "integration_claude", "linux"), null);
   assert.equal(toggleDeclared(d, "integration_music", "linux"), null);
   assert.equal(toggleDeclared(d, "agent_claude-desktop", "linux"), null);
@@ -285,15 +287,15 @@ test("a Claude Code session gets its pill even when it is not loaded", () => {
   assert.equal(State.upsertWorkspacePill("not_a_pill", "x", ""), null);
 });
 
-test("toggling declares up to four pills and never the main one", () => {
+test("toggling declares up to MAX_DECLARED pills and never the main one", () => {
   State.settings.activeIntegrations = [];
   State.loadIntegrationTasks();
   for (const id of ["integration_n8n", "agent_gemini", "ai_anthropic", "integration_stripe", "integration_github"]) {
     State.toggleIntegration(id);
   }
   assert.deepEqual(State.settings.activeIntegrations, [
-    "integration_n8n", "agent_gemini", "ai_anthropic", "integration_stripe",
-  ]);
+    "integration_n8n", "agent_gemini", "ai_anthropic", "integration_stripe", "integration_github",
+  ].slice(0, MAX_DECLARED));
   State.toggleIntegration("integration_claude");
   assert.ok(ids().includes("integration_claude"));
   State.setFocus("agent_gemini");

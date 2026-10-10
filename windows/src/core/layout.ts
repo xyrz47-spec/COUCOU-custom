@@ -24,7 +24,8 @@ export type IslandViewName =
   | "greeting"
   | "recap"
   | "wardrobe"
-  | "launcher";
+  | "launcher"
+  | "skills";
 
 export type BotStateName =
   | "idle"
@@ -94,8 +95,10 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   // to the shared image.
   recap: { height: 184, botX: 62, botY: null, botDiameter: 58, agentMode: "column" },
   wardrobe: { height: 160, botX: 68, botY: null, botDiameter: 58, agentMode: "none" },
-  // The tiles take the whole width: Mochi steps aside (island.ts, updateBotTargets).
-  launcher: { height: 196, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
+  // Mochi on the left, as in the overview; the tiles beside him (style.css, .launch-grid).
+  launcher: { height: 196, botX: 68, botY: 119, botDiameter: 58, agentMode: "none" },
+  // A list to read and a field to type in: as tall as the chat, the whole width (no Mochi).
+  skills: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
 };
 
 // The upload views above are only the fallback geometry. Once a file is actually

@@ -894,3 +894,8 @@ mod tests {
 pub fn file_icon_rgba(_path: &std::path::Path, _size: i32) -> Option<(u32, u32, Vec<u8>)> {
     None
 }
+
+/// Sends a file or folder to the desktop's trash, where it can be restored from.
+pub fn move_to_bin(path: &std::path::Path) -> bool {
+    Command::new("gio").arg("trash").arg(path).status().map(|s| s.success()).unwrap_or(false)
+}

@@ -410,8 +410,17 @@ pub fn fullscreen_app_over(win: &WebviewWindow) -> bool {
         // itself: it keeps its title bar, a fullscreen window has none.
         let style = GetWindowLongPtrW(front, GWL_STYLE) as u32;
         let maximized = IsZoomed(front).as_bool() && style & WS_CAPTION.0 == WS_CAPTION.0;
-        covers && !maximized
+        // And it has the pointer to itself: a game being played hides it, and
+        // shows it again in its menus, where the island answers as usual.
+        covers && !maximized && cursor_hidden()
     }
+}
+
+/// The pointer is not drawn: the app in front holds it (a game, a video).
+fn cursor_hidden() -> bool {
+    use ::windows::Win32::UI::WindowsAndMessaging::{GetCursorInfo, CURSORINFO, CURSOR_SHOWING};
+    let mut info = CURSORINFO { cbSize: std::mem::size_of::<CURSORINFO>() as u32, ..Default::default() };
+    unsafe { GetCursorInfo(&mut info).is_ok() && info.flags.0 & CURSOR_SHOWING.0 == 0 }
 }
 
 /// `set_position` already places a Win32 window on the right display.
@@ -728,4 +737,28 @@ unsafe fn icon_pixels(
         let _ = DeleteObject(info.hbmMask.into());
     }
     pixels
+}
+
+/// Sends a file or folder to the Recycle Bin, where it can be restored from.
+pub fn move_to_bin(path: &std::path::Path) -> bool {
+    use std::os::windows::ffi::OsStrExt;
+
+    use ::windows::core::PCWSTR;
+    use ::windows::Win32::UI::Shell::{SHFileOperationW, SHFILEOPSTRUCTW};
+
+    /// FO_DELETE.
+    const DELETE: u32 = 3;
+    /// FOF_SILENT | FOF_NOCONFIRMATION | FOF_ALLOWUNDO | FOF_NOERRORUI: to the
+    /// bin, without a dialog of the shell's own.
+    const TO_BIN_QUIETLY: u16 = 0x0004 | 0x0010 | 0x0040 | 0x0400;
+
+    // The list of paths ends with two NULs.
+    let from: Vec<u16> = path.as_os_str().encode_wide().chain([0, 0]).collect();
+    let mut operation = SHFILEOPSTRUCTW {
+        wFunc: DELETE,
+        pFrom: PCWSTR(from.as_ptr()),
+        fFlags: TO_BIN_QUIETLY,
+        ..Default::default()
+    };
+    unsafe { SHFileOperationW(&mut operation) == 0 && !operation.fAnyOperationsAborted.as_bool() }
 }
