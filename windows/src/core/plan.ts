@@ -127,6 +127,15 @@ export function parseCodexPlan(result: unknown, now = Date.now()): CodexPlanUsag
 
 // ── Shared ────────────────────────────────────────────────────────────────────
 
+/**
+ * Claude's numbers are worth asking for again: none yet, or older than ten
+ * minutes. Asking is a request of its own (claude_plan.rs), so not more often;
+ * a terminal session's status line keeps them fresher than that by itself.
+ */
+export function claudeIsStale(u: PlanUsage | null | undefined, now = Date.now()): boolean {
+  return !u || now - u.updatedAt > 10 * 60_000;
+}
+
 /** What to show for a window: 0 once its reset time has passed. */
 export const effectivePct = (w: PlanWindow, now = Date.now()): number => (w.resetsAt <= now ? 0 : w.usedPct);
 

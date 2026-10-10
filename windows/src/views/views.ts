@@ -14,7 +14,8 @@ import { renderIntegrationCard, type IntegrationCardHooks } from "./integrations
 import { highlightRow, listRows, openRow } from "./github";
 import { pillDefinition, sessionSubtitle } from "../core/pills";
 import {
-  PlanCard, buildPlanPill, claudePillVisible, codexPillVisible, planCardOpen, refreshCodexPlanUsage,
+  PlanCard, buildPlanPill, claudePillVisible, codexPillVisible, planCardOpen, refreshClaudePlanUsage,
+  refreshCodexPlanUsage,
 } from "./usage";
 import { buildDiffCard } from "./diff";
 import { lastTextStep } from "../core/diff";
@@ -118,6 +119,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const codexPill = buildPlanPill(true);
   const planPills = h("div", { class: "plan-pills" }, claudePill.el, codexPill.el);
   let codexShown = false;
+  let claudeShown = false;
 
   function go(v: IslandViewName) {
     actions.blip();
@@ -163,6 +165,10 @@ export function buildHeader(actions: ViewActions): ViewHost {
     const shown = codexOn && State.mode === "expanded";
     if (shown && !codexShown) refreshCodexPlanUsage();
     codexShown = shown;
+    // Claude Code too, for numbers no status line has kept fresh.
+    const claudeNow = claudeOn && State.mode === "expanded";
+    if (claudeNow && !claudeShown) refreshClaudePlanUsage();
+    claudeShown = claudeNow;
   }
 }
 

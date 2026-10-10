@@ -11,8 +11,8 @@
 
 import { Bridge } from "../core/bridge";
 import {
-  PLAN_TEXT, claudeSubtitle, codexIsStale, codexResetsLabel, codexSubtitle, dominantPct,
-  effectivePct, parseCodexPlan, pillLabel, planColor, resetLabel,
+  PLAN_TEXT, claudeIsStale, claudeSubtitle, codexIsStale, codexResetsLabel, codexSubtitle, dominantPct,
+  effectivePct, parseClaudePlan, parseCodexPlan, pillLabel, planColor, resetLabel,
   type CodexPlanUsage, type PlanUsage, type PlanWindow,
 } from "../core/plan";
 import { State } from "../core/state";
@@ -80,6 +80,28 @@ export function storedClaudePlanUsage(): string | null {
   }
 }
 
+let claudeInFlight = false;
+
+/**
+ * Asks Claude Code itself when the numbers are missing or old. They normally
+ * come from a terminal session's status line; Claude Code started from the
+ * Claude desktop app has none, so without this its users never saw a number.
+ * Only from the pill (shown or clicked), never on a timer, and never while
+ * paused: it is a small request of its own.
+ */
+export function refreshClaudePlanUsage(): void {
+  if (claudeInFlight || State.paused || !claudeIsStale(State.planUsage)) return;
+  claudeInFlight = true;
+  void Bridge.claudePlanUsage()
+    .then((result) => {
+      const usage = parseClaudePlan(result?.rate_limits);
+      if (usage) setClaudePlanUsage(usage);
+    })
+    .finally(() => {
+      claudeInFlight = false;
+    });
+}
+
 // ── Codex numbers ─────────────────────────────────────────────────────────────
 
 let codexInFlight = false;
@@ -125,6 +147,7 @@ export function buildPlanPill(codex: boolean): PlanPill {
       State.planDetailIsCodex = codex;
       State.showingPlanDetail = !open;
       if (codex) refreshCodexPlanUsage();
+      else refreshClaudePlanUsage();
       State.notify();
     },
   }, dotEl, label);

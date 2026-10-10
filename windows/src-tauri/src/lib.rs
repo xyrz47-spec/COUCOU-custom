@@ -5,6 +5,7 @@ mod agents;
 mod beat;
 mod chat;
 mod claude;
+mod claude_plan;
 mod codex_plan;
 mod config_file;
 mod desktop;
@@ -445,6 +446,13 @@ fn status_line_apply(
     Ok(backup)
 }
 
+/// Claude plan usage, asked of the Claude Code CLI (one small `claude -p`) when
+/// its pill shows with old numbers. Off the main thread: it takes a few seconds.
+#[tauri::command]
+async fn claude_plan_usage() -> Option<serde_json::Value> {
+    tauri::async_runtime::spawn_blocking(claude_plan::read).await.ok().flatten()
+}
+
 /// Codex plan usage, asked of the Codex CLI (`codex app-server`) when its pill
 /// shows. Off the main thread: it can take a few seconds.
 #[tauri::command]
@@ -786,6 +794,7 @@ pub fn run() {
             status_line_preview,
             status_line_apply,
             codex_plan_usage,
+            claude_plan_usage,
             task_spawn,
             task_cancel,
             task_projects,

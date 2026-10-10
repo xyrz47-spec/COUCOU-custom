@@ -126,6 +126,12 @@ export const Bridge = {
    * is missing, not signed in or slow (15 s).
    */
   codexPlanUsage: () => call<unknown>("codex_plan_usage"),
+  /**
+   * Claude plan limits asked of the Claude Code CLI (`{ rate_limits }`, as the
+   * status line gives them), or null when it is missing, not on a plan or slow.
+   * A real, very small request: only for numbers that are old.
+   */
+  claudePlanUsage: () => call<{ rate_limits?: unknown }>("claude_plan_usage"),
 
   // ── Task mode (src-tauri/src/task_runner.rs) ──────────────────────────────
   /**
