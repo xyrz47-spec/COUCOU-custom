@@ -319,12 +319,13 @@ class AppState {
   }
 
   /**
-   * The big player: Spotify's pill was brought to the front and a song is
-   * loaded, so its card takes the whole island (style.css, .overview.player).
-   * Not for a song being announced, which only passes by.
+   * The big player: Spotify's card was asked to take the whole island, with
+   * its button, and a song is loaded (style.css, .overview.player). Not for a
+   * song being announced, which only passes by.
    */
   get spotifyPlayerShown(): boolean {
-    return this.mode === "expanded" && this.view === "overview" && this.focusTask?.id === SPOTIFY_ID &&
+    return Spotify.player &&
+      this.mode === "expanded" && this.view === "overview" && this.focusTask?.id === SPOTIFY_ID &&
       Spotify.state.track != null && !Spotify.announcing && !this.showingPlanDetail;
   }
 

@@ -33,7 +33,7 @@ export function registerSpotifyHandlers(island: SpotifyHost) {
     State.notify();
   });
   State.subscribe(() => {
-    syncPlayerFocus();
+    syncPlayer();
     syncPillName();
     refreshWhenShown();
     syncBeat();
@@ -104,37 +104,13 @@ function songAnnounced(untouched: boolean) {
   }, FOLD_MS);
 }
 
-/** The pill that had the front before a click brought Spotify's there. */
-let beforePlayer: string | null = null;
-let lastFocus: string | null = null;
-let wasExpanded = false;
-
 /**
- * The big player is asked for each time it is wanted, with a click on
- * Spotify's pill: when the island folds, the front goes back to the pill that
- * had it, so the island opens on that one again.
+ * The big player is asked for each time it is wanted, with the button on
+ * Spotify's card: once the island folds, or another pill takes the front, the
+ * card is its usual size again.
  */
-function syncPlayerFocus() {
-  const focus = State.focusId;
-  if (focus !== lastFocus) {
-    // A song being announced has its own way back (announceSong).
-    if (focus !== SPOTIFY_ID) beforePlayer = null;
-    else if (lastFocus && !Spotify.announcing) beforePlayer = lastFocus;
-    lastFocus = focus;
-  }
-  const expanded = State.mode === "expanded";
-  if (wasExpanded && !expanded && focus === SPOTIFY_ID && beforePlayer && !Spotify.announcing && handBack == null) {
-    const previous = beforePlayer;
-    beforePlayer = null;
-    // The card folds away with the island; only then does the front go back.
-    window.setTimeout(() => {
-      if (State.focusId !== SPOTIFY_ID || State.mode === "expanded") return;
-      if (!State.tasks.some((t) => t.id === previous)) return;
-      State.focusId = previous;
-      State.notify();
-    }, FOLD_MS);
-  }
-  wasExpanded = expanded;
+function syncPlayer() {
+  if (Spotify.player && (State.mode !== "expanded" || State.focusTask?.id !== SPOTIFY_ID)) Spotify.player = false;
 }
 
 /** SpotifyController.syncTaskName: the track's title, else the pill's name. */

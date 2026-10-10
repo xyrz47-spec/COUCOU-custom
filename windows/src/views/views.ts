@@ -22,7 +22,7 @@ import { Bridge } from "../core/bridge";
 import { buildRecap } from "./recap";
 import { buildWardrobe } from "./wardrobe";
 import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
-import { SPOTIFY_ID } from "../core/spotify";
+import { SPOTIFY_ID, Spotify } from "../core/spotify";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
 import type { ViewCommand } from "../island/shortcuts";
@@ -189,13 +189,17 @@ function buildOverview(actions: ViewActions): ViewHost {
     { class: "icon-btn jump", title: tl("Open"), onclick: () => actions.openTarget() },
     svg(ICONS.arrowUpRight, 8),
   );
-  // Out of Spotify's big player, back to the main pill.
-  const back = h(
-    "button",
-    { class: "icon-btn player-back", title: tl("Back"), onclick: () => actions.setFocus(State.mainPillId) },
-    svg(ICONS.chevronLeft, 8, { stroke: 2.6 }),
-  );
-  const left = card(null, leftBody, jump, back);
+  // Spotify's card grows to take the whole island, and back (State.spotifyPlayerShown).
+  const playerToggle = h("button", {
+    class: "icon-btn player-toggle",
+    onclick: () => {
+      actions.blip();
+      Spotify.player = !Spotify.player;
+      State.notify();
+    },
+  });
+  let playerIcon: boolean | null = null;
+  const left = card(null, leftBody, jump, playerToggle);
   const pills = h("div", { class: "pills" });
   const right = card(null, pills);
   // Opened from a plan pill in the header: stands in for the left card.
@@ -388,7 +392,17 @@ function buildOverview(actions: ViewActions): ViewHost {
 
       jump.style.display = detailOpen || mode === "plan" || mode === "diff" ? "none" : "";
       // The big player takes the whole island: the pills step aside (style.css).
-      el.classList.toggle("player", mode === "spotify" && State.spotifyPlayerShown);
+      const big = mode === "spotify" && State.spotifyPlayerShown;
+      el.classList.toggle("player", big);
+      // The button is there for a song, on the card of either size.
+      const song = mode === "spotify" && Spotify.state.track != null && !Spotify.announcing;
+      playerToggle.style.display = song ? "" : "none";
+      if (playerIcon !== big) {
+        playerIcon = big;
+        clear(playerToggle);
+        playerToggle.append(svg(big ? ICONS.shrink : ICONS.expand, 9, { stroke: 2.6 }));
+      }
+      playerToggle.title = big ? t("Small player") : t("Large player");
 
       // Ctrl+↓ Ctrl+↑ walk the open GitHub list (cardItemCount / cardSelection).
       const rows = mode === "card" ? listRows(leftBody) : [];

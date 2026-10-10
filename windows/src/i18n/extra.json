@@ -3999,6 +3999,30 @@
    "ru": "Mochi слушает то, что играет компьютер, по несколько секунд за раз, чтобы определить темп трека. Ничего не записывается и не отправляется.",
    "id": "Mochi mendengarkan apa yang diputar komputer, beberapa detik setiap kali, untuk menemukan tempo lagu. Tidak ada yang direkam atau dikirim.",
    "ko": "Mochi가 컴퓨터에서 재생되는 소리를 몇 초씩 들으며 곡의 템포를 찾습니다. 아무것도 녹음하거나 전송하지 않습니다."
+  },
+  "Large player": {
+   "zh-Hans": "大播放器",
+   "hi": "बड़ा प्लेयर",
+   "es": "Reproductor grande",
+   "ar": "مشغّل كبير",
+   "fr": "Grand lecteur",
+   "bn": "বড় প্লেয়ার",
+   "pt-BR": "Player grande",
+   "ru": "Большой плеер",
+   "id": "Pemutar besar",
+   "ko": "크게 보기"
+  },
+  "Small player": {
+   "zh-Hans": "小播放器",
+   "hi": "छोटा प्लेयर",
+   "es": "Reproductor pequeño",
+   "ar": "مشغّل صغير",
+   "fr": "Petit lecteur",
+   "bn": "ছোট প্লেয়ার",
+   "pt-BR": "Player pequeno",
+   "ru": "Маленький плеер",
+   "id": "Pemutar kecil",
+   "ko": "작게 보기"
   }
  }
 }

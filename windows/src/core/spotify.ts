@@ -64,6 +64,8 @@ export const Spotify = {
   announcing: 0,
   /** What Rust was last told (island/spotify.ts): a Mochi is seen dancing, and the song may be listened to. */
   dancing: false,
+  /** The card was asked to take the whole island, with its button (State.spotifyPlayerShown). */
+  player: false,
 };
 
 /** How long the island stays open on a song that just started, seconds. */
