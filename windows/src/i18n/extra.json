@@ -4204,30 +4204,6 @@
    "id": "Tambah ke peluncur",
    "ko": "런처에 추가"
   },
-  "Drop an app, a shortcut or a folder here, or type a web address or a full path.": {
-   "zh-Hans": "将应用、快捷方式或文件夹拖到这里，或输入网址或完整路径。",
-   "hi": "किसी ऐप, शॉर्टकट या फ़ोल्डर को यहाँ छोड़ें, या कोई वेब पता या पूरा पाथ लिखें।",
-   "es": "Suelta aquí una app, un acceso directo o una carpeta, o escribe una dirección web o una ruta completa.",
-   "ar": "أفلت تطبيقًا أو اختصارًا أو مجلدًا هنا، أو اكتب عنوان ويب أو مسارًا كاملًا.",
-   "fr": "Dépose ici une app, un raccourci ou un dossier, ou saisis une adresse web ou un chemin complet.",
-   "bn": "এখানে কোনো অ্যাপ, শর্টকাট বা ফোল্ডার ছেড়ে দিন, অথবা একটি ওয়েব ঠিকানা বা পুরো পাথ লিখুন।",
-   "pt-BR": "Solte aqui um app, um atalho ou uma pasta, ou digite um endereço web ou um caminho completo.",
-   "ru": "Перетащите сюда приложение, ярлык или папку либо введите веб-адрес или полный путь.",
-   "id": "Letakkan aplikasi, pintasan, atau folder di sini, atau ketik alamat web atau path lengkap.",
-   "ko": "앱·바로가기·폴더를 여기에 끌어다 놓거나, 웹 주소 또는 전체 경로를 입력하세요."
-  },
-  "Image file (optional)": {
-   "zh-Hans": "图片文件（可选）",
-   "hi": "इमेज फ़ाइल (वैकल्पिक)",
-   "es": "Archivo de imagen (opcional)",
-   "ar": "ملف صورة (اختياري)",
-   "fr": "Fichier image (facultatif)",
-   "bn": "ছবির ফাইল (ঐচ্ছিক)",
-   "pt-BR": "Arquivo de imagem (opcional)",
-   "ru": "Файл изображения (необязательно)",
-   "id": "File gambar (opsional)",
-   "ko": "이미지 파일 (선택)"
-  },
   "Drop an image to use it as the tile's picture.": {
    "zh-Hans": "拖入图片即可用作磁贴的图片。",
    "hi": "टाइल की तस्वीर के लिए कोई इमेज यहाँ छोड़ें।",
@@ -4239,6 +4215,18 @@
    "ru": "Перетащите изображение, чтобы использовать его как картинку плитки.",
    "id": "Letakkan gambar untuk dijadikan gambar ubin.",
    "ko": "이미지를 끌어다 놓으면 타일 그림으로 씁니다."
+  },
+  "Image": {
+   "zh-Hans": "图片",
+   "hi": "इमेज",
+   "es": "Imagen",
+   "ar": "صورة",
+   "fr": "Image",
+   "bn": "ছবি",
+   "pt-BR": "Imagem",
+   "ru": "Изображение",
+   "id": "Gambar",
+   "ko": "이미지"
   }
  }
 }

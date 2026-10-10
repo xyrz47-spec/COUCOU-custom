@@ -99,6 +99,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         let mut settings = settings.clone();
         settings.desktop_mochi = current.desktop_mochi.clone();
         settings.launcher.truncate(launcher::MAX_ITEMS);
+        launcher::prune_images(&settings.launcher);
         *current = settings;
         (screen_changed, autostart_changed, shortcuts_changed)
     };
@@ -740,7 +741,7 @@ fn create_launcher_window(app: &AppHandle) {
     match WebviewWindowBuilder::new(app, LAUNCHER_ADD, url)
         .additional_browser_args(BROWSER_ARGS)
         .title(i18n::t("Add to the launcher"))
-        .inner_size(440.0, 370.0)
+        .inner_size(460.0, 204.0)
         .resizable(false)
         .maximizable(false)
         .visible(false)
@@ -869,6 +870,8 @@ pub fn run() {
             launcher::launcher_icon,
             launcher::launcher_favicon,
             launcher::launcher_image,
+            launcher::launcher_image_at,
+            launcher::launcher_store_image,
             open_launcher_add,
             close_launcher_add,
             approval_decision,

@@ -164,6 +164,10 @@ export const Bridge = {
   launcherFavicon: (index: number) => call<string | null>("launcher_favicon", { index }),
   /** The picture the user chose for the entry (an image file of their own) as a data URL, or null. */
   launcherImage: (index: number) => call<string | null>("launcher_image", { index }),
+  /** The image file at `path` as a data URL, for the "add" window's preview; null when it is not one. */
+  launcherImageAt: (path: string) => call<string | null>("launcher_image_at", { path }),
+  /** Keeps a picked picture (a data URL) in the app's own folder and returns where. */
+  launcherStoreImage: (data: string) => call<string>("launcher_store_image", { data }),
   /** The launcher's "add" window (settings/add-launcher.ts), shown with an empty form, and put away. */
   openLauncherAdd: () => call<void>("open_launcher_add"),
   closeLauncherAdd: () => call<void>("close_launcher_add"),

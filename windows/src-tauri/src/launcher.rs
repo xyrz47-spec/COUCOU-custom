@@ -110,6 +110,91 @@ pub fn launcher_image(shared: State<Shared>, index: usize) -> Option<String> {
     image_data_url(Path::new(&image))
 }
 
+/// The image at `path` as a data URL, for the "add" window to show the
+/// picture just dropped on it; `None` for anything that is not an image.
+#[tauri::command(async)]
+pub fn launcher_image_at(path: String) -> Option<String> {
+    image_data_url(Path::new(path.trim()))
+}
+
+/// Where the pictures picked through the file dialog are kept: the page has
+/// their bytes, not their path, so the app keeps a copy of its own.
+fn images_dir() -> std::path::PathBuf {
+    platform::config_dir().join("launcher-images")
+}
+
+/// Keeps a picked picture (a `data:` URL, as the page read it) and says where.
+/// Only an image, and no larger than one shown from disk.
+#[tauri::command(async)]
+pub fn launcher_store_image(data: String) -> Result<String, String> {
+    let encoded = data.split_once("base64,").map(|(_, rest)| rest).ok_or("Not an image.")?;
+    let bytes = base64_decode(encoded).ok_or("Not an image.")?;
+    if bytes.len() as u64 > IMAGE_LIMIT {
+        return Err("That image is too large.".into());
+    }
+    let ext = match image_mime(&bytes).ok_or("Not an image.")? {
+        "image/png" => "png",
+        "image/jpeg" => "jpg",
+        "image/gif" => "gif",
+        "image/webp" => "webp",
+        "image/x-icon" => "ico",
+        "image/bmp" => "bmp",
+        _ => "svg",
+    };
+    let dir = images_dir();
+    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let stamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or_default();
+    let path = dir.join(format!("{stamp}.{ext}"));
+    std::fs::write(&path, bytes).map_err(|e| e.to_string())?;
+    Ok(path.to_string_lossy().into_owned())
+}
+
+/// The kept pictures no entry wears any more are let go (an entry removed, a
+/// form closed without adding). Only files of the app's own folder.
+pub fn prune_images(items: &[LauncherItem]) {
+    let Ok(entries) = std::fs::read_dir(images_dir()) else { return };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        let worn = items.iter().any(|item| Path::new(item.image.trim()) == path);
+        if !worn && path.is_file() {
+            let _ = std::fs::remove_file(path);
+        }
+    }
+}
+
+/// Standard base64, padding or not; `None` for anything else.
+fn base64_decode(text: &str) -> Option<Vec<u8>> {
+    let mut out = Vec::with_capacity(text.len() / 4 * 3);
+    let (mut bits, mut count) = (0u32, 0u8);
+    for c in text.bytes() {
+        let value = match c {
+            b'A'..=b'Z' => c - b'A',
+            b'a'..=b'z' => c - b'a' + 26,
+            b'0'..=b'9' => c - b'0' + 52,
+            b'+' => 62,
+            b'/' => 63,
+            b'=' | b'\r' | b'\n' => continue,
+            _ => return None,
+        };
+        bits = (bits << 6) | value as u32;
+        count += 1;
+        if count == 4 {
+            out.extend_from_slice(&[(bits >> 16) as u8, (bits >> 8) as u8, bits as u8]);
+            (bits, count) = (0, 0);
+        }
+    }
+    match count {
+        0 => {}
+        2 => out.push((bits >> 4) as u8),
+        3 => out.extend_from_slice(&[(bits >> 10) as u8, (bits >> 2) as u8]),
+        _ => return None,
+    }
+    Some(out)
+}
+
 fn image_data_url(path: &Path) -> Option<String> {
     if !path.is_absolute() {
         return None;
@@ -346,6 +431,25 @@ mod tests {
         assert_eq!(image_data_url(Path::new("tile.png")), None);
         assert_eq!(image_data_url(Path::new("")), None);
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn base64_reads_back_what_was_written() {
+        for bytes in [&b""[..], b"a", b"ab", b"abc", b"abcd", &[0xFF, 0x00, 0x89, b'P', b'N', b'G', 0x0D]] {
+            assert_eq!(base64_decode(&crate::claude::base64_for(bytes)).as_deref(), Some(bytes));
+        }
+        // Without its padding, and not base64 at all.
+        assert_eq!(base64_decode("YWI").as_deref(), Some(&b"ab"[..]));
+        assert_eq!(base64_decode("a b"), None);
+        assert_eq!(base64_decode("a"), None);
+    }
+
+    #[test]
+    fn what_is_handed_over_as_a_picture_has_to_be_an_image() {
+        let text = format!("data:text/plain;base64,{}", crate::claude::base64_for(b"just text"));
+        assert!(launcher_store_image(text).is_err());
+        assert!(launcher_store_image("data:image/png,not-base64".into()).is_err());
+        assert!(launcher_store_image("data:image/png;base64,***".into()).is_err());
     }
 
     #[test]
