@@ -92,6 +92,8 @@ pub struct Settings {
     /// island — "kitty -e nvim", "subl"… ("" = VS Code, `code`). Run without
     /// a shell, the path appended as one argument.
     pub editor_command: String,
+    /// The launcher tab's websites and apps, in the order shown (launcher.rs).
+    pub launcher: Vec<crate::launcher::LauncherItem>,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -157,6 +159,7 @@ impl Default for Settings {
             task_recent_dirs: Vec::new(),
             task_outputs_dir: String::new(),
             editor_command: String::new(),
+            launcher: Vec::new(),
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -442,6 +445,7 @@ mod tests {
   "taskRecentDirs": ["/home/me/.dotfiles"],
   "taskOutputsDir": "/home/me/vault/outputs",
   "editorCommand": "kitty -e nvim",
+  "launcher": [{ "name": "Docs", "target": "https://example.com/docs" }],
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -875,6 +879,7 @@ mod tests {
                 "taskRecentDirs",
                 "taskOutputsDir",
                 "editorCommand",
+                "launcher",
                 "desktopMochi",
             ]
         );

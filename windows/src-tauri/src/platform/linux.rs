@@ -889,3 +889,8 @@ mod tests {
         assert_eq!(xdg_user_dir("", "XDG_PICTURES_DIR", home), None);
     }
 }
+
+/// Windows only for now: where there is no icon the launcher draws its own tile.
+pub fn file_icon_rgba(_path: &std::path::Path, _size: i32) -> Option<(u32, u32, Vec<u8>)> {
+    None
+}

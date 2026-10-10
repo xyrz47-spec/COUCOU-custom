@@ -16,6 +16,7 @@ mod i18n;
 mod identity;
 mod integrations;
 mod island;
+mod launcher;
 mod local_chat;
 mod log;
 mod net;
@@ -97,6 +98,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         // Where Mochi sits on the desktop is desktop.rs's to say, not a webview's.
         let mut settings = settings.clone();
         settings.desktop_mochi = current.desktop_mochi.clone();
+        settings.launcher.truncate(launcher::MAX_ITEMS);
         *current = settings;
         (screen_changed, autostart_changed, shortcuts_changed)
     };
@@ -802,6 +804,8 @@ pub fn run() {
             skills::skills_list,
             skills::skill_set_enabled,
             skills::skill_reveal,
+            launcher::launcher_open,
+            launcher::launcher_icon,
             approval_decision,
             approval_answer,
             approval_ack,

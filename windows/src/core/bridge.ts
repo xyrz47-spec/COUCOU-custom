@@ -154,6 +154,13 @@ export const Bridge = {
   skillSetEnabled: (path: string, enabled: boolean) => callOrThrow<void>("skill_set_enabled", { path, enabled }),
   skillReveal: (path: string) => call<void>("skill_reveal", { path }),
 
+  // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
+  /** Opens entry `index` of the saved list: a website, an app, a folder. */
+  launcherOpen: (index: number) => call<void>("launcher_open", { index }),
+  /** The entry's icon as RGBA pixels (base64), for a file the system has one for. */
+  launcherIcon: (index: number) =>
+    call<{ width: number; height: number; rgba: string }>("launcher_icon", { index }),
+
   approvalDecision: (requestId: string, decision: "allow" | "deny") =>
     call<void>("approval_decision", { requestId, decision }),
   /** "The card is up" — until this lands the relay only waits a moment. */

@@ -489,3 +489,19 @@ html[dir="rtl"] :is(.diff, .path, .keycap, input[type="password"], input[type="t
 .skill-row.off .skill-name {
   color: var(--dim);
 }
+
+/* ── Launcher (launcher.ts) ────────────────────────────────────────────────── */
+
+.launch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.launch-list:empty {
+  display: none;
+}
+
+.launch-list .row {
+  flex-wrap: nowrap;
+}

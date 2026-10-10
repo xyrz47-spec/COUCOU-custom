@@ -18,6 +18,7 @@ import {
 import { h, clear } from "../views/dom";
 import { agentsSection } from "./agents";
 import { skillsSection } from "./skills";
+import { launcherSection } from "./launcher";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
 import {
@@ -1451,6 +1452,7 @@ async function render() {
     activePillsSection(connected),
     integrationsSection(present),
     generalSection(),
+    launcherSection(() => settings, save),
     shortcutsSection(shortcutReport),
     h("div", {
       class: "hint",

@@ -22,6 +22,8 @@ export const ICONS = {
   // chevron.right
   chevronRight: "M9 5.5 15.5 12 9 18.5",
   chevronLeft: "M15 5.5 8.5 12 15 18.5",
+  // square.grid.2x2.fill
+  grid: "M4.5 4.5h6.2v6.2H4.5zM13.3 4.5h6.2v6.2h-6.2zM4.5 13.3h6.2v6.2H4.5zM13.3 13.3h6.2v6.2h-6.2z",
   // arrow.up.left.and.arrow.down.right / the same pointing in (stroke)
   expand: "M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7",
   shrink: "M20 10h-6V4M4 14h6v6M14 10l6-6M10 14l-6 6",

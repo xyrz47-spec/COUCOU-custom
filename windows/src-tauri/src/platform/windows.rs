@@ -616,3 +616,116 @@ pub fn set_layer_overlay(_win: &WebviewWindow, _on: bool) {}
 pub fn layer_display(_island: &WebviewWindow, _mochi: &WebviewWindow) -> Option<(f64, f64)> {
     None
 }
+
+// ── File icons (the launcher tab) ─────────────────────────────────────────────
+
+/// A file's icon as RGBA pixels, row after row: an app's own, `size` across,
+/// when the file holds icons (.exe, .dll, .ico); else the one the shell shows
+/// for it — a shortcut's, a folder's, a document type's — at its large size.
+pub fn file_icon_rgba(path: &std::path::Path, size: i32) -> Option<(u32, u32, Vec<u8>)> {
+    use std::os::windows::ffi::OsStrExt;
+
+    use ::windows::core::PCWSTR;
+    use ::windows::Win32::Storage::FileSystem::FILE_FLAGS_AND_ATTRIBUTES;
+    use ::windows::Win32::UI::Shell::{SHGetFileInfoW, SHFILEINFOW, SHGFI_ICON, SHGFI_LARGEICON};
+    use ::windows::Win32::UI::WindowsAndMessaging::{DestroyIcon, PrivateExtractIconsW, HICON};
+
+    let wide: Vec<u16> = path.as_os_str().encode_wide().chain(std::iter::once(0)).collect();
+    unsafe {
+        let mut icon = HICON::default();
+        if wide.len() <= 260 {
+            let mut name = [0u16; 260];
+            name[..wide.len()].copy_from_slice(&wide);
+            let mut icons = [HICON::default()];
+            let found = PrivateExtractIconsW(&name, 0, size, size, Some(&mut icons), None, 0);
+            if found != 0 && found != u32::MAX && !icons[0].is_invalid() {
+                icon = icons[0];
+            }
+        }
+        if icon.is_invalid() {
+            let mut info = SHFILEINFOW::default();
+            let found = SHGetFileInfoW(
+                PCWSTR(wide.as_ptr()),
+                FILE_FLAGS_AND_ATTRIBUTES(0),
+                Some(&mut info),
+                std::mem::size_of::<SHFILEINFOW>() as u32,
+                SHGFI_ICON | SHGFI_LARGEICON,
+            );
+            if found == 0 || info.hIcon.is_invalid() {
+                return None;
+            }
+            icon = info.hIcon;
+        }
+        let pixels = icon_pixels(icon);
+        let _ = DestroyIcon(icon);
+        pixels
+    }
+}
+
+/// The colour bitmap of an icon, top row first, as RGBA.
+unsafe fn icon_pixels(
+    icon: ::windows::Win32::UI::WindowsAndMessaging::HICON,
+) -> Option<(u32, u32, Vec<u8>)> {
+    use ::windows::Win32::Graphics::Gdi::{
+        DeleteObject, GetDC, GetDIBits, GetObjectW, ReleaseDC, BITMAP, BITMAPINFO, BITMAPINFOHEADER, BI_RGB,
+        DIB_RGB_COLORS,
+    };
+    use ::windows::Win32::UI::WindowsAndMessaging::{GetIconInfo, ICONINFO};
+
+    let mut info = ICONINFO::default();
+    GetIconInfo(icon, &mut info).ok()?;
+    let color = info.hbmColor;
+    let read = || {
+        if color.is_invalid() {
+            return None;
+        }
+        let mut bitmap = BITMAP::default();
+        let got = GetObjectW(
+            color.into(),
+            std::mem::size_of::<BITMAP>() as i32,
+            Some((&mut bitmap as *mut BITMAP).cast()),
+        );
+        let (w, h) = (bitmap.bmWidth, bitmap.bmHeight);
+        if got == 0 || w <= 0 || h <= 0 || w > 512 || h > 512 {
+            return None;
+        }
+        let mut header = BITMAPINFO {
+            bmiHeader: BITMAPINFOHEADER {
+                biSize: std::mem::size_of::<BITMAPINFOHEADER>() as u32,
+                biWidth: w,
+                // Negative: top row first.
+                biHeight: -h,
+                biPlanes: 1,
+                biBitCount: 32,
+                biCompression: BI_RGB.0,
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let mut pixels = vec![0u8; (w * h * 4) as usize];
+        let dc = GetDC(None);
+        let lines = GetDIBits(dc, color, 0, h as u32, Some(pixels.as_mut_ptr().cast()), &mut header, DIB_RGB_COLORS);
+        ReleaseDC(None, dc);
+        if lines == 0 {
+            return None;
+        }
+        // BGRA → RGBA. An old icon without an alpha channel reads as see-through
+        // everywhere: it is opaque.
+        let no_alpha = pixels.chunks(4).all(|p| p[3] == 0);
+        for p in pixels.chunks_mut(4) {
+            p.swap(0, 2);
+            if no_alpha {
+                p[3] = 255;
+            }
+        }
+        Some((w as u32, h as u32, pixels))
+    };
+    let pixels = read();
+    if !color.is_invalid() {
+        let _ = DeleteObject(color.into());
+    }
+    if !info.hbmMask.is_invalid() {
+        let _ = DeleteObject(info.hbmMask.into());
+    }
+    pixels
+}

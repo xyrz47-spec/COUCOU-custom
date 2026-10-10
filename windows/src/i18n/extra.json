@@ -4107,6 +4107,90 @@
    "ru": "Навыки не найдены.",
    "id": "Skill tidak ditemukan.",
    "ko": "스킬이 없습니다."
+  },
+  "Launcher": {
+   "zh-Hans": "启动器",
+   "hi": "लॉन्चर",
+   "es": "Lanzador",
+   "ar": "المشغّل",
+   "fr": "Lanceur",
+   "bn": "লঞ্চার",
+   "pt-BR": "Lançador",
+   "ru": "Лаунчер",
+   "id": "Peluncur",
+   "ko": "런처"
+  },
+  "Open websites and apps from the island's fourth tab. Add a web address, or the full path of an app, a shortcut or a folder.": {
+   "zh-Hans": "从灵动岛的第四个标签页打开网站和应用。添加网址，或应用、快捷方式、文件夹的完整路径。",
+   "hi": "आइलैंड के चौथे टैब से वेबसाइट और ऐप खोलें। कोई वेब पता जोड़ें, या किसी ऐप, शॉर्टकट या फ़ोल्डर का पूरा पाथ।",
+   "es": "Abre sitios web y apps desde la cuarta pestaña de la isla. Añade una dirección web, o la ruta completa de una app, un acceso directo o una carpeta.",
+   "ar": "افتح المواقع والتطبيقات من التبويب الرابع في الجزيرة. أضف عنوان ويب، أو المسار الكامل لتطبيق أو اختصار أو مجلد.",
+   "fr": "Ouvre des sites et des apps depuis le quatrième onglet de l'île. Ajoute une adresse web, ou le chemin complet d'une app, d'un raccourci ou d'un dossier.",
+   "bn": "আইল্যান্ডের চতুর্থ ট্যাব থেকে ওয়েবসাইট ও অ্যাপ খুলুন। একটি ওয়েব ঠিকানা যোগ করুন, অথবা কোনো অ্যাপ, শর্টকাট বা ফোল্ডারের পুরো পাথ।",
+   "pt-BR": "Abra sites e apps pela quarta aba da ilha. Adicione um endereço web, ou o caminho completo de um app, um atalho ou uma pasta.",
+   "ru": "Открывайте сайты и приложения с четвёртой вкладки острова. Добавьте веб-адрес или полный путь к приложению, ярлыку или папке.",
+   "id": "Buka situs web dan aplikasi dari tab keempat pulau. Tambahkan alamat web, atau path lengkap aplikasi, pintasan, atau folder.",
+   "ko": "아일랜드의 네 번째 탭에서 웹사이트와 앱을 바로 엽니다. 웹 주소나, 앱·바로가기·폴더의 전체 경로를 추가하세요."
+  },
+  "Name": {
+   "zh-Hans": "名称",
+   "hi": "नाम",
+   "es": "Nombre",
+   "ar": "الاسم",
+   "fr": "Nom",
+   "bn": "নাম",
+   "pt-BR": "Nome",
+   "ru": "Название",
+   "id": "Nama",
+   "ko": "이름"
+  },
+  "Web address or full path": {
+   "zh-Hans": "网址或完整路径",
+   "hi": "वेब पता या पूरा पाथ",
+   "es": "Dirección web o ruta completa",
+   "ar": "عنوان ويب أو مسار كامل",
+   "fr": "Adresse web ou chemin complet",
+   "bn": "ওয়েব ঠিকানা বা পুরো পাথ",
+   "pt-BR": "Endereço web ou caminho completo",
+   "ru": "Веб-адрес или полный путь",
+   "id": "Alamat web atau path lengkap",
+   "ko": "웹 주소 또는 전체 경로"
+  },
+  "Add": {
+   "zh-Hans": "添加",
+   "hi": "जोड़ें",
+   "es": "Añadir",
+   "ar": "إضافة",
+   "fr": "Ajouter",
+   "bn": "যোগ করুন",
+   "pt-BR": "Adicionar",
+   "ru": "Добавить",
+   "id": "Tambah",
+   "ko": "추가"
+  },
+  "Enter a web address (https://…) or the full path of a file or folder.": {
+   "zh-Hans": "请输入网址（https://…）或文件、文件夹的完整路径。",
+   "hi": "कोई वेब पता (https://…) या किसी फ़ाइल या फ़ोल्डर का पूरा पाथ डालें।",
+   "es": "Escribe una dirección web (https://…) o la ruta completa de un archivo o carpeta.",
+   "ar": "أدخل عنوان ويب (https://…) أو المسار الكامل لملف أو مجلد.",
+   "fr": "Saisis une adresse web (https://…) ou le chemin complet d'un fichier ou d'un dossier.",
+   "bn": "একটি ওয়েব ঠিকানা (https://…) অথবা কোনো ফাইল বা ফোল্ডারের পুরো পাথ লিখুন।",
+   "pt-BR": "Digite um endereço web (https://…) ou o caminho completo de um arquivo ou pasta.",
+   "ru": "Введите веб-адрес (https://…) или полный путь к файлу или папке.",
+   "id": "Masukkan alamat web (https://…) atau path lengkap file atau folder.",
+   "ko": "웹 주소(https://…)나 파일·폴더의 전체 경로를 입력하세요."
+  },
+  "Add websites and apps in Settings.": {
+   "zh-Hans": "在设置中添加网站和应用。",
+   "hi": "सेटिंग्स में वेबसाइट और ऐप जोड़ें।",
+   "es": "Añade sitios web y apps en Ajustes.",
+   "ar": "أضف المواقع والتطبيقات من الإعدادات.",
+   "fr": "Ajoute des sites et des apps dans les Réglages.",
+   "bn": "সেটিংসে ওয়েবসাইট ও অ্যাপ যোগ করুন।",
+   "pt-BR": "Adicione sites e apps nos Ajustes.",
+   "ru": "Добавьте сайты и приложения в настройках.",
+   "id": "Tambahkan situs web dan aplikasi di Pengaturan.",
+   "ko": "설정에서 웹사이트와 앱을 추가하세요."
   }
  }
 }

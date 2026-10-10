@@ -105,6 +105,13 @@ export interface IntegrationInfo {
   configured: boolean;
 }
 
+/** One tile of the launcher tab (views/launcher.ts). */
+export interface LauncherItem {
+  name: string;
+  /** `https://…`, or the full path of a file or folder. */
+  target: string;
+}
+
 export interface Settings {
   soundEnabled: boolean;
   soundVolume: number;
@@ -178,6 +185,8 @@ export interface Settings {
   taskOutputsDir: string;
   /** Command that opens a session's folder or file ("" = VS Code, `code`). */
   editorCommand: string;
+  /** The launcher tab's websites and apps, in the order shown. */
+  launcher: LauncherItem[];
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -219,6 +228,7 @@ export const DEFAULT_SETTINGS: Settings = {
   taskRecentDirs: [],
   taskOutputsDir: "",
   editorCommand: "",
+  launcher: [],
 };
 
 type Listener = () => void;
