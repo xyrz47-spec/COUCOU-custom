@@ -281,6 +281,8 @@ export class Island {
       { id: "compact-song" },
       this.compactSongArt,
       h("div", { class: "text" }, this.compactSongTitle, h("div", { class: "time" }, this.compactSongTime)),
+      // Three bars that bounce while it plays (style.css).
+      h("span", { class: "eq" }, h("i"), h("i"), h("i")),
     );
 
     this.header = buildHeader(actions);

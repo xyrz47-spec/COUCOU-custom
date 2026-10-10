@@ -15,7 +15,7 @@ import {
   volumeLevel, withPlaying,
   type SpotifyTrack,
 } from "../core/spotify";
-import { createMiniBot } from "../mochi/minibots";
+import { createMiniBot, releaseMiniBot } from "../mochi/minibots";
 import { pillDefinition } from "../core/pills";
 import { N_, t } from "../i18n/i18n";
 
@@ -266,10 +266,28 @@ export function buildSpotifyCard(): SpotifyCardHost {
   art.addEventListener("click", () => void Bridge.spotifyOpen());
   const title = h("span", { class: "np-title" });
   const subtitle = h("div", { class: "np-sub" });
+  const titleDot = dot(green, 6);
+  const titleRow = h("div", { class: "np-title-row" }, titleDot, title);
+  /** In the big player Spotify's mini Mochi dances where the dot is, as on its pill. */
+  let dancer: HTMLElement | null = null;
   const head = h("div", { class: "np-head" },
     art,
-    h("div", { class: "np-text" }, h("div", { class: "np-title-row" }, dot(green, 6), title), subtitle),
+    h("div", { class: "np-text" }, titleRow, subtitle),
   );
+
+  function syncDancer() {
+    const task = State.spotifyPlayerShown ? State.tasks.find((x) => x.id === SPOTIFY_ID) : null;
+    if (task && !dancer) {
+      dancer = createMiniBot(task, 26, () => State.spotifyPlaying);
+      dancer.classList.add("np-dancer");
+      titleDot.replaceWith(dancer);
+    } else if (!task && dancer) {
+      const canvas = dancer.querySelector("canvas");
+      if (canvas) releaseMiniBot(canvas);
+      dancer.replaceWith(titleDot);
+      dancer = null;
+    }
+  }
 
   let dragFraction: number | null = null;
   const elapsed = h("span", { class: "np-time elapsed" });
@@ -370,6 +388,8 @@ export function buildSpotifyCard(): SpotifyCardHost {
     }
     art.title = track.album ? t("{0} — open Spotify", { 0: track.album }) : t("Open Spotify");
     const cover = currentArtwork(s);
+    // The big player glows in the cover's colours (style.css, .overview.player .np-root).
+    el.style.setProperty("--np-cover", cover ? `url("${cover}")` : "none");
     if (cover) {
       if (artImg.getAttribute("src") !== cover) artImg.setAttribute("src", cover);
       art.classList.add("has-art");
@@ -427,6 +447,7 @@ export function buildSpotifyCard(): SpotifyCardHost {
         el.append(want === "playing" ? playingEl : idleEl);
         shownTrack = null;
       }
+      syncDancer();
       if (track) syncPlaying(track);
       else syncIdle();
       syncTimer();

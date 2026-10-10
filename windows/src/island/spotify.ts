@@ -8,6 +8,7 @@
 // is seen dancing (syncDancing).
 
 import { Bridge, onEvent } from "../core/bridge";
+import type { BotEmoteName } from "../core/layout";
 import { pillDefinition } from "../core/pills";
 import {
   ANNOUNCE_SECONDS, SPOTIFY_ID, Spotify, desktopDances, isAd, isNewSong, islandDances, type SpotifyState,
@@ -24,6 +25,8 @@ export interface SpotifyHost {
    * when the island is not free to. `done(untouched)` says how it ended.
    */
   glance(seconds: number, done: (untouched: boolean) => void): boolean;
+  /** Mochi's face for a moment (Island.emote). */
+  emote?(name: BotEmoteName): void;
 }
 
 export function registerSpotifyHandlers(island: SpotifyHost) {
@@ -54,7 +57,11 @@ export function applySpotify(island: SpotifyHost, next: SpotifyState) {
   const fresh = isNewSong(Spotify.heard, next);
   if (!next.running) Spotify.heard = null;
   else if (next.playing && next.track) Spotify.heard = next.track.id;
-  if (fresh) announceSong(island);
+  if (fresh) {
+    // A new song: Mochi is glad to hear it.
+    if (State.spotifyPlaying && !State.paused) island.emote?.("happy");
+    announceSong(island);
+  }
   State.notify();
 }
 
