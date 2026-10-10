@@ -123,13 +123,13 @@ export function buildLauncher(actions: ViewActions): ViewHost {
 
   function tile(item: LauncherItem, index: number): HTMLElement {
     // A mini Mochi until the icon comes, and for good when there is none.
-    const pill = createMiniBot(tilePill(item), 24);
-    const art = h("div", { class: "launch-art pill" }, pill);
+    const pill = createMiniBot(tilePill(item), 32);
+    const art = h("div", { class: "launch-art mochi" }, pill);
     const wear = (picture: HTMLElement) => {
       const canvas = pill.querySelector("canvas");
       if (canvas) releaseMiniBot(canvas);
       clear(art);
-      art.classList.remove("pill");
+      art.classList.remove("mochi");
       art.classList.add("has-icon");
       art.append(picture);
     };
