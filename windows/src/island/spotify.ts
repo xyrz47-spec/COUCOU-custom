@@ -36,7 +36,6 @@ export function registerSpotifyHandlers(island: SpotifyHost) {
     State.notify();
   });
   State.subscribe(() => {
-    syncPlayer();
     syncPillName();
     refreshWhenShown();
     syncBeat();
@@ -109,15 +108,6 @@ function songAnnounced(untouched: boolean) {
       State.notify();
     }
   }, FOLD_MS);
-}
-
-/**
- * The big player is asked for each time it is wanted, with the button on
- * Spotify's card: once the island folds, or another pill takes the front, the
- * card is its usual size again.
- */
-function syncPlayer() {
-  if (Spotify.player && (State.mode !== "expanded" || State.focusTask?.id !== SPOTIFY_ID)) Spotify.player = false;
 }
 
 /** SpotifyController.syncTaskName: the track's title, else the pill's name. */

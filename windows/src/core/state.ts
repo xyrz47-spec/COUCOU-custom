@@ -320,13 +320,13 @@ class AppState {
 
   /**
    * The big player: Spotify's card was asked to take the whole island, with
-   * its button, and a song is loaded (style.css, .overview.player). Not for a
-   * song being announced, which only passes by.
+   * its button, and a song is loaded (style.css, .overview.player). A song
+   * being announced shows in it too.
    */
   get spotifyPlayerShown(): boolean {
     return Spotify.player &&
       this.mode === "expanded" && this.view === "overview" && this.focusTask?.id === SPOTIFY_ID &&
-      Spotify.state.track != null && !Spotify.announcing && !this.showingPlanDetail;
+      Spotify.state.track != null && !this.showingPlanDetail;
   }
 
   get otherTasks(): AgentTask[] {

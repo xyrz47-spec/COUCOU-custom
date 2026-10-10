@@ -54,6 +54,26 @@ export const IDLE_SPOTIFY: SpotifyState = {
   position: 0, positionAt: 0, shuffle: false, repeat: false, volume: 50, modes: true, tempo: 0, beatAt: 0,
 };
 
+const PLAYER_KEY = "coucou.spotifyPlayer";
+
+function storedPlayer(): boolean {
+  try {
+    return typeof window !== "undefined" && window.localStorage?.getItem(PLAYER_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** The big player, on or off, remembered for the next time the card shows. */
+export function setSpotifyPlayer(on: boolean) {
+  Spotify.player = on;
+  try {
+    window.localStorage?.setItem(PLAYER_KEY, on ? "1" : "0");
+  } catch {
+    // Storage off or full: the choice just will not outlive this run.
+  }
+}
+
 /** The page's copy of the player, and the cover of the track that has one. */
 export const Spotify = {
   state: { ...IDLE_SPOTIFY } as SpotifyState,
@@ -64,8 +84,12 @@ export const Spotify = {
   announcing: 0,
   /** What Rust was last told (island/spotify.ts): a Mochi is seen dancing, and the song may be listened to. */
   dancing: false,
-  /** The card was asked to take the whole island, with its button (State.spotifyPlayerShown). */
-  player: false,
+  /**
+   * The card was asked to take the whole island, with its button
+   * (State.spotifyPlayerShown). Kept until the button is clicked again, a
+   * restart included (setSpotifyPlayer).
+   */
+  player: storedPlayer(),
 };
 
 /** How long the island stays open on a song that just started, seconds. */

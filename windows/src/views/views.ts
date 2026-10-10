@@ -23,7 +23,7 @@ import { Bridge } from "../core/bridge";
 import { buildRecap } from "./recap";
 import { buildWardrobe } from "./wardrobe";
 import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
-import { SPOTIFY_ID, Spotify } from "../core/spotify";
+import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
 import type { ViewCommand } from "../island/shortcuts";
@@ -200,7 +200,7 @@ function buildOverview(actions: ViewActions): ViewHost {
     class: "icon-btn player-toggle",
     onclick: () => {
       actions.blip();
-      Spotify.player = !Spotify.player;
+      setSpotifyPlayer(!Spotify.player);
       State.notify();
     },
   });
@@ -401,7 +401,7 @@ function buildOverview(actions: ViewActions): ViewHost {
       const big = mode === "spotify" && State.spotifyPlayerShown;
       el.classList.toggle("player", big);
       // The button is there for a song, on the card of either size.
-      const song = mode === "spotify" && Spotify.state.track != null && !Spotify.announcing;
+      const song = mode === "spotify" && Spotify.state.track != null;
       playerToggle.style.display = song ? "" : "none";
       if (playerIcon !== big) {
         playerIcon = big;
