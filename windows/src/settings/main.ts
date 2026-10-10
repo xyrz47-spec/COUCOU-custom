@@ -1345,6 +1345,13 @@ function applyDirection() {
   document.title = t("Settings — Coucou");
 }
 
+/** The window was just shown: its content fades in and settles, a section after the other (settings.css). */
+function appear() {
+  root.classList.remove("appear");
+  void root.offsetWidth;
+  root.classList.add("appear");
+}
+
 let rendering: Promise<void> | null = null;
 let renderAgain = false;
 
@@ -1383,6 +1390,9 @@ async function main() {
     void rerender();
   });
   await render();
+  appear();
+  // Shown again (lib.rs, show_settings_window): the content settles in once more.
+  void onEvent<null>("settings-shown", appear);
 
   void onEvent<ShortcutsReport>("shortcuts-status", (fresh) => shortcutsListener?.report(fresh));
   void onEvent<Settings>("settings-changed", (s) => {

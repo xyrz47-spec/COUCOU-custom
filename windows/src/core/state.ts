@@ -110,6 +110,8 @@ export interface LauncherItem {
   name: string;
   /** `https://…`, or the full path of a file or folder. */
   target: string;
+  /** The full path of an image file of the user's own for the tile to wear, if any. */
+  image?: string;
 }
 
 export interface Settings {

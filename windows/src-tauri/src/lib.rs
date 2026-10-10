@@ -740,7 +740,7 @@ fn create_launcher_window(app: &AppHandle) {
     match WebviewWindowBuilder::new(app, LAUNCHER_ADD, url)
         .additional_browser_args(BROWSER_ARGS)
         .title(i18n::t("Add to the launcher"))
-        .inner_size(440.0, 290.0)
+        .inner_size(440.0, 370.0)
         .resizable(false)
         .maximizable(false)
         .visible(false)
@@ -787,6 +787,8 @@ pub fn show_settings_window(app: &AppHandle) {
         log::line("settings window missing");
         return;
     };
+    // The page lets its content settle in (src/settings/main.ts, appear).
+    let _ = app.emit_to("settings", "settings-shown", ());
     let _ = win.unminimize();
     let _ = win.show();
     let _ = win.set_focus();
@@ -866,6 +868,7 @@ pub fn run() {
             launcher::launcher_open,
             launcher::launcher_icon,
             launcher::launcher_favicon,
+            launcher::launcher_image,
             open_launcher_add,
             close_launcher_add,
             approval_decision,

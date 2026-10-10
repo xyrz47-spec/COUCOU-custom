@@ -29,6 +29,8 @@ const PAGE_HEAD: usize = 256 * 1024;
 /// The largest icon kept.
 const FAVICON_LIMIT: usize = 512 * 1024;
 const WEB_TIMEOUT: Duration = Duration::from_secs(8);
+/// The largest image file shown as a tile's picture.
+const IMAGE_LIMIT: u64 = 4 * 1024 * 1024;
 /// Icons tried for one site before giving up.
 const MAX_TRIES: usize = 4;
 
@@ -38,6 +40,10 @@ pub struct LauncherItem {
     pub name: String,
     /// `https://…`, or the full path of a file or folder.
     pub target: String,
+    /// The full path of an image file of the user's own for the tile to wear,
+    /// in place of the entry's icon. Empty for most.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub image: String,
 }
 
 /// An icon's pixels, for the page to paint: RGBA, row after row, base64.
@@ -94,6 +100,25 @@ pub fn launcher_icon(shared: State<Shared>, index: usize) -> Option<IconPixels> 
     }
     let (width, height, rgba) = platform::file_icon_rgba(path, ICON_SIZE)?;
     Some(IconPixels { width, height, rgba: crate::claude::base64_for(&rgba) })
+}
+
+/// The picture the user chose for entry `index`, as a data URL; `None` when
+/// there is none, or the file is not an image the page can show.
+#[tauri::command(async)]
+pub fn launcher_image(shared: State<Shared>, index: usize) -> Option<String> {
+    let image = shared.settings.lock().unwrap().launcher.get(index)?.image.trim().to_string();
+    image_data_url(Path::new(&image))
+}
+
+fn image_data_url(path: &Path) -> Option<String> {
+    if !path.is_absolute() {
+        return None;
+    }
+    let meta = std::fs::metadata(path).ok().filter(|m| m.is_file() && m.len() <= IMAGE_LIMIT)?;
+    let _ = meta;
+    let bytes = std::fs::read(path).ok()?;
+    let mime = image_mime(&bytes)?;
+    Some(format!("data:{mime};base64,{}", crate::claude::base64_for(&bytes)))
 }
 
 /// The icon of entry `index` when it is a website, as a data URL; `None` when
@@ -231,6 +256,9 @@ pub fn image_mime(bytes: &[u8]) -> Option<&'static str> {
     if bytes.starts_with(b"GIF8") {
         return Some("image/gif");
     }
+    if bytes.starts_with(b"BM") && bytes.len() > 26 {
+        return Some("image/bmp");
+    }
     if bytes.len() > 12 && bytes.starts_with(b"RIFF") && &bytes[8..12] == b"WEBP" {
         return Some("image/webp");
     }
@@ -301,6 +329,31 @@ mod tests {
             assert!(icon.starts_with("data:image/"), "{site}");
             println!("{site}: {} ({} bytes)", &icon[..icon.find(';').unwrap_or(20)], icon.len());
         }
+    }
+
+    #[test]
+    fn a_picture_of_the_users_own_is_read_only_when_it_is_an_image() {
+        let dir = std::env::temp_dir().join(format!("coucou-launcher-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let png = dir.join("tile.png");
+        std::fs::write(&png, [0x89, b'P', b'N', b'G', 0x0D, 0x0A, 0x1A, 0x0A]).unwrap();
+        assert_eq!(image_data_url(&png).as_deref(), Some("data:image/png;base64,iVBORw0KGgo="));
+        // A file that is not an image, a folder, a path that is not full, nothing at all.
+        let text = dir.join("notes.png");
+        std::fs::write(&text, "just text").unwrap();
+        assert_eq!(image_data_url(&text), None);
+        assert_eq!(image_data_url(&dir), None);
+        assert_eq!(image_data_url(Path::new("tile.png")), None);
+        assert_eq!(image_data_url(Path::new("")), None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn an_entry_without_a_picture_is_saved_without_one() {
+        let plain = LauncherItem { name: "Docs".into(), target: "https://example.com".into(), image: String::new() };
+        assert_eq!(serde_json::to_string(&plain).unwrap(), r#"{"name":"Docs","target":"https://example.com"}"#);
+        let back: LauncherItem = serde_json::from_str(r#"{"name":"Docs","target":"https://example.com"}"#).unwrap();
+        assert_eq!(back, plain);
     }
 
     #[test]

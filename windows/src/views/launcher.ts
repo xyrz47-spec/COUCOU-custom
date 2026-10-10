@@ -135,19 +135,37 @@ export function buildLauncher(actions: ViewActions): ViewHost {
       art.classList.add("has-icon");
       art.append(picture);
     };
-    if (isWebTarget(item.target)) {
-      void siteIcon(item.target, index).then((data) => {
-        if (!data) return;
+    /** The entry's own icon: a website's from the website, a file's from the system. */
+    const ownIcon = () => {
+      if (isWebTarget(item.target)) {
+        void siteIcon(item.target, index).then((data) => {
+          if (!data) return;
+          const img = h("img", { alt: "", draggable: "false" }) as HTMLImageElement;
+          // An icon that will not draw leaves the mini Mochi in place.
+          img.addEventListener("load", () => wear(img));
+          img.src = data;
+        });
+      } else {
+        void Bridge.launcherIcon(index).then((icon) => {
+          const canvas = icon ? iconCanvas(icon) : null;
+          if (canvas) wear(canvas);
+        });
+      }
+    };
+    if (item.image) {
+      // A picture of the user's own comes first; one that cannot be shown gives way to the icon.
+      void Bridge.launcherImage(index).then((data) => {
+        if (!data) return ownIcon();
         const img = h("img", { alt: "", draggable: "false" }) as HTMLImageElement;
-        // An icon that will not draw leaves the initial in place.
-        img.addEventListener("load", () => wear(img));
+        img.addEventListener("load", () => {
+          wear(img);
+          art.classList.add("custom");
+        });
+        img.addEventListener("error", ownIcon);
         img.src = data;
       });
     } else {
-      void Bridge.launcherIcon(index).then((icon) => {
-        const canvas = icon ? iconCanvas(icon) : null;
-        if (canvas) wear(canvas);
-      });
+      ownIcon();
     }
     const button = h(
       "button",

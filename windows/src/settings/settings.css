@@ -505,3 +505,44 @@ html[dir="rtl"] :is(.diff, .path, .keycap, input[type="password"], input[type="t
 .launch-list .row {
   flex-wrap: nowrap;
 }
+
+/* ── A window just shown ───────────────────────────────────────────────────────
+   Its content fades in and settles into place, one block a moment after the
+   other (main.ts and add-launcher.ts, appear). The class is put back on each
+   time the window is shown. */
+#settings-root.appear > * {
+  animation: window-in 0.38s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+#settings-root.appear > :nth-child(2) { animation-delay: 45ms; }
+#settings-root.appear > :nth-child(3) { animation-delay: 90ms; }
+#settings-root.appear > :nth-child(4) { animation-delay: 135ms; }
+#settings-root.appear > :nth-child(n + 5) { animation-delay: 180ms; }
+
+/* The add window is one block: its rows come in one after the other instead. */
+#settings-root.appear > .add-form > * {
+  animation: window-in 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+#settings-root.appear > .add-form > :nth-child(2) { animation-delay: 50ms; }
+#settings-root.appear > .add-form > :nth-child(3) { animation-delay: 95ms; }
+#settings-root.appear > .add-form > :nth-child(4) { animation-delay: 140ms; }
+#settings-root.appear > .add-form > :nth-child(n + 5) { animation-delay: 185ms; }
+
+@keyframes window-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #settings-root.appear > *,
+  #settings-root.appear > .add-form > * {
+    animation: none;
+  }
+}

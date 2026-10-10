@@ -3189,3 +3189,15 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     animation: none;
   }
 }
+
+/* A picture of the user's own on a launcher tile: it fills the square, corners rounded. */
+.launch-art.custom {
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.launch-art.custom img {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+}

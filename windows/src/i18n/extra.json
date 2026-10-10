@@ -4215,6 +4215,30 @@
    "ru": "Перетащите сюда приложение, ярлык или папку либо введите веб-адрес или полный путь.",
    "id": "Letakkan aplikasi, pintasan, atau folder di sini, atau ketik alamat web atau path lengkap.",
    "ko": "앱·바로가기·폴더를 여기에 끌어다 놓거나, 웹 주소 또는 전체 경로를 입력하세요."
+  },
+  "Image file (optional)": {
+   "zh-Hans": "图片文件（可选）",
+   "hi": "इमेज फ़ाइल (वैकल्पिक)",
+   "es": "Archivo de imagen (opcional)",
+   "ar": "ملف صورة (اختياري)",
+   "fr": "Fichier image (facultatif)",
+   "bn": "ছবির ফাইল (ঐচ্ছিক)",
+   "pt-BR": "Arquivo de imagem (opcional)",
+   "ru": "Файл изображения (необязательно)",
+   "id": "File gambar (opsional)",
+   "ko": "이미지 파일 (선택)"
+  },
+  "Drop an image to use it as the tile's picture.": {
+   "zh-Hans": "拖入图片即可用作磁贴的图片。",
+   "hi": "टाइल की तस्वीर के लिए कोई इमेज यहाँ छोड़ें।",
+   "es": "Suelta una imagen para usarla como imagen del mosaico.",
+   "ar": "أفلت صورة لاستخدامها صورةً للبلاطة.",
+   "fr": "Dépose une image pour en faire l'image de la tuile.",
+   "bn": "টাইলের ছবি হিসেবে ব্যবহার করতে একটি ছবি ছেড়ে দিন।",
+   "pt-BR": "Solte uma imagem para usá-la como imagem do bloco.",
+   "ru": "Перетащите изображение, чтобы использовать его как картинку плитки.",
+   "id": "Letakkan gambar untuk dijadikan gambar ubin.",
+   "ko": "이미지를 끌어다 놓으면 타일 그림으로 씁니다."
   }
  }
 }

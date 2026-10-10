@@ -162,6 +162,8 @@ export const Bridge = {
     call<{ width: number; height: number; rgba: string }>("launcher_icon", { index }),
   /** A website entry's own icon as a data URL, fetched from that website; null when it has none. */
   launcherFavicon: (index: number) => call<string | null>("launcher_favicon", { index }),
+  /** The picture the user chose for the entry (an image file of their own) as a data URL, or null. */
+  launcherImage: (index: number) => call<string | null>("launcher_image", { index }),
   /** The launcher's "add" window (settings/add-launcher.ts), shown with an empty form, and put away. */
   openLauncherAdd: () => call<void>("open_launcher_add"),
   closeLauncherAdd: () => call<void>("close_launcher_add"),
