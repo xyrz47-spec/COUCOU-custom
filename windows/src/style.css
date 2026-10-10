@@ -2763,3 +2763,163 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   unicode-bidi: plaintext;
   text-align: start;
 }
+
+/* ── Spotify: the big player ───────────────────────────────────────────────────
+   A click on Spotify's pill gives its card the whole island
+   (State.spotifyPlayerShown): the pills and Mochi step aside, and the same
+   pieces are laid out larger, the cover on the left. */
+.player-back {
+  position: absolute;
+  top: 8px;
+  right: 32px;
+  z-index: 2;
+  display: none;
+}
+
+.overview.player .player-back {
+  display: grid;
+}
+
+.overview.player > .right {
+  display: none;
+}
+
+.overview.player > .left {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+.overview.player .np-card {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 14px 18px 14px 14px;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  column-gap: 18px;
+}
+
+.overview.player .np-head {
+  display: contents;
+}
+
+.overview.player .np-art {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  align-self: center;
+  flex: none;
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.overview.player .np-art::after {
+  border-radius: 12px;
+}
+
+.overview.player .np-art > svg {
+  width: 48px;
+  height: 48px;
+}
+
+.overview.player .np-text {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  gap: 6px;
+  padding-right: 52px;
+}
+
+.overview.player .np-title-row {
+  gap: 8px;
+}
+
+.overview.player .np-title {
+  font: 700 20px var(--font);
+}
+
+.overview.player .np-sub {
+  font: 400 13px var(--font);
+}
+
+.overview.player .np-progress {
+  grid-column: 2;
+  grid-row: 2;
+  gap: 8px;
+  padding-top: 0;
+  font-size: 11px;
+}
+
+.overview.player .np-time.elapsed,
+.overview.player .np-time.remaining {
+  min-width: 32px;
+}
+
+.overview.player .np-bar {
+  height: 16px;
+}
+
+.overview.player .np-track,
+.overview.player .np-fill {
+  height: 4px;
+}
+
+.overview.player .np-bar.active .np-track,
+.overview.player .np-bar.active .np-fill {
+  height: 6px;
+}
+
+.overview.player .np-knob {
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+}
+
+.overview.player .np-controls {
+  grid-column: 2;
+  grid-row: 3;
+  padding-top: 8px;
+}
+
+.overview.player .np-buttons {
+  gap: 20px;
+}
+
+.overview.player .np-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.overview.player .np-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.overview.player .np-play {
+  width: 38px;
+  height: 38px;
+}
+
+.overview.player .np-play svg {
+  width: 16px;
+  height: 16px;
+}
+
+.overview.player .np-volume {
+  gap: 7px;
+}
+
+.overview.player .np-vol-icon {
+  width: 18px;
+}
+
+.overview.player .np-vol-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.overview.player .np-volume .np-bar {
+  flex: 0 0 96px;
+  width: 96px;
+}

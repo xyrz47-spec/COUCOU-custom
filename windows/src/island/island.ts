@@ -7,7 +7,7 @@ import {
   EXPANDED_CORNER, EXPANDED_W, NOTCH_W, PANEL_H, PANEL_W,
   ROUNDED_CORNER, VIEW_LAYOUTS, botGlowColor, botGlowOpacity, botPosition, chatPromptHeight,
   islandSize,
-  QUESTION_PICKER_H,
+  PLAYER_H, QUESTION_PICKER_H,
   type BotEmoteName, type IslandMode, type IslandViewName,
 } from "../core/layout";
 import { Sound } from "../core/sound";
@@ -132,6 +132,11 @@ export class Island {
     };
     State.subscribe(() => {
       this.dirty = true;
+      // The big player is taller than the overview it takes over.
+      if (State.spotifyPlayerShown !== this.playerShown) {
+        this.playerShown = State.spotifyPlayerShown;
+        if (State.mode === "expanded") this.animateGeometry(!this.playerShown);
+      }
       this.ensureRunning();
     });
   }
@@ -678,11 +683,15 @@ export class Island {
 
   // ── Geometry ────────────────────────────────────────────────────────────────
 
+  /** The island is sized for Spotify's big player. */
+  private playerShown = false;
+
   private targetSize(): { w: number; h: number; r: number } {
     let { w, h } = islandSize(State.mode, State.view, State.chatHistory.length);
     if (State.mode === "expanded" && State.view === "question" && State.pendingApproval?.questions) {
       h = QUESTION_PICKER_H;
     }
+    if (State.spotifyPlayerShown) h = PLAYER_H;
     const r = State.mode === "expanded" ? EXPANDED_CORNER : ROUNDED_CORNER;
     return { w, h, r };
   }
@@ -1059,10 +1068,12 @@ export class Island {
     // The drop canvas draws its own Mochi; two of them would overlap. Out on the
     // desktop, he isn't here at all.
     const away = State.mochiOnDesktop;
-    const visible = p.opacity > 0 && !greetingActive && !this.uploadActive && !away;
+    // The big Spotify player takes the whole card: Mochi steps aside for it.
+    const player = State.spotifyPlayerShown;
+    const visible = p.opacity > 0 && !greetingActive && !this.uploadActive && !away && !player;
     this.botCanvas.style.opacity = visible ? "1" : "0";
 
-    if (State.mode === "expanded" && State.view !== "uploading" && !greetingActive && !this.uploadActive && !away) {
+    if (State.mode === "expanded" && State.view !== "uploading" && !greetingActive && !this.uploadActive && !away && !player) {
       const d = p.diameter;
       const color = botGlowColor(State.effectiveState);
       this.botGlow.style.display = "block";

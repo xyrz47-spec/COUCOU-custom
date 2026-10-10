@@ -189,7 +189,13 @@ function buildOverview(actions: ViewActions): ViewHost {
     { class: "icon-btn jump", title: tl("Open"), onclick: () => actions.openTarget() },
     svg(ICONS.arrowUpRight, 8),
   );
-  const left = card(null, leftBody, jump);
+  // Out of Spotify's big player, back to the main pill.
+  const back = h(
+    "button",
+    { class: "icon-btn player-back", title: tl("Back"), onclick: () => actions.setFocus(State.mainPillId) },
+    svg(ICONS.chevronLeft, 8, { stroke: 2.6 }),
+  );
+  const left = card(null, leftBody, jump, back);
   const pills = h("div", { class: "pills" });
   const right = card(null, pills);
   // Opened from a plan pill in the header: stands in for the left card.
@@ -381,6 +387,8 @@ function buildOverview(actions: ViewActions): ViewHost {
       }
 
       jump.style.display = detailOpen || mode === "plan" || mode === "diff" ? "none" : "";
+      // The big player takes the whole island: the pills step aside (style.css).
+      el.classList.toggle("player", mode === "spotify" && State.spotifyPlayerShown);
 
       // Ctrl+↓ Ctrl+↑ walk the open GitHub list (cardItemCount / cardSelection).
       const rows = mode === "card" ? listRows(leftBody) : [];

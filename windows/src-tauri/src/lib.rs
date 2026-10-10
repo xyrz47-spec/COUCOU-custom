@@ -869,6 +869,7 @@ pub fn run() {
             }
             gate.set_active(true);
             island::spawn_cursor_poll(handle.clone(), gate.clone());
+            island::spawn_fullscreen_watch(handle.clone(), gate.clone());
 
             log::line(format!("--- Coucou {} started ---", env!("CARGO_PKG_VERSION")));
             hooks::ensure_hook_exe(&handle);

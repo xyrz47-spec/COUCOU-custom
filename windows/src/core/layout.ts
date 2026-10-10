@@ -102,6 +102,9 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
 /** The question view with options to pick from: room for two rows of them. */
 export const QUESTION_PICKER_H = 200;
 
+/** The overview while Spotify's big player has it (State.spotifyPlayerShown). */
+export const PLAYER_H = 232;
+
 /** Chat view grows with the conversation — IslandContainer.chatPromptHeight. */
 export function chatPromptHeight(messageCount: number): number {
   return Math.min(300, 240 + messageCount * 40);

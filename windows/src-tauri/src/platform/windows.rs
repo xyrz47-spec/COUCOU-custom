@@ -9,7 +9,10 @@ use std::process::Command;
 use tauri::{AppHandle, Manager, WebviewWindow};
 
 use ::windows::core::{BOOL, PWSTR};
-use ::windows::Win32::Foundation::{CloseHandle, HANDLE, HLOCAL, HWND, LPARAM, LocalFree, POINT};
+use ::windows::Win32::Foundation::{CloseHandle, HANDLE, HLOCAL, HWND, LPARAM, LocalFree, POINT, RECT};
+use ::windows::Win32::Graphics::Gdi::{
+    GetMonitorInfoW, MonitorFromWindow, MONITORINFO, MONITOR_DEFAULTTONEAREST,
+};
 use ::windows::Win32::Security::Authorization::ConvertSidToStringSidW;
 use ::windows::Win32::Security::{GetTokenInformation, TokenUser, TOKEN_QUERY, TOKEN_USER};
 use ::windows::Win32::System::Diagnostics::ToolHelp::{
@@ -24,10 +27,11 @@ use ::windows::Win32::UI::Input::KeyboardAndMouse::{
     VK_CONTROL, VK_LBUTTON, VK_MENU, VK_SHIFT,
 };
 use ::windows::Win32::UI::WindowsAndMessaging::{
-    EnumChildWindows, EnumWindows, GetClassNameW, GetCursorPos, GetWindow, GetWindowLongPtrW,
-    GetWindowTextW, GetWindowThreadProcessId, IsIconic, IsWindowVisible, SetForegroundWindow,
-    SetWindowLongPtrW, ShowWindow, GWL_EXSTYLE, GW_OWNER, SW_RESTORE, WS_EX_NOACTIVATE,
-    WS_EX_TOOLWINDOW,
+    EnumChildWindows, EnumWindows, GetClassNameW, GetCursorPos, GetForegroundWindow,
+    GetShellWindow, GetWindow, GetWindowLongPtrW, GetWindowRect, GetWindowTextW,
+    GetWindowThreadProcessId, IsIconic, IsWindowVisible, IsZoomed, SetForegroundWindow,
+    SetWindowLongPtrW, ShowWindow, GWL_EXSTYLE, GWL_STYLE, GW_OWNER, SW_RESTORE, WS_CAPTION,
+    WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW,
 };
 
 use super::LocalTime;
@@ -365,6 +369,50 @@ pub fn set_input_region(_win: &WebviewWindow, _rect: Option<(f64, f64, f64, f64)
 
 /// The cursor poll already parks itself with the island (island.rs): nothing to do.
 pub fn set_pointer_watch(_active: bool) {}
+
+/// Another app fills the island's display: a game, a video, a browser in F11,
+/// exclusive or borderless fullscreen alike. The window in front is the one
+/// that counts, and it has to cover the whole display, taskbar included.
+pub fn fullscreen_app_over(win: &WebviewWindow) -> bool {
+    let Some(island) = hwnd_of(win) else { return false };
+    unsafe {
+        let front = GetForegroundWindow();
+        if front.0.is_null() || front == island || front == GetShellWindow() {
+            return false;
+        }
+        let mut pid = 0u32;
+        GetWindowThreadProcessId(front, Some(&mut pid));
+        if pid == std::process::id() {
+            return false;
+        }
+        // The desktop itself covers the display too.
+        let mut class = [0u16; 64];
+        let len = GetClassNameW(front, &mut class).max(0) as usize;
+        let class = String::from_utf16_lossy(&class[..len.min(class.len())]);
+        if class == "WorkerW" || class == "Progman" {
+            return false;
+        }
+        let monitor = MonitorFromWindow(front, MONITOR_DEFAULTTONEAREST);
+        if monitor != MonitorFromWindow(island, MONITOR_DEFAULTTONEAREST) {
+            return false;
+        }
+        let mut info = MONITORINFO { cbSize: std::mem::size_of::<MONITORINFO>() as u32, ..Default::default() };
+        let mut rect = RECT::default();
+        if !GetMonitorInfoW(monitor, &mut info).as_bool() || GetWindowRect(front, &mut rect).is_err() {
+            return false;
+        }
+        let screen = info.rcMonitor;
+        let covers = rect.left <= screen.left
+            && rect.top <= screen.top
+            && rect.right >= screen.right
+            && rect.bottom >= screen.bottom;
+        // An ordinary maximized window covers it as well when the taskbar hides
+        // itself: it keeps its title bar, a fullscreen window has none.
+        let style = GetWindowLongPtrW(front, GWL_STYLE) as u32;
+        let maximized = IsZoomed(front).as_bool() && style & WS_CAPTION.0 == WS_CAPTION.0;
+        covers && !maximized
+    }
+}
 
 /// `set_position` already places a Win32 window on the right display.
 pub fn pin_to_monitor(_win: &WebviewWindow, _x: i32, _y: i32) {}

@@ -61,6 +61,9 @@ pub struct PollGate {
     pub rect: Mutex<IslandRect>,
     /// Mirrors the window flag so we only call into the OS when it changes.
     ignoring: AtomicBool,
+    /// Another app is fullscreen on the island's display (spawn_fullscreen_watch):
+    /// the mouse is left to it.
+    fullscreen: AtomicBool,
 }
 
 impl PollGate {
@@ -71,6 +74,7 @@ impl PollGate {
             collapsed: AtomicBool::new(true),
             rect: Mutex::new(IslandRect::default()),
             ignoring: AtomicBool::new(false),
+            fullscreen: AtomicBool::new(false),
         }
     }
 
@@ -382,8 +386,14 @@ pub fn spawn_cursor_poll(app: AppHandle, gate: Arc<PollGate>) {
                 let Ok(origin) = win.outer_position() else { continue };
                 let scale = win.scale_factor().unwrap_or(1.0);
                 let Some((cx, cy)) = cursor_physical() else { continue };
-                let x = (cx - origin.x as f64) / scale;
-                let y = (cy - origin.y as f64) / scale;
+                // A fullscreen app has the display: the cursor is its own, and
+                // the page is told it is nowhere near.
+                let fullscreen = gate.fullscreen.load(Ordering::Relaxed);
+                let (x, y) = if fullscreen {
+                    (CURSOR_AWAY, CURSOR_AWAY)
+                } else {
+                    ((cx - origin.x as f64) / scale, (cy - origin.y as f64) / scale)
+                };
                 let size = match win.inner_size() {
                     Ok(s) => (s.width as f64 / scale, s.height as f64 / scale),
                     Err(_) => (PANEL_W, PANEL_H),
@@ -425,7 +435,7 @@ pub fn spawn_cursor_poll(app: AppHandle, gate: Arc<PollGate>) {
                     && y >= 0.0
                     && y <= size.1;
 
-                let accept = on_island || dragging;
+                let accept = (on_island || dragging) && !fullscreen;
                 if gate.ignoring.load(Ordering::Relaxed) == accept {
                     gate.ignoring.store(!accept, Ordering::Relaxed);
                     let _ = win.set_ignore_cursor_events(!accept);
@@ -437,12 +447,47 @@ pub fn spawn_cursor_poll(app: AppHandle, gate: Arc<PollGate>) {
     });
 }
 
+/// Where the page is told the cursor is while a fullscreen app has the display.
+const CURSOR_AWAY: f64 = -10_000.0;
+/// How often the app in front is looked at, in milliseconds.
+const FULLSCREEN_WATCH_MS: u64 = 500;
+
+/// While another app is fullscreen on the island's display — a game, a video,
+/// exclusive or borderless — the island leaves the mouse to it: the whole
+/// window is click-through, wake strip included, and hovering opens nothing.
+/// The island still shows what it has to say, and the global shortcuts still
+/// reach it. Its own thread, because the cursor poll is parked while the
+/// island is hidden, which is when the wake strip sits under the cursor.
+pub fn spawn_fullscreen_watch(app: AppHandle, gate: Arc<PollGate>) {
+    if !platform::CURSOR_POLL {
+        return;
+    }
+    std::thread::spawn(move || loop {
+        std::thread::sleep(Duration::from_millis(FULLSCREEN_WATCH_MS));
+        let Some(win) = window(&app) else { continue };
+        let fullscreen = platform::fullscreen_app_over(&win);
+        if gate.fullscreen.swap(fullscreen, Ordering::Relaxed) == fullscreen {
+            continue;
+        }
+        if fullscreen {
+            let _ = win.emit("cursor", CursorPayload { x: CURSOR_AWAY, y: CURSOR_AWAY });
+        }
+        refresh_click_through(&app, &gate);
+    });
+}
+
 /// Re-applies click-through after the window or the island changed shape.
 ///
 /// With the cursor poll (Windows) the window takes the mouse again and the next
 /// tick decides from the cursor. Without it (Linux) the input region is set to
 /// the island itself, or to the whole wake strip while collapsed.
 pub fn refresh_click_through(app: &AppHandle, gate: &PollGate) {
+    // Not even the wake strip takes the mouse from a fullscreen app.
+    if gate.fullscreen.load(Ordering::Relaxed) {
+        gate.ignoring.store(true, Ordering::Relaxed);
+        set_ignore_cursor(app, true);
+        return;
+    }
     if platform::CURSOR_POLL {
         set_ignore_cursor(app, false);
         gate.forget_ignore_state();

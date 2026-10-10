@@ -401,6 +401,11 @@ fn gtk_window_ptr(win: &gtk::ApplicationWindow) -> *mut gtk::ffi::GtkWindow {
 /// WebKitGTK has no competing drop target to remove.
 pub fn unblock_webview_drops(_app: &AppHandle) {}
 
+/// Windows only: here the compositor keeps the island below fullscreen windows.
+pub fn fullscreen_app_over(_win: &WebviewWindow) -> bool {
+    false
+}
+
 /// Turns the island into an overlay surface on the top edge that never takes
 /// the keyboard. Must run before the window is first shown: a layer surface
 /// cannot be made out of a window the compositor already knows.
