@@ -160,6 +160,8 @@ export const Bridge = {
   /** The entry's icon as RGBA pixels (base64), for a file the system has one for. */
   launcherIcon: (index: number) =>
     call<{ width: number; height: number; rgba: string }>("launcher_icon", { index }),
+  /** A website entry's own icon as a data URL, fetched from that website; null when it has none. */
+  launcherFavicon: (index: number) => call<string | null>("launcher_favicon", { index }),
 
   approvalDecision: (requestId: string, decision: "allow" | "deny") =>
     call<void>("approval_decision", { requestId, decision }),

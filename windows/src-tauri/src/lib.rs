@@ -806,6 +806,7 @@ pub fn run() {
             skills::skill_reveal,
             launcher::launcher_open,
             launcher::launcher_icon,
+            launcher::launcher_favicon,
             approval_decision,
             approval_answer,
             approval_ack,

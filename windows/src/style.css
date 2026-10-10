@@ -3054,44 +3054,49 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
 }
 
 /* ── Launcher (views/launcher.ts) ──────────────────────────────────────────────
-   The fourth tab: a row of large tiles that runs sideways, the one under the
+   The fourth tab: tiles in two rows that run sideways, the one under the
    pointer stepping forward. */
-.launch-row {
+.launch-grid {
   height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: grid;
+  grid-template-rows: repeat(2, 64px);
+  grid-auto-flow: column;
+  grid-auto-columns: 78px;
+  gap: 8px;
+  align-content: center;
   padding: 0 8px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
 }
 
-.launch-row::-webkit-scrollbar {
+.launch-grid::-webkit-scrollbar {
   display: none;
 }
 
 .launch-tile {
-  flex: 0 0 96px;
-  height: 108px;
-  padding: 8px 6px 6px;
+  min-width: 0;
+  padding: 6px 5px 5px;
   border: 1px solid var(--hairline);
-  border-radius: 16px;
+  border-radius: 13px;
   background: var(--card);
   color: var(--ink);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 5px;
   cursor: default;
   transition: transform 0.2s cubic-bezier(0.3, 1.2, 0.4, 1), border-color 0.18s, box-shadow 0.18s;
 }
 
 .launch-tile:hover {
-  transform: scale(1.07);
+  transform: scale(1.08);
   border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.55);
+  /* Over its neighbours, which it now overlaps. */
+  position: relative;
+  z-index: 1;
 }
 
 .launch-tile:active {
@@ -3099,34 +3104,37 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
 }
 
 .launch-art {
-  flex: 0 0 60px;
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   display: grid;
   place-items: center;
   overflow: hidden;
-  font: 700 26px var(--font);
+  font: 700 16px var(--font);
   color: #fff;
 }
 
-.launch-art.has-icon,
-.launch-tile.add .launch-art {
-  background: rgba(255, 255, 255, 0.06);
+.launch-art.has-icon {
+  background: transparent;
+  border-radius: 0;
 }
 
 .launch-tile.add .launch-art {
+  background: rgba(255, 255, 255, 0.06);
   color: var(--dim-3);
 }
 
-.launch-art canvas {
-  width: 44px;
-  height: 44px;
+.launch-art canvas,
+.launch-art img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 .launch-name {
   max-width: 100%;
-  font: 600 10.5px var(--font);
+  font: 600 10px var(--font);
   color: var(--dim);
   white-space: nowrap;
   overflow: hidden;

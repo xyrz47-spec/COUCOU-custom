@@ -95,7 +95,7 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   recap: { height: 184, botX: 62, botY: null, botDiameter: 58, agentMode: "column" },
   wardrobe: { height: 160, botX: 68, botY: null, botDiameter: 58, agentMode: "none" },
   // The tiles take the whole width: Mochi steps aside (island.ts, updateBotTargets).
-  launcher: { height: 176, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
+  launcher: { height: 196, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
 };
 
 // The upload views above are only the fallback geometry. Once a file is actually
