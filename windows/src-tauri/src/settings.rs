@@ -74,6 +74,22 @@ pub struct Settings {
     /// (beat.rs, Windows). Off by default: listening is for the user to ask
     /// for. The page reads it (src/island/spotify.ts), not this side.
     pub dance_to_beat: bool,
+    /// Chat → Task mode: the folder whose subfolders are offered as project
+    /// folders for a task ("" = the home folder)…
+    pub task_projects_root: String,
+    /// …and the project folder picked last, preselected next time.
+    pub task_last_project: String,
+    /// Folders typed into the dropdown's "Other…" (any path, dotted ones
+    /// included), newest first, so they stay offered. Capped by the chat.
+    pub task_recent_dirs: Vec<String>,
+    /// Where finished tasks also land: the answer as a Markdown note, the
+    /// reports as Typst files ("" = only in the project). An Obsidian vault
+    /// folder works well here.
+    pub task_outputs_dir: String,
+    /// The command that opens a session's folder or a diff's file from the
+    /// island — "kitty -e nvim", "subl"… ("" = VS Code, `code`). Run without
+    /// a shell, the path appended as one argument.
+    pub editor_command: String,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -133,6 +149,11 @@ impl Default for Settings {
             language: String::new(),
             announce_songs: false,
             dance_to_beat: false,
+            task_projects_root: String::new(),
+            task_last_project: String::new(),
+            task_recent_dirs: Vec::new(),
+            task_outputs_dir: String::new(),
+            editor_command: String::new(),
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -412,6 +433,11 @@ mod tests {
   "language": "pt-BR",
   "announceSongs": true,
   "danceToBeat": true,
+  "taskProjectsRoot": "/home/me/projects",
+  "taskLastProject": "/home/me/projects/shop",
+  "taskRecentDirs": ["/home/me/.dotfiles"],
+  "taskOutputsDir": "/home/me/vault/outputs",
+  "editorCommand": "kitty -e nvim",
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -831,6 +857,11 @@ mod tests {
                 "language",
                 "announceSongs",
                 "danceToBeat",
+                "taskProjectsRoot",
+                "taskLastProject",
+                "taskRecentDirs",
+                "taskOutputsDir",
+                "editorCommand",
                 "desktopMochi",
             ]
         );
