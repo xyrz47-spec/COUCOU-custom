@@ -12,7 +12,7 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
-import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances } from "../core/spotify";
+import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
 import { t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
 import { Greeting } from "../mochi/greeting";
@@ -63,7 +63,8 @@ export class Island {
   private compactSong!: HTMLElement;
   private compactSongArt!: HTMLImageElement;
   private compactSongTitle!: HTMLElement;
-  private compactSongArtist!: HTMLElement;
+  private compactSongTime!: HTMLElement;
+  private compactSongTimer: number | null = null;
   private wakeStrip!: HTMLElement;
 
   private header!: ViewHost;
@@ -274,13 +275,12 @@ export class Island {
     this.countdown = h("div", { id: "countdown" });
     this.compactSongArt = h("img", { alt: "", draggable: "false" }) as HTMLImageElement;
     this.compactSongTitle = h("span", { class: "title" });
-    this.compactSongArtist = h("span", { class: "artist" });
+    this.compactSongTime = h("i");
     this.compactSong = h(
       "div",
       { id: "compact-song" },
       this.compactSongArt,
-      this.compactSongTitle,
-      this.compactSongArtist,
+      h("div", { class: "text" }, this.compactSongTitle, h("div", { class: "time" }, this.compactSongTime)),
     );
 
     this.header = buildHeader(actions);
@@ -1260,18 +1260,24 @@ export class Island {
 
   /**
    * The compact island has an empty stretch between Mochi and the mini grid:
-   * while Spotify plays on a declared pill, the song is named there, with its
-   * cover. Nothing to click: a click opens the island, as anywhere on it.
+   * while Spotify plays on a declared pill, the song is shown there. Its cover
+   * on the left, its title above, and below a thin line of how far it is.
+   * Nothing to click: a click opens the island, as anywhere on it.
    */
   private syncCompactSong() {
     const track = Spotify.state.track;
     const show = State.mode === "compact" && State.spotifyPlaying && track != null;
     this.compactSong.classList.toggle("on", show);
+    // The line moves once a second, and only while it is on screen.
+    if (show && this.compactSongTimer == null) {
+      this.compactSongTimer = window.setInterval(() => this.paintCompactSongTime(), 1000);
+    } else if (!show && this.compactSongTimer != null) {
+      window.clearInterval(this.compactSongTimer);
+      this.compactSongTimer = null;
+    }
     if (!show || !track) return;
     const title = isAd(track) ? t("Advertisement") : track.title;
-    const artist = isAd(track) ? "" : track.artist;
     if (this.compactSongTitle.textContent !== title) this.compactSongTitle.textContent = title;
-    if (this.compactSongArtist.textContent !== artist) this.compactSongArtist.textContent = artist;
     const cover = currentArtwork(Spotify.state);
     if (cover) {
       if (this.compactSongArt.getAttribute("src") !== cover) this.compactSongArt.setAttribute("src", cover);
@@ -1279,6 +1285,14 @@ export class Island {
       this.compactSongArt.removeAttribute("src");
     }
     this.compactSongArt.style.display = cover ? "" : "none";
+    this.paintCompactSongTime();
+  }
+
+  private paintCompactSongTime() {
+    const s = Spotify.state;
+    const duration = s.track?.duration ?? 0;
+    const done = duration > 0 ? Math.min(1, Math.max(0, spotifyPosition(s, Date.now()) / duration)) : 0;
+    this.compactSongTime.style.width = `${done * 100}%`;
   }
 
   /** Applies settings coming from Rust at boot. */
