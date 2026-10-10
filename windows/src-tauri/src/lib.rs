@@ -28,6 +28,7 @@ mod secrets;
 mod session_window;
 mod settings;
 mod shortcuts;
+mod skills;
 mod sounds;
 mod spotify;
 mod taktus;
@@ -789,6 +790,9 @@ pub fn run() {
             task_cancel,
             task_projects,
             task_reveal,
+            skills::skills_list,
+            skills::skill_set_enabled,
+            skills::skill_reveal,
             approval_decision,
             approval_answer,
             approval_ack,

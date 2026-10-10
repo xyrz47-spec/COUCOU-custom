@@ -17,6 +17,7 @@ import {
 } from "../core/pills";
 import { h, clear } from "../views/dom";
 import { agentsSection } from "./agents";
+import { skillsSection } from "./skills";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
 import {
@@ -1400,6 +1401,7 @@ async function render() {
     installed: false, planRelayInstalled: false, settingsPath: "", hookPath: "", hookReady: false,
   };
   const agents = await Bridge.agentHooksList();
+  const skills = await Bridge.skillsList();
 
   const hasKey = (await Bridge.secretPresent("anthropic-api-key")) ?? false;
   const shortcutReport = await Bridge.shortcutsStatus();
@@ -1441,6 +1443,7 @@ async function render() {
     h("h1", {}, h("span", { text: "Coucou" }), h("span", { class: "version", text: version })),
     claudeSection(status),
     agentsSection(agents),
+    skillsSection(skills),
     planSection(status),
     apiSection(hasKey),
     chatProvidersSection(chatKeys, keyChanged),

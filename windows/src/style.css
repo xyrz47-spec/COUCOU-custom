@@ -697,7 +697,9 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 6px;
+  /* Clear of the mini Mochi on the left (7 + 24 px): a long name is cut short
+     instead of running under him. */
+  padding: 0 8px 0 34px;
   pointer-events: none;
 }
 

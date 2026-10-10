@@ -4023,6 +4023,90 @@
    "ru": "Маленький плеер",
    "id": "Pemutar kecil",
    "ko": "작게 보기"
+  },
+  "Skills": {
+   "zh-Hans": "技能",
+   "hi": "स्किल",
+   "es": "Skills",
+   "ar": "المهارات",
+   "fr": "Skills",
+   "bn": "স্কিল",
+   "pt-BR": "Skills",
+   "ru": "Навыки",
+   "id": "Skill",
+   "ko": "스킬"
+  },
+  "Turn Claude Code's skills on and off: your own, and each project's. A skill turned off stays in its folder with SKILL.md renamed to SKILL.md.disabled. New sessions pick the change up.": {
+   "zh-Hans": "开启或关闭 Claude Code 的技能：你自己的，以及各项目的。关闭的技能仍留在原文件夹中，只是 SKILL.md 被重命名为 SKILL.md.disabled。新会话会应用更改。",
+   "hi": "Claude Code के स्किल चालू या बंद करें: आपके अपने और हर प्रोजेक्ट के। बंद किया गया स्किल अपने फ़ोल्डर में ही रहता है, बस SKILL.md का नाम SKILL.md.disabled हो जाता है। नए सेशन में बदलाव लागू होता है।",
+   "es": "Activa o desactiva las skills de Claude Code: las tuyas y las de cada proyecto. Una skill desactivada se queda en su carpeta, con SKILL.md renombrado a SKILL.md.disabled. Las sesiones nuevas aplican el cambio.",
+   "ar": "شغّل مهارات Claude Code أو أوقفها: مهاراتك ومهارات كل مشروع. المهارة الموقوفة تبقى في مجلدها، ويُعاد تسمية SKILL.md إلى SKILL.md.disabled. الجلسات الجديدة تطبّق التغيير.",
+   "fr": "Active ou désactive les skills de Claude Code : les tiennes et celles de chaque projet. Une skill désactivée reste dans son dossier, son SKILL.md renommé en SKILL.md.disabled. Les nouvelles sessions prennent le changement en compte.",
+   "bn": "Claude Code-এর স্কিল চালু বা বন্ধ করুন: আপনার নিজের এবং প্রতিটি প্রজেক্টের। বন্ধ করা স্কিল তার ফোল্ডারেই থাকে, শুধু SKILL.md-এর নাম বদলে SKILL.md.disabled হয়। নতুন সেশনে পরিবর্তনটি কার্যকর হয়।",
+   "pt-BR": "Ative ou desative as skills do Claude Code: as suas e as de cada projeto. Uma skill desativada continua na pasta, com o SKILL.md renomeado para SKILL.md.disabled. As novas sessões aplicam a mudança.",
+   "ru": "Включайте и выключайте навыки Claude Code: свои и навыки каждого проекта. Выключенный навык остаётся в своей папке, а SKILL.md переименовывается в SKILL.md.disabled. Изменение применяется в новых сессиях.",
+   "id": "Nyalakan atau matikan skill Claude Code: milik Anda dan milik tiap proyek. Skill yang dimatikan tetap di foldernya, hanya SKILL.md diganti nama menjadi SKILL.md.disabled. Sesi baru menerapkan perubahan ini.",
+   "ko": "Claude Code의 스킬을 켜고 끕니다. 내 스킬과 각 프로젝트의 스킬이 대상입니다. 끈 스킬은 폴더에 그대로 남고 SKILL.md만 SKILL.md.disabled로 이름이 바뀝니다. 변경 내용은 새 세션부터 적용됩니다."
+  },
+  "My skills": {
+   "zh-Hans": "我的技能",
+   "hi": "मेरे स्किल",
+   "es": "Mis skills",
+   "ar": "مهاراتي",
+   "fr": "Mes skills",
+   "bn": "আমার স্কিল",
+   "pt-BR": "Minhas skills",
+   "ru": "Мои навыки",
+   "id": "Skill saya",
+   "ko": "내 스킬"
+  },
+  "Project skills": {
+   "zh-Hans": "项目技能",
+   "hi": "प्रोजेक्ट के स्किल",
+   "es": "Skills del proyecto",
+   "ar": "مهارات المشروع",
+   "fr": "Skills du projet",
+   "bn": "প্রজেক্টের স্কিল",
+   "pt-BR": "Skills do projeto",
+   "ru": "Навыки проекта",
+   "id": "Skill proyek",
+   "ko": "프로젝트 스킬"
+  },
+  "Search skills…": {
+   "zh-Hans": "搜索技能…",
+   "hi": "स्किल खोजें…",
+   "es": "Buscar skills…",
+   "ar": "ابحث في المهارات…",
+   "fr": "Rechercher une skill…",
+   "bn": "স্কিল খুঁজুন…",
+   "pt-BR": "Buscar skills…",
+   "ru": "Поиск навыков…",
+   "id": "Cari skill…",
+   "ko": "스킬 검색…"
+  },
+  "{on} of {total} on": {
+   "zh-Hans": "已开启 {on}/{total}",
+   "hi": "{total} में से {on} चालू",
+   "es": "{on} de {total} activas",
+   "ar": "{on} من {total} مفعّلة",
+   "fr": "{on} sur {total} activées",
+   "bn": "{total}টির মধ্যে {on}টি চালু",
+   "pt-BR": "{on} de {total} ativas",
+   "ru": "Включено {on} из {total}",
+   "id": "{on} dari {total} aktif",
+   "ko": "{total}개 중 {on}개 켜짐"
+  },
+  "No skills found.": {
+   "zh-Hans": "未找到技能。",
+   "hi": "कोई स्किल नहीं मिला।",
+   "es": "No se encontraron skills.",
+   "ar": "لم يُعثر على مهارات.",
+   "fr": "Aucune skill trouvée.",
+   "bn": "কোনো স্কিল পাওয়া যায়নি।",
+   "pt-BR": "Nenhuma skill encontrada.",
+   "ru": "Навыки не найдены.",
+   "id": "Skill tidak ditemukan.",
+   "ko": "스킬이 없습니다."
   }
  }
 }

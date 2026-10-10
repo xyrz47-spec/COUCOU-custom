@@ -427,3 +427,65 @@ select option {
 html[dir="rtl"] :is(.diff, .path, .keycap, input[type="password"], input[type="text"]) {
   direction: ltr;
 }
+
+/* ── Skills (skills.ts) ────────────────────────────────────────────────────── */
+
+.skill-search {
+  width: 100%;
+}
+
+.skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* A long list scrolls inside its own frame, so the sections below stay in reach. */
+.skill-list {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+}
+
+.skill-row + .skill-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.skill-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.skill-name {
+  font: 600 12.5px var(--font);
+}
+
+.skill-desc {
+  font: 400 11.5px var(--font);
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skill-desc:empty {
+  display: none;
+}
+
+.skill-row.off .skill-name {
+  color: var(--dim);
+}

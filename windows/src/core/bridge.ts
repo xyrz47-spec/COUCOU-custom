@@ -142,6 +142,12 @@ export const Bridge = {
   /** The bubble's folder button: the project's reports/ if any, else the project. */
   taskReveal: (dir: string) => call<void>("task_reveal", { dir }),
 
+  // ── Settings → Skills: Claude Code's skills, the user's and each project's ──
+  skillsList: () => call<SkillGroup[]>("skills_list"),
+  /** Renames the skill's SKILL.md out of Claude Code's sight, or back. Throws when it could not. */
+  skillSetEnabled: (path: string, enabled: boolean) => callOrThrow<void>("skill_set_enabled", { path, enabled }),
+  skillReveal: (path: string) => call<void>("skill_reveal", { path }),
+
   approvalDecision: (requestId: string, decision: "allow" | "deny") =>
     call<void>("approval_decision", { requestId, decision }),
   /** "The card is up" — until this lands the relay only waits a moment. */
@@ -241,6 +247,23 @@ export const Bridge = {
   /** A Mochi dances to the song where he can be seen, or no longer does: Rust listens to it only then. */
   spotifyDancing: (on: boolean) => call<void>("spotify_dancing", { on }),
 };
+
+/** One of Claude Code's skills (src-tauri/src/skills.rs). */
+export interface SkillInfo {
+  name: string;
+  description: string;
+  /** The skill's folder. */
+  path: string;
+  enabled: boolean;
+}
+
+export interface SkillGroup {
+  /** The project's folder; empty for the user's own skills. */
+  project: string;
+  /** The folder the skills are in. */
+  root: string;
+  skills: SkillInfo[];
+}
 
 export type SpotifyAction = "playPause" | "next" | "previous" | "seek" | "shuffle" | "repeat" | "volume";
 
