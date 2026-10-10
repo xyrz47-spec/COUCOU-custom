@@ -2923,3 +2923,59 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   flex: 0 0 96px;
   width: 96px;
 }
+
+/* ── Spotify in the compact island ─────────────────────────────────────────────
+   Between Mochi (left) and the mini grid (right), while a song plays: its
+   cover, its title, and the artist in what room is left (island.ts,
+   syncCompactSong). It takes no clicks: a click opens the island. */
+#compact-song {
+  position: absolute;
+  left: 62px;
+  right: 62px;
+  top: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+#compact-song.on {
+  opacity: 1;
+}
+
+#compact-song img {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+#compact-song .title,
+#compact-song .artist {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#compact-song .title {
+  flex: 0 1 auto;
+  font: 600 11px var(--font);
+  color: var(--ink);
+}
+
+#compact-song .artist {
+  flex: 0 100 auto;
+  font: 400 10.5px var(--font);
+  color: var(--dim-2);
+}
+
+#compact-song .artist:empty {
+  display: none;
+}

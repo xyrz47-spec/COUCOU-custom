@@ -12,7 +12,8 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
-import { SPOTIFY_ID, islandDances } from "../core/spotify";
+import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances } from "../core/spotify";
+import { t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
 import { Greeting } from "../mochi/greeting";
 import { createMiniBot, pruneMiniBots, syncMiniBotStates, tickMiniBots } from "../mochi/minibots";
@@ -58,6 +59,11 @@ export class Island {
   private greetingCanvas!: HTMLCanvasElement;
   private miniGrid!: HTMLElement;
   private countdown!: HTMLElement;
+  /** What Spotify plays, in the compact island (syncCompactSong). */
+  private compactSong!: HTMLElement;
+  private compactSongArt!: HTMLImageElement;
+  private compactSongTitle!: HTMLElement;
+  private compactSongArtist!: HTMLElement;
   private wakeStrip!: HTMLElement;
 
   private header!: ViewHost;
@@ -266,6 +272,16 @@ export class Island {
     this.greetingCanvas = h("canvas", { id: "greeting-canvas" });
     this.miniGrid = h("div", { id: "mini-grid" });
     this.countdown = h("div", { id: "countdown" });
+    this.compactSongArt = h("img", { alt: "", draggable: "false" }) as HTMLImageElement;
+    this.compactSongTitle = h("span", { class: "title" });
+    this.compactSongArtist = h("span", { class: "artist" });
+    this.compactSong = h(
+      "div",
+      { id: "compact-song" },
+      this.compactSongArt,
+      this.compactSongTitle,
+      this.compactSongArtist,
+    );
 
     this.header = buildHeader(actions);
     this.views = buildViews(actions, () => this.animateGeometry(false));
@@ -299,6 +315,7 @@ export class Island {
       this.botGlow,
       this.botCanvas,
       this.miniGrid,
+      this.compactSong,
       this.countdown,
     );
 
@@ -1236,8 +1253,32 @@ export class Island {
       }
     }
 
+    this.syncCompactSong();
     syncMiniBotStates(State.tasks);
     this.engine.setState(State.effectiveState);
+  }
+
+  /**
+   * The compact island has an empty stretch between Mochi and the mini grid:
+   * while Spotify plays on a declared pill, the song is named there, with its
+   * cover. Nothing to click: a click opens the island, as anywhere on it.
+   */
+  private syncCompactSong() {
+    const track = Spotify.state.track;
+    const show = State.mode === "compact" && State.spotifyPlaying && track != null;
+    this.compactSong.classList.toggle("on", show);
+    if (!show || !track) return;
+    const title = isAd(track) ? t("Advertisement") : track.title;
+    const artist = isAd(track) ? "" : track.artist;
+    if (this.compactSongTitle.textContent !== title) this.compactSongTitle.textContent = title;
+    if (this.compactSongArtist.textContent !== artist) this.compactSongArtist.textContent = artist;
+    const cover = currentArtwork(Spotify.state);
+    if (cover) {
+      if (this.compactSongArt.getAttribute("src") !== cover) this.compactSongArt.setAttribute("src", cover);
+    } else {
+      this.compactSongArt.removeAttribute("src");
+    }
+    this.compactSongArt.style.display = cover ? "" : "none";
   }
 
   /** Applies settings coming from Rust at boot. */
