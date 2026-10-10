@@ -93,6 +93,9 @@ pub struct Settings {
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
+    /// Where the island was dropped, if the user moved it. Owned by the Rust side
+    /// (island/placement.rs) — what a webview sends back is ignored. None: top centre of `screen`.
+    pub island_spot: Option<IslandSpot>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -110,6 +113,20 @@ pub struct DesktopSpot {
     pub y: f64,
     /// What x and y are measured in (`DesktopMode::space`).
     pub space: String,
+}
+
+/// Where the user left the island, measured on the display it is on, so that it follows that display
+/// through a layout, resolution or scale change (island/placement.rs).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IslandSpot {
+    /// The display's key (`island::DisplayId::key()`), in the format of `Settings::screen`.
+    pub display: String,
+    /// Logical pixels from the display's left edge to the island's centre line.
+    pub x: f64,
+    /// Logical pixels from the display's top edge to the top of the island; 0 when docked.
+    pub y: f64,
+    /// Docked to the top edge: square top corners and the invisible wake strip.
+    pub docked: bool,
 }
 
 fn default_model() -> String {
@@ -155,6 +172,7 @@ impl Default for Settings {
             task_outputs_dir: String::new(),
             editor_command: String::new(),
             desktop_mochi: DesktopMochiPref::default(),
+            island_spot: None,
         }
     }
 }
@@ -173,7 +191,13 @@ pub fn load() -> Settings {
     load_from(&settings_path())
 }
 
+/// One save at a time: they all go through the same temporary file (`save_to`), and Settings (main
+/// thread), the dropped island (poll thread, island/placement.rs) and Mochi (desktop.rs) save from
+/// different threads. Two interleaved writes could leave unreadable JSON behind.
+static SAVING: Mutex<()> = Mutex::new(());
+
 pub fn save(settings: &Settings) -> std::io::Result<()> {
+    let _one_at_a_time = SAVING.lock().unwrap_or_else(PoisonError::into_inner);
     let dir = config_dir();
     crate::platform::ensure_private_dir(&dir)?;
     save_to(&settings_path(), settings)
@@ -438,7 +462,8 @@ mod tests {
   "taskRecentDirs": ["/home/me/.dotfiles"],
   "taskOutputsDir": "/home/me/vault/outputs",
   "editorCommand": "kitty -e nvim",
-  "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
+  "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } },
+  "islandSpot": { "display": "at:-1080,0|DISPLAY2|1080x1920", "x": 540.0, "y": 280.0, "docked": false }
 }"##;
 
     fn custom() -> Value {
@@ -561,6 +586,22 @@ mod tests {
     }
 
     #[test]
+    fn a_file_from_before_the_island_spot_keeps_the_island_at_the_top_centre() {
+        let loaded = parse(&custom_with("islandSpot", None)).unwrap();
+        assert_eq!(loaded.island_spot, None);
+        assert_eq!(loaded.mochi_outfit, "witchHat");
+    }
+
+    #[test]
+    fn a_half_written_island_spot_costs_only_the_spot() {
+        for half in [json!({ "display": "x" }), json!({ "x": "left", "y": 0, "docked": true, "display": "d" })] {
+            let loaded = parse(&custom_with("islandSpot", Some(half.clone()))).unwrap();
+            assert_eq!(loaded.island_spot, None, "{half}");
+            assert_eq!(loaded.model, "some-model", "{half}");
+        }
+    }
+
+    #[test]
     fn a_file_from_before_the_colours_paints_every_pill_as_the_catalog_says() {
         let loaded = parse(&custom_with("pillColors", None)).unwrap();
         assert!(loaded.pill_colors.is_empty());
@@ -623,6 +664,7 @@ mod tests {
             ("mainPill", json!(["agent_cursor"])),
             ("screen", Value::Null),
             ("shortcuts", json!("Ctrl+Alt+A")),
+            ("islandSpot", json!("left")),
         ] {
             let loaded = parse(&custom_with(key, Some(wrong)))
                 .unwrap_or_else(|| panic!("a file with a bad {key} was thrown away"));
@@ -863,6 +905,7 @@ mod tests {
                 "taskOutputsDir",
                 "editorCommand",
                 "desktopMochi",
+                "islandSpot",
             ]
         );
         let _ = std::fs::remove_dir_all(&dir);
