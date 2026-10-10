@@ -334,6 +334,7 @@ export class Island {
   // ── FSM ─────────────────────────────────────────────────────────────────────
 
   private wireFsm() {
+    this.fsm.keepCompact = true;
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;
     this.fsm.openOnHover = State.settings.openOnHover;
     this.fsm.onTransition = (from, to) => {

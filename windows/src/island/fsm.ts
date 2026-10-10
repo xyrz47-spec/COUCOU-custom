@@ -23,6 +23,11 @@ export class IslandStateMachine {
   }
   /** petit → hidden delay, seconds. */
   petitToHiddenDelay = 60;
+  /**
+   * The compact island stays on screen for good instead of hiding after
+   * `petitToHiddenDelay`: left alone for a while, it looked as if Coucou had quit.
+   */
+  keepCompact = false;
   /** Whether ordinary resting and activity states may use the compact island. */
   get showCompactIsland(): boolean {
     return this.compactVisible;
@@ -206,7 +211,7 @@ export class IslandStateMachine {
     this.clear("petitHide");
     // A card folded away while it waits for an answer keeps the compact island
     // on screen, so it can be reopened (isHeldOpen on macOS).
-    if (this.pinned) return;
+    if (this.pinned || (this.keepCompact && this.showCompactIsland)) return;
     this.petitHide = window.setTimeout(() => {
       this.petitHide = null;
       if (this.state === "petit" && !this.pinned) this.transition("hidden");
