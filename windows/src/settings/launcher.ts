@@ -7,11 +7,11 @@ import { clear, h } from "../views/dom";
 import { t } from "../i18n/i18n";
 
 /** As many as launcher.rs keeps room for. */
-const MAX_ITEMS = 24;
+export const MAX_ITEMS = 24;
 
-const isWeb = (target: string): boolean => /^https?:\/\/\S+\.\S+/i.test(target);
+export const isWeb = (target: string): boolean => /^https?:\/\/\S+\.\S+/i.test(target);
 /** A full path: `C:\…`, `\\server\…` or `/…`. Whether it exists is the app's to find out. */
-const isPath = (target: string): boolean => /^([a-z]:[\\/]|\\\\|\/)/i.test(target);
+export const isPath = (target: string): boolean => /^([a-z]:[\\/]|\\\\|\/)/i.test(target);
 
 /** What to call an entry the user gave no name: the site, or the file without its extension. */
 export function defaultName(target: string): string {

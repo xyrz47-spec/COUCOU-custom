@@ -723,6 +723,65 @@ fn create_settings_window(app: &AppHandle) {
     }
 }
 
+/// The launcher's "add" window (src/settings/add-launcher.ts): a small form of
+/// its own behind the launcher tab's + tile. Made hidden at launch, for the
+/// reason the settings window is, and only ever shown and hidden afterwards.
+const LAUNCHER_ADD: &str = "launcher-add";
+
+fn create_launcher_window(app: &AppHandle) {
+    #[cfg(dev)]
+    let dev = app.config().build.dev_url.clone().map(|mut base| {
+        base.set_path("/launcher.html");
+        WebviewUrl::External(base)
+    });
+    #[cfg(not(dev))]
+    let dev: Option<WebviewUrl> = None;
+    let url = dev.unwrap_or_else(|| WebviewUrl::App("launcher.html".into()));
+    match WebviewWindowBuilder::new(app, LAUNCHER_ADD, url)
+        .additional_browser_args(BROWSER_ARGS)
+        .title(i18n::t("Add to the launcher"))
+        .inner_size(440.0, 290.0)
+        .resizable(false)
+        .maximizable(false)
+        .visible(false)
+        .center()
+        .build()
+    {
+        Ok(win) => {
+            // Closing it must only hide it, or it could never be reopened.
+            let hidden = win.clone();
+            win.on_window_event(move |event| {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                    api.prevent_close();
+                    let _ = hidden.hide();
+                }
+            });
+        }
+        Err(err) => log::line(format!("launcher window failed: {err}")),
+    }
+}
+
+/// The launcher tab's + tile: the "add" window, with an empty form.
+#[tauri::command]
+fn open_launcher_add(app: AppHandle) {
+    let Some(win) = app.get_webview_window(LAUNCHER_ADD) else {
+        log::line("launcher window missing");
+        return;
+    };
+    let _ = win.set_title(&i18n::t("Add to the launcher"));
+    let _ = app.emit_to(LAUNCHER_ADD, "launcher-add-open", ());
+    let _ = win.unminimize();
+    let _ = win.show();
+    let _ = win.set_focus();
+}
+
+#[tauri::command]
+fn close_launcher_add(app: AppHandle) {
+    if let Some(win) = app.get_webview_window(LAUNCHER_ADD) {
+        let _ = win.hide();
+    }
+}
+
 pub fn show_settings_window(app: &AppHandle) {
     let Some(win) = app.get_webview_window("settings") else {
         log::line("settings window missing");
@@ -807,6 +866,8 @@ pub fn run() {
             launcher::launcher_open,
             launcher::launcher_icon,
             launcher::launcher_favicon,
+            open_launcher_add,
+            close_launcher_add,
             approval_decision,
             approval_answer,
             approval_ack,
@@ -862,6 +923,7 @@ pub fn run() {
             tray::build(&handle)?;
             // Before the island: see create_settings_window.
             create_settings_window(&handle);
+            create_launcher_window(&handle);
             // Same rule for Mochi's desktop window.
             desktop::setup(&handle);
 

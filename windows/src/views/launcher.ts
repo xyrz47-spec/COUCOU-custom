@@ -3,10 +3,11 @@
 // (src-tauri/src/launcher.rs). A tile wears its entry's own icon: an app's
 // from the system, a website's from that website (kept once fetched, so the
 // site is asked one time). Until it comes, or when there is none, the tile
-// shows the entry's initial on a colour of its own.
+// shows a mini Mochi in a colour of the entry's own, as a pill does.
 
 import { Bridge } from "../core/bridge";
-import { State, type LauncherItem } from "../core/state";
+import { State, type AgentTask, type LauncherItem } from "../core/state";
+import { createMiniBot, pruneMiniBots, releaseMiniBot } from "../mochi/minibots";
 import { clear, h, svg } from "./dom";
 import { ICONS } from "./icons";
 import type { ViewActions, ViewHost } from "./views";
@@ -21,10 +22,33 @@ export function tileHue(text: string): number {
   return Math.abs(hash) % 360;
 }
 
-/** The letter a tile without an icon shows: the name's first, else the address's. */
-export function tileInitial(item: LauncherItem): string {
-  const name = item.name.trim() || item.target.replace(/^https?:\/\/(www\.)?/i, "");
-  return ([...name][0] ?? "?").toUpperCase();
+/** The entry's colour as "#RRGGBB": the mini Mochi of a tile without an icon wears it. */
+export function tileColor(text: string): string {
+  const h = tileHue(text) / 360;
+  const s = 0.62;
+  const l = 0.58;
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const channel = (t: number) => {
+    t = (t + 1) % 1;
+    const v = t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p;
+    return Math.round(v * 255).toString(16).padStart(2, "0");
+  };
+  return `#${channel(h + 1 / 3)}${channel(h)}${channel(h - 1 / 3)}`;
+}
+
+/** What a mini Mochi is made from: a pill's task, with only a colour to it. */
+function tilePill(item: LauncherItem): AgentTask {
+  return {
+    id: `launcher:${item.target}`,
+    name: item.name,
+    color: tileColor(item.target),
+    state: "idle",
+    stepIndex: 0,
+    steps: [],
+    source: "agent",
+    isIntegration: false,
+  };
 }
 
 // ── Website icons, kept ───────────────────────────────────────────────────────
@@ -85,7 +109,7 @@ export function buildLauncher(actions: ViewActions): ViewHost {
     "div",
     { class: "launch-empty" },
     h("span", { text: tl("Add websites and apps in Settings.") }),
-    h("button", { class: "link-btn", text: tl("Open Settings"), onclick: () => actions.openSettingsWindow() }),
+    h("button", { class: "link-btn", text: tl("Add"), onclick: () => void Bridge.openLauncherAdd() }),
   );
   const el = h("div", { class: "view launcher" }, grid, empty);
   // The rows run sideways: the wheel moves along them.
@@ -98,13 +122,15 @@ export function buildLauncher(actions: ViewActions): ViewHost {
   let shown = "";
 
   function tile(item: LauncherItem, index: number): HTMLElement {
-    const art = h("div", { class: "launch-art" }, h("span", { text: tileInitial(item) }));
-    const hue = tileHue(item.target);
-    art.style.background = `linear-gradient(145deg, hsl(${hue} 62% 46%), hsl(${(hue + 40) % 360} 58% 30%))`;
+    // A mini Mochi until the icon comes, and for good when there is none.
+    const pill = createMiniBot(tilePill(item), 24);
+    const art = h("div", { class: "launch-art pill" }, pill);
     const wear = (picture: HTMLElement) => {
+      const canvas = pill.querySelector("canvas");
+      if (canvas) releaseMiniBot(canvas);
       clear(art);
+      art.classList.remove("pill");
       art.classList.add("has-icon");
-      art.style.background = "";
       art.append(picture);
     };
     if (isWebTarget(item.target)) {
@@ -144,11 +170,13 @@ export function buildLauncher(actions: ViewActions): ViewHost {
       if (key === shown) return;
       shown = key;
       clear(grid);
+      // The mini Mochis of the tiles just taken down are let go with them.
+      pruneMiniBots();
       items.forEach((item, index) => grid.append(tile(item, index)));
       if (items.length > 0) {
         grid.append(h(
           "button",
-          { class: "launch-tile add", title: tl("Open Settings"), onclick: () => actions.openSettingsWindow() },
+          { class: "launch-tile add", title: tl("Add to the launcher"), onclick: () => void Bridge.openLauncherAdd() },
           h("div", { class: "launch-art" }, svg(ICONS.plus, 16)),
           h("span", { class: "launch-name", text: tl("Add") }),
         ));

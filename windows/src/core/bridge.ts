@@ -162,6 +162,9 @@ export const Bridge = {
     call<{ width: number; height: number; rgba: string }>("launcher_icon", { index }),
   /** A website entry's own icon as a data URL, fetched from that website; null when it has none. */
   launcherFavicon: (index: number) => call<string | null>("launcher_favicon", { index }),
+  /** The launcher's "add" window (settings/add-launcher.ts), shown with an empty form, and put away. */
+  openLauncherAdd: () => call<void>("open_launcher_add"),
+  closeLauncherAdd: () => call<void>("close_launcher_add"),
 
   approvalDecision: (requestId: string, decision: "allow" | "deny") =>
     call<void>("approval_decision", { requestId, decision }),

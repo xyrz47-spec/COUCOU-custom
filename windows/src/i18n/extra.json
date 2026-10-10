@@ -4191,6 +4191,30 @@
    "ru": "Добавьте сайты и приложения в настройках.",
    "id": "Tambahkan situs web dan aplikasi di Pengaturan.",
    "ko": "설정에서 웹사이트와 앱을 추가하세요."
+  },
+  "Add to the launcher": {
+   "zh-Hans": "添加到启动器",
+   "hi": "लॉन्चर में जोड़ें",
+   "es": "Añadir al lanzador",
+   "ar": "إضافة إلى المشغّل",
+   "fr": "Ajouter au lanceur",
+   "bn": "লঞ্চারে যোগ করুন",
+   "pt-BR": "Adicionar ao lançador",
+   "ru": "Добавить в лаунчер",
+   "id": "Tambah ke peluncur",
+   "ko": "런처에 추가"
+  },
+  "Drop an app, a shortcut or a folder here, or type a web address or a full path.": {
+   "zh-Hans": "将应用、快捷方式或文件夹拖到这里，或输入网址或完整路径。",
+   "hi": "किसी ऐप, शॉर्टकट या फ़ोल्डर को यहाँ छोड़ें, या कोई वेब पता या पूरा पाथ लिखें।",
+   "es": "Suelta aquí una app, un acceso directo o una carpeta, o escribe una dirección web o una ruta completa.",
+   "ar": "أفلت تطبيقًا أو اختصارًا أو مجلدًا هنا، أو اكتب عنوان ويب أو مسارًا كاملًا.",
+   "fr": "Dépose ici une app, un raccourci ou un dossier, ou saisis une adresse web ou un chemin complet.",
+   "bn": "এখানে কোনো অ্যাপ, শর্টকাট বা ফোল্ডার ছেড়ে দিন, অথবা একটি ওয়েব ঠিকানা বা পুরো পাথ লিখুন।",
+   "pt-BR": "Solte aqui um app, um atalho ou uma pasta, ou digite um endereço web ou um caminho completo.",
+   "ru": "Перетащите сюда приложение, ярлык или папку либо введите веб-адрес или полный путь.",
+   "id": "Letakkan aplikasi, pintasan, atau folder di sini, atau ketik alamat web atau path lengkap.",
+   "ko": "앱·바로가기·폴더를 여기에 끌어다 놓거나, 웹 주소 또는 전체 경로를 입력하세요."
   }
  }
 }

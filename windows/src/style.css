@@ -3120,6 +3120,13 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   border-radius: 0;
 }
 
+/* No icon (yet): a mini Mochi in the entry's colour, as in a pill. */
+.launch-art.pill {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  overflow: visible;
+}
+
 .launch-tile.add .launch-art {
   background: rgba(255, 255, 255, 0.06);
   color: var(--dim-3);
