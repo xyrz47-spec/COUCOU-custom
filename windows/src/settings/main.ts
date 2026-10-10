@@ -1360,14 +1360,16 @@ async function rerender() {
     renderAgain = true;
     return;
   }
-  const scroll = document.scrollingElement?.scrollTop ?? 0;
+  // The pages scroll in their own frame, not the window.
+  const scroll = root.querySelector(".pages")?.scrollTop ?? 0;
   rendering = render();
   try {
     await rendering;
   } finally {
     rendering = null;
   }
-  if (document.scrollingElement) document.scrollingElement.scrollTop = scroll;
+  const shelf = root.querySelector(".pages");
+  if (shelf) shelf.scrollTop = scroll;
   if (renderAgain) {
     renderAgain = false;
     await rerender();
@@ -1447,25 +1449,94 @@ async function render() {
   declaredViews.length = 0;
   localRedraw = null;
   shortcutsListener = null;
-  clear(root);
-  root.append(
-    h("h1", {}, h("span", { text: "Coucou" }), h("span", { class: "version", text: version })),
-    claudeSection(status),
-    agentsSection(agents),
-    planSection(status),
-    apiSection(hasKey),
-    chatProvidersSection(chatKeys, keyChanged),
-    localSection(customKey),
-    activePillsSection(connected),
-    integrationsSection(present),
-    generalSection(),
-    launcherSection(() => settings, save),
-    shortcutsSection(shortcutReport),
-    h("div", {
-      class: "hint",
-      text: t("No telemetry. Network requests only go to the services you configure yourself."),
-    }),
+  // One page at a time, picked in the column on the left.
+  const pages: Page[] = [
+    { id: "claude", label: "Claude Code", color: "#F29B38", sections: [claudeSection(status), planSection(status), agentsSection(agents)] },
+    { id: "chat", label: t("Chat"), color: "#60A5FA", sections: [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
+    { id: "pills", label: t("Active pills"), color: "#22C55E", sections: [activePillsSection(connected), integrationsSection(present)] },
+    { id: "launcher", label: t("Launcher"), color: "#E879F9", sections: [launcherSection(() => settings, save)] },
+    { id: "general", label: t("General"), color: "#9398A1", sections: [generalSection()] },
+    { id: "shortcuts", label: t("Shortcuts"), color: "#EAB308", sections: [shortcutsSection(shortcutReport)] },
+  ];
+  if (!pages.some((p) => p.id === currentPage)) currentPage = pages[0].id;
+
+  const marker = h("i", { class: "nav-marker" });
+  const nav = h(
+    "nav",
+    { class: "nav" },
+    h("div", { class: "brand" }, h("span", { text: "Coucou" }), h("span", { class: "version", text: version })),
+    marker,
   );
+  const shelf = h("div", { class: "pages" });
+  const buttons = new Map<string, HTMLElement>();
+  const sheets = new Map<string, HTMLElement>();
+
+  /** Shows a page: its sections come in one after the other, and the marker slides to its name. */
+  const open = (id: string, moving: boolean) => {
+    currentPage = id;
+    try {
+      window.localStorage?.setItem(PAGE_KEY, id);
+    } catch {
+      // Storage off: the window just opens on its first page next time.
+    }
+    for (const [key, button] of buttons) button.classList.toggle("on", key === id);
+    for (const [key, sheet] of sheets) {
+      const on = key === id;
+      // Taken off and put back on, so the way in plays again.
+      if (on && moving) {
+        sheet.classList.remove("on");
+        void sheet.offsetWidth;
+      }
+      sheet.classList.toggle("on", on);
+    }
+    const button = buttons.get(id);
+    if (button) {
+      marker.style.transform = `translateY(${button.offsetTop}px)`;
+      marker.style.height = `${button.offsetHeight}px`;
+      marker.style.setProperty("--page", pages.find((p) => p.id === id)?.color ?? "#fff");
+    }
+    if (moving) shelf.scrollTop = 0;
+  };
+
+  for (const page of pages) {
+    const dot = h("i", { class: "nav-dot" });
+    dot.style.background = page.color;
+    const button = h("button", { class: "nav-item", onclick: () => open(page.id, true) }, dot, h("span", { text: page.label }));
+    buttons.set(page.id, button);
+    nav.append(button);
+    const sheet = h("div", { class: "page" }, h("h1", { text: page.label }), ...page.sections);
+    sheet.style.setProperty("--page", page.color);
+    sheets.set(page.id, sheet);
+    shelf.append(sheet);
+  }
+  nav.append(h("div", {
+    class: "nav-foot",
+    text: t("No telemetry. Network requests only go to the services you configure yourself."),
+  }));
+
+  clear(root);
+  root.classList.add("app");
+  root.append(nav, shelf);
+  open(currentPage, false);
 }
+
+/** One page of the window: a name in the column on the left, and its sections. */
+interface Page {
+  id: string;
+  label: string;
+  /** The colour of its dot, and of the page's accents. */
+  color: string;
+  sections: HTMLElement[];
+}
+
+const PAGE_KEY = "coucou.settingsPage";
+/** The page on screen, kept across redraws and restarts. */
+let currentPage = (() => {
+  try {
+    return window.localStorage?.getItem(PAGE_KEY) ?? "";
+  } catch {
+    return "";
+  }
+})();
 
 void main();

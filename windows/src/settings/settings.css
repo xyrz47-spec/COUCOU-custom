@@ -651,3 +651,230 @@ section.add-form {
   50% { transform: translateX(5px); }
   75% { transform: translateX(-3px); }
 }
+
+/* ── The settings window, laid out anew (main.ts, render) ──────────────────────
+   A column to move about in on the left, one page of sections at a time on
+   the right. Everything here is under .app, which only the settings window
+   wears: the launcher's "add" window keeps the plain layout above. */
+body.settings-window:has(#settings-root.app) {
+  overflow: hidden;
+}
+
+#settings-root.app {
+  max-width: none;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+  gap: 0;
+}
+
+/* The column: the name, the pages, and under the one that is open a marker
+   that slides from name to name. */
+.app .nav {
+  position: relative;
+  padding: 22px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-right: 1px solid var(--hairline);
+  background: linear-gradient(180deg, #121317 0%, #0c0d10 100%);
+}
+
+.app .brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 12px 18px;
+  font: 700 19px var(--font);
+  letter-spacing: -0.02em;
+}
+
+.app .brand .version {
+  font: 400 11px var(--font);
+  color: var(--dim-2);
+}
+
+.app .nav-item {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--dim);
+  font: 500 13px var(--font);
+  text-align: start;
+  transition: color 0.18s, transform 0.22s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.app .nav-item:hover:not(:disabled) {
+  background: transparent;
+  color: var(--ink);
+  transform: translateX(2px);
+}
+
+.app .nav-item.on {
+  color: var(--ink);
+}
+
+.app .nav-dot {
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0.55;
+  transition: opacity 0.2s, transform 0.3s cubic-bezier(0.3, 1.4, 0.4, 1), box-shadow 0.2s;
+}
+
+.app .nav-item.on .nav-dot {
+  opacity: 1;
+  transform: scale(1.3);
+  box-shadow: 0 0 10px currentColor;
+}
+
+.app .nav-marker {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 0;
+  z-index: 0;
+  border-radius: 11px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--page, #fff) 16%, transparent), rgba(255, 255, 255, 0.05));
+  box-shadow: inset 2px 0 0 var(--page, #fff);
+  transition: transform 0.36s cubic-bezier(0.2, 0.9, 0.25, 1), height 0.2s, background 0.3s, box-shadow 0.3s;
+  pointer-events: none;
+}
+
+.app .nav-foot {
+  margin-top: auto;
+  padding: 12px 12px 4px;
+  font: 400 10.5px/1.5 var(--font);
+  color: var(--dim-2);
+}
+
+/* The pages: only the open one is there, and its sections come in one after
+   the other each time it is opened. */
+.app .pages {
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 26px 32px 40px;
+  scroll-behavior: smooth;
+}
+
+.app .page {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.app .page.on {
+  display: flex;
+}
+
+.app .page > h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font: 700 22px var(--font);
+  letter-spacing: -0.02em;
+}
+
+.app .page > h1::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--page, #fff);
+  box-shadow: 0 0 14px var(--page, #fff);
+}
+
+.app .page.on > * {
+  animation: window-in 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.app .page.on > :nth-child(2) { animation-delay: 50ms; }
+.app .page.on > :nth-child(3) { animation-delay: 100ms; }
+.app .page.on > :nth-child(4) { animation-delay: 150ms; }
+.app .page.on > :nth-child(n + 5) { animation-delay: 200ms; }
+
+/* A window just shown: the column slides in from its side, the page as above. */
+#settings-root.app.appear > * {
+  animation: none;
+}
+
+#settings-root.app.appear > .nav {
+  animation: nav-in 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes nav-in {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The sections: a little more room, a light that follows the page's colour,
+   and a border that wakes under the pointer. */
+.app section {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #16171b 0%, #131417 100%);
+  transition: border-color 0.2s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.app section:hover {
+  border-color: color-mix(in srgb, var(--page, #fff) 30%, var(--hairline));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+.app section > h2 {
+  font: 600 14px var(--font);
+}
+
+.app button {
+  transition: background 0.16s, color 0.16s, border-color 0.16s, transform 0.2s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.app button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.app .switch::after {
+  transition: transform 0.24s cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+
+.app .pages::-webkit-scrollbar {
+  width: 10px;
+}
+
+.app .pages::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  background-clip: content-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app .page.on > *,
+  #settings-root.app.appear > .nav {
+    animation: none;
+  }
+
+  .app .nav-marker {
+    transition: none;
+  }
+}
