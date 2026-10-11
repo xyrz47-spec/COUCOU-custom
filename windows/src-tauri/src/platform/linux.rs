@@ -891,6 +891,15 @@ mod tests {
 }
 
 /// Windows only for now: where there is no icon the launcher draws its own tile.
+/// The Start menu's apps are Windows's to list (platform/windows.rs).
+pub fn start_apps() -> Vec<(String, String)> {
+    Vec::new()
+}
+
+pub fn shell_image(_name: &str, _size: i32) -> Option<(u32, u32, Vec<u8>)> {
+    None
+}
+
 pub fn file_icon_rgba(_path: &std::path::Path, _size: i32) -> Option<(u32, u32, Vec<u8>)> {
     None
 }

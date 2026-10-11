@@ -31,6 +31,7 @@ mod secrets;
 mod session_window;
 mod settings;
 mod shortcuts;
+mod skill_advisor;
 mod skill_store;
 mod skills;
 mod sounds;
@@ -766,7 +767,7 @@ fn create_launcher_window(app: &AppHandle) {
     match WebviewWindowBuilder::new(app, LAUNCHER_ADD, url)
         .additional_browser_args(BROWSER_ARGS)
         .title(i18n::t("Add to the launcher"))
-        .inner_size(460.0, 204.0)
+        .inner_size(460.0, 464.0)
         .resizable(false)
         .maximizable(false)
         .visible(false)
@@ -896,12 +897,15 @@ pub fn run() {
             skill_store::skill_install,
             skill_store::skill_copy,
             skill_store::skill_remove,
+            skill_advisor::skills_advise,
             launcher::launcher_open,
             launcher::launcher_icon,
             launcher::launcher_favicon,
             launcher::launcher_image,
             launcher::launcher_image_at,
             launcher::launcher_store_image,
+            launcher::launcher_apps,
+            launcher::launcher_app_icon,
             open_launcher_add,
             close_launcher_add,
             approval_decision,

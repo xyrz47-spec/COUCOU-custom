@@ -7,6 +7,10 @@
 // for who wants one — an image file of their own, picked with a click or
 // dropped on the window — and without it the tile wears the entry's own icon.
 //
+// Above the form, the apps installed on this PC (the Start menu's own list,
+// launcher.rs): a field to search them by name, and a click on one fills the
+// form in. A second click on it, or Enter, adds it.
+//
 // Like the settings window it is made once, hidden, at launch, and only shown
 // and hidden afterwards: `launcher-add-open` says it has just been shown.
 
@@ -16,7 +20,7 @@ import { Bridge, IS_TAURI, onEvent } from "../core/bridge";
 import { clear, h, svg } from "../views/dom";
 import { ICONS } from "../views/icons";
 import { isRtl, resolveLanguage, setLanguage, systemLanguages, t } from "../i18n/i18n";
-import { MAX_ITEMS, defaultName, isPath, isWeb } from "./launcher";
+import { MAX_ITEMS, defaultName, isApp, isPath, isWeb, matchingApps } from "./launcher";
 
 const root = document.getElementById("settings-root")!;
 
@@ -25,6 +29,31 @@ const unquoted = (text: string): string => text.trim().replace(/^"(.*)"$/, "$1")
 
 /** The files launcher.rs will show as a tile's picture. */
 const isImageFile = (path: string): boolean => /\.(png|jpe?g|gif|webp|ico|svg|bmp)$/i.test(path);
+
+interface InstalledApp {
+  name: string;
+  target: string;
+}
+
+/** The installed apps, asked for once per run of the window's page; their icons as they are first shown. */
+let installed: Promise<InstalledApp[]> | null = null;
+const appIcons = new Map<string, Promise<ImageData | null>>();
+
+function appIcon(target: string): Promise<ImageData | null> {
+  let icon = appIcons.get(target);
+  if (!icon) {
+    icon = Bridge.launcherAppIcon(target).then((pixels) => {
+      if (!pixels) return null;
+      const bytes = Uint8ClampedArray.from(atob(pixels.rgba), (c) => c.charCodeAt(0));
+      return bytes.length === pixels.width * pixels.height * 4 ? new ImageData(bytes, pixels.width, pixels.height) : null;
+    });
+    appIcons.set(target, icon);
+  }
+  return icon;
+}
+
+/** Rows drawn at once: the list is searched, not scrolled through from A to Z. */
+const APP_ROWS = 60;
 
 /** As large as launcher.rs keeps (IMAGE_LIMIT). */
 const IMAGE_LIMIT = 4 * 1024 * 1024;
@@ -116,7 +145,7 @@ function draw() {
 
   async function submit() {
     const where = unquoted(target.value);
-    if (!isWeb(where) && !isPath(where)) return refuse();
+    if (!isWeb(where) && !isPath(where) && !isApp(where)) return refuse();
     add.disabled = true;
     try {
       // The list as it is saved now: it may have changed since this window was last shown.
@@ -144,16 +173,80 @@ function draw() {
     });
   }
 
+  // ── The apps on this PC ─────────────────────────────────────────────────────
+
+  const find = h("input", { type: "text", class: "add-find", placeholder: t("Search installed apps…"), spellcheck: "false" }) as HTMLInputElement;
+  const apps = h("div", { class: "add-apps" });
+  let all: InstalledApp[] = [];
+  /** The list has been answered (it may be empty: not on Windows). */
+  let listed = false;
+  let picked = "";
+
+  const drawApps = () => {
+    clear(apps);
+    const found = matchingApps(all, find.value);
+    if (found.length === 0) {
+      apps.append(h("div", { class: "add-apps-empty", text: listed ? t("No app by that name.") : t("Loading…") }));
+      return;
+    }
+    for (const app of found.slice(0, APP_ROWS)) {
+      const icon = h("canvas", { width: "48", height: "48" }) as HTMLCanvasElement;
+      const row = h(
+        "button",
+        { class: app.target === picked ? "add-app on" : "add-app", title: app.name },
+        icon,
+        h("span", { text: app.name }),
+      );
+      void appIcon(app.target).then((image) => {
+        if (!image) return;
+        icon.width = image.width;
+        icon.height = image.height;
+        icon.getContext("2d")?.putImageData(image, 0, 0);
+        icon.classList.add("on");
+      });
+      row.addEventListener("click", () => {
+        // A second click on the one already picked adds it.
+        if (picked === app.target) return void submit();
+        picked = app.target;
+        name.value = app.name;
+        target.value = app.target;
+        target.classList.remove("invalid");
+        for (const other of apps.children) other.classList.toggle("on", other === row);
+      });
+      apps.append(row);
+    }
+  };
+  find.addEventListener("input", drawApps);
+  find.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    // Enter takes the first app found, then adds it.
+    const first = matchingApps(all, find.value)[0];
+    if (!first) return;
+    name.value = first.name;
+    target.value = first.target;
+    void submit();
+  });
+  installed ??= Bridge.launcherApps().then((list) => list ?? []);
+  void installed.then((list) => {
+    all = list;
+    listed = true;
+    drawApps();
+  });
+
   clear(root);
-  root.append(h(
-    "section",
-    { class: "add-form" },
-    picture,
-    name,
-    target,
-    h("div", { class: "add-buttons" }, cancel, add),
-  ));
-  name.focus();
+  root.append(
+    h("section", { class: "add-finder" }, find, apps),
+    h(
+      "section",
+      { class: "add-form" },
+      picture,
+      name,
+      target,
+      h("div", { class: "add-buttons" }, cancel, add),
+    ),
+  );
+  drawApps();
+  find.focus();
 
   return {
     /** A file dropped on the window: an image is the tile's picture, anything else what it opens. */

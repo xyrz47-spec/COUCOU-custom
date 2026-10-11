@@ -59,10 +59,75 @@ pub fn is_web(target: &str) -> bool {
     t.starts_with("https://") || t.starts_with("http://")
 }
 
-/// What can be opened: a web address, or an absolute path that is there.
+/// How an installed app is named as an entry's target: the shell's own
+/// address for an item of its Applications folder. Opening it starts the app,
+/// whether it is a desktop program or a Store app.
+const APP_PREFIX: &str = "shell:AppsFolder\\";
+
+/// `shell:AppsFolder\<id>` with an id that is only an id: the settings file,
+/// and the page, can hold any text.
+pub fn is_app(target: &str) -> bool {
+    let Some(head) = target.get(..APP_PREFIX.len()) else { return false };
+    let id = &target[APP_PREFIX.len()..];
+    head.eq_ignore_ascii_case(APP_PREFIX)
+        && !id.is_empty()
+        && id.len() <= 400
+        && !id.chars().any(|c| c.is_control() || matches!(c, '"' | '<' | '>' | '|' | '*' | '?'))
+}
+
+/// An app found on this PC, for the "add" window to offer.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct InstalledApp {
+    pub name: String,
+    /// What to save as the entry's target.
+    pub target: String,
+}
+
+/// The Start menu's list as the "add" window shows it: apps only (not the
+/// uninstallers, manuals and web links programs put beside themselves), each
+/// once, by name.
+fn tidy_apps(listed: Vec<(String, String)>) -> Vec<InstalledApp> {
+    const NOT_APPS: &[&str] = &[".url", ".chm", ".txt", ".pdf", ".htm", ".html", ".rtf", ".md"];
+    let mut apps: Vec<InstalledApp> = listed
+        .into_iter()
+        .filter_map(|(name, id)| {
+            let name = name.trim().to_string();
+            let lower_name = name.to_lowercase();
+            let lower_id = id.to_lowercase();
+            let target = format!("{APP_PREFIX}{id}");
+            let keep = !name.is_empty()
+                && is_app(&target)
+                && !lower_name.contains("uninstall")
+                && !name.contains("제거")
+                && !NOT_APPS.iter().any(|ending| lower_id.ends_with(ending));
+            keep.then_some(InstalledApp { name, target })
+        })
+        .collect();
+    apps.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()).then(a.target.cmp(&b.target)));
+    apps.dedup_by(|b, a| a.target.eq_ignore_ascii_case(&b.target));
+    apps
+}
+
+/// The apps installed on this PC, for the "add" window's search.
+#[tauri::command(async)]
+pub fn launcher_apps() -> Vec<InstalledApp> {
+    tidy_apps(platform::start_apps())
+}
+
+/// The icon of an installed app, for the "add" window's list: small, since many are asked for.
+#[tauri::command(async)]
+pub fn launcher_app_icon(target: String) -> Option<IconPixels> {
+    if !is_app(&target) {
+        return None;
+    }
+    let (width, height, rgba) = platform::shell_image(&target, 48)?;
+    Some(IconPixels { width, height, rgba: crate::claude::base64_for(&rgba) })
+}
+
+/// What can be opened: a web address, an installed app, or an absolute path that is there.
 fn openable(target: &str) -> bool {
     let target = target.trim();
-    if is_web(target) {
+    if is_web(target) || is_app(target) {
         return true;
     }
     let path = Path::new(target);
@@ -93,6 +158,11 @@ pub fn launcher_icon(shared: State<Shared>, index: usize) -> Option<IconPixels> 
     let target = shared.settings.lock().unwrap().launcher.get(index)?.target.trim().to_string();
     if is_web(&target) {
         return None;
+    }
+    // An installed app has no file of its own to take an icon from: the shell draws it.
+    if is_app(&target) {
+        let (width, height, rgba) = platform::shell_image(&target, ICON_SIZE)?;
+        return Some(IconPixels { width, height, rgba: crate::claude::base64_for(&rgba) });
     }
     let path = Path::new(&target);
     if !path.is_absolute() || !path.exists() {
@@ -472,5 +542,73 @@ mod tests {
         // A "not found" page served in an icon's place.
         assert_eq!(image_mime(b"<!doctype html><html>"), None);
         assert_eq!(image_mime(&[]), None);
+    }
+}
+
+#[cfg(test)]
+mod app_tests {
+    use super::*;
+
+    fn listed(pairs: &[(&str, &str)]) -> Vec<(String, String)> {
+        pairs.iter().map(|(name, id)| (name.to_string(), id.to_string())).collect()
+    }
+
+    #[test]
+    fn an_installed_app_is_named_by_the_shells_own_address() {
+        assert!(is_app(r"shell:AppsFolder\Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"));
+        assert!(is_app(r"SHELL:appsfolder\Chrome"));
+        assert!(is_app(r"shell:AppsFolder\{6D809377-6AF0-444B-8957-A3773F02200E}\CurseForge\CurseForge.exe"));
+        for bad in [
+            r"shell:AppsFolder\",
+            "shell:AppsFolder",
+            "shell:startup",
+            "shell:AppsFolder\\a\" & calc",
+            "shell:AppsFolder\\a\nb",
+            r"C:\Windows\explorer.exe",
+            "https://example.com",
+            "",
+        ] {
+            assert!(!is_app(bad), "{bad}");
+        }
+        // It opens like a path does, without having to be a file.
+        assert!(openable(r"shell:AppsFolder\Chrome"));
+        assert!(!openable(r"shell:AppsFolder\"));
+    }
+
+    #[test]
+    fn the_list_keeps_apps_only_each_once_by_name() {
+        let apps = tidy_apps(listed(&[
+            ("Visual Studio Code", "Microsoft.VisualStudioCode"),
+            ("calculator", "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"),
+            ("Uninstall Thing", r"{6D80}\Thing\unins000.exe"),
+            ("Thing 제거", r"{6D80}\Thing\remove.exe"),
+            ("Thing Help", r"{6D80}\Thing\help.CHM"),
+            ("Thing on the Web", r"{6D80}\Thing\site.url"),
+            ("Thing", r"{6D80}\Thing\thing.exe"),
+            ("Thing", r"{6D80}\Thing\thing.exe"),
+            ("  ", "Blank.Name"),
+            ("Bad", "id\nwith a line break"),
+        ]));
+        let names: Vec<&str> = apps.iter().map(|a| a.name.as_str()).collect();
+        assert_eq!(names, ["calculator", "Thing", "Visual Studio Code"]);
+        assert_eq!(apps[1].target, r"shell:AppsFolder\{6D80}\Thing\thing.exe");
+        assert!(apps.iter().all(|a| is_app(&a.target)));
+    }
+
+    /// This PC's own Start menu. Run by hand
+    /// (`cargo test live_apps -- --ignored --nocapture`).
+    #[test]
+    #[ignore]
+    #[cfg(windows)]
+    fn live_apps_are_listed_with_their_pictures() {
+        let apps = launcher_apps();
+        println!("{} apps; first: {:?}", apps.len(), apps.iter().take(8).map(|a| &a.name).collect::<Vec<_>>());
+        assert!(apps.len() > 10);
+        let pictured = apps.iter().take(12).filter(|a| launcher_app_icon(a.target.clone()).is_some()).count();
+        println!("{pictured} of the first 12 have a picture");
+        assert!(pictured >= 6);
+        let icon = launcher_app_icon(apps[0].target.clone()).unwrap();
+        println!("{}x{}", icon.width, icon.height);
+        assert!(icon.width >= 32 && icon.width == icon.height);
     }
 }

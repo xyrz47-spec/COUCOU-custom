@@ -8,16 +8,28 @@
 // skills.sh — by a word typed, or a field picked from the chips — and adds a
 // result to that same folder with one click. Only skills of the publishers
 // skill_store.rs lists as verified show, until the box is unticked.
+//
+// "Suggest" hands the choice to Claude Code (skill_advisor.rs): the user says
+// what they are working on, and gets a plan for the folder chosen at the top —
+// skills to add, installed ones to remove, each with its reason. Nothing
+// changes until the lines left ticked are applied; removed skills go to the bin.
 
-import { Bridge, type FoundSkill, type SkillGroup, type SkillInfo } from "../core/bridge";
+import { Bridge, onEvent, type FoundSkill, type SkillAdvice, type SkillGroup, type SkillInfo } from "../core/bridge";
 import { State } from "../core/state";
 import { clear, h } from "./dom";
 import { enhanceSelect } from "./select";
 import type { ViewActions, ViewHost } from "./views";
-import { t, tl } from "../i18n/i18n";
+import { N_, t, tl } from "../i18n/i18n";
 
 /** Search words for the fields people look for most. Words to search with, not labels: left as they are. */
 const FIELDS = ["design", "frontend", "react", "testing", "docs", "deploy", "database", "mobile", "ai", "security"];
+
+/** How far a plan is on its way, as skill_advisor.rs reports it. */
+const ADVICE_STEPS: Record<string, string> = {
+  reading: N_("Reading the project…"),
+  searching: N_("Searching skills.sh…"),
+  choosing: N_("Claude Code is choosing…"),
+};
 
 function errorText(err: unknown): string {
   return String(err).replace(/^Error:\s*/, "");
@@ -31,7 +43,7 @@ function folderName(path: string): string {
 const compact = (n: number): string => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
 
 export function buildSkills(actions: ViewActions): ViewHost {
-  let tab: "mine" | "find" = "mine";
+  let tab: "mine" | "find" | "plan" = "mine";
   let groups: SkillGroup[] = [];
   let projects: string[] = [];
   /** Where a skill is added or copied to: "" is the user's own skills, else a project's folder. */
@@ -43,9 +55,22 @@ export function buildSkills(actions: ViewActions): ViewHost {
   const added = new Set<string>();
   let searchTimer: number | null = null;
   let asked = 0;
+  /** The plan Claude Code proposed, and the folder it is for. */
+  let advice: SkillAdvice | null = null;
+  let adviceFor = "";
+  let advising = false;
+  let adviceStep = "reading";
+  let advised = 0;
+  let applying = false;
+  /** The plan's lines left unticked, and what became of those applied ("" done, else why not). */
+  const skipped = new Set<string>();
+  const outcome = new Map<string, string>();
 
   const tabInstalled = h("button", { text: tl("Installed"), onclick: () => show("mine") });
   const tabFind = h("button", { text: tl("Find"), onclick: () => show("find") });
+  const tabPlan = h("button", { text: tl("Suggest"), onclick: () => show("plan") });
+  const ask = h("button", { class: "sk-btn primary sk-ask", text: tl("Ask Claude Code"), onclick: () => void runAdvice() }) as HTMLButtonElement;
+  const apply = h("button", { class: "sk-btn primary sk-apply", onclick: () => void applyPlan() }) as HTMLButtonElement;
   const search = h("input", { type: "text", class: "sk-search", placeholder: tl("Search skills…") }) as HTMLInputElement;
   const where = h("select", { class: "sk-where", title: tl("Open folder") }) as HTMLSelectElement;
   const count = h("span", { class: "sk-count" });
@@ -59,10 +84,10 @@ export function buildSkills(actions: ViewActions): ViewHost {
     h(
       "div",
       { class: "card" },
-      h("div", { class: "sk-top" }, h("div", { class: "seg sk-seg" }, tabInstalled, tabFind), search,
+      h("div", { class: "sk-top" }, h("div", { class: "seg sk-seg" }, tabInstalled, tabFind, tabPlan), search,
         // Drawn by the page, its list inside this card: the island's window takes the mouse nowhere else.
         enhanceSelect(where, "sk-where-box", () => el.firstElementChild as HTMLElement | null)),
-      h("div", { class: "sk-bar" }, chips, count, verifiedBox),
+      h("div", { class: "sk-bar" }, chips, count, verifiedBox, ask, apply),
       note,
       list,
     ),
@@ -135,6 +160,149 @@ export function buildSkills(actions: ViewActions): ViewHost {
         draw();
       });
   }
+
+  // ── The plan ────────────────────────────────────────────────────────────────
+
+  /** Asks Claude Code for a plan for the folder at the top. Changes nothing. */
+  async function runAdvice() {
+    const request = search.value.trim();
+    if (request.length < 2 || advising || applying) return;
+    const mine = ++advised;
+    const folder = dest;
+    advising = true;
+    adviceStep = "reading";
+    advice = null;
+    skipped.clear();
+    outcome.clear();
+    say("");
+    draw();
+    try {
+      const plan = await Bridge.skillsAdvise(request, folder, verifiedOnly);
+      if (mine !== advised) return;
+      advice = plan;
+      adviceFor = folder;
+    } catch (err) {
+      if (mine === advised) say(errorText(err), true);
+    } finally {
+      if (mine === advised) {
+        advising = false;
+        draw();
+      }
+    }
+  }
+
+  const addKey = (skill: { source: string; skillId: string }) => `add:${skill.source}/${skill.skillId}`;
+  const removeKey = (skill: { path: string }) => `remove:${skill.path}`;
+
+  /**
+   * Does what the plan's ticked lines say. Skills are added first, and nothing
+   * is removed unless every one of them went in: a skill is only taken away
+   * once what was to replace it is there.
+   */
+  async function applyPlan() {
+    const plan = advice;
+    if (!plan || applying || advising) return;
+    applying = true;
+    say("");
+    draw();
+    let added = 0;
+    let removed = 0;
+    let failed = false;
+    for (const skill of plan.add) {
+      const key = addKey(skill);
+      if (skipped.has(key) || outcome.has(key)) continue;
+      try {
+        await Bridge.skillInstall(skill.source, skill.skillId, adviceFor);
+        outcome.set(key, "");
+        added++;
+      } catch (err) {
+        outcome.set(key, errorText(err));
+        failed = true;
+      }
+      draw();
+    }
+    if (!failed) {
+      for (const skill of plan.remove) {
+        const key = removeKey(skill);
+        if (skipped.has(key) || outcome.has(key)) continue;
+        try {
+          await Bridge.skillRemove(skill.path);
+          outcome.set(key, "");
+          removed++;
+        } catch (err) {
+          outcome.set(key, errorText(err));
+        }
+        draw();
+      }
+    }
+    applying = false;
+    if (failed) say(t("A skill could not be added, so none was removed."), true);
+    else say(t("Done: {added} added, {removed} removed.", { added, removed }));
+    await load();
+  }
+
+  function planRow(kind: "add" | "remove", key: string, name: string, reason: string, more: (Node | null)[] = []): HTMLElement {
+    const done = outcome.get(key);
+    const ticked = !skipped.has(key);
+    const tick = h("button", { class: ticked ? "sk-switch on" : "sk-switch" }) as HTMLButtonElement;
+    tick.disabled = applying || done != null;
+    tick.addEventListener("click", () => {
+      if (skipped.has(key)) skipped.delete(key);
+      else skipped.add(key);
+      draw();
+    });
+    const label = kind === "add" ? (done === "" ? t("Added") : t("Add")) : done === "" ? t("Removed") : t("Remove");
+    const title = h("div", { class: "sk-name" }, h("span", { text: name }), h("span", { class: kind === "add" ? "sk-tag ok" : "sk-tag bad", text: label }));
+    for (const part of more) if (part) title.append(part);
+    // Why, or — once tried and refused — why not.
+    const why = h("div", { class: done ? "sk-desc err" : "sk-desc", text: done || reason, title: reason });
+    return h(
+      "div",
+      { class: `sk-row sk-plan ${kind}${ticked ? "" : " off"}${done === "" ? " done" : ""}` },
+      tick,
+      h("div", { class: "sk-text" }, title, why),
+    );
+  }
+
+  function drawPlan() {
+    if (advising) {
+      list.append(h("div", { class: "sk-empty sk-thinking", text: t(ADVICE_STEPS[adviceStep] ?? ADVICE_STEPS.reading) }));
+      return;
+    }
+    if (!advice) {
+      list.append(h("div", {
+        class: "sk-empty sk-plan-help",
+        text: t("Say what you are working on, then ask: Claude Code looks for skills that fit the folder chosen above, and for installed ones that are no use there or would get in the way. Nothing changes until you apply; removed skills go to the bin."),
+      }));
+      return;
+    }
+    if (advice.note) list.append(h("div", { class: "sk-plan-note", text: advice.note }));
+    if (advice.add.length + advice.remove.length === 0) {
+      list.append(h("div", { class: "sk-empty", text: t("Nothing to change: the skills here already fit.") }));
+      return;
+    }
+    let open = 0;
+    for (const skill of advice.add) {
+      const key = addKey(skill);
+      if (!skipped.has(key) && !outcome.has(key)) open++;
+      const facts = h("span", { class: "sk-tag", text: `${skill.source} · ${t("{n} installs", { n: compact(skill.installs) })}` });
+      list.append(planRow("add", key, skill.name, skill.reason, [skill.verified ? h("span", { class: "sk-tag ok", text: t("Verified") }) : null, facts]));
+    }
+    for (const skill of advice.remove) {
+      const key = removeKey(skill);
+      if (!skipped.has(key) && !outcome.has(key)) open++;
+      list.append(planRow("remove", key, skill.name, skill.reason));
+    }
+    apply.style.display = open > 0 || applying ? "" : "none";
+    apply.disabled = applying || open === 0;
+    apply.textContent = applying ? t("Applying…") : t("Apply {n}", { n: open });
+  }
+
+  void onEvent<string>("skills-advice-step", (step) => {
+    if (!advising) return;
+    adviceStep = step;
+    draw();
+  });
 
   // ── Rows ────────────────────────────────────────────────────────────────────
 
@@ -257,10 +425,23 @@ export function buildSkills(actions: ViewActions): ViewHost {
   function draw() {
     tabInstalled.classList.toggle("on", tab === "mine");
     tabFind.classList.toggle("on", tab === "find");
+    tabPlan.classList.toggle("on", tab === "plan");
     verifiedBox.classList.toggle("on", verifiedOnly);
-    verifiedBox.style.display = tab === "find" ? "" : "none";
+    verifiedBox.style.display = tab === "mine" ? "none" : "";
+    // "Suggest" takes a sentence, not a word to filter by, and has its own buttons.
+    chips.style.display = tab === "plan" ? "none" : "";
+    ask.style.display = tab === "plan" ? "" : "none";
+    ask.disabled = advising || applying;
+    apply.style.display = "none";
+    search.placeholder = tab === "plan" ? t("What are you working on?") : t("Search skills…");
     clear(list);
     const query = search.value.trim().toLowerCase();
+
+    if (tab === "plan") {
+      count.textContent = "";
+      drawPlan();
+      return;
+    }
 
     if (tab === "mine") {
       let total = 0;
@@ -290,7 +471,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
     }
   }
 
-  function show(next: "mine" | "find") {
+  function show(next: "mine" | "find" | "plan") {
     actions.blip();
     tab = next;
     say("");
@@ -300,7 +481,12 @@ export function buildSkills(actions: ViewActions): ViewHost {
 
   // ── Input ───────────────────────────────────────────────────────────────────
 
+  search.addEventListener("keydown", (e) => {
+    if (tab === "plan" && (e as KeyboardEvent).key === "Enter") void runAdvice();
+  });
   search.addEventListener("input", () => {
+    // A request is sent when asked, not as it is typed.
+    if (tab === "plan") return;
     if (tab === "mine") {
       draw();
       return;
@@ -311,11 +497,18 @@ export function buildSkills(actions: ViewActions): ViewHost {
   });
   where.addEventListener("change", () => {
     dest = where.value;
+    // A plan is for one folder: another folder, another plan.
+    if (advice && adviceFor !== dest && !applying) {
+      advice = null;
+      skipped.clear();
+      outcome.clear();
+    }
     draw();
   });
   verifiedBox.addEventListener("click", () => {
     verifiedOnly = !verifiedOnly;
-    runSearch();
+    if (tab === "find") runSearch();
+    else draw();
   });
 
   say("");

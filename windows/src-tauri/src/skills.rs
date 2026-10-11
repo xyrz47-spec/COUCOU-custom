@@ -160,7 +160,7 @@ fn front_matter(text: &str) -> (Option<String>, String) {
     (name, description)
 }
 
-fn read_skills(root: &Path) -> Vec<Skill> {
+pub(crate) fn read_skills(root: &Path) -> Vec<Skill> {
     let mut out = Vec::new();
     let Ok(entries) = fs::read_dir(root) else { return out };
     for entry in entries.flatten() {

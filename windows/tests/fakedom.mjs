@@ -27,6 +27,8 @@ class FakeElement {
     this.dataset = {};
     this.scrollTop = 0;
     this.scrollHeight = 0;
+    // A text field starts empty, as in a browser.
+    if (this.tagName === "INPUT") this.value = "";
     this.style = { setProperty: (k, v) => (this.style[k] = v) };
     const el = this;
     this.classList = {

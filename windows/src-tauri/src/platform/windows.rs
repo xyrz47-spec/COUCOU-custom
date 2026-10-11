@@ -671,6 +671,126 @@ pub fn file_icon_rgba(path: &std::path::Path, size: i32) -> Option<(u32, u32, Ve
     }
 }
 
+/// The apps of the Start menu, desktop programs and Store apps alike, as the
+/// shell's own Applications folder lists them: each one's name and its id
+/// there (an AppUserModelID). `shell:AppsFolder\<id>` opens it, and names it
+/// for `shell_image`. Nothing is run, and no registry key or file is read by
+/// hand: this is the list the Start menu shows.
+pub fn start_apps() -> Vec<(String, String)> {
+    use ::windows::Win32::System::Com::{CoInitializeEx, CoTaskMemFree, CoUninitialize, COINIT_APARTMENTTHREADED};
+    use ::windows::Win32::UI::Shell::{
+        BHID_EnumItems, FOLDERID_AppsFolder, IEnumShellItems, IShellItem, SHGetKnownFolderItem, KF_FLAG_DEFAULT,
+        SIGDN, SIGDN_NORMALDISPLAY, SIGDN_PARENTRELATIVEPARSING,
+    };
+
+    let mut apps = Vec::new();
+    unsafe {
+        let init = CoInitializeEx(None, COINIT_APARTMENTTHREADED);
+        let mut list = || -> ::windows::core::Result<()> {
+            let folder: IShellItem = SHGetKnownFolderItem(&FOLDERID_AppsFolder, KF_FLAG_DEFAULT, None)?;
+            let items: IEnumShellItems = folder.BindToHandler(None, &BHID_EnumItems)?;
+            loop {
+                let mut one = [None];
+                let mut got = 0u32;
+                if items.Next(&mut one, Some(&mut got)).is_err() || got == 0 {
+                    break;
+                }
+                let Some(item) = one[0].take() else { break };
+                let text = |kind: SIGDN| -> Option<String> {
+                    let name = item.GetDisplayName(kind).ok()?;
+                    let text = name.to_string().ok();
+                    CoTaskMemFree(Some(name.0 as *const _));
+                    text
+                };
+                if let (Some(name), Some(id)) = (text(SIGDN_NORMALDISPLAY), text(SIGDN_PARENTRELATIVEPARSING)) {
+                    apps.push((name, id));
+                }
+            }
+            Ok(())
+        };
+        let _ = list();
+        if init.is_ok() {
+            CoUninitialize();
+        }
+    }
+    apps
+}
+
+/// The picture the shell shows for `name` — a path, or `shell:AppsFolder\<id>`
+/// — at `size` pixels a side, as RGBA. For what has no file to take an icon
+/// from: a Store app, or a shortcut whose program is somewhere else.
+pub fn shell_image(name: &str, size: i32) -> Option<(u32, u32, Vec<u8>)> {
+    use ::windows::core::PCWSTR;
+    use ::windows::Win32::Foundation::SIZE;
+    use ::windows::Win32::Graphics::Gdi::DeleteObject;
+    use ::windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_APARTMENTTHREADED};
+    use ::windows::Win32::UI::Shell::{IShellItemImageFactory, SHCreateItemFromParsingName, SIIGBF_ICONONLY};
+
+    let wide: Vec<u16> = name.encode_utf16().chain(std::iter::once(0)).collect();
+    unsafe {
+        let init = CoInitializeEx(None, COINIT_APARTMENTTHREADED);
+        let pixels = (|| {
+            let factory: IShellItemImageFactory = SHCreateItemFromParsingName(PCWSTR(wide.as_ptr()), None).ok()?;
+            let bitmap = factory.GetImage(SIZE { cx: size, cy: size }, SIIGBF_ICONONLY).ok()?;
+            let pixels = bitmap_pixels(bitmap);
+            let _ = DeleteObject(bitmap.into());
+            pixels
+        })();
+        if init.is_ok() {
+            CoUninitialize();
+        }
+        pixels
+    }
+}
+
+/// A 32-bit bitmap from the shell, top row first, as RGBA. The shell hands its
+/// colours already multiplied by their alpha; a canvas wants them plain.
+unsafe fn bitmap_pixels(bitmap: ::windows::Win32::Graphics::Gdi::HBITMAP) -> Option<(u32, u32, Vec<u8>)> {
+    use ::windows::Win32::Graphics::Gdi::{
+        GetDC, GetDIBits, GetObjectW, ReleaseDC, BITMAP, BITMAPINFO, BITMAPINFOHEADER, BI_RGB, DIB_RGB_COLORS,
+    };
+
+    let mut shape = BITMAP::default();
+    let got = GetObjectW(bitmap.into(), std::mem::size_of::<BITMAP>() as i32, Some((&mut shape as *mut BITMAP).cast()));
+    let (w, h) = (shape.bmWidth, shape.bmHeight);
+    if got == 0 || w <= 0 || h <= 0 || w > 512 || h > 512 {
+        return None;
+    }
+    let mut header = BITMAPINFO {
+        bmiHeader: BITMAPINFOHEADER {
+            biSize: std::mem::size_of::<BITMAPINFOHEADER>() as u32,
+            biWidth: w,
+            // Negative: top row first.
+            biHeight: -h,
+            biPlanes: 1,
+            biBitCount: 32,
+            biCompression: BI_RGB.0,
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    let mut pixels = vec![0u8; (w * h * 4) as usize];
+    let dc = GetDC(None);
+    let lines = GetDIBits(dc, bitmap, 0, h as u32, Some(pixels.as_mut_ptr().cast()), &mut header, DIB_RGB_COLORS);
+    ReleaseDC(None, dc);
+    if lines == 0 {
+        return None;
+    }
+    let no_alpha = pixels.chunks(4).all(|p| p[3] == 0);
+    for p in pixels.chunks_mut(4) {
+        p.swap(0, 2);
+        let alpha = p[3];
+        if no_alpha {
+            p[3] = 255;
+        } else if alpha != 0 && alpha != 255 {
+            for colour in &mut p[..3] {
+                *colour = ((u32::from(*colour) * 255) / u32::from(alpha)).min(255) as u8;
+            }
+        }
+    }
+    Some((w as u32, h as u32, pixels))
+}
+
 /// The colour bitmap of an icon, top row first, as RGBA.
 unsafe fn icon_pixels(
     icon: ::windows::Win32::UI::WindowsAndMessaging::HICON,

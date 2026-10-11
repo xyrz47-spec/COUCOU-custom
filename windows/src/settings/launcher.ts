@@ -13,6 +13,21 @@ export const isWeb = (target: string): boolean => /^https?:\/\/\S+\.\S+/i.test(t
 /** A full path: `C:\…`, `\\server\…` or `/…`. Whether it exists is the app's to find out. */
 export const isPath = (target: string): boolean => /^([a-z]:[\\/]|\\\\|\/)/i.test(target);
 
+/** An installed app, as the "add" window's search names it (launcher.rs, is_app). */
+export const isApp = (target: string): boolean => /^shell:AppsFolder\\[^"<>|*?\x00-\x1f]+$/i.test(target);
+
+/** The apps whose name holds every word typed, those that start with it first. */
+export function matchingApps<T extends { name: string }>(apps: readonly T[], typed: string): T[] {
+  const words = typed.toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return [...apps];
+  const found = apps.filter((app) => {
+    const name = app.name.toLowerCase();
+    return words.every((word) => name.includes(word));
+  });
+  const first = (app: T) => (app.name.toLowerCase().startsWith(words[0]) ? 0 : 1);
+  return found.sort((a, b) => first(a) - first(b));
+}
+
 /** What to call an entry the user gave no name: the site, or the file without its extension. */
 export function defaultName(target: string): string {
   if (isWeb(target)) {
@@ -73,7 +88,7 @@ export function launcherSection(current: () => Settings, save: () => Promise<voi
     if (items().length >= MAX_ITEMS) return;
     // A path copied from the file manager comes in quotes.
     const where = target.value.trim().replace(/^"(.*)"$/, "$1");
-    if (!isWeb(where) && !isPath(where)) {
+    if (!isWeb(where) && !isPath(where) && !isApp(where)) {
       note.textContent = t("Enter a web address (https://…) or the full path of a file or folder.");
       note.style.display = "";
       return;

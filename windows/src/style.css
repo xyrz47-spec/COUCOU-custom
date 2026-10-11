@@ -4134,3 +4134,86 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   color: #c3c9d3;
   white-space: nowrap;
 }
+
+/* ── The Skills tab's "Suggest": Claude Code's plan (views/skills.ts) ─────────
+   A line a skill: its tick, what happens to it, and why. A reason is a
+   sentence, so it wraps where the other rows' descriptions are cut. */
+.sk-ask,
+.sk-apply {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.sk-ask + .sk-apply {
+  margin-left: 0;
+}
+
+.sk-plan-help {
+  padding: 22px 26px;
+  line-height: 1.55;
+}
+
+.sk-thinking {
+  animation: sk-thinking 1.4s ease-in-out infinite;
+}
+
+@keyframes sk-thinking {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.sk-plan-note {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11px/1.5 var(--font);
+  color: var(--ink-2);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.sk-plan {
+  align-items: flex-start;
+  animation: sk-plan-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+
+.sk-plan .sk-switch {
+  margin-top: 2px;
+}
+
+.sk-plan .sk-desc {
+  white-space: normal;
+  line-height: 1.45;
+  color: var(--dim);
+}
+
+.sk-plan .sk-desc.err {
+  color: #f4505e;
+}
+
+.sk-plan.off .sk-text {
+  opacity: 0.45;
+}
+
+.sk-plan.done .sk-name > span:first-child {
+  color: var(--dim);
+}
+
+.sk-tag.bad {
+  background: rgba(244, 80, 94, 0.14);
+  color: #f4505e;
+}
+
+@keyframes sk-plan-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk-plan,
+  .sk-thinking {
+    animation: none;
+  }
+}

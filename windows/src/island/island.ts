@@ -1365,7 +1365,7 @@ export class Island {
     if (shown === this.weatherShown) return;
     this.weatherShown = shown;
     this.compactWeather.replaceChildren(
-      ...(kind ? [weatherIcon(kind, 23), ...(degrees ? [h("em", { text: degrees })] : [])] : []),
+      ...(kind ? [weatherIcon(kind, 26), ...(degrees ? [h("em", { text: degrees })] : [])] : []),
     );
     this.compactWeather.classList.toggle("on", shown !== "");
     // The time has less room beside an icon, or more without one.

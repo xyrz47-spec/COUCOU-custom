@@ -395,6 +395,107 @@ fn run(
     }
 }
 
+// ── A question answered as data ───────────────────────────────────────────────
+
+/// What `ask_json` waits for at most: these are short questions.
+const JSON_TIMEOUT: Duration = Duration::from_secs(120);
+/// The whole answer of `ask_json` is one JSON object of a few kilobytes.
+const MAX_JSON: u64 = 4 * 1024 * 1024;
+
+/// One question to Claude Code, answered as JSON of the shape `schema`
+/// describes (`--json-schema`): no tool at all, nothing kept, no settings read
+/// — the same closed session as the chat's, without even the web. For Coucou's
+/// own features that need a judgement rather than a conversation
+/// (skill_advisor.rs). Blocking: call it off the async runtime's own threads.
+pub fn ask_json(model: &str, system: &str, prompt: String, schema: &Value) -> Result<Value, String> {
+    let exe = platform::claude_candidates().into_iter().next().ok_or_else(not_installed)?;
+    let schema = schema.to_string();
+    let mut cmd = Command::new(&exe);
+    cmd.args([
+        "-p",
+        "--model",
+        model_arg(model),
+        "--output-format",
+        "json",
+        "--json-schema",
+        &schema,
+        "--no-session-persistence",
+        "--setting-sources",
+        "local",
+        "--strict-mcp-config",
+        "--disable-slash-commands",
+        "--system-prompt",
+        system,
+        "--tools",
+        "",
+    ]);
+    cmd.current_dir(platform::local_dir()).stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::null());
+    if let Some(parent) = exe.parent() {
+        let mut dirs = vec![parent.to_path_buf()];
+        if let Some(path) = std::env::var_os("PATH") {
+            dirs.extend(std::env::split_paths(&path));
+        }
+        if let Ok(joined) = std::env::join_paths(dirs) {
+            cmd.env("PATH", joined);
+        }
+    }
+    platform::no_console(&mut cmd);
+    let mut child = cmd.spawn().map_err(|err| format!("claude: {err}"))?;
+    let pid = child.id();
+    if let Some(mut stdin) = child.stdin.take() {
+        std::thread::spawn(move || {
+            let _ = stdin.write_all(prompt.as_bytes());
+        });
+    }
+    let timed_out = Arc::new(AtomicBool::new(false));
+    let (done, over) = mpsc::channel::<()>();
+    {
+        let timed_out = timed_out.clone();
+        std::thread::spawn(move || {
+            if over.recv_timeout(JSON_TIMEOUT) == Err(mpsc::RecvTimeoutError::Timeout) {
+                timed_out.store(true, Ordering::Release);
+                kill_tree(pid);
+            }
+        });
+    }
+    let mut out = Vec::new();
+    if let Some(stdout) = child.stdout.take() {
+        let _ = stdout.take(MAX_JSON).read_to_end(&mut out);
+    }
+    drop(done);
+    kill_tree(pid);
+    let _ = child.kill();
+    let _ = child.wait();
+    if timed_out.load(Ordering::Acquire) {
+        return Err(t("Claude Code took too long to answer."));
+    }
+    let answer: Value = serde_json::from_slice(&out).map_err(|_| t("Claude Code ended without an answer."))?;
+    structured(&answer)
+}
+
+/// The data in what `claude -p --output-format json` printed: the `result`
+/// message's `structured_output`, or why there is none.
+fn structured(answer: &Value) -> Result<Value, String> {
+    // One object; an older CLI prints the whole list of messages.
+    let result = match answer {
+        Value::Array(messages) => messages.iter().rev().find(|m| m.get("type").and_then(Value::as_str) == Some("result")),
+        other => Some(other),
+    }
+    .ok_or_else(|| t("Claude Code ended without an answer."))?;
+    let text = result.get("result").and_then(Value::as_str).unwrap_or("").trim();
+    if result.get("is_error").and_then(Value::as_bool).unwrap_or(false) {
+        return Err(if text.is_empty() { t("Claude Code ended without an answer.") } else { text.to_string() });
+    }
+    match result.get("structured_output") {
+        Some(data) if data.is_object() => Ok(data.clone()),
+        // No field for it (an older CLI): the text is the JSON.
+        _ => serde_json::from_str::<Value>(text)
+            .ok()
+            .filter(Value::is_object)
+            .ok_or_else(|| t("Claude Code ended without an answer.")),
+    }
+}
+
 /// Ends the whole tree: an npm install runs `claude.cmd`, and killing cmd.exe
 /// alone would leave node running under it (task_runner.rs does the same).
 fn kill_tree(pid: u32) {
@@ -519,6 +620,20 @@ mod tests {
         assert_eq!(model_arg("opus --tools default"), DEFAULT_MODEL);
         assert_eq!(model_arg(&"a".repeat(65)), DEFAULT_MODEL);
         assert!(MODELS.iter().any(|(id, _)| *id == DEFAULT_MODEL));
+    }
+
+    #[test]
+    fn the_data_is_read_from_the_result_or_its_error_said() {
+        let ok = json!({"type":"result","is_error":false,"result":"{\"queries\":[\"a\"]}","structured_output":{"queries":["a"]}});
+        assert_eq!(structured(&ok).unwrap(), json!({"queries":["a"]}));
+        // An older CLI: a list of messages, and the JSON only as text.
+        let list = json!([{"type":"system"},{"type":"result","is_error":false,"result":" {\"n\":1} "}]);
+        assert_eq!(structured(&list).unwrap(), json!({"n":1}));
+        let failed = json!({"type":"result","is_error":true,"result":"Not logged in · Please run /login"});
+        assert_eq!(structured(&failed).unwrap_err(), "Not logged in · Please run /login");
+        let prose = json!({"type":"result","is_error":false,"result":"Sure! Here you go."});
+        assert_eq!(structured(&prose).unwrap_err(), "Claude Code ended without an answer.");
+        assert!(structured(&json!([{"type":"system"}])).is_err());
     }
 
     #[test]

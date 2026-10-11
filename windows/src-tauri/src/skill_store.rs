@@ -132,7 +132,7 @@ pub fn skills_projects() -> Vec<String> {
 
 /// The skills folder `dest` names: the user's for "", else that project's —
 /// which has to be one Claude Code worked in.
-fn dest_root(dest: &str) -> Result<PathBuf, String> {
+pub(crate) fn dest_root(dest: &str) -> Result<PathBuf, String> {
     if dest.trim().is_empty() {
         return Ok(skills::user_root());
     }

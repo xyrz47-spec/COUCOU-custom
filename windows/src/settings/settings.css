@@ -1670,3 +1670,86 @@ body.settings-window:has(#settings-root.app) {
 .app button.weather-place .hint {
   margin: 0;
 }
+
+/* ── The "add" window's installed apps (add-launcher.ts) ───────────────────────
+   A field to search them by name over a list that scrolls; the picked one is
+   marked, and fills the form under it. */
+section.add-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-find {
+  width: 100%;
+}
+
+.add-apps {
+  height: 172px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.add-apps-empty {
+  margin: auto;
+  color: var(--dim);
+  font: 400 12px var(--font);
+}
+
+.settings-window button.add-app {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ink, #f5f6f8);
+  font: 400 12.5px var(--font);
+  text-align: left;
+  transform: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.settings-window button.add-app:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.settings-window button.add-app.on {
+  border-color: rgba(232, 121, 249, 0.55);
+  background: rgba(232, 121, 249, 0.14);
+}
+
+.add-app canvas {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.add-app canvas.on {
+  opacity: 1;
+}
+
+.add-app span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#settings-root.appear > .add-finder {
+  animation: window-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}

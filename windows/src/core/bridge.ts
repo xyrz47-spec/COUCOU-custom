@@ -157,6 +157,13 @@ export const Bridge = {
   /** Skills matching `query` on skills.sh (skill_store.rs). Throws when the search could not be made. */
   skillsSearch: (query: string, verifiedOnly: boolean) =>
     callOrThrow<FoundSkill[]>("skills_search", { query, verifiedOnly }),
+  /**
+   * A plan for the skills of `dest` ("" the user's own, else a project's
+   * folder) that serves `request`, proposed by Claude Code (skill_advisor.rs).
+   * Changes nothing; throws with the reason.
+   */
+  skillsAdvise: (request: string, dest: string, verifiedOnly: boolean) =>
+    callOrThrow<SkillAdvice>("skills_advise", { request, dest, verifiedOnly }),
   /** The projects a skill can be added to: the folders Claude Code has worked in. */
   skillsProjects: () => call<string[]>("skills_projects"),
   /** Adds a found skill to the user's skills (`dest` "") or a project's. Throws with the reason. */
@@ -179,6 +186,11 @@ export const Bridge = {
   launcherImage: (index: number) => call<string | null>("launcher_image", { index }),
   /** The image file at `path` as a data URL, for the "add" window's preview; null when it is not one. */
   launcherImageAt: (path: string) => call<string | null>("launcher_image_at", { path }),
+  /** The apps installed on this PC (the Start menu's list), for the "add" window's search. */
+  launcherApps: () => call<{ name: string; target: string }[]>("launcher_apps"),
+  /** An installed app's icon as RGBA pixels (base64), for that list. */
+  launcherAppIcon: (target: string) =>
+    call<{ width: number; height: number; rgba: string }>("launcher_app_icon", { target }),
   /** Keeps a picked picture (a data URL) in the app's own folder and returns where. */
   launcherStoreImage: (data: string) => call<string>("launcher_store_image", { data }),
   /** The launcher's "add" window (settings/add-launcher.ts), shown with an empty form, and put away. */
@@ -312,6 +324,13 @@ export interface FoundSkill {
   installs: number;
   /** From one of the publishers skill_store.rs lists. */
   verified: boolean;
+}
+
+/** What Claude Code proposes for a folder's skills: to add, to remove, and a word on why. */
+export interface SkillAdvice {
+  add: (FoundSkill & { reason: string })[];
+  remove: { path: string; name: string; reason: string }[];
+  note: string;
 }
 
 export interface SkillGroup {
