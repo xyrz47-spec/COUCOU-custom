@@ -3572,3 +3572,61 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   font: 400 11.5px var(--font);
   color: var(--dim-3);
 }
+
+/* ── The pills' pages, as a row of two arrows above the four pills ─────────────
+   (views.ts; this takes the place of the strip at the card's right edge.) */
+.pill-pager {
+  top: 7px;
+  bottom: auto;
+  left: 8px;
+  right: 8px;
+  width: auto;
+  height: 16px;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0;
+}
+
+.card.paged .pills {
+  padding: 26px 8px 2px;
+}
+
+/* The pills of the page just turned to come in from the arrow's side, one a
+   moment after the other. Only before they start: once in place, a pill is
+   under its usual rules again (its hover included). */
+.pills.turn-next > *,
+.pills.turn-prev > * {
+  animation: pills-from-right 0.32s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+
+.pills.turn-prev > * {
+  animation-name: pills-from-left;
+}
+
+.pills.turn-next > :nth-child(2),
+.pills.turn-prev > :nth-child(2) { animation-delay: 35ms; }
+.pills.turn-next > :nth-child(3),
+.pills.turn-prev > :nth-child(3) { animation-delay: 70ms; }
+.pills.turn-next > :nth-child(4),
+.pills.turn-prev > :nth-child(4) { animation-delay: 105ms; }
+
+@keyframes pills-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(28px) scale(0.95);
+  }
+}
+
+@keyframes pills-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-28px) scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pills.turn-next > *,
+  .pills.turn-prev > * {
+    animation: none;
+  }
+}

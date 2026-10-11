@@ -114,7 +114,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const tabChat = h("button", { class: "tab", title: tl("Ask"), onclick: () => go("prompt") }, svg(ICONS.bubble, 13));
   const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 13));
   const tabApps = h("button", { class: "tab", title: tl("Launcher"), onclick: () => go("launcher") }, svg(ICONS.grid, 13));
-  const tabSkills = h("button", { class: "tab", title: tl("Skills"), onclick: () => go("skills") }, svg(ICONS.sparkle, 13));
+  const tabSkills = h("button", { class: "tab", title: tl("Skills"), onclick: () => go("skills") }, svg(ICONS.star, 13));
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 14));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 14));
@@ -220,20 +220,22 @@ function buildOverview(actions: ViewActions): ViewHost {
   const PILLS_PER_PAGE = 4;
   let pillPage = 0;
   let pillPages = 1;
+  /** Which way the page was just turned (1 next, -1 previous), for the pills to come in from that side. */
+  let turned = 0;
   const turn = (delta: number) => {
     pillPage = (pillPage + delta + pillPages) % pillPages;
+    turned = delta;
     actions.blip();
     State.notify();
   };
-  const pageLabel = h("span", {});
+  // An arrow at each end of a row above the pills.
   const pager = h(
     "div",
     { class: "pill-pager" },
-    h("button", { onclick: () => turn(-1) }, svg(ICONS.chevronUp, 8, { stroke: 2.8 })),
-    pageLabel,
-    h("button", { onclick: () => turn(1) }, svg(ICONS.chevronDown, 8, { stroke: 2.8 })),
+    h("button", { onclick: () => turn(-1) }, svg(ICONS.chevronLeft, 9, { stroke: 2.8 })),
+    h("button", { onclick: () => turn(1) }, svg(ICONS.chevronRight, 9, { stroke: 2.8 })),
   );
-  const right = card(null, pills, pager);
+  const right = card(null, pager, pills);
   // Opened from a plan pill in the header: stands in for the left card.
   const plan = new PlanCard();
   let planTimer: number | null = null;
@@ -454,7 +456,6 @@ function buildOverview(actions: ViewActions): ViewHost {
       const others = everyPill.slice(pillPage * PILLS_PER_PAGE, (pillPage + 1) * PILLS_PER_PAGE);
       pager.style.display = pillPages > 1 ? "" : "none";
       right.classList.toggle("paged", pillPages > 1);
-      pageLabel.textContent = `${pillPage + 1}/${pillPages}`;
       const pillKey = `${pillPage}~` + others.map((t) => `${t.id}:${t.color}:${t.pillBadge ?? ""}`).join("|");
       if (pillKey !== pillIds) {
         pillIds = pillKey;
@@ -469,6 +470,13 @@ function buildOverview(actions: ViewActions): ViewHost {
           }
         }
         pruneMiniBots();
+        // A page just turned: its pills slide in from the side the arrow points to (style.css).
+        if (turned !== 0) {
+          pills.classList.remove("turn-next", "turn-prev");
+          void pills.offsetWidth;
+          pills.classList.add(turned > 0 ? "turn-next" : "turn-prev");
+          turned = 0;
+        }
       }
       spotifyPill?.sync();
     },
