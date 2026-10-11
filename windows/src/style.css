@@ -3826,3 +3826,159 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   font-style: normal;
   text-align: center;
 }
+
+/* ── The chat's model picker, at the island's full height (views/chat.ts) ─────
+   The providers down the left, the chosen one's models beside them and, under
+   those, how hard it thinks. The chat box steps aside while it is open: the
+   model button under the picker closes it, and so does picking a model. */
+.chat-body.picking .chat-bar {
+  display: none;
+}
+
+.picker {
+  flex-direction: row;
+  gap: 10px;
+  padding: 10px;
+}
+
+.picker-chips {
+  flex: 0 0 136px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 3px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 9px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.picker-chip {
+  flex: 0 0 auto;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 12.5px;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.picker-chip:hover:not(.on) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.picker-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.picker-list {
+  gap: 3px;
+}
+
+.picker-model {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border-radius: 9px;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+
+.picker-effort {
+  display: none;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.picker-effort.on {
+  display: flex;
+}
+
+.picker-effort-label {
+  flex: 0 0 auto;
+  font: 500 11.5px var(--font);
+  color: #8a8f98;
+}
+
+.picker-effort-levels {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Each level as wide as its word asks, the room left over shared out. */
+.picker-effort-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #c8cdd4;
+  font: 400 11.5px var(--font);
+  white-space: nowrap;
+  cursor: default;
+  transition: background 0.15s, color 0.15s;
+}
+
+.picker-effort-btn:hover:not(.on) {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.picker-effort-btn.on {
+  font-weight: 600;
+  color: var(--ink-2);
+  background: rgba(255, 255, 255, 0.16);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* The weather's icon before the time (island.ts, syncWeather). */
+#compact-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+#compact-clock .wx {
+  display: none;
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+#compact-clock .wx.on {
+  display: block;
+  animation: wx-in 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards;
+}
+
+#compact-clock .wx svg {
+  display: block;
+}
+
+@keyframes wx-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #compact-clock .wx.on {
+    animation: none;
+  }
+}

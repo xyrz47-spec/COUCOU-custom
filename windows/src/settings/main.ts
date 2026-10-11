@@ -1053,6 +1053,7 @@ function generalSection(): HTMLElement {
     ...recapRows(),
     languageRow(),
     ...clockRows(),
+    ...weatherRows(),
   );
 }
 
@@ -1146,6 +1147,78 @@ function clockRows(): HTMLElement[] {
   return [
     h("div", { class: "row" }, h("label", { text: t("Clock") }), select),
     h("div", { class: "hint", text: t("Shown in the compact island while no song plays.") }),
+  ];
+}
+
+/**
+ * The weather beside the clock: a place picked by name. Until one is picked
+ * nothing is asked of anyone; once it is, only its coordinates are sent
+ * (weather.rs).
+ */
+function weatherRows(): HTMLElement[] {
+  const row = h("div", { class: "row" });
+  const found = h("div", { class: "weather-places" });
+  const draw = () => {
+    clear(row);
+    clear(found);
+    row.append(h("label", { text: t("Weather") }));
+    const place = settings.weather;
+    if (place) {
+      const remove = h("button", { class: "danger", text: t("Remove") });
+      remove.addEventListener("click", () => {
+        settings.weather = null;
+        void save();
+        draw();
+      });
+      row.append(h("span", { class: "path", text: place.name }), remove);
+      return;
+    }
+    const input = h("input", {
+      type: "text",
+      placeholder: t("City"),
+      spellcheck: "false",
+      autocomplete: "off",
+      style: "flex:1 1 auto;min-width:0",
+    }) as HTMLInputElement;
+    const find = h("button", { class: "primary", text: t("Search") }) as HTMLButtonElement;
+    const search = async () => {
+      const query = input.value.trim();
+      if (query.length < 2 || find.disabled) return;
+      find.disabled = true;
+      clear(found);
+      try {
+        const places = await Bridge.weatherSearch(query, language());
+        if (places.length === 0) found.append(h("div", { class: "hint", text: t("No place by that name.") }));
+        for (const one of places) {
+          const pick = h(
+            "button",
+            { class: "weather-place" },
+            h("span", { text: one.name }),
+            h("span", { class: "hint", text: one.region }),
+          );
+          pick.addEventListener("click", () => {
+            settings.weather = { name: one.name, latitude: one.latitude, longitude: one.longitude };
+            void save();
+            draw();
+          });
+          found.append(pick);
+        }
+      } catch (err) {
+        found.append(h("div", { class: "notice err", text: String(err).replace(/^Error:\s*/, "") }));
+      }
+      find.disabled = false;
+    };
+    find.addEventListener("click", () => void search());
+    input.addEventListener("keydown", (e) => {
+      if ((e as KeyboardEvent).key === "Enter") void search();
+    });
+    row.append(input, find);
+  };
+  draw();
+  return [
+    row,
+    found,
+    h("div", { class: "hint", text: t("Pick your city to see its weather as an icon beside the clock. Coucou then asks Open-Meteo for the weather at that spot, every twenty minutes; until a city is picked, nothing is asked.") }),
   ];
 }
 

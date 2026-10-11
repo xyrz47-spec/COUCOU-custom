@@ -8,6 +8,7 @@ import {
 } from "./pills";
 import type { CodexPlanUsage, PlanUsage } from "./plan";
 import type { ProviderId } from "./providers";
+import type { WeatherNow, WeatherPlace } from "./weather";
 import type { FileDiff } from "./diff";
 import type { Bindings } from "./shortcuts";
 import { DEFAULT_OUTFIT, type Outfit } from "../mochi/wardrobe";
@@ -191,6 +192,10 @@ export interface Settings {
   launcher: LauncherItem[];
   /** The form of the compact island's clock (core/clock.ts): "" follows the language, "off" shows none. */
   clockFormat: string;
+  /** How hard the chat's model thinks, where the provider takes it (core/providers.ts, EFFORTS); "" is its own default. */
+  chatEffort: string;
+  /** The place whose weather shows beside the compact island's clock; null until one is picked. */
+  weather: WeatherPlace | null;
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -234,6 +239,8 @@ export const DEFAULT_SETTINGS: Settings = {
   editorCommand: "",
   launcher: [],
   clockFormat: "",
+  chatEffort: "",
+  weather: null,
 };
 
 type Listener = () => void;
@@ -281,6 +288,10 @@ class AppState {
   codexPlanUsage: CodexPlanUsage | null = null;
   /** A plan card is open in place of the overview's left card. */
   showingPlanDetail = false;
+  /** The chat's model picker is open: the island takes its full height for it (island.ts). */
+  chatPicking = false;
+  /** The weather at the picked place, once it has been asked for (island.ts). */
+  weather: WeatherNow | null = null;
   /** Which one: the Codex card rather than Claude's. */
   planDetailIsCodex = false;
   /** Per-pill file diffs, in order of reception. Steps carry their ids. */

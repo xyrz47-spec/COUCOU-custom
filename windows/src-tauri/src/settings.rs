@@ -98,6 +98,12 @@ pub struct Settings {
     /// the language, "off" shows none. Kept as it comes: a form this build
     /// doesn't know reads as "".
     pub clock_format: String,
+    /// How hard the chat's model thinks before it answers, where the provider
+    /// takes it (claude_cli.rs): "" leaves it to the provider.
+    pub chat_effort: String,
+    /// The place whose weather shows beside the compact island's clock
+    /// (weather.rs); none until one is picked, and nothing is asked until then.
+    pub weather: Option<crate::weather::WeatherPlace>,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -165,6 +171,8 @@ impl Default for Settings {
             editor_command: String::new(),
             launcher: Vec::new(),
             clock_format: String::new(),
+            chat_effort: String::new(),
+            weather: None,
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -452,6 +460,8 @@ mod tests {
   "editorCommand": "kitty -e nvim",
   "launcher": [{ "name": "Docs", "target": "https://example.com/docs" }],
   "clockFormat": "24h-seconds",
+  "chatEffort": "high",
+  "weather": { "name": "Seoul", "latitude": 37.57, "longitude": 126.98 },
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -887,6 +897,8 @@ mod tests {
                 "editorCommand",
                 "launcher",
                 "clockFormat",
+                "chatEffort",
+                "weather",
                 "desktopMochi",
             ]
         );

@@ -7,12 +7,14 @@ import {
   EXPANDED_CORNER, EXPANDED_W, NOTCH_W, PANEL_H, PANEL_W,
   ROUNDED_CORNER, VIEW_LAYOUTS, botGlowColor, botGlowOpacity, botPosition, chatPromptHeight,
   islandSize,
-  PLAYER_H, QUESTION_PICKER_H,
+  CHAT_PICKER_H, PLAYER_H, QUESTION_PICKER_H,
   type BotEmoteName, type IslandMode, type IslandViewName,
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
 import { CLOCK_MAX_FONT, clockFontSize, clockParts, formatClock } from "../core/clock";
+import { WEATHER_REFRESH_MS, weatherKind } from "../core/weather";
+import { weatherIcon } from "../views/weather";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
 import { language, t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
@@ -71,6 +73,13 @@ export class Island {
   private compactClockText!: HTMLElement;
   /** The clock's text with every digit the same: its size is worked out again only when this changes. */
   private compactClockShape = "";
+  /** The weather's icon, before the time (syncWeather). */
+  private compactWeather!: HTMLElement;
+  /** The place the weather was last asked for, "" for none. */
+  private weatherPlace = "";
+  /** The kind of sky the icon shows, "" for none. */
+  private weatherShown = "";
+  private weatherTimer: number | null = null;
   private compactClockTimer: number | null = null;
   private wakeStrip!: HTMLElement;
 
@@ -325,7 +334,12 @@ export class Island {
       this.botCanvas,
       this.miniGrid,
       this.compactSong,
-      (this.compactClock = h("div", { id: "compact-clock" }, (this.compactClockText = h("span", {})))),
+      (this.compactClock = h(
+        "div",
+        { id: "compact-clock" },
+        (this.compactWeather = h("b", { class: "wx" })),
+        (this.compactClockText = h("span", {})),
+      )),
       this.countdown,
     );
     // The clock's own font (style.css) arrives a moment after the page: what
@@ -725,6 +739,8 @@ export class Island {
       h = QUESTION_PICKER_H;
     }
     if (State.spotifyPlayerShown) h = PLAYER_H;
+    // The chat's model picker gets all the height there is (views/chat.ts).
+    if (State.mode === "expanded" && State.view === "prompt" && State.chatPicking) h = CHAT_PICKER_H;
     const r = State.mode === "expanded" ? EXPANDED_CORNER : ROUNDED_CORNER;
     return { w, h, r };
   }
@@ -1290,6 +1306,7 @@ export class Island {
     // No song: the same stretch says what time it is.
     const clock = State.mode === "compact" && !show && State.settings.clockFormat !== "off";
     this.compactClock.classList.toggle("on", clock);
+    this.syncWeather();
     if (clock) {
       this.paintCompactClock();
       // Looked at once a second, written only when the minute turns.
@@ -1320,6 +1337,45 @@ export class Island {
     this.paintCompactSongTime();
   }
 
+  /**
+   * The weather beside the clock, for the place picked in Settings → General:
+   * asked for when a place is picked, then every twenty minutes. No place,
+   * nothing asked.
+   */
+  private syncWeather() {
+    const place = State.settings.weather;
+    const key = place ? `${place.latitude},${place.longitude}` : "";
+    if (key !== this.weatherPlace) {
+      this.weatherPlace = key;
+      State.weather = null;
+      if (this.weatherTimer != null) {
+        window.clearInterval(this.weatherTimer);
+        this.weatherTimer = null;
+      }
+      if (key) {
+        void this.askWeather(key);
+        this.weatherTimer = window.setInterval(() => void this.askWeather(key), WEATHER_REFRESH_MS);
+      }
+    }
+    const kind = State.weather ? weatherKind(State.weather.code, State.weather.isDay) : "";
+    if (kind === this.weatherShown) return;
+    this.weatherShown = kind;
+    this.compactWeather.replaceChildren(...(kind ? [weatherIcon(kind, 19)] : []));
+    this.compactWeather.classList.toggle("on", kind !== "");
+    // The time has less room beside an icon, or more without one.
+    this.compactClockShape = "";
+  }
+
+  private async askWeather(key: string) {
+    const now = await Bridge.weatherNow();
+    // The place changed while the answer was on its way.
+    if (key !== this.weatherPlace) return;
+    // An ask that failed keeps what is shown: the sky of twenty minutes ago beats none.
+    if (!now) return;
+    State.weather = now;
+    State.notify();
+  }
+
   private paintCompactClock() {
     // In the form picked in Settings → General (core/clock.ts).
     const text = formatClock(State.settings.clockFormat, new Date(), language());
@@ -1338,7 +1394,9 @@ export class Island {
     if (shape === this.compactClockShape) return;
     this.compactClock.style.fontSize = `${CLOCK_MAX_FONT}px`;
     const width = this.compactClockText.offsetWidth;
-    const room = this.compactClock.clientWidth;
+    // What the weather's icon and the gap after it take is not the time's.
+    const icon = this.weatherShown ? this.compactWeather.offsetWidth + 7 : 0;
+    const room = this.compactClock.clientWidth - icon;
     this.compactClock.style.fontSize = `${clockFontSize(width, CLOCK_MAX_FONT, room)}px`;
     // Not laid out yet (nothing to measure): asked again at the next tick.
     this.compactClockShape = width > 0 && room > 0 ? shape : "";

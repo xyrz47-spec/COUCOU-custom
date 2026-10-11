@@ -38,6 +38,7 @@ mod spotify;
 mod taktus;
 mod task_runner;
 mod tray;
+mod weather;
 #[cfg(windows)]
 mod webview_drop;
 
@@ -585,6 +586,22 @@ fn local_set_key(url: String, key: String) -> Result<(), String> {
     local_chat::set_custom_key(&url, &key)
 }
 
+/// Settings → General → Weather: the places called what was typed.
+#[tauri::command]
+async fn weather_search(query: String, language: String) -> Result<Vec<weather::Place>, String> {
+    weather::search(&query, &language).await
+}
+
+/// The weather at the place picked in the settings; nothing while none is.
+#[tauri::command]
+async fn weather_now(shared: State<'_, Shared>) -> Result<Option<weather::Now>, String> {
+    let place = shared.settings.lock().unwrap().weather.clone();
+    match place {
+        Some(place) => weather::now(&place).await.map(Some),
+        None => Ok(None),
+    }
+}
+
 /// Where the Claude Code CLI is, for Settings → Chat; nothing when it is not installed.
 #[tauri::command]
 fn chat_cli_path() -> Option<String> {
@@ -898,6 +915,8 @@ pub fn run() {
             local_set_key,
             chat_reset,
             chat_cli_path,
+            weather_search,
+            weather_now,
             ingest_file,
             secret_present,
             secret_set,

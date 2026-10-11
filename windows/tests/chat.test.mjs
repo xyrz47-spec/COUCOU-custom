@@ -31,6 +31,7 @@ beforeEach(() => {
   State.stateOverride = null;
   State.view = "prompt";
   State.droppedFile = null;
+  State.chatPicking = false;
   view = buildPrompt(() => {});
   view.sync();
 });
@@ -93,6 +94,45 @@ test("Claude Code needs no key: its models are listed without one being asked fo
   // Claude's API model is another setting, and is left alone.
   assert.equal(State.settings.model, "claude-opus-5");
   assert.equal($(".model-name").textContent, "opus");
+});
+
+test("the open picker takes the island's full height, and gives it back", async () => {
+  answers.secret_present = false;
+  let resized = 0;
+  view = buildPrompt(() => resized++);
+  view.sync();
+  $(".model-btn").fire("click");
+  await flush();
+  assert.equal(State.chatPicking, true);
+  assert.equal(resized, 1);
+  $(".model-btn").fire("click");
+  assert.equal(State.chatPicking, false);
+  assert.equal(resized, 2);
+});
+
+test("Claude Code can be told how hard to think; the others are not asked", async () => {
+  answers.secret_present = false;
+  answers.chat_models = [{ id: "sonnet", label: "Sonnet" }];
+  $(".model-btn").fire("click");
+  await flush();
+  // Anthropic's API chat takes no effort: no levels are offered.
+  assert.ok(!$(".picker-effort").classList.contains("on"));
+  assert.deepEqual(view.el.find(".picker-effort-btn"), []);
+
+  view.el.find(".picker-chip")[0].fire("click");
+  await flush();
+  assert.equal(State.settings.chatProvider, "claude-code");
+  assert.ok($(".picker-effort").classList.contains("on"));
+  const levels = () => view.el.find(".picker-effort-btn");
+  assert.deepEqual(levels().map((b) => b.textContent), ["Default", "Low", "Medium", "High", "Very high", "Max"]);
+  assert.ok(levels()[0].classList.contains("on"));
+  levels()[3].fire("click");
+  assert.equal(State.settings.chatEffort, "high");
+  assert.equal(sent("save_settings").at(-1).settings.chatEffort, "high");
+  assert.ok(levels()[3].classList.contains("on") && !levels()[0].classList.contains("on"));
+  // Picking a level leaves the picker open, and the model button says it.
+  assert.ok($(".chat-body").classList.contains("picking"));
+  assert.equal($(".model-name").textContent, "sonnet · High");
 });
 
 test("switching provider saves it and asks the new provider only", async () => {

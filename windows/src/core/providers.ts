@@ -22,10 +22,12 @@ export interface ProviderDef {
   defaultModel: string;
   /** When the saved model is not offered, the first one containing this is picked. */
   prefer: string | null;
+  /** It can be told how hard to think (settings.chatEffort). */
+  effort?: boolean;
 }
 
 export const PROVIDERS: readonly ProviderDef[] = [
-  { id: "claude-code", name: "Claude Code", accent: "#F2B138", key: null, urlField: null, defaultModel: "sonnet", prefer: null },
+  { id: "claude-code", name: "Claude Code", accent: "#F2B138", key: null, urlField: null, defaultModel: "sonnet", prefer: null, effort: true },
   { id: "anthropic", name: "Anthropic", accent: "#E07950", key: "anthropic-api-key", urlField: null, defaultModel: "claude-opus-5", prefer: "opus" },
   { id: "google", name: "Google", accent: "#4285F4", key: "google-api-key", urlField: null, defaultModel: "gemini-2.0-flash", prefer: "flash" },
   { id: "openai", name: "OpenAI", accent: "#10A37F", key: "openai-api-key", urlField: null, defaultModel: "gpt-4o", prefer: "mini" },
@@ -34,6 +36,22 @@ export const PROVIDERS: readonly ProviderDef[] = [
   { id: "lmstudio", name: "LM Studio", accent: "#A3E635", key: null, urlField: "lmstudioUrl", defaultModel: "", prefer: null },
   { id: "custom", name: N_("Custom server"), accent: "#C0C4CC", key: null, urlField: "customUrl", defaultModel: "", prefer: null },
 ];
+
+/**
+ * How hard the model thinks before it answers — `settings.chatEffort`, as
+ * Claude Code's --effort takes it (claude_cli.rs). "" is the provider's own.
+ */
+export const EFFORTS = ["", "low", "medium", "high", "xhigh", "max"] as const;
+export type Effort = (typeof EFFORTS)[number];
+
+export function isEffort(value: unknown): value is Effort {
+  return typeof value === "string" && (EFFORTS as readonly string[]).includes(value);
+}
+
+/** The effort in force: the saved one where the active provider takes one, else "". */
+export function activeEffort(settings: Settings): Effort {
+  return providerDef(settings.chatProvider).effort && isEffort(settings.chatEffort) ? settings.chatEffort : "";
+}
 
 /** Credential store entry of the custom server's optional key. */
 export const CUSTOM_SERVER_KEY = "openai-compatible-key";

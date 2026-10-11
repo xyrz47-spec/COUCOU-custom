@@ -107,6 +107,8 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
 
 /** The question view with options to pick from: room for two rows of them. */
 export const QUESTION_PICKER_H = 200;
+/** The chat while its model picker is open: all the height the panel has. */
+export const CHAT_PICKER_H = 312;
 
 /** The overview while Spotify's big player has it (State.spotifyPlayerShown). */
 export const PLAYER_H = 232;

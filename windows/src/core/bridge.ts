@@ -8,6 +8,7 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import type { Settings } from "./state";
 import type { RecapHistory, RecapPrefs } from "../recap/summary";
 import type { SpotifyState } from "./spotify";
+import type { FoundPlace, WeatherNow } from "./weather";
 
 export const IS_TAURI =
   typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
@@ -202,6 +203,13 @@ export const Bridge = {
   chatReset: () => call<void>("chat_reset"),
   /** Where the Claude Code CLI is, for Settings → Chat; null when it is not installed. */
   chatCliPath: () => call<string>("chat_cli_path"),
+
+  // ── Weather ───────────────────────────────────────────────────────────────
+  /** Settings → General → Weather: the places called what was typed. */
+  weatherSearch: (query: string, language: string) =>
+    callOrThrow<FoundPlace[]>("weather_search", { query, language }),
+  /** The weather at the picked place; null while none is picked, or when it could not be asked. */
+  weatherNow: () => call<WeatherNow>("weather_now"),
   /**
    * The models a provider offers, for the picker in the chat view. Rust asks
    * the provider only when it has a key (or a server address).

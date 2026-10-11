@@ -213,7 +213,7 @@ pub async fn send(
         return claude::send(chat, &model, query, context).await;
     }
     if provider == claude_cli::ID {
-        return claude_cli::send(app, chat, &model, query, context).await;
+        return claude_cli::send(app, chat, &model, &settings.chat_effort, query, context).await;
     }
     if let Some(p) = openai_compat::provider(provider) {
         return openai_compat::send(chat, p, &model, query, context).await;

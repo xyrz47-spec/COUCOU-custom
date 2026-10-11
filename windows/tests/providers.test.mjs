@@ -4,7 +4,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  PROVIDERS, activeModel, isLoopbackHost, pickModel, providerDef, urlExposure, visibleProviders, withModel,
+  EFFORTS, PROVIDERS, activeEffort, activeModel, isEffort, isLoopbackHost, pickModel, providerDef, urlExposure,
+  visibleProviders, withModel,
 } from "../src/core/providers.ts";
 import { DEFAULT_SETTINGS } from "../src/core/state.ts";
 
@@ -37,6 +38,17 @@ test("Claude's model is the existing setting; the others are kept per provider",
   assert.equal(s.chatModels.openai, "gpt-5-mini");
   // withModel never changes the object it was given.
   assert.deepEqual(DEFAULT_SETTINGS.chatModels, {});
+});
+
+test("the effort counts only where the provider takes one, and only a known level", () => {
+  assert.deepEqual([...EFFORTS], ["", "low", "medium", "high", "xhigh", "max"]);
+  assert.deepEqual(PROVIDERS.filter((p) => p.effort).map((p) => p.id), ["claude-code"]);
+  assert.equal(activeEffort(settings({ chatProvider: "claude-code" })), "");
+  assert.equal(activeEffort(settings({ chatProvider: "claude-code", chatEffort: "high" })), "high");
+  // The level stays saved while another provider answers, and counts for nothing there.
+  assert.equal(activeEffort(settings({ chatProvider: "anthropic", chatEffort: "high" })), "");
+  assert.equal(activeEffort(settings({ chatProvider: "claude-code", chatEffort: "ultra" })), "");
+  assert.ok(isEffort("") && isEffort("xhigh") && !isEffort("High") && !isEffort(undefined));
 });
 
 test("model servers show in the picker once connected, or while in use", () => {

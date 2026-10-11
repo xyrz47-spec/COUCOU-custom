@@ -13,7 +13,8 @@ import {
   Bridge, onEvent, type ChatContext, type ModelInfo, type TaskResult, type TaskStarted,
 } from "../core/bridge";
 import {
-  activeModel, pickModel, providerDef, visibleProviders, withModel, type ProviderDef,
+  EFFORTS, activeEffort, activeModel, pickModel, providerDef, visibleProviders, withModel,
+  type Effort, type ProviderDef,
 } from "../core/providers";
 import { Sound } from "../core/sound";
 import { State, type ChatMessage } from "../core/state";
@@ -42,6 +43,18 @@ const STRINGS = {
   otherFolder: N_("Other…"),
   typePath: N_("Full path of a folder — Enter to use it, Esc to go back"),
   taskProjectDelete: N_("Project folder the task runs in — Delete forgets a remembered one"),
+  effort: N_("Effort"),
+  effortHint: N_("How hard Claude thinks before it answers. Higher is slower and uses more of your plan."),
+};
+
+/** The effort levels by name, as the picker and the model button show them. */
+const EFFORT_NAMES: Record<Effort, string> = {
+  "": N_("Default"),
+  low: N_("Low"),
+  medium: N_("Medium"),
+  high: N_("High"),
+  xhigh: N_("Very high"),
+  max: N_("Max"),
 };
 
 /** "Other…" keeps this many typed folders on the list. */
@@ -125,11 +138,16 @@ interface Picker {
   readonly isOpen: boolean;
 }
 
-/** Provider chips, then the chosen provider's models — ModelPickerView. */
+/**
+ * The providers down the left, the chosen one's models beside them and, where
+ * the provider takes one, how hard it thinks under those — ModelPickerView,
+ * given the island's full height.
+ */
 function buildPicker(onChange: () => void): Picker {
   const chips = h("div", { class: "picker-chips" });
   const list = h("div", { class: "picker-list" });
-  const el = h("div", { class: "picker" }, chips, h("div", { class: "picker-rule" }), list);
+  const effort = h("div", { class: "picker-effort" });
+  const el = h("div", { class: "picker" }, chips, h("div", { class: "picker-main" }, list, effort));
 
   /** Models already asked for, by provider; a model server is asked again each time. */
   const cache = new Map<string, ModelInfo[]>();
@@ -152,11 +170,38 @@ function buildPicker(onChange: () => void): Picker {
         saveSettings();
         Sound.play("pop");
         drawChips();
+        drawEffort();
         void loadModels();
         onChange();
       });
       chips.append(chip);
     }
+  }
+
+  /** The effort levels, for a provider that takes one; nothing for the others. */
+  function drawEffort() {
+    clear(effort);
+    const p = providerDef(State.settings.chatProvider);
+    effort.classList.toggle("on", Boolean(p.effort));
+    if (!p.effort) return;
+    const current = activeEffort(State.settings);
+    const levels = h("div", { class: "picker-effort-levels", style: `--accent:${p.accent}` });
+    for (const level of EFFORTS) {
+      const button = h("button", {
+        class: level === current ? "picker-effort-btn on" : "picker-effort-btn",
+        text: t(EFFORT_NAMES[level]),
+      });
+      button.addEventListener("click", () => {
+        if (level === activeEffort(State.settings)) return;
+        State.settings = { ...State.settings, chatEffort: level };
+        saveSettings();
+        Sound.play("blip");
+        drawEffort();
+        onChange();
+      });
+      levels.append(button);
+    }
+    effort.append(h("span", { class: "picker-effort-label", text: t(STRINGS.effort), title: tl(STRINGS.effortHint) }), levels);
   }
 
   function status(text: string, withSettings = false) {
@@ -231,6 +276,7 @@ function buildPicker(onChange: () => void): Picker {
     isOpen = true;
     el.classList.add("on");
     drawChips();
+    drawEffort();
     onChange();
     void loadModels();
   }
@@ -294,6 +340,11 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   const picker = buildPicker(() => {
     body.classList.toggle("picking", picker.isOpen);
     drawModelButton();
+    // The island takes its full height while the picker is open (island.ts).
+    if (State.chatPicking !== picker.isOpen) {
+      State.chatPicking = picker.isOpen;
+      onHeightChange();
+    }
   });
   body.append(chipRow, log, picker.el, modelRow, bar);
 
@@ -417,7 +468,9 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   function drawModelButton() {
     const p = providerDef(State.settings.chatProvider);
     modelDot.style.background = p.accent;
-    modelName.textContent = activeModel(State.settings) || t(STRINGS.noModel);
+    const model = activeModel(State.settings) || t(STRINGS.noModel);
+    const level = activeEffort(State.settings);
+    modelName.textContent = level ? `${model} · ${t(EFFORT_NAMES[level])}` : model;
     modelBtn.classList.toggle("open", picker.isOpen);
     modelBtn.disabled = sending;
   }

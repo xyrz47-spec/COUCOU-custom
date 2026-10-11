@@ -72,6 +72,15 @@ fn model_arg(model: &str) -> &str {
     if ok { model } else { DEFAULT_MODEL }
 }
 
+/// How hard the model thinks before it answers, as `--effort` takes it
+/// (core/providers.ts lists the same). Anything else — "" included, the
+/// settings' way of saying "the CLI's own default" — passes no flag.
+const EFFORTS: &[&str] = &["low", "medium", "high", "xhigh", "max"];
+
+fn effort_arg(effort: &str) -> Option<&'static str> {
+    EFFORTS.iter().copied().find(|level| *level == effort.trim())
+}
+
 // ── The question ──────────────────────────────────────────────────────────────
 
 /// Adds text to `content`, into the block before it when that one is text.
@@ -222,10 +231,12 @@ pub async fn send(
     app: &AppHandle,
     chat: &Chat,
     model: &str,
+    effort: &str,
     query: String,
     context: Option<ChatContext>,
 ) -> Result<ChatReply, String> {
     let exe = platform::claude_candidates().into_iter().next().ok_or_else(not_installed)?;
+    let effort = effort_arg(effort);
     let turn = chat.begin(ID);
     let user = json!({ "role": "user", "content": claude::user_content(turn.first, context.as_ref(), &query) });
     let line = input_line(&turn.history, &user);
@@ -234,7 +245,7 @@ pub async fn send(
 
     let island = app.clone();
     let answer = tauri::async_runtime::spawn_blocking(move || {
-        run(&exe, &model, &system, line, |visible| {
+        run(&exe, &model, effort, &system, line, |visible| {
             let _ = island.emit_to(WINDOW_LABEL, "chat-delta", visible);
         })
     })
@@ -248,7 +259,14 @@ pub async fn send(
 
 /// Runs claude on one question and follows its stream to the answer.
 /// Blocking: called off the async runtime's own threads.
-fn run(exe: &Path, model: &str, system: &str, line: String, mut on_delta: impl FnMut(String)) -> Result<String, String> {
+fn run(
+    exe: &Path,
+    model: &str,
+    effort: Option<&str>,
+    system: &str,
+    line: String,
+    mut on_delta: impl FnMut(String),
+) -> Result<String, String> {
     let mut cmd = Command::new(exe);
     cmd.args([
         "-p",
@@ -274,6 +292,9 @@ fn run(exe: &Path, model: &str, system: &str, line: String, mut on_delta: impl F
         "--allowedTools",
         TOOLS,
     ]);
+    if let Some(level) = effort {
+        cmd.args(["--effort", level]);
+    }
     cmd.current_dir(platform::local_dir()).stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped());
     // An npm install is a script calling node: its own folder first on PATH (codex_plan.rs).
     if let Some(parent) = exe.parent() {
@@ -500,6 +521,17 @@ mod tests {
         assert!(MODELS.iter().any(|(id, _)| *id == DEFAULT_MODEL));
     }
 
+    #[test]
+    fn only_a_known_effort_becomes_a_flag() {
+        assert_eq!(effort_arg("high"), Some("high"));
+        assert_eq!(effort_arg(" max "), Some("max"));
+        assert_eq!(effort_arg("xhigh"), Some("xhigh"));
+        // "" is the CLI's own default: no flag.
+        assert_eq!(effort_arg(""), None);
+        assert_eq!(effort_arg("High"), None);
+        assert_eq!(effort_arg("--tools default"), None);
+    }
+
     /// The real CLI, with the user's own sign-in: one small question. Run by
     /// hand (`cargo test live_claude -- --ignored --nocapture`); it counts
     /// against the plan like any question.
@@ -509,7 +541,8 @@ mod tests {
         let exe = platform::claude_candidates().into_iter().next().expect("claude is installed");
         let user = json!({"role":"user","content":[{"type":"text","text":"Reply with the single word: pong"}]});
         let mut steps = Vec::new();
-        let answer = run(&exe, "haiku", "You answer in one word.", input_line(&[], &user), |v| steps.push(v)).unwrap();
+        let answer =
+            run(&exe, "haiku", effort_arg("low"), "You answer in one word.", input_line(&[], &user), |v| steps.push(v)).unwrap();
         println!("answer: {answer:?}, steps: {steps:?}");
         assert!(answer.to_lowercase().contains("pong"), "{answer}");
         assert!(!steps.is_empty());
