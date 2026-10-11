@@ -1174,138 +1174,39 @@ body.settings-window:has(#settings-root.app) {
   }
 }
 
-/* ── Glass over a dreamy sky ────────────────────────────────────────────────
-   Last in the file, so it has the last word on how the settings window looks
-   (.app; the launcher's "add" window is left as it is).
+/* ── Boxes in their page's colour ──────────────────────────────────────────────
+   Last in the file, so it has the last word on the settings window's boxes
+   (.app; the launcher's "add" window is left as it is). The column on the
+   left and the background behind the boxes are the plain ones set above.
 
-   Depth is three things here, used the same way everywhere: a panel is
-   frosted glass with a line of light along its top edge and a long soft
-   shadow under it; what is pressed (a button, a key, a switch's thumb) stands
-   out of its panel and sinks under the press; what is typed in is sunk into
-   it. */
+   Inside a box, a gradient of its page's colour (--page) runs from the top
+   left corner and fades out. Depth is used the same way everywhere: a box is
+   lit along its top edge and casts a long soft shadow; what is pressed (a
+   button, a key, a switch's thumb) stands out of it and sinks under the
+   press; what is typed in is sunk into it. */
 
-/* The sky: three soft lights over a deep violet night, drifting slowly. */
-body.settings-window:has(#settings-root.app) {
-  background: linear-gradient(155deg, #120d2b 0%, #0b1026 45%, #170b26 100%);
-}
-
-body.settings-window:has(#settings-root.app)::before {
-  content: "";
-  position: fixed;
-  inset: -25%;
-  z-index: 0;
-  background:
-    radial-gradient(38% 34% at 22% 24%, rgba(139, 92, 246, 0.5), transparent 70%),
-    radial-gradient(34% 32% at 78% 22%, rgba(56, 189, 248, 0.38), transparent 70%),
-    radial-gradient(40% 36% at 66% 80%, rgba(236, 72, 153, 0.34), transparent 70%),
-    radial-gradient(30% 28% at 18% 84%, rgba(45, 212, 191, 0.26), transparent 70%),
-    radial-gradient(46% 42% at 50% 52%, rgba(99, 102, 241, 0.24), transparent 72%);
-  animation: dream-drift 28s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes dream-drift {
-  from {
-    transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1);
-  }
-  to {
-    transform: translate3d(4%, 3%, 0) rotate(8deg) scale(1.08);
-  }
-}
-
-#settings-root.app {
-  position: relative;
-  z-index: 1;
-  padding: 14px;
-  gap: 14px;
-  grid-template-columns: 212px minmax(0, 1fr);
-}
-
-/* The column: a pane of glass standing free of the window's edge. */
-.app .nav {
-  padding: 22px 12px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 24px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
-  backdrop-filter: blur(26px) saturate(150%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 24px 48px -16px rgba(0, 0, 0, 0.6),
-    0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-.app .brand span:first-child,
-.app .page > h1 {
-  background: linear-gradient(92deg, #ffffff 0%, #d8ccff 55%, #9be7ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.app .brand .version,
-.app .nav-foot {
-  color: rgba(226, 226, 255, 0.5);
-}
-
-.app .nav-item {
-  border-radius: 13px;
-  color: rgba(232, 232, 255, 0.66);
-}
-
-/* The open page's name stands on a lit tile of its own. */
-.app .nav-marker {
-  border-radius: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--page, #fff) 34%, transparent), rgba(255, 255, 255, 0.08));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 10px 22px -8px color-mix(in srgb, var(--page, #fff) 55%, transparent),
-    0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.app .pages {
-  height: calc(100vh - 28px);
-  padding: 14px 22px 34px 12px;
-}
-
-.app .page {
-  gap: 18px;
-}
-
-.app .page > h1 {
-  font-size: 24px;
-}
-
-.app .page > h1::before {
-  flex: 0 0 auto;
-  width: 11px;
-  height: 11px;
-  box-shadow: 0 0 18px var(--page, #fff), 0 0 4px #fff;
-}
-
-/* A section: frosted glass, lit along its top edge, floating over the sky. It
-   comes forward a little under the pointer. */
 .app section {
   padding: 20px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.045) 100%);
-  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid color-mix(in srgb, var(--page, #fff) 22%, rgba(255, 255, 255, 0.08));
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--page, #fff) 30%, transparent) 0%, transparent 62%),
+    linear-gradient(160deg, color-mix(in srgb, var(--page, #fff) 14%, #17181c) 0%, #15161a 48%, color-mix(in srgb, var(--page, #fff) 8%, #121316) 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 22px 44px -18px rgba(0, 0, 0, 0.62),
-    0 3px 10px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 22px 40px -20px rgba(0, 0, 0, 0.75),
+    0 3px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.3s, border-color 0.25s;
 }
 
 .app section:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: color-mix(in srgb, var(--page, #fff) 42%, rgba(255, 255, 255, 0.1));
   transform: translateY(-2px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.26),
-    0 32px 56px -20px rgba(0, 0, 0, 0.7),
-    0 0 0 1px color-mix(in srgb, var(--page, #fff) 16%, transparent),
-    0 6px 16px rgba(0, 0, 0, 0.26);
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 32px 52px -22px rgba(0, 0, 0, 0.82),
+    0 0 26px -10px color-mix(in srgb, var(--page, #fff) 60%, transparent),
+    0 6px 16px rgba(0, 0, 0, 0.32);
 }
 
 .app section > h2 {
@@ -1316,143 +1217,143 @@ body.settings-window:has(#settings-root.app)::before {
   box-shadow: 0 0 10px var(--page, #fff);
 }
 
-.app .hint,
-.app .row > label {
-  color: rgba(226, 226, 250, 0.62);
-}
-
 .app section > .row:hover,
 .app .launch-list .row:hover,
 .app .row.shortcut:hover,
 .app .pill-row:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.06);
 }
 
-/* Buttons stand out of the glass, come up to the pointer, and go down under a press. */
+/* Buttons stand out of the box, come up to the pointer, and go down under a press. */
 .app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.07));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 8px 16px -8px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 8px 16px -8px rgba(0, 0, 0, 0.75),
     0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.11));
+  border-color: rgba(255, 255, 255, 0.28);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.23), rgba(255, 255, 255, 0.1));
   transform: translateY(-2px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    0 14px 22px -10px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 14px 22px -10px rgba(0, 0, 0, 0.8),
     0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* The button that matters most wears the page's colour. */
 .app button.primary:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
   border-color: rgba(255, 255, 255, 0.35);
-  background: linear-gradient(135deg, #b9a6ff 0%, #8fb8ff 52%, #7ee8d9 100%);
-  color: #0d0b1f;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--page, #fff) 45%, #fff) 0%,
+    color-mix(in srgb, var(--page, #fff) 78%, #fff) 100%
+  );
+  color: #0b0c0e;
   font-weight: 600;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 10px 22px -8px rgba(139, 92, 246, 0.7),
+    0 10px 22px -8px color-mix(in srgb, var(--page, #fff) 70%, transparent),
     0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .app button.primary:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
-  background: linear-gradient(135deg, #cabcff 0%, #a6c8ff 52%, #98f0e3 100%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--page, #fff) 30%, #fff) 0%,
+    color-mix(in srgb, var(--page, #fff) 62%, #fff) 100%
+  );
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 16px 30px -10px rgba(139, 92, 246, 0.85),
+    0 16px 30px -10px color-mix(in srgb, var(--page, #fff) 85%, transparent),
     0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .app button.danger:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
   border-color: rgba(255, 130, 150, 0.35);
-  background: linear-gradient(180deg, rgba(255, 110, 135, 0.26), rgba(255, 90, 115, 0.12));
-  color: #ffb3bf;
+  background: linear-gradient(180deg, rgba(255, 110, 135, 0.24), rgba(255, 90, 115, 0.11));
+  color: #ffa7b4;
 }
 
 .app button.danger:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
   border-color: rgba(255, 150, 165, 0.6);
-  background: linear-gradient(180deg, rgba(255, 110, 135, 0.38), rgba(255, 90, 115, 0.2));
+  background: linear-gradient(180deg, rgba(255, 110, 135, 0.36), rgba(255, 90, 115, 0.19));
 }
 
 .app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):active:not(:disabled) {
   transform: translateY(1px) scale(0.98);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Fields are sunk into the glass; the ring of the page's colour floats over them. */
+/* Fields are sunk into the box; the ring of the page's colour floats over them. */
 .app :is(input[type="number"], input[type="text"], input[type="password"], select) {
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  background: rgba(6, 5, 22, 0.42);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.07);
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .app :is(input[type="number"], input[type="text"], input[type="password"], select):hover {
-  border-color: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .app :is(input[type="number"], input[type="text"], input[type="password"], select):focus {
-  border-color: color-mix(in srgb, var(--page, #fff) 70%, #fff);
-  background: rgba(6, 5, 22, 0.55);
+  border-color: color-mix(in srgb, var(--page, #fff) 75%, #fff);
+  background: rgba(0, 0, 0, 0.4);
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.45),
-    0 0 0 3px color-mix(in srgb, var(--page, #fff) 30%, transparent),
+    inset 0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 0 3px color-mix(in srgb, var(--page, #fff) 28%, transparent),
     0 8px 20px -8px color-mix(in srgb, var(--page, #fff) 60%, transparent);
 }
 
-.app select option {
-  background-color: #17132e;
-}
-
-/* A switch: a sunk track, a thumb that stands out of it, and the sky's own colours when on. */
+/* A switch: a sunk track, a thumb that stands out of it, green when on. */
 .app .switch {
-  background: rgba(6, 5, 22, 0.5);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.38);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.09);
 }
 
 .app .switch::after {
-  background: linear-gradient(180deg, #ffffff, #d9dbe6);
+  background: linear-gradient(180deg, #ffffff, #d9dbe3);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 #fff;
 }
 
 .app .switch.on {
-  background: linear-gradient(90deg, #8b5cf6, #38bdf8);
+  background: linear-gradient(90deg, #16a34a, #34d399);
   box-shadow:
-    inset 0 2px 5px rgba(0, 0, 0, 0.3),
-    0 0 16px rgba(124, 124, 255, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.12);
+    inset 0 2px 5px rgba(0, 0, 0, 0.28),
+    0 0 14px rgba(34, 197, 94, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* A slider: a sunk groove, a thumb to take hold of. */
 .app input[type="range"] {
   height: 6px;
-  background: rgba(6, 5, 22, 0.55);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.42);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 .app input[type="range"]::-webkit-slider-thumb {
   width: 17px;
   height: 17px;
-  background: linear-gradient(180deg, #ffffff, #cfd3e6);
+  background: linear-gradient(180deg, #ffffff, #cfd3df);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.55), inset 0 1px 0 #fff;
 }
 
-/* Keys: a clean raised chip (the hard edge under them is gone). */
+/* Keys: a clean raised chip. */
 .app .keycap {
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 11px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.07));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 6px 12px -6px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 6px 12px -6px rgba(0, 0, 0, 0.75);
 }
 
 .app button.keycap:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 12px 18px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 12px 18px -8px rgba(0, 0, 0, 0.8);
 }
 
 .app .keycap.static {
@@ -1464,88 +1365,38 @@ body.settings-window:has(#settings-root.app)::before {
 @keyframes key-listening {
   50% {
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.26),
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
       0 0 0 4px color-mix(in srgb, var(--page, #fff) 32%, transparent),
       0 0 22px color-mix(in srgb, var(--page, #fff) 55%, transparent);
   }
 }
 
-/* What the window says back: tinted glass, no hard bar down its side. */
+/* What the window says back: tinted, no hard bar down its side. */
 .app .notice {
   padding: 11px 15px;
-  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   border-radius: 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 10px 20px -12px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-}
-
-.app .notice.ok {
-  background: rgba(52, 211, 153, 0.16);
-  color: #9ff5cf;
-}
-
-.app .notice.err {
-  background: rgba(251, 113, 133, 0.17);
-  color: #ffc0cb;
-}
-
-.app .notice.warn {
-  background: rgba(251, 191, 36, 0.15);
-  color: #ffdc8a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 20px -12px rgba(0, 0, 0, 0.65);
 }
 
 .app .diff {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 14px;
-  background: rgba(6, 5, 22, 0.55);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.42);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
 .app .path,
 .app .tag {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.app .tag.warn {
-  background: rgba(251, 191, 36, 0.16);
-}
-
-.app .tag.err {
-  background: rgba(251, 113, 133, 0.17);
-}
-
-.app .pill-group {
-  border-top-color: rgba(255, 255, 255, 0.09);
-}
-
-.app .subhead {
-  color: rgba(226, 226, 250, 0.55);
 }
 
 .app .subhead::after {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.16), transparent);
-}
-
-.palette {
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 16px;
-  background: rgba(28, 24, 54, 0.82);
-  backdrop-filter: blur(20px) saturate(150%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 20px 40px -12px rgba(0, 0, 0, 0.7);
-}
-
-.app .pages::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
-  background-clip: content-box;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--page, #fff) 40%, rgba(255, 255, 255, 0.1)), transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.settings-window:has(#settings-root.app)::before {
-    animation: none;
-  }
-
   .app section:hover,
   .app button.keycap:hover:not(:disabled) {
     transform: none;
