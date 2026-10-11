@@ -5151,6 +5151,66 @@
    "ru": "Всё, что эта сборка добавляет в Coucou, в одном месте. Выключите то, чем не пользуетесь: оно исчезнет из острова и из этого окна, а его настройки сохранятся до следующего включения.",
    "id": "Semua yang ditambahkan build ini ke Coucou, di satu tempat. Matikan yang tidak Anda pakai: fitur itu hilang dari pulau dan jendela ini, dan pengaturannya disimpan untuk saat Anda menyalakannya lagi.",
    "ko": "이 빌드가 Coucou에 추가한 기능을 한곳에서 관리합니다. 쓰지 않는 기능은 꺼 두세요. 끈 기능은 아일랜드와 이 창에서 사라지고, 설정해 둔 내용은 다시 켤 때까지 그대로 보관됩니다."
+  },
+  "Clock font": {
+   "zh-Hans": "时钟字体",
+   "hi": "घड़ी का फ़ॉन्ट",
+   "es": "Fuente del reloj",
+   "ar": "خط الساعة",
+   "fr": "Police de l'horloge",
+   "bn": "ঘড়ির ফন্ট",
+   "pt-BR": "Fonte do relógio",
+   "ru": "Шрифт часов",
+   "id": "Font jam",
+   "ko": "시계 글꼴"
+  },
+  "Balanced": {
+   "zh-Hans": "均衡",
+   "hi": "संतुलित",
+   "es": "Equilibrada",
+   "ar": "متوازن",
+   "fr": "Équilibrée",
+   "bn": "ভারসাম্যপূর্ণ",
+   "pt-BR": "Equilibrada",
+   "ru": "Сбалансированный",
+   "id": "Seimbang",
+   "ko": "균형"
+  },
+  "Squared": {
+   "zh-Hans": "方正",
+   "hi": "चौकोर",
+   "es": "Cuadrada",
+   "ar": "مربّع",
+   "fr": "Carrée",
+   "bn": "চৌকো",
+   "pt-BR": "Quadrada",
+   "ru": "Квадратный",
+   "id": "Persegi",
+   "ko": "네모"
+  },
+  "Monospaced": {
+   "zh-Hans": "等宽",
+   "hi": "मोनोस्पेस",
+   "es": "Monoespaciada",
+   "ar": "ثابت العرض",
+   "fr": "À chasse fixe",
+   "bn": "মনোস্পেস",
+   "pt-BR": "Monoespaçada",
+   "ru": "Моноширинный",
+   "id": "Monospasi",
+   "ko": "고정폭"
+  },
+  "Narrow": {
+   "zh-Hans": "窄体",
+   "hi": "संकरा",
+   "es": "Estrecha",
+   "ar": "ضيّق",
+   "fr": "Étroite",
+   "bn": "সরু",
+   "pt-BR": "Estreita",
+   "ru": "Узкий",
+   "id": "Sempit",
+   "ko": "좁게"
   }
  }
 }

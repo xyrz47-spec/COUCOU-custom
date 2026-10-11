@@ -186,3 +186,44 @@ test("a local answer streams into one reply, then the finished text replaces it"
   assert.deepEqual(State.chatHistory.map((m) => m.role), ["user", "assistant"]);
   assert.ok(!$(".model-btn").disabled);
 });
+
+test("\"New conversation\" drops the chat, and the answer that was on its way", async () => {
+  let finish;
+  answers.chat_send = () => new Promise((resolve) => (finish = resolve));
+  const button = $(".new-chat-btn");
+  const input = $(".chat-input");
+  assert.ok(!button.classList.contains("on"), "nothing to drop yet");
+  input.value = "hello";
+  $(".send-btn").fire("click");
+  await flush();
+  view.sync();
+  assert.ok(button.classList.contains("on"));
+  emit("chat-delta", "Hel");
+  assert.equal(view.el.find(".reply").length, 1);
+
+  button.fire("click");
+  view.sync();
+  assert.deepEqual(State.chatHistory, []);
+  assert.equal(State.stateOverride, null, "Mochi stops waiting");
+  assert.equal(sent("chat_reset").length, 1);
+  assert.equal(view.el.find(".reply").length, 0);
+  assert.ok(!button.classList.contains("on"));
+  assert.ok(!input.disabled && !$(".model-btn").disabled, "the new chat can be written in at once");
+
+  // What the chat that was left still sends lands nowhere.
+  emit("chat-delta", "Hello there");
+  finish({ text: "Hello there!" });
+  await flush();
+  view.sync();
+  assert.deepEqual(State.chatHistory, []);
+  assert.equal(view.el.find(".reply").length, 0);
+
+  // The new chat takes its own answer.
+  answers.chat_send = { text: "Hi!" };
+  input.value = "again";
+  $(".send-btn").fire("click");
+  await flush();
+  await flush();
+  view.sync();
+  assert.deepEqual(State.chatHistory.map((m) => m.content), ["again", "Hi!"]);
+});

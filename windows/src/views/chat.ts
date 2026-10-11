@@ -43,6 +43,8 @@ const STRINGS = {
   otherFolder: N_("Other…"),
   typePath: N_("Full path of a folder — Enter to use it, Esc to go back"),
   taskProjectDelete: N_("Project folder the task runs in — Delete forgets a remembered one"),
+  newChat: N_("New conversation"),
+  newChatHint: N_("Start a new chat"),
   effort: N_("Effort"),
   effortHint: N_("How hard Claude thinks before it answers. Higher is slower and uses more of your plan."),
 };
@@ -382,7 +384,14 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
     placeholder: tl(STRINGS.typePath),
     spellcheck: "false",
   }) as HTMLInputElement;
-  const modelRow = h("div", { class: "model-row" }, taskBtn, dirSelect, dirInput, modelBtn);
+  // Drops this chat for a new one, an answer on its way included (Ctrl+K does the same).
+  const newBtn = h(
+    "button",
+    { class: "new-chat-btn", title: tl(STRINGS.newChatHint) },
+    svg(ICONS.plus, 9),
+    h("span", { text: tl(STRINGS.newChat) }),
+  );
+  const modelRow = h("div", { class: "model-row" }, taskBtn, dirSelect, dirInput, newBtn, modelBtn);
 
   const body = h("div", { class: "chat-body" });
   const picker = buildPicker(() => {
@@ -400,6 +409,8 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   (el.querySelector(".card") as HTMLElement).style.setProperty("--wash", "rgba(99,102,241,0.5)");
 
   let sending = false;
+  /** The chat this view shows (State.chatSession): another one, and what was in flight is let go. */
+  let session = State.chatSession;
   let renderedCount = -1;
   // Bumped when a bubble changes without the count changing (a task's answer).
   let epoch = 0;
@@ -498,6 +509,27 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
     input.focus();
   }
 
+  /** The chat was dropped (here, by Ctrl+K, by a dropped file): nothing of it is waited for. */
+  function followSession() {
+    if (session === State.chatSession) return;
+    session = State.chatSession;
+    sending = false;
+    live = null;
+    renderedCount = -1;
+    followUpTarget = null;
+  }
+
+  newBtn.addEventListener("click", () => {
+    if (picker.isOpen) picker.close();
+    State.dropChat();
+    void Bridge.chatReset();
+    Sound.play("blip");
+    followSession();
+    State.notify();
+    onHeightChange();
+    input.focus();
+  });
+
   taskBtn.addEventListener("click", () => {
     taskMode = !taskMode;
     if (taskMode) void loadProjects();
@@ -546,6 +578,7 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   });
 
   void onEvent<string>("chat-delta", (text) => {
+    followSession();
     if (!sending || !text) return; // nothing visible yet: the dots stay
     if (!live) {
       live = h("div", { class: "reply" });
@@ -619,25 +652,36 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
     const context: ChatContext | null =
       State.chatHistory.length === 1 && file ? { kind: "file", name: file.name, path: file.path } : null;
 
+    // The chat this question is asked in: dropped before the answer, and the answer is not shown.
+    const asked = State.chatSession;
+    session = asked;
+    let reply: { text: string } | null = null;
+    let failure: unknown = null;
     try {
-      const reply = await Bridge.chatSend(query, context);
-      State.chatHistory.push({ id: nextId++, role: "assistant", content: reply.text });
-      State.stateOverride = null;
-      Sound.play("finish");
+      reply = await Bridge.chatSend(query, context);
     } catch (err) {
-      State.stateOverride = null;
-      State.noteMessage = String(err).replace(/^Error:\s*/, "");
+      failure = err;
+    }
+    if (asked !== State.chatSession) {
+      followSession();
+      return;
+    }
+    State.stateOverride = null;
+    if (reply) {
+      State.chatHistory.push({ id: nextId++, role: "assistant", content: reply.text });
+      Sound.play("finish");
+    } else {
+      State.noteMessage = String(failure).replace(/^Error:\s*/, "");
       State.view = "note";
       Sound.play("error");
-    } finally {
-      sending = false;
-      live = null;
-      renderedCount = -1; // the finished answer replaces the streamed one
-      drawModelButton();
-      State.notify();
-      onHeightChange();
-      input.focus();
     }
+    sending = false;
+    live = null;
+    renderedCount = -1; // the finished answer replaces the streamed one
+    drawModelButton();
+    State.notify();
+    onHeightChange();
+    input.focus();
   }
 
   send.addEventListener("click", () => void submit());
@@ -656,6 +700,9 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
   return {
     el,
     sync() {
+      followSession();
+      // There to be pressed once there is a chat to drop.
+      newBtn.classList.toggle("on", State.chatHistory.length > 0 || sending);
       const file = State.droppedFile;
       const wantChip = file?.name ?? "";
       if (chipRow.dataset.label !== wantChip) {

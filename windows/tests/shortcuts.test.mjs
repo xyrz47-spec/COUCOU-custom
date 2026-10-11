@@ -488,11 +488,12 @@ test("island keys: pills by number, new chat, settings, pin", () => {
 
   State.chatHistory = [{ id: 1, role: "user", content: "hi" }];
   State.stateOverride = "thinking";
+  const before = State.chatSession;
   runIslandKey(host, { kind: "newChat" });
-  assert.equal(State.chatHistory.length, 1, "not while an answer is on its way");
-  State.stateOverride = null;
-  runIslandKey(host, { kind: "newChat" });
+  // An answer on its way is let go with the chat it was for.
   assert.deepEqual(State.chatHistory, []);
+  assert.equal(State.stateOverride, null);
+  assert.equal(State.chatSession, before + 1);
   assert.equal(sent("chat_reset").length, 1);
 
   runIslandKey(host, { kind: "settings" });

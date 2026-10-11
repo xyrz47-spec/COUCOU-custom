@@ -13,7 +13,7 @@ import {
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
 import { featureOn } from "../core/features";
-import { CLOCK_MAX_FONT, clockFontSize, clockParts, formatClock } from "../core/clock";
+import { CLOCK_MAX_FONT, clockFace, clockFontSize, clockParts, formatClock } from "../core/clock";
 import { WEATHER_REFRESH_MS, weatherDegrees, weatherKind } from "../core/weather";
 import { weatherIcon } from "../views/weather";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
@@ -658,9 +658,10 @@ export class Island {
    */
   private swallow(path: string) {
     const name = path.split(/[\\/]/).pop() || "file";
+    // A new file, a new chat: one still waiting for its answer is let go.
+    State.dropChat();
     State.droppedFile = { name, path };
     State.promptContext = { kind: "file", name, path };
-    State.chatHistory = [];
     void Bridge.chatReset();
 
     UploadSeq.performDrop(State.uploadDuration);
@@ -1387,6 +1388,13 @@ export class Island {
   }
 
   private paintCompactClock() {
+    // In the letters picked in Settings → General (style.css, .face-…): another
+    // face is another width, so the text is measured again.
+    const face = clockFace(State.settings.clockFace);
+    if (this.compactClock.dataset.face !== face) {
+      this.compactClock.dataset.face = face;
+      this.compactClockShape = "";
+    }
     // In the form picked in Settings → General (core/clock.ts).
     const text = formatClock(State.settings.clockFormat, new Date(), language());
     if (this.compactClockText.textContent !== text) {
@@ -1394,7 +1402,8 @@ export class Island {
       // every figure gets a cell as wide as a 0 (style.css), so a turning
       // second moves nothing beside it.
       this.compactClockText.replaceChildren(
-        ...clockParts(text).map((part) => (part.figure ? h("i", { text: part.text }) : part.text)),
+        ...clockParts(text).map((part) =>
+          part.figure ? h("i", { text: part.text }) : part.word ? h("u", { text: part.text }) : part.text),
       );
     }
     // Brought down to fit its stretch of the island when it is long. Figures

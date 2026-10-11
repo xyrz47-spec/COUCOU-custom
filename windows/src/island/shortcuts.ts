@@ -163,11 +163,8 @@ export function runIslandKey(host: ShortcutHost, action: IslandKeyAction) {
       host.viewCommand("toggleDiff");
       break;
     case "newChat":
-      // Not while an answer is on its way: it would land in the new chat.
-      if (State.stateOverride === "thinking") return;
-      State.chatHistory = [];
-      State.droppedFile = null;
-      State.promptContext = null;
+      // An answer still on its way is let go with the chat it was for.
+      State.dropChat();
       void Bridge.chatReset();
       Sound.play("blip");
       host.setView("prompt");

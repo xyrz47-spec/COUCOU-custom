@@ -98,6 +98,9 @@ pub struct Settings {
     /// the language, "off" shows none. Kept as it comes: a form this build
     /// doesn't know reads as "".
     pub clock_format: String,
+    /// The letters the clock is set in (src/core/clock.ts, CLOCK_FACES): "" is
+    /// the balanced face. Kept as it comes: one this build doesn't know reads as "".
+    pub clock_face: String,
     /// How hard the chat's model thinks before it answers, where the provider
     /// takes it (claude_cli.rs): "" leaves it to the provider.
     pub chat_effort: String,
@@ -182,6 +185,7 @@ impl Default for Settings {
             editor_command: String::new(),
             launcher: Vec::new(),
             clock_format: String::new(),
+            clock_face: String::new(),
             chat_effort: String::new(),
             weather: None,
             auto_approve: String::new(),
@@ -474,6 +478,7 @@ mod tests {
   "editorCommand": "kitty -e nvim",
   "launcher": [{ "name": "Docs", "target": "https://example.com/docs" }],
   "clockFormat": "24h-seconds",
+  "clockFace": "square",
   "chatEffort": "high",
   "weather": { "name": "Seoul", "latitude": 37.57, "longitude": 126.98 },
   "autoApprove": "edits",
@@ -914,6 +919,7 @@ mod tests {
                 "editorCommand",
                 "launcher",
                 "clockFormat",
+                "clockFace",
                 "chatEffort",
                 "weather",
                 "autoApprove",

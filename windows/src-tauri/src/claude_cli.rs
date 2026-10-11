@@ -40,6 +40,17 @@ const MODELS: &[(&str, &str)] = &[("opus", "Opus"), ("sonnet", "Sonnet"), ("haik
 const TOOLS: &str = "WebSearch,WebFetch";
 /// A search and a few pages can take a while; past this the answer is given up.
 const TIMEOUT: Duration = Duration::from_secs(240);
+
+/// The chat turn in flight, so that a chat dropped for a new one ends it
+/// (lib.rs, chat_reset) rather than letting it use the plan for nobody.
+static RUNNING: Mutex<Option<u32>> = Mutex::new(None);
+
+/// Ends the chat turn in flight, if there is one: its answer is not wanted any more.
+pub fn cancel() {
+    if let Some(pid) = RUNNING.lock().unwrap().take() {
+        kill_tree(pid);
+    }
+}
 /// The island is told about new text at most this often.
 const DELTA_INTERVAL: Duration = Duration::from_millis(1000 / 15);
 /// One stream-json line we are willing to read.
@@ -309,6 +320,7 @@ fn run(
     platform::no_console(&mut cmd);
     let mut child = cmd.spawn().map_err(|err| format!("claude: {err}"))?;
     let pid = child.id();
+    *RUNNING.lock().unwrap() = Some(pid);
 
     // The question goes in on its own thread: a picture can be larger than the
     // pipe holds, and claude may not read it all before it starts to write.
@@ -378,6 +390,12 @@ fn run(
         }
     }
     drop(done);
+    {
+        let mut running = RUNNING.lock().unwrap();
+        if *running == Some(pid) {
+            *running = None;
+        }
+    }
     // The answer is in, or it never came: either way the session is done with.
     kill_tree(pid);
     let _ = child.kill();

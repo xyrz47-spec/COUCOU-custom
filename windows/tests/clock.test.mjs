@@ -40,15 +40,30 @@ test("the clock keeps its size while it fits, and a long form is brought down to
   assert.equal(clockFontSize(undefined, CLOCK_MAX_FONT, undefined), CLOCK_MAX_FONT);
 });
 
+test("the clock's face is one of four, the balanced one unless another is picked", async () => {
+  const { CLOCK_FACES, clockFace, isClockFace } = await import("../src/core/clock.ts");
+  const { DEFAULT_SETTINGS } = await import("../src/core/state.ts");
+  assert.deepEqual([...CLOCK_FACES], ["", "square", "mono", "narrow"]);
+  assert.equal(clockFace(DEFAULT_SETTINGS.clockFace), "");
+  assert.equal(clockFace("square"), "square");
+  // A face this build doesn't know, or none at all (a file saved before there were faces).
+  assert.equal(clockFace("gothic"), "");
+  assert.equal(clockFace(undefined), "");
+  assert.ok(isClockFace("mono") && !isClockFace("Mono"));
+});
+
 test("the clock's text is cut into figures and what stands between them", async () => {
   const { clockParts } = await import("../src/core/clock.ts");
   assert.deepEqual(clockParts("오후 5:07"), [
-    { text: "오후 ", figure: false },
-    { text: "5", figure: true },
-    { text: ":", figure: false },
-    { text: "0", figure: true },
-    { text: "7", figure: true },
+    { text: "오후 ", figure: false, word: true },
+    { text: "5", figure: true, word: false },
+    { text: ":", figure: false, word: false },
+    { text: "0", figure: true, word: false },
+    { text: "7", figure: true, word: false },
   ]);
+  // A word in any script is one; what only separates figures is not.
+  assert.deepEqual(clockParts("5:07 PM").map((p) => p.word), [false, false, false, false, true]);
+  assert.deepEqual(clockParts("10월 11일").filter((p) => p.word).map((p) => p.text), ["월 ", "일"]);
   assert.equal(clockParts("17:28:09").filter((p) => p.figure).length, 6);
   assert.equal(clockParts("10월 11일 오후 5:07").map((p) => p.text).join(""), "10월 11일 오후 5:07");
   assert.deepEqual(clockParts(""), []);

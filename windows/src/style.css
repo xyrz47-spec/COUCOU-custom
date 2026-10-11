@@ -3794,11 +3794,12 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   font-size: 11.5px;
 }
 
-/* The clock's face: Bai Jamjuree Bold (Cadson Demak, SIL Open Font License
-   1.1), whose figures are squared off at the corners. The app carries the
-   file, so the clock looks the same on any PC; the words beside the figures
-   in a script it lacks (오후) fall back to the island's own font. island.ts
-   brings a long form down to the size at which it fits its stretch. */
+/* The clock's squared face (Settings → General → Clock font): Bai Jamjuree
+   Bold (Cadson Demak, SIL Open Font License 1.1), whose figures are squared
+   off at the corners. The app carries the file, so it looks the same on any
+   PC; the words beside the figures in a script it lacks (오후) fall back to
+   the island's own font. island.ts brings a long form down to the size at
+   which it fits its stretch, whatever the face. */
 @font-face {
   font-family: "Coucou Clock";
   src: url("./fonts/BaiJamjuree-Bold.ttf") format("truetype");
@@ -3807,12 +3808,40 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
 }
 
 #compact-clock {
-  font-family: "Coucou Clock", "Bahnschrift", var(--font);
-  font-weight: 700;
+  font-family: "Segoe UI Variable Display", "Segoe UI", var(--font);
+  font-weight: 600;
   font-size: 15px;
   line-height: 32px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
+}
+
+/* The faces of Settings → General → Clock font (core/clock.ts, CLOCK_FACES).
+   The one above is the balanced one: figures drawn at one width, so a 1 sits
+   in its cell as squarely as a 0, in the weight of the words beside them. */
+#compact-clock[data-face="square"] {
+  font-family: "Coucou Clock", "Bahnschrift", var(--font);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#compact-clock[data-face="mono"] {
+  font-family: "Cascadia Mono", "Consolas", var(--font);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+#compact-clock[data-face="narrow"] {
+  font-family: "Bahnschrift", "Segoe UI", var(--font);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* A word beside the figures (오후, PM, 10월's 월): a little smaller, so that
+   it weighs no more than they do. */
+#compact-clock span u {
+  font-size: 0.88em;
+  text-decoration: none;
 }
 
 #compact-clock span {
@@ -4127,8 +4156,15 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   gap: 4px;
 }
 
+/* The temperature, in the clock's own face and weight. */
+#compact-clock .wx {
+  font-weight: inherit;
+}
+
 #compact-clock .wx em {
-  font: 700 12.5px/32px "Coucou Clock", "Bahnschrift", var(--font);
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 32px;
   font-style: normal;
   letter-spacing: 0;
   color: #c3c9d3;
@@ -4382,4 +4418,56 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
   transition-delay: 0s !important;
+}
+
+/* "New conversation" (views/chat.ts): drops this chat for a new one. It is
+   there once there is a chat to drop, and comes in from the model's side. */
+.new-chat-btn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  margin-inline: 6px;
+  padding: 4px 9px 4px 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  font: 500 10.5px var(--font);
+  color: #7b8089;
+  cursor: default;
+  transition: background 0.18s, color 0.18s, transform 0.15s;
+}
+
+.new-chat-btn.on {
+  display: inline-flex;
+  animation: new-chat-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.new-chat-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink-2);
+}
+
+.new-chat-btn:active {
+  transform: scale(0.94);
+}
+
+.new-chat-btn svg {
+  transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+
+.new-chat-btn:hover svg {
+  transform: rotate(90deg);
+}
+
+@keyframes new-chat-in {
+  from {
+    opacity: 0;
+    transform: translateX(6px) scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .new-chat-btn.on {
+    animation: none;
+  }
 }

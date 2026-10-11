@@ -616,6 +616,8 @@ fn chat_cli_path() -> Option<String> {
 #[tauri::command]
 fn chat_reset(chat: State<Chat>) {
     chat.reset();
+    // An answer Claude Code was still writing is for the chat that was dropped.
+    claude_cli::cancel();
 }
 
 /// Copies a dropped file into the inbox and reports its name back.

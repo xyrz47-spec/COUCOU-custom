@@ -193,6 +193,8 @@ export interface Settings {
   launcher: LauncherItem[];
   /** The form of the compact island's clock (core/clock.ts): "" follows the language, "off" shows none. */
   clockFormat: string;
+  /** The letters the clock is set in (core/clock.ts, CLOCK_FACES): "" is the balanced face. */
+  clockFace: string;
   /** How hard the chat's model thinks, where the provider takes it (core/providers.ts, EFFORTS); "" is its own default. */
   chatEffort: string;
   /** The place whose weather shows beside the compact island's clock; null until one is picked. */
@@ -246,6 +248,7 @@ export const DEFAULT_SETTINGS: Settings = {
   editorCommand: "",
   launcher: [],
   clockFormat: "",
+  clockFace: "",
   chatEffort: "",
   weather: null,
   autoApprove: "",
@@ -286,6 +289,8 @@ class AppState {
   noteMessage: string | null = null;
   searchResult: SearchResult | null = null;
   chatHistory: ChatMessage[] = [];
+  /** Bumped when the chat is dropped for a new one: an answer still on its way belonged to the one left. */
+  chatSession = 0;
   pendingApproval: ApprovalInfo | null = null;
   /** The pill that was in front when the card came up; it comes back after. */
   focusBeforeApproval: string | null = null;
@@ -584,6 +589,19 @@ class AppState {
    * What the island opens on. A card waiting for an answer comes first, so
    * reopening a folded island shows it again (Mac #117, #290).
    */
+  /**
+   * Drops the chat for a new one: its turns, the file or window it was about,
+   * and the wait for an answer still on its way (views/chat.ts lets that one
+   * go). The caller tells Rust (Bridge.chatReset).
+   */
+  dropChat() {
+    this.chatSession++;
+    this.chatHistory = [];
+    this.droppedFile = null;
+    this.promptContext = null;
+    if (this.stateOverride === "thinking") this.stateOverride = null;
+  }
+
   defaultView(): IslandViewName {
     if (this.pendingApproval) return this.pendingApproval.questions ? "question" : "approval";
     return this.tasks.length === 0 ? "empty" : "overview";

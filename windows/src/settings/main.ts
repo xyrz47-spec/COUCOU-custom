@@ -10,7 +10,7 @@ import {
   recordPress, type Binding,
 } from "../core/shortcuts";
 import { DEFAULT_SETTINGS, type Settings } from "../core/state";
-import { CLOCK_FORMATS, formatClock, isClockFormat } from "../core/clock";
+import { CLOCK_FACES, CLOCK_FORMATS, clockFace, formatClock, isClockFormat } from "../core/clock";
 import { isAutoApprove } from "../core/auto-approve";
 import {
   FEATURES, FEATURE_GROUPS, featureCount, featureDef, featureOn, featureSwitch, withFeature,
@@ -1205,9 +1205,24 @@ function clockRows(): HTMLElement[] {
     settings.clockFormat = select.value;
     void save();
   });
+  // The letters it is set in (core/clock.ts, CLOCK_FACES).
+  const faces = h("select", {}) as HTMLSelectElement;
+  const names: Record<(typeof CLOCK_FACES)[number], string> = {
+    "": t("Balanced"),
+    square: t("Squared"),
+    mono: t("Monospaced"),
+    narrow: t("Narrow"),
+  };
+  for (const face of CLOCK_FACES) faces.append(h("option", { value: face, text: names[face] }));
+  faces.value = clockFace(settings.clockFace);
+  faces.addEventListener("change", () => {
+    settings.clockFace = faces.value;
+    void save();
+  });
   return [
     h("div", { class: "row", "data-anchor": "clock" }, h("label", { text: t("Clock") }), select),
     h("div", { class: "hint", text: t("Shown in the compact island while no song plays.") }),
+    h("div", { class: "row" }, h("label", { text: t("Clock font") }), faces),
   ];
 }
 

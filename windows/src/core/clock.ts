@@ -42,6 +42,26 @@ export function formatClock(format: string, when: Date, language: string): strin
   }
 }
 
+// ── Its face ──────────────────────────────────────────────────────────────────
+
+/**
+ * `settings.clockFace`: the letters the clock is set in (style.css,
+ * #compact-clock.face-…). "" is the balanced one: figures of one width drawn
+ * for it, the same weight as the words beside them. "square" is the squared
+ * face the app carries, "mono" a typewriter's, "narrow" a condensed one.
+ */
+export const CLOCK_FACES = ["", "square", "mono", "narrow"] as const;
+export type ClockFace = (typeof CLOCK_FACES)[number];
+
+export function isClockFace(value: unknown): value is ClockFace {
+  return typeof value === "string" && (CLOCK_FACES as readonly string[]).includes(value);
+}
+
+/** The face in force: one this build doesn't know reads as the balanced one. */
+export function clockFace(value: unknown): ClockFace {
+  return isClockFace(value) ? value : "";
+}
+
 // ── Its size ──────────────────────────────────────────────────────────────────
 
 /** The clock's largest letters, in px: easy to read at a glance, with air above and below. */
@@ -61,11 +81,12 @@ export function clockFontSize(width: number, at: number, room: number): number {
 
 /**
  * The clock's text cut into its figures and what stands between them, in
- * order: the island gives every figure a cell of the same width.
+ * order: the island gives every figure a cell of the same width, and sets a
+ * word (오후, PM, a month) a little smaller so it weighs no more than the figures.
  */
-export function clockParts(text: string): { text: string; figure: boolean }[] {
+export function clockParts(text: string): { text: string; figure: boolean; word: boolean }[] {
   return text
     .split(/([0-9])/)
     .filter(Boolean)
-    .map((part) => ({ text: part, figure: /^[0-9]$/.test(part) }));
+    .map((part) => ({ text: part, figure: /^[0-9]$/.test(part), word: /\p{L}/u.test(part) }));
 }
