@@ -104,6 +104,10 @@ pub struct Settings {
     /// The place whose weather shows beside the compact island's clock
     /// (weather.rs); none until one is picked, and nothing is asked until then.
     pub weather: Option<crate::weather::WeatherPlace>,
+    /// Permission requests the island answers "allow" by itself
+    /// (src/core/auto-approve.ts): "" none, "edits" file edits, "all"
+    /// everything but questions, plans and commands that look destructive.
+    pub auto_approve: String,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -173,6 +177,7 @@ impl Default for Settings {
             clock_format: String::new(),
             chat_effort: String::new(),
             weather: None,
+            auto_approve: String::new(),
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -462,6 +467,7 @@ mod tests {
   "clockFormat": "24h-seconds",
   "chatEffort": "high",
   "weather": { "name": "Seoul", "latitude": 37.57, "longitude": 126.98 },
+  "autoApprove": "edits",
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -899,6 +905,7 @@ mod tests {
                 "clockFormat",
                 "chatEffort",
                 "weather",
+                "autoApprove",
                 "desktopMochi",
             ]
         );

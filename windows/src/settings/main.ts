@@ -11,6 +11,7 @@ import {
 } from "../core/shortcuts";
 import { DEFAULT_SETTINGS, type Settings } from "../core/state";
 import { CLOCK_FORMATS, formatClock, isClockFormat } from "../core/clock";
+import { isAutoApprove } from "../core/auto-approve";
 import { SOUND_NAMES } from "../core/sound";
 import {
   MAX_DECLARED, PILL_CATEGORIES, availablePills, chooseMainPill, isComingSoon, mainPillChoices,
@@ -229,6 +230,51 @@ function claudeSection(status: HookStatus): HTMLElement {
 
   draw();
   return section;
+}
+
+// ── Approve without asking ────────────────────────────────────────────────────
+
+/**
+ * Permission requests the island answers by itself (core/auto-approve.ts).
+ * Off until the user picks otherwise; the widest choice says what it means.
+ */
+function autoApproveSection(): HTMLElement {
+  const select = h("select", {}) as HTMLSelectElement;
+  const choices: [string, string][] = [
+    ["", t("Ask every time")],
+    ["edits", t("File edits only")],
+    ["all", t("Everything")],
+  ];
+  for (const [value, text] of choices) select.append(h("option", { value, text }));
+  select.value = isAutoApprove(settings.autoApprove) ? settings.autoApprove : "";
+  const warning = h("div", {});
+  const draw = () => {
+    clear(warning);
+    if (select.value !== "all") return;
+    warning.append(
+      h("div", {
+        class: "notice warn",
+        text: t("Claude Code will run commands on this computer without showing them to you first. Use this only in projects you trust."),
+      }),
+    );
+  };
+  select.addEventListener("change", () => {
+    settings.autoApprove = select.value;
+    void save();
+    draw();
+  });
+  draw();
+  return h(
+    "section",
+    {},
+    h("h2", {}, h("span", { text: t("Approve without asking") })),
+    h("div", {
+      class: "hint",
+      text: t("Coucou can answer Claude Code's permission requests by itself, so the work goes on without you. A question Claude asks you still comes up, and so do a plan to approve and a command that looks destructive: deleting a folder, a forced push, a publish. It only counts while Coucou is running and not paused."),
+    }),
+    h("div", { class: "row" }, h("label", { text: t("Allow automatically") }), select),
+    warning,
+  );
 }
 
 // ── Plan usage section ────────────────────────────────────────────────────────
@@ -1614,7 +1660,7 @@ async function render() {
   shortcutsListener = null;
   // One page at a time, picked in the column on the left.
   const pages: Page[] = [
-    { id: "claude", label: "Claude Code", color: "#F29B38", sections: [claudeSection(status), planSection(status), agentsSection(agents)] },
+    { id: "claude", label: "Claude Code", color: "#F29B38", sections: [claudeSection(status), autoApproveSection(), planSection(status), agentsSection(agents)] },
     { id: "chat", label: t("Chat"), color: "#60A5FA", sections: [claudeCodeChatSection(cliPath), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
     { id: "pills", label: t("Active pills"), color: "#22C55E", sections: [activePillsSection(connected), integrationsSection(present)] },
     { id: "launcher", label: t("Launcher"), color: "#E879F9", sections: [launcherSection(() => settings, save)] },

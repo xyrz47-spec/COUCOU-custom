@@ -196,6 +196,8 @@ export interface Settings {
   chatEffort: string;
   /** The place whose weather shows beside the compact island's clock; null until one is picked. */
   weather: WeatherPlace | null;
+  /** Permission requests answered "allow" with no card (core/auto-approve.ts): "" none, "edits", "all". */
+  autoApprove: string;
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -241,6 +243,7 @@ export const DEFAULT_SETTINGS: Settings = {
   clockFormat: "",
   chatEffort: "",
   weather: null,
+  autoApprove: "",
 };
 
 type Listener = () => void;

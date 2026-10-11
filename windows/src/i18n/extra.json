@@ -4587,6 +4587,102 @@
    "ru": "Выберите город, и его погода появится значком рядом с часами. После этого Coucou каждые двадцать минут спрашивает у Open-Meteo погоду в этой точке; пока город не выбран, ничего не запрашивается.",
    "id": "Pilih kota Anda untuk melihat cuacanya sebagai ikon di samping jam. Coucou lalu menanyakan cuaca di titik itu ke Open-Meteo, setiap dua puluh menit; sebelum kota dipilih, tidak ada yang ditanyakan.",
    "ko": "도시를 고르면 시계 옆에 그곳의 날씨가 아이콘으로 표시됩니다. 그 뒤로 Coucou가 20분마다 Open-Meteo에 그 위치의 날씨를 묻습니다. 도시를 고르기 전에는 아무것도 묻지 않습니다."
+  },
+  "Approve without asking": {
+   "zh-Hans": "无需询问自动批准",
+   "hi": "बिना पूछे स्वीकृति",
+   "es": "Aprobar sin preguntar",
+   "ar": "الموافقة دون سؤال",
+   "fr": "Approuver sans demander",
+   "bn": "না জিজ্ঞেস করে অনুমোদন",
+   "pt-BR": "Aprovar sem perguntar",
+   "ru": "Одобрять без вопросов",
+   "id": "Setujui tanpa bertanya",
+   "ko": "확인 없이 자동 허용"
+  },
+  "Coucou can answer Claude Code's permission requests by itself, so the work goes on without you. A question Claude asks you still comes up, and so do a plan to approve and a command that looks destructive: deleting a folder, a forced push, a publish. It only counts while Coucou is running and not paused.": {
+   "zh-Hans": "Coucou 可以自行回应 Claude Code 的权限请求，让工作不必等你。Claude 向你提出的问题仍会显示，待批准的计划和看起来有破坏性的命令（删除文件夹、强制推送、发布）也是如此。仅在 Coucou 运行且未暂停时生效。",
+   "hi": "Coucou खुद Claude Code के अनुमति अनुरोधों का जवाब दे सकता है, ताकि काम आपके बिना चलता रहे। Claude का आपसे पूछा गया सवाल फिर भी दिखता है, और स्वीकृति के लिए रखी योजना तथा नुकसानदेह दिखने वाला कमांड भी: फ़ोल्डर हटाना, फ़ोर्स पुश, प्रकाशन। यह तभी लागू होता है जब Coucou चल रहा हो और रुका न हो।",
+   "es": "Coucou puede responder por sí mismo a las solicitudes de permiso de Claude Code, para que el trabajo siga sin ti. Una pregunta que Claude te haga sigue apareciendo, igual que un plan por aprobar y un comando que parezca destructivo: borrar una carpeta, un push forzado, una publicación. Solo cuenta mientras Coucou esté en marcha y sin pausar.",
+   "ar": "يستطيع Coucou الرد بنفسه على طلبات الإذن من Claude Code ليستمر العمل من دونك. السؤال الذي يطرحه Claude عليك يظل يظهر، وكذلك الخطة المعروضة للموافقة والأمر الذي يبدو مدمِّرًا: حذف مجلد، دفع قسري، نشر. يسري ذلك فقط ما دام Coucou يعمل وغير متوقف مؤقتًا.",
+   "fr": "Coucou peut répondre lui-même aux demandes d'autorisation de Claude Code, pour que le travail avance sans vous. Une question que Claude vous pose s'affiche toujours, de même qu'un plan à approuver et une commande qui paraît destructrice : supprimer un dossier, un push forcé, une publication. Cela ne vaut que tant que Coucou tourne et n'est pas en pause.",
+   "bn": "Coucou নিজেই Claude Code-এর অনুমতির অনুরোধের উত্তর দিতে পারে, যাতে কাজ আপনাকে ছাড়াই চলতে থাকে। Claude আপনাকে প্রশ্ন করলে তা তবুও দেখায়, অনুমোদনের জন্য রাখা পরিকল্পনা এবং ক্ষতিকর মনে হওয়া কমান্ডও: ফোল্ডার মোছা, ফোর্স পুশ, প্রকাশ। Coucou চালু থাকলে এবং বিরতিতে না থাকলে তবেই এটি কার্যকর।",
+   "pt-BR": "O Coucou pode responder sozinho aos pedidos de permissão do Claude Code, para o trabalho seguir sem você. Uma pergunta que o Claude fizer a você continua aparecendo, assim como um plano a aprovar e um comando que pareça destrutivo: apagar uma pasta, um push forçado, uma publicação. Só vale enquanto o Coucou estiver em execução e não pausado.",
+   "ru": "Coucou может сам отвечать на запросы разрешений Claude Code, чтобы работа шла без вас. Вопрос, который Claude задаёт вам, всё равно появится, как и план на утверждение и команда, которая выглядит разрушительной: удаление папки, принудительный push, публикация. Действует, только пока Coucou запущен и не на паузе.",
+   "id": "Coucou dapat menjawab sendiri permintaan izin Claude Code, sehingga pekerjaan berjalan tanpa Anda. Pertanyaan yang diajukan Claude kepada Anda tetap muncul, begitu pula rencana yang perlu disetujui dan perintah yang tampak merusak: menghapus folder, push paksa, publikasi. Ini hanya berlaku selama Coucou berjalan dan tidak dijeda.",
+   "ko": "Coucou가 Claude Code의 권한 요청에 직접 답해서, 내가 없어도 작업이 계속되게 합니다. Claude가 나에게 묻는 질문은 그대로 표시되고, 승인할 계획과 위험해 보이는 명령(폴더 삭제, 강제 푸시, 배포)도 그대로 묻습니다. Coucou가 실행 중이고 일시정지 상태가 아닐 때만 적용됩니다."
+  },
+  "Allow automatically": {
+   "zh-Hans": "自动允许",
+   "hi": "अपने आप अनुमति दें",
+   "es": "Permitir automáticamente",
+   "ar": "السماح تلقائيًا",
+   "fr": "Autoriser automatiquement",
+   "bn": "স্বয়ংক্রিয়ভাবে অনুমতি দিন",
+   "pt-BR": "Permitir automaticamente",
+   "ru": "Разрешать автоматически",
+   "id": "Izinkan otomatis",
+   "ko": "자동 허용"
+  },
+  "Ask every time": {
+   "zh-Hans": "每次询问",
+   "hi": "हर बार पूछें",
+   "es": "Preguntar siempre",
+   "ar": "اسأل في كل مرة",
+   "fr": "Toujours demander",
+   "bn": "প্রতিবার জিজ্ঞেস করুন",
+   "pt-BR": "Perguntar sempre",
+   "ru": "Спрашивать каждый раз",
+   "id": "Tanya setiap kali",
+   "ko": "매번 묻기"
+  },
+  "File edits only": {
+   "zh-Hans": "仅文件修改",
+   "hi": "केवल फ़ाइल संपादन",
+   "es": "Solo ediciones de archivos",
+   "ar": "تعديلات الملفات فقط",
+   "fr": "Modifications de fichiers seulement",
+   "bn": "শুধু ফাইল সম্পাদনা",
+   "pt-BR": "Só edições de arquivos",
+   "ru": "Только правки файлов",
+   "id": "Hanya suntingan berkas",
+   "ko": "파일 수정만"
+  },
+  "Everything": {
+   "zh-Hans": "全部",
+   "hi": "सब कुछ",
+   "es": "Todo",
+   "ar": "كل شيء",
+   "fr": "Tout",
+   "bn": "সবকিছু",
+   "pt-BR": "Tudo",
+   "ru": "Всё",
+   "id": "Semuanya",
+   "ko": "모든 작업"
+  },
+  "Claude Code will run commands on this computer without showing them to you first. Use this only in projects you trust.": {
+   "zh-Hans": "Claude Code 将在这台电脑上运行命令，而不会先给你看。请只在你信任的项目中使用。",
+   "hi": "Claude Code इस कंप्यूटर पर कमांड आपको पहले दिखाए बिना चलाएगा। इसे केवल उन प्रोजेक्ट में इस्तेमाल करें जिन पर आपको भरोसा है।",
+   "es": "Claude Code ejecutará comandos en este ordenador sin mostrártelos antes. Úsalo solo en proyectos de confianza.",
+   "ar": "سيشغّل Claude Code أوامر على هذا الحاسوب دون أن يعرضها عليك أولًا. استخدم هذا فقط في مشاريع تثق بها.",
+   "fr": "Claude Code exécutera des commandes sur cet ordinateur sans vous les montrer d'abord. À n'utiliser que dans des projets de confiance.",
+   "bn": "Claude Code এই কম্পিউটারে কমান্ড চালাবে আগে আপনাকে না দেখিয়েই। শুধু যে প্রকল্পগুলোকে আপনি বিশ্বাস করেন সেখানেই এটি ব্যবহার করুন।",
+   "pt-BR": "O Claude Code vai executar comandos neste computador sem mostrá-los a você antes. Use isto só em projetos em que você confia.",
+   "ru": "Claude Code будет выполнять команды на этом компьютере, не показывая их вам заранее. Используйте только в проектах, которым доверяете.",
+   "id": "Claude Code akan menjalankan perintah di komputer ini tanpa menunjukkannya dulu kepada Anda. Gunakan hanya pada proyek yang Anda percayai.",
+   "ko": "Claude Code가 이 컴퓨터에서 명령을 먼저 보여 주지 않고 실행합니다. 믿을 수 있는 프로젝트에서만 사용하세요."
+  },
+  "Allowed without asking: {what}": {
+   "zh-Hans": "未询问即允许：{what}",
+   "hi": "बिना पूछे अनुमति दी: {what}",
+   "es": "Permitido sin preguntar: {what}",
+   "ar": "سُمح دون سؤال: {what}",
+   "fr": "Autorisé sans demander : {what}",
+   "bn": "না জিজ্ঞেস করে অনুমতি: {what}",
+   "pt-BR": "Permitido sem perguntar: {what}",
+   "ru": "Разрешено без вопроса: {what}",
+   "id": "Diizinkan tanpa bertanya: {what}",
+   "ko": "확인 없이 허용: {what}"
   }
  }
 }

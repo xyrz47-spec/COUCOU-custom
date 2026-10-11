@@ -59,6 +59,77 @@ test("a paused island hands a permission request straight back to the terminal",
   assert.equal(task().state, "idle");
 });
 
+// ── Approve without asking ────────────────────────────────────────────────────
+
+test("off, a permission request gets its card", () => {
+  hook({ hook_event_name: "PermissionRequest", request_id: "r1", session_id: "s1", tool_name: "Edit", tool_input: { file_path: "a.ts" } });
+  assert.deepEqual(sent("approval_decision"), []);
+  assert.equal(State.pendingApproval?.requestId, "r1");
+  assert.deepEqual(asked, ["alert:approval"]);
+});
+
+test("file edits only: an edit is allowed with no card, a command still asks", () => {
+  State.settings = { ...DEFAULT_SETTINGS, autoApprove: "edits" };
+  hook({ hook_event_name: "PermissionRequest", request_id: "r1", session_id: "s1", tool_name: "Edit", tool_input: { file_path: "src/a.ts" } });
+  assert.deepEqual(sent("approval_decision"), [{ requestId: "r1", decision: "allow" }]);
+  assert.equal(State.pendingApproval, null);
+  assert.deepEqual(sent("approval_ack"), []);
+  assert.ok(!asked.includes("alert:approval"));
+  // The pill's steps say what went through.
+  assert.match(task().steps.at(-1), /Allowed without asking: Edit · src\/a\.ts/);
+
+  hook({ hook_event_name: "PermissionRequest", request_id: "r2", session_id: "s1", tool_name: "Bash", tool_input: { command: "npm test" } });
+  assert.deepEqual(sent("approval_decision"), [{ requestId: "r1", decision: "allow" }]);
+  assert.equal(State.pendingApproval?.requestId, "r2");
+});
+
+test("everything: a command is allowed, a destructive one and a question still come up", () => {
+  State.settings = { ...DEFAULT_SETTINGS, autoApprove: "all" };
+  hook({ hook_event_name: "PermissionRequest", request_id: "r1", session_id: "s1", tool_name: "Bash", tool_input: { command: "npm test" } });
+  assert.deepEqual(sent("approval_decision"), [{ requestId: "r1", decision: "allow" }]);
+  assert.equal(State.pendingApproval, null);
+
+  hook({ hook_event_name: "PermissionRequest", request_id: "r2", session_id: "s1", tool_name: "Bash", tool_input: { command: "rm -rf build" } });
+  assert.equal(sent("approval_decision").length, 1);
+  assert.equal(State.pendingApproval?.requestId, "r2");
+  assert.ok(asked.includes("alert:approval"));
+  State.endApproval();
+
+  hook({
+    hook_event_name: "PermissionRequest", request_id: "r3", session_id: "s1", tool_name: "AskUserQuestion",
+    tool_input: { questions: [{ question: "Which one?", options: [{ label: "A" }, { label: "B" }] }] },
+  });
+  assert.equal(sent("approval_decision").length, 1);
+  assert.equal(State.pendingApproval?.requestId, "r3");
+  assert.ok(asked.includes("alert:question"));
+});
+
+test("a request allowed by itself goes through even while a card is up", () => {
+  State.settings = { ...DEFAULT_SETTINGS, autoApprove: "all" };
+  hook({ hook_event_name: "PermissionRequest", request_id: "r1", session_id: "s1", tool_name: "Bash", tool_input: { command: "git push --force" } });
+  assert.equal(State.pendingApproval?.requestId, "r1");
+  hook({ hook_event_name: "PermissionRequest", request_id: "r2", session_id: "s2", tool_name: "Bash", tool_input: { command: "ls" } });
+  assert.deepEqual(sent("approval_decision"), [{ requestId: "r2", decision: "allow" }]);
+  assert.deepEqual(sent("approval_decline"), []);
+  // The card that was up is still the one waiting.
+  assert.equal(State.pendingApproval?.requestId, "r1");
+});
+
+test("paused, nothing is allowed by itself: the terminal asks", () => {
+  State.settings = { ...DEFAULT_SETTINGS, autoApprove: "all" };
+  State.paused = true;
+  hook({ hook_event_name: "PermissionRequest", request_id: "r1", tool_name: "Bash", tool_input: { command: "ls" } });
+  assert.deepEqual(sent("approval_decision"), []);
+  assert.deepEqual(sent("approval_decline"), [{ requestId: "r1" }]);
+});
+
+test("an agent Coucou cannot answer for is never allowed by itself", () => {
+  State.settings = { ...DEFAULT_SETTINGS, autoApprove: "all" };
+  hook({ hook_event_name: "PermissionRequest", request_id: "r1", coucou_agent: "gemini", tool_name: "Bash", tool_input: { command: "ls" } });
+  assert.deepEqual(sent("approval_decision"), []);
+  assert.deepEqual(sent("approval_decline"), [{ requestId: "r1" }]);
+});
+
 test("a paused island ignores every other event", () => {
   State.paused = true;
   hook({ hook_event_name: "SessionStart", cwd: "C:\\Users\\me\\proj" });

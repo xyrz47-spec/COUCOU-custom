@@ -5,6 +5,7 @@
 // The relay has already mapped every agent's events and fields onto Claude
 // Code's (hook/src/normalize.rs), so one handler serves them all.
 
+import { autoApproves } from "../core/auto-approve";
 import { Bridge, onEvent } from "../core/bridge";
 import { buildFileDiff, fileName, makeDiffStep, toOneLine } from "../core/diff";
 import { Sound } from "../core/sound";
@@ -466,6 +467,20 @@ function handleHook(island: Island, payload: HookPayload) {
       }
 
       const requestId = payload.request_id ?? "";
+      // Settings → Claude Code → "Approve without asking": answered here and
+      // now, with no card. Off unless the user turned it on; a question, a
+      // plan or a command that looks destructive still gets its card below.
+      if (requestId && autoApproves(State.settings.autoApprove, payload.tool_name ?? "", payload.tool_input ?? {})) {
+        ensurePill();
+        void Bridge.log(`auto-allowed ${payload.tool_name ?? "Tool"} req=${requestId}`);
+        void Bridge.approvalDecision(requestId, "allow");
+        // The pill's steps say what went through, since no card did.
+        State.appendStep(
+          agentId,
+          t("Allowed without asking: {what}", { what: approvalTarget(payload.tool_name ?? "Tool", payload.tool_input ?? {}) }),
+        );
+        break;
+      }
       // One card, one request. A second one must never quietly replace the first
       // — that would leave a human staring at request B while request A waits for
       // a decision nobody can give. Hand it straight back to the terminal.
