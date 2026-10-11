@@ -5,6 +5,7 @@
 
 import type { Settings } from "./state";
 import { N_ } from "../i18n/i18n";
+import { featureOn } from "./features";
 
 export type ProviderId =
   | "claude-code" | "anthropic" | "openai" | "google" | "openrouter"
@@ -79,9 +80,12 @@ export function withModel(settings: Settings, provider: ProviderId, model: strin
  * active one, so the picker never hides where the chat goes.
  */
 export function visibleProviders(settings: Settings): ProviderDef[] {
-  return PROVIDERS.filter(
-    (p) => !p.urlField || settings[p.urlField] !== "" || settings.chatProvider === p.id,
-  );
+  return PROVIDERS.filter((p) => {
+    if (settings.chatProvider === p.id) return true;
+    // Claude Code's chat is a feature of its own (Settings → Features).
+    if (p.id === "claude-code") return featureOn(settings, "claudeChat");
+    return !p.urlField || settings[p.urlField] !== "";
+  });
 }
 
 /** The model to keep once the list arrives: the saved one if offered, else a sensible one. */

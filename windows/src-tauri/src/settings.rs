@@ -111,6 +111,10 @@ pub struct Settings {
     /// Project folders the user named for skills (the Skills tab's "Choose a
     /// folder…"), beside those Claude Code's own sessions name (skills.rs).
     pub skill_folders: Vec<String>,
+    /// What Settings → Features turned off (src/core/features.ts), by id; empty
+    /// means everything is on. Kept as it comes: an id this build doesn't know
+    /// turns nothing off.
+    pub disabled_features: Vec<String>,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -182,6 +186,7 @@ impl Default for Settings {
             weather: None,
             auto_approve: String::new(),
             skill_folders: Vec::new(),
+            disabled_features: Vec::new(),
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -473,6 +478,7 @@ mod tests {
   "weather": { "name": "Seoul", "latitude": 37.57, "longitude": 126.98 },
   "autoApprove": "edits",
   "skillFolders": ["C:\\work\\shop"],
+  "disabledFeatures": ["weather", "motion"],
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -912,6 +918,7 @@ mod tests {
                 "weather",
                 "autoApprove",
                 "skillFolders",
+                "disabledFeatures",
                 "desktopMochi",
             ]
         );

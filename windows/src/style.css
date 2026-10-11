@@ -4368,3 +4368,18 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     animation: none;
   }
 }
+
+/* Settings → Features → Animations, off: the tabs of this build, the header's
+   buttons and the chat's model picker change at once. Not "none": a change
+   that code waits the end of still ends. The island's own way of opening and
+   Mochi are not touched. */
+:root.still :is(#header, .view.skills, .view.launcher, .picker) *,
+:root.still :is(#header, .view.skills, .view.launcher, .picker) *::before,
+:root.still :is(#header, .view.skills, .view.launcher, .picker) *::after,
+:root.still :is(.view.skills, .view.launcher, .picker) {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+}

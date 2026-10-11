@@ -12,6 +12,10 @@ import {
 import { DEFAULT_SETTINGS, type Settings } from "../core/state";
 import { CLOCK_FORMATS, formatClock, isClockFormat } from "../core/clock";
 import { isAutoApprove } from "../core/auto-approve";
+import {
+  FEATURES, FEATURE_GROUPS, featureCount, featureDef, featureOn, featureSwitch, withFeature,
+  type FeatureDef, type FeatureId,
+} from "../core/features";
 import { SOUND_NAMES } from "../core/sound";
 import {
   MAX_DECLARED, PILL_CATEGORIES, availablePills, chooseMainPill, isComingSoon, mainPillChoices,
@@ -238,14 +242,20 @@ function claudeSection(status: HookStatus): HTMLElement {
  * Permission requests the island answers by itself (core/auto-approve.ts).
  * Off until the user picks otherwise; the widest choice says what it means.
  */
-function autoApproveSection(): HTMLElement {
-  const select = h("select", {}) as HTMLSelectElement;
-  const choices: [string, string][] = [
+/** Everything that shows what is approved without asking, told when it changes. */
+const autoApproveViews: (() => void)[] = [];
+
+function autoApproveChoices(): [string, string][] {
+  return [
     ["", t("Ask every time")],
     ["edits", t("File edits only")],
     ["all", t("Everything")],
   ];
-  for (const [value, text] of choices) select.append(h("option", { value, text }));
+}
+
+function autoApproveSection(): HTMLElement {
+  const select = h("select", {}) as HTMLSelectElement;
+  for (const [value, text] of autoApproveChoices()) select.append(h("option", { value, text }));
   select.value = isAutoApprove(settings.autoApprove) ? settings.autoApprove : "";
   const warning = h("div", {});
   const draw = () => {
@@ -261,12 +271,17 @@ function autoApproveSection(): HTMLElement {
   select.addEventListener("change", () => {
     settings.autoApprove = select.value;
     void save();
+    for (const view of autoApproveViews) view();
+  });
+  // Picked in Settings → Features: this list and its warning follow.
+  autoApproveViews.push(() => {
+    select.value = isAutoApprove(settings.autoApprove) ? settings.autoApprove : "";
     draw();
   });
   draw();
   return h(
     "section",
-    {},
+    { "data-anchor": "autoApprove" },
     h("h2", {}, h("span", { text: t("Approve without asking") })),
     h("div", {
       class: "hint",
@@ -572,7 +587,7 @@ function claudeCodeChatSection(cliPath: string | null): HTMLElement {
   chatCliRedraw = draw;
   return h(
     "section",
-    {},
+    { "data-anchor": "claudeChat" },
     h("h2", {}, h("span", { text: t("Chat with Claude Code") })),
     h("div", { class: "hint", text: t("Chat with the Claude plan you already have, through Claude Code: no API key. Each question counts against the plan's limits. It can search the web and nothing else: it opens no file of yours and runs nothing. Pick the model above the chat box.") }),
     body,
@@ -1098,8 +1113,8 @@ function generalSection(): HTMLElement {
     h("div", { class: "hint", text: t("The command that opens a session's folder or a diff's file — e.g. kitty -e nvim. Empty: VS Code. The main pill takes the editor's name.") }),
     ...recapRows(),
     languageRow(),
-    ...clockRows(),
-    ...weatherRows(),
+    ...(featureOn(settings, "clock") ? clockRows() : []),
+    ...(featureOn(settings, "weather") ? weatherRows() : []),
   );
 }
 
@@ -1191,7 +1206,7 @@ function clockRows(): HTMLElement[] {
     void save();
   });
   return [
-    h("div", { class: "row" }, h("label", { text: t("Clock") }), select),
+    h("div", { class: "row", "data-anchor": "clock" }, h("label", { text: t("Clock") }), select),
     h("div", { class: "hint", text: t("Shown in the compact island while no song plays.") }),
   ];
 }
@@ -1202,7 +1217,7 @@ function clockRows(): HTMLElement[] {
  * (weather.rs).
  */
 function weatherRows(): HTMLElement[] {
-  const row = h("div", { class: "row" });
+  const row = h("div", { class: "row", "data-anchor": "weather" });
   const found = h("div", { class: "weather-places" });
   const draw = () => {
     clear(row);
@@ -1265,6 +1280,137 @@ function weatherRows(): HTMLElement[] {
     row,
     found,
     h("div", { class: "hint", text: t("Pick your city to see its weather as an icon beside the clock. Coucou then asks Open-Meteo for the weather at that spot, every twenty minutes; until a city is picked, nothing is asked.") }),
+  ];
+}
+
+// ── Features ──────────────────────────────────────────────────────────────────
+
+/** Opens a page of the window, at one of its spots when one is named (set by render). */
+let goTo: (page: string, anchor?: string) => void = () => {};
+/** How full the meter of Settings → Features was last drawn, so it glides to where it is now. */
+let meterShown: number | null = null;
+
+/**
+ * Draws the window again after a feature was turned on or off, without its
+ * sections coming in a second time (settings.css, .quiet). `after` leaves the
+ * switch the time to finish its slide.
+ */
+function redrawQuietly(after = 0) {
+  window.setTimeout(() => {
+    root.classList.add("quiet");
+    void rerender();
+  }, after);
+}
+
+/** The button of a feature's row that opens its own settings. */
+function openButton(page: string, anchor?: string): HTMLElement {
+  return h("button", { class: "feature-open", text: t("Settings"), onclick: () => goTo(page, anchor) });
+}
+
+/**
+ * Settings → Features: what this build adds to Coucou (core/features.ts), a
+ * switch each. `cliPath` and `hasKey` say where the chat can go once Claude
+ * Code's is turned off or on again.
+ */
+function featuresSections(cliPath: string | null, hasKey: boolean): HTMLElement[] {
+  const change = (id: FeatureId, on: boolean) => {
+    settings.disabledFeatures = withFeature(settings, id, on);
+    if (id !== "claudeChat") return;
+    // Off while the chat goes through it: back to the provider that takes a key.
+    if (!on && settings.chatProvider === "claude-code") settings.chatProvider = "anthropic";
+    // On again with no key of Anthropic's: the chat goes through Claude Code as before.
+    if (on && cliPath && !hasKey && settings.chatProvider === "anthropic") settings.chatProvider = "claude-code";
+  };
+
+  const { on, of } = featureCount(settings);
+  const fill = h("i", {});
+  fill.style.width = `${(meterShown ?? on / of) * 100}%`;
+  meterShown = on / of;
+  // Once it is on the page, so that it glides there.
+  window.setTimeout(() => {
+    fill.style.width = `${(on / of) * 100}%`;
+  }, 40);
+  const everything = h("button", {
+    text: t("Turn everything on"),
+    onclick: () => {
+      for (const def of FEATURES) change(def.id, true);
+      void save();
+      redrawQuietly();
+    },
+  }) as HTMLButtonElement;
+  everything.disabled = on === of;
+
+  function row(def: FeatureDef): HTMLElement {
+    const own = featureSwitch(settings, def.id);
+    // Part of a feature that is off: its switch waits for that one.
+    const held = def.needs != null && !featureOn(settings, def.needs);
+    const el = h("div", { class: "feature-row" });
+    el.classList.toggle("off", !own || held);
+    el.classList.toggle("sub", def.needs != null);
+    const name = h("div", { class: "feature-name" }, h("span", { text: t(def.name) }));
+    if (held) name.append(h("span", { class: "tag", text: t("Needs: {name}", { name: t(featureDef(def.needs!).name) }) }));
+    const sw = toggle(own, (next) => {
+      change(def.id, next);
+      el.classList.toggle("off", !next || held);
+      void save();
+      redrawQuietly(280);
+    }) as HTMLButtonElement;
+    sw.disabled = held;
+    el.append(
+      h("i", { class: "feature-mark" }),
+      h("div", { class: "feature-text" }, name, h("div", { class: "hint", text: t(def.about) })),
+    );
+    if (def.page && own && !held) el.append(openButton(def.page, def.anchor));
+    el.append(sw);
+    return el;
+  }
+
+  /** Approving without asking has three settings, not two: its list stands where a switch would. */
+  function autoApproveRow(): HTMLElement {
+    const select = h("select", {}) as HTMLSelectElement;
+    for (const [value, text] of autoApproveChoices()) select.append(h("option", { value, text }));
+    const el = h("div", { class: "feature-row" });
+    const sync = () => {
+      select.value = isAutoApprove(settings.autoApprove) ? settings.autoApprove : "";
+      el.classList.toggle("off", select.value === "");
+    };
+    select.addEventListener("change", () => {
+      settings.autoApprove = select.value;
+      void save();
+      for (const view of autoApproveViews) view();
+    });
+    autoApproveViews.push(sync);
+    sync();
+    el.append(
+      h("i", { class: "feature-mark" }),
+      h("div", { class: "feature-text" },
+        h("div", { class: "feature-name" }, h("span", { text: t("Approve without asking") })),
+        h("div", { class: "hint", text: t("Coucou answers Claude Code's permission requests by itself. A question, a plan to approve and a command that looks destructive still come up.") }),
+      ),
+      openButton("claude", "autoApprove"),
+      select,
+    );
+    return el;
+  }
+
+  const groups = FEATURE_GROUPS.map((group) => {
+    const rows = FEATURES.filter((def) => def.group === group.id).map(row);
+    if (group.id === "claude") rows.push(autoApproveRow());
+    return h("section", {}, h("h2", {}, h("span", { text: t(group.title) })), h("div", { class: "feature-list" }, ...rows));
+  });
+
+  return [
+    h(
+      "section",
+      {},
+      h("div", { class: "hint", text: t("What this build adds to Coucou, in one place. Turn off what you don't use: it leaves the island and this window, and what you had set for it is kept for when you turn it on again.") }),
+      h("div", { class: "feature-summary" },
+        h("span", { class: "feature-count", text: t("{on} of {total} on", { on, total: of }) }),
+        h("div", { class: "feature-meter" }, fill),
+        everything,
+      ),
+    ),
+    ...groups,
   ];
 }
 
@@ -1655,15 +1801,22 @@ async function render() {
   const customKey = (await Bridge.secretPresent(CUSTOM_SERVER_KEY)) ?? false;
 
   declaredViews.length = 0;
+  autoApproveViews.length = 0;
+  // Settings → Features → Animations, off: what moved now changes at once (settings.css).
+  document.documentElement.classList.toggle("still", !featureOn(settings, "motion"));
   localRedraw = null;
   chatCliRedraw = null;
   shortcutsListener = null;
   // One page at a time, picked in the column on the left.
+  // A feature turned off (Settings → Features) takes its section, or its page, with it.
   const pages: Page[] = [
+    { id: "features", label: t("Features"), color: "#8ED9DA", sections: featuresSections(cliPath, hasKey) },
     { id: "claude", label: "Claude Code", color: "#F5B98A", sections: [claudeSection(status), autoApproveSection(), planSection(status), agentsSection(agents)] },
-    { id: "chat", label: t("Chat"), color: "#9CC4F5", sections: [claudeCodeChatSection(cliPath), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
+    { id: "chat", label: t("Chat"), color: "#9CC4F5", sections: [...(featureOn(settings, "claudeChat") ? [claudeCodeChatSection(cliPath)] : []), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
     { id: "pills", label: t("Active pills"), color: "#9ADBB3", sections: [activePillsSection(connected), integrationsSection(present)] },
-    { id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save)] },
+    ...(featureOn(settings, "launcherTab")
+      ? [{ id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save)] }]
+      : []),
     { id: "general", label: t("General"), color: "#BDB2F7", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EBD58A", sections: [shortcutsSection(shortcutReport)] },
   ];
@@ -1688,6 +1841,8 @@ async function render() {
     } catch {
       // Storage off: the window just opens on its first page next time.
     }
+    // A page turned to comes in as pages do, whatever was last redrawn quietly.
+    if (moving) root.classList.remove("quiet");
     for (const [key, button] of buttons) button.classList.toggle("on", key === id);
     for (const [key, sheet] of sheets) {
       const on = key === id;
@@ -1727,6 +1882,17 @@ async function render() {
   root.classList.add("app");
   root.append(nav, shelf);
   open(currentPage, false);
+  goTo = (id, anchor) => {
+    if (!sheets.has(id)) return;
+    open(id, true);
+    const spot = anchor ? sheets.get(id)!.querySelector<HTMLElement>(`[data-anchor="${anchor}"]`) : null;
+    if (!spot) return;
+    // The spot is brought into view and lights up a moment.
+    spot.scrollIntoView({ block: "center" });
+    spot.classList.remove("flash");
+    void spot.offsetWidth;
+    spot.classList.add("flash");
+  };
 }
 
 /** One page of the window: a name in the column on the left, and its sections. */

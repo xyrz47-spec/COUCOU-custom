@@ -12,6 +12,7 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
+import { featureOn } from "../core/features";
 import { CLOCK_MAX_FONT, clockFontSize, clockParts, formatClock } from "../core/clock";
 import { WEATHER_REFRESH_MS, weatherDegrees, weatherKind } from "../core/weather";
 import { weatherIcon } from "../views/weather";
@@ -1301,10 +1302,12 @@ export class Island {
    */
   private syncCompactSong() {
     const track = Spotify.state.track;
-    const show = State.mode === "compact" && State.spotifyPlaying && track != null;
+    const show = State.mode === "compact" && State.spotifyPlaying && track != null &&
+      featureOn(State.settings, "compactSong");
     this.compactSong.classList.toggle("on", show);
     // No song: the same stretch says what time it is.
-    const clock = State.mode === "compact" && !show && State.settings.clockFormat !== "off";
+    const clock = State.mode === "compact" && !show && State.settings.clockFormat !== "off" &&
+      featureOn(State.settings, "clock");
     this.compactClock.classList.toggle("on", clock);
     this.syncWeather();
     if (clock) {
@@ -1343,7 +1346,8 @@ export class Island {
    * nothing asked.
    */
   private syncWeather() {
-    const place = State.settings.weather;
+    // Turned off in Settings → Features: as with no place, nothing is asked.
+    const place = featureOn(State.settings, "weather") ? State.settings.weather : null;
     const key = place ? `${place.latitude},${place.longitude}` : "";
     if (key !== this.weatherPlace) {
       this.weatherPlace = key;
@@ -1422,6 +1426,16 @@ export class Island {
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;
     this.fsm.showCompactIsland = State.settings.showCompactIsland;
     this.fsm.openOnHover = State.settings.openOnHover;
+    // Settings → Features: the animations of this build stop when asked to
+    // (style.css, :root.still), and a tab turned off while it is open gives way to the home view.
+    document.documentElement.classList.toggle("still", !featureOn(State.settings, "motion"));
+    const gone =
+      (State.view === "launcher" && !featureOn(State.settings, "launcherTab")) ||
+      (State.view === "skills" && !featureOn(State.settings, "skillsTab"));
+    if (gone) {
+      if (State.mode === "expanded") this.setView(State.defaultView());
+      else State.view = State.defaultView();
+    }
     State.notify();
   }
 

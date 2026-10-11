@@ -8,6 +8,7 @@ import {
 } from "./pills";
 import type { CodexPlanUsage, PlanUsage } from "./plan";
 import type { ProviderId } from "./providers";
+import { featureOn } from "./features";
 import type { WeatherNow, WeatherPlace } from "./weather";
 import type { FileDiff } from "./diff";
 import type { Bindings } from "./shortcuts";
@@ -200,6 +201,8 @@ export interface Settings {
   autoApprove: string;
   /** Project folders the user named for skills, beside those Claude Code worked in (skills.rs). */
   skillFolders: string[];
+  /** What Settings → Features turned off (core/features.ts); empty means everything is on. */
+  disabledFeatures: string[];
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -247,6 +250,7 @@ export const DEFAULT_SETTINGS: Settings = {
   weather: null,
   autoApprove: "",
   skillFolders: [],
+  disabledFeatures: [],
 };
 
 type Listener = () => void;
@@ -356,7 +360,7 @@ class AppState {
    * being announced shows in it too.
    */
   get spotifyPlayerShown(): boolean {
-    return Spotify.player &&
+    return Spotify.player && featureOn(this.settings, "musicPlayer") &&
       this.mode === "expanded" && this.view === "overview" && this.focusTask?.id === SPOTIFY_ID &&
       Spotify.state.track != null && !this.showingPlanDetail;
   }

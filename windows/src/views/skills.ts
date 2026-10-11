@@ -22,6 +22,7 @@
 
 import { Bridge, onEvent, type FoundSkill, type SkillAdvice, type SkillGroup, type SkillInfo } from "../core/bridge";
 import { State } from "../core/state";
+import { featureOn } from "../core/features";
 import { clear, h } from "./dom";
 import { enhanceSelect } from "./select";
 import type { ViewActions, ViewHost } from "./views";
@@ -468,6 +469,13 @@ export function buildSkills(actions: ViewActions): ViewHost {
   }
 
   function draw() {
+    // "Suggest" is a feature of its own (Settings → Features): off, the tab goes with its plan.
+    const suggests = featureOn(State.settings, "skillAdvice");
+    tabPlan.style.display = suggests ? "" : "none";
+    if (!suggests && tab === "plan") {
+      tab = "mine";
+      say("");
+    }
     tabInstalled.classList.toggle("on", tab === "mine");
     tabFind.classList.toggle("on", tab === "find");
     tabPlan.classList.toggle("on", tab === "plan");
@@ -575,6 +583,8 @@ export function buildSkills(actions: ViewActions): ViewHost {
       const shown = State.mode === "expanded" && State.view === "skills";
       if (shown && !wasShown) void load();
       wasShown = shown;
+      // "Suggest" was turned on or off in Settings → Features: its tab follows.
+      if ((tabPlan.style.display !== "none") !== featureOn(State.settings, "skillAdvice")) draw();
     },
   };
 }

@@ -24,6 +24,7 @@ import { buildRecap } from "./recap";
 import { buildWardrobe } from "./wardrobe";
 import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
+import { featureOn } from "../core/features";
 import { buildLauncher } from "./launcher";
 import { buildSkills } from "./skills";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
@@ -147,6 +148,9 @@ export function buildHeader(actions: ViewActions): ViewHost {
       tabDrop.classList.toggle("on", v === "upload");
       tabApps.classList.toggle("on", v === "launcher");
       tabSkills.classList.toggle("on", v === "skills");
+      // Tabs of this build, each a switch in Settings → Features.
+      tabApps.style.display = featureOn(State.settings, "launcherTab") ? "" : "none";
+      tabSkills.style.display = featureOn(State.settings, "skillsTab") ? "" : "none";
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
       gearBtn.append(svg(v === "settings" ? ICONS.gearFill : ICONS.gear, 14));
@@ -434,7 +438,7 @@ function buildOverview(actions: ViewActions): ViewHost {
       }
       wasBig = big;
       // The button is there for a song, on the card of either size.
-      const song = mode === "spotify" && Spotify.state.track != null;
+      const song = mode === "spotify" && Spotify.state.track != null && featureOn(State.settings, "musicPlayer");
       playerToggle.style.display = song ? "" : "none";
       if (playerIcon !== big) {
         playerIcon = big;

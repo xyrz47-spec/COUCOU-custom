@@ -1913,3 +1913,157 @@ section.add-finder {
     transform: none;
   }
 }
+
+/* ── Settings → Features ──────────────────────────────────────────────────────
+   What this build adds, a row each: a mark that is lit while the feature is
+   on, its name and what it is, a way to its own settings, and its switch. A
+   feature that is part of another stands a step in, on that one's thread. */
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feature-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background 0.18s;
+}
+
+.feature-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.feature-row.sub {
+  margin-left: 22px;
+}
+
+.feature-row.sub::before {
+  content: "";
+  position: absolute;
+  left: -11px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--page, #fff) 32%, transparent);
+}
+
+.feature-mark {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--page, #fff);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--page, #fff) 70%, transparent);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+
+.feature-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: opacity 0.3s;
+}
+
+.feature-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 13px var(--font);
+  color: var(--ink);
+}
+
+.feature-row.off .feature-mark {
+  background: var(--dim-2);
+  box-shadow: none;
+  transform: scale(0.75);
+}
+
+.feature-row.off .feature-text {
+  opacity: 0.55;
+}
+
+.feature-row > .switch,
+.feature-row > .cselect,
+.feature-row > select {
+  flex: none;
+}
+
+/* A list where a switch would stand: no wider than its longest choice needs. */
+.feature-row > .cselect {
+  min-width: 124px;
+}
+
+.app .feature-row > button.feature-open {
+  flex: none;
+  padding: 4px 11px;
+  font-size: 11.5px;
+}
+
+.feature-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.feature-count {
+  flex: none;
+  font: 600 12.5px var(--font);
+  color: var(--ink);
+}
+
+.feature-meter {
+  flex: 1 1 auto;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.feature-meter > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--page, #fff) 55%, #fff), var(--page, #fff));
+  transition: width 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* The window drawn again because a feature changed: nothing comes in twice. */
+.app.quiet .page.on > * {
+  animation: none;
+}
+
+/* A spot of a page opened from a feature's row lights up, then settles. */
+.app .flash {
+  border-radius: 12px;
+  animation: spot-flash 1.5s ease-out;
+}
+
+@keyframes spot-flash {
+  0%,
+  25% {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--page, #fff) 75%, transparent),
+      0 0 26px color-mix(in srgb, var(--page, #fff) 45%, transparent);
+  }
+}
+
+/* Settings → Features → Animations, off: what moved now changes at once. Not
+   "none": a change that code waits the end of still ends. */
+:root.still *,
+:root.still *::before,
+:root.still *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}

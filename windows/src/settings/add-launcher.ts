@@ -21,6 +21,7 @@ import { clear, h, svg } from "../views/dom";
 import { ICONS } from "../views/icons";
 import { isRtl, resolveLanguage, setLanguage, systemLanguages, t } from "../i18n/i18n";
 import { MAX_ITEMS, defaultName, isApp, isPath, isWeb, matchingApps } from "./launcher";
+import { featureOn } from "../core/features";
 
 const root = document.getElementById("settings-root")!;
 
@@ -61,6 +62,8 @@ const IMAGE_LIMIT = 4 * 1024 * 1024;
 async function applyLanguage() {
   const boot = await Bridge.boot();
   setLanguage(resolveLanguage(boot?.settings.language ?? "", systemLanguages()));
+  // Settings → Features → Animations, off: this window too stays still (settings.css).
+  document.documentElement.classList.toggle("still", boot != null && !featureOn(boot.settings, "motion"));
   document.documentElement.dir = isRtl() ? "rtl" : "ltr";
   document.title = t("Add to the launcher");
 }
