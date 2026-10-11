@@ -1360,7 +1360,7 @@ export class Island {
     const kind = State.weather ? weatherKind(State.weather.code, State.weather.isDay) : "";
     if (kind === this.weatherShown) return;
     this.weatherShown = kind;
-    this.compactWeather.replaceChildren(...(kind ? [weatherIcon(kind, 19)] : []));
+    this.compactWeather.replaceChildren(...(kind ? [weatherIcon(kind, 23)] : []));
     this.compactWeather.classList.toggle("on", kind !== "");
     // The time has less room beside an icon, or more without one.
     this.compactClockShape = "";
