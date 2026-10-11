@@ -12,7 +12,7 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
-import { formatClock } from "../core/clock";
+import { CLOCK_MAX_FONT, clockFontSize, formatClock } from "../core/clock";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
 import { language, t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
@@ -68,6 +68,9 @@ export class Island {
   private compactSongTimer: number | null = null;
   /** The time of day, in the compact island while no song plays (syncCompactSong). */
   private compactClock!: HTMLElement;
+  private compactClockText!: HTMLElement;
+  /** The clock's text with every digit the same: its size is worked out again only when this changes. */
+  private compactClockShape = "";
   private compactClockTimer: number | null = null;
   private wakeStrip!: HTMLElement;
 
@@ -322,7 +325,7 @@ export class Island {
       this.botCanvas,
       this.miniGrid,
       this.compactSong,
-      (this.compactClock = h("div", { id: "compact-clock" })),
+      (this.compactClock = h("div", { id: "compact-clock" }, (this.compactClockText = h("span", {})))),
       this.countdown,
     );
 
@@ -1315,7 +1318,19 @@ export class Island {
   private paintCompactClock() {
     // In the form picked in Settings → General (core/clock.ts).
     const text = formatClock(State.settings.clockFormat, new Date(), language());
-    if (this.compactClock.textContent !== text) this.compactClock.textContent = text;
+    if (this.compactClockText.textContent === text) return;
+    this.compactClockText.textContent = text;
+    // As large as its stretch of the island takes. Digits are all one width
+    // (tabular), so a turning minute or second changes nothing: the text is
+    // measured again only when its shape does (another form, 9:59 → 10:00).
+    const shape = text.replace(/\d/g, "0");
+    if (shape === this.compactClockShape) return;
+    this.compactClock.style.fontSize = `${CLOCK_MAX_FONT}px`;
+    const width = this.compactClockText.offsetWidth;
+    const room = this.compactClock.clientWidth;
+    this.compactClock.style.fontSize = `${clockFontSize(width, CLOCK_MAX_FONT, room)}px`;
+    // Not laid out yet (nothing to measure): asked again at the next tick.
+    this.compactClockShape = width > 0 && room > 0 ? shape : "";
   }
 
   private paintCompactSongTime() {

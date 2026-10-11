@@ -54,7 +54,7 @@ test("a provider without a key is never asked for its models", async () => {
   $(".model-btn").fire("click");
   await flush();
   assert.ok($(".chat-body").classList.contains("picking"));
-  assert.deepEqual(chips(), ["Anthropic", "Google", "OpenAI", "OpenRouter"]);
+  assert.deepEqual(chips(), ["Claude Code", "Anthropic", "Google", "OpenAI", "OpenRouter"]);
   assert.deepEqual(sent("secret_present"), [{ key: "anthropic-api-key" }]);
   assert.deepEqual(sent("chat_models"), []);
   assert.match($(".picker-status").textContent, /No API key/);
@@ -77,13 +77,31 @@ test("with a key, the models are listed and picking one saves it", async () => {
   assert.equal($(".model-name").textContent, "claude-sonnet-5");
 });
 
+test("Claude Code needs no key: its models are listed without one being asked for", async () => {
+  answers.secret_present = false;
+  answers.chat_models = [{ id: "opus", label: "Opus" }, { id: "sonnet", label: "Sonnet" }, { id: "haiku", label: "Haiku" }];
+  State.settings = { ...State.settings, chatProvider: "claude-code" };
+  view.sync();
+  assert.equal($(".model-name").textContent, "sonnet");
+  $(".model-btn").fire("click");
+  await flush();
+  assert.deepEqual(sent("secret_present"), []);
+  assert.deepEqual(sent("chat_models"), [{ provider: "claude-code" }]);
+  assert.deepEqual(models(), ["Opus", "Sonnet", "Haiku"]);
+  view.el.find(".picker-model")[0].fire("click");
+  assert.equal(State.settings.chatModels["claude-code"], "opus");
+  // Claude's API model is another setting, and is left alone.
+  assert.equal(State.settings.model, "claude-opus-5");
+  assert.equal($(".model-name").textContent, "opus");
+});
+
 test("switching provider saves it and asks the new provider only", async () => {
   answers.secret_present = (args) => args.key === "google-api-key";
   answers.chat_models = (args) => (args.provider === "google" ? [{ id: "gemini-2.5-flash", label: "gemini-2.5-flash" }] : []);
   $(".model-btn").fire("click");
   await flush();
   assert.deepEqual(sent("chat_models"), []);
-  view.el.find(".picker-chip")[1].fire("click");
+  view.el.find(".picker-chip")[2].fire("click");
   await flush();
   assert.equal(State.settings.chatProvider, "google");
   assert.deepEqual(sent("chat_models"), [{ provider: "google" }]);

@@ -484,6 +484,55 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
   );
 }
 
+// ── Claude Code in the chat ───────────────────────────────────────────────────
+
+/** Redraws the section below after the chat's provider changed elsewhere. */
+let chatCliRedraw: (() => void) | null = null;
+
+/**
+ * The chat answered by Claude Code itself (claude_cli.rs): the plan the user
+ * already has, no key. `cliPath` is where the CLI is, null when it is not installed.
+ */
+function claudeCodeChatSection(cliPath: string | null): HTMLElement {
+  const p = providerDef("claude-code");
+  const body = h("div", {});
+  const draw = () => {
+    clear(body);
+    const inUse = settings.chatProvider === p.id;
+    const use = h("button", { class: inUse ? "" : "primary", text: inUse ? CHAT_STRINGS.inUse : CHAT_STRINGS.useInChat }) as HTMLButtonElement;
+    use.disabled = inUse || !cliPath;
+    use.addEventListener("click", () => {
+      settings.chatProvider = p.id;
+      void save().then(() => {
+        draw();
+        localRedraw?.();
+      });
+    });
+    body.append(
+      h("div", { class: "row" },
+        h("label", {},
+          h("i", { class: "dot", style: `background:${p.accent};margin-right:8px` }),
+          h("span", { text: p.name }),
+        ),
+        cliPath
+          ? h("span", { class: "path", text: cliPath })
+          : h("span", { class: "hint", text: t("Not found. Install Claude Code and sign in with it, then open this window again.") }),
+        statusDot(Boolean(cliPath)),
+        use,
+      ),
+    );
+  };
+  draw();
+  chatCliRedraw = draw;
+  return h(
+    "section",
+    {},
+    h("h2", {}, h("span", { text: t("Chat with Claude Code") })),
+    h("div", { class: "hint", text: t("Chat with the Claude plan you already have, through Claude Code: no API key. Each question counts against the plan's limits. It can search the web and nothing else: it opens no file of yours and runs nothing. Pick the model above the chat box.") }),
+    body,
+  );
+}
+
 // ── Chat providers section ────────────────────────────────────────────────────
 
 const CHAT_STRINGS = {
@@ -654,7 +703,10 @@ function localSection(customKey: boolean): HTMLElement {
       use.disabled = inUse;
       use.addEventListener("click", () => {
         settings.chatProvider = id;
-        void save().then(redraw);
+        void save().then(() => {
+          redraw();
+          chatCliRedraw?.();
+        });
       });
       const disconnect = h("button", { class: "danger", text: CHAT_STRINGS.disconnect });
       disconnect.addEventListener("click", async () => {
@@ -666,6 +718,7 @@ function localSection(customKey: boolean): HTMLElement {
         }
         await save();
         redraw();
+        chatCliRedraw?.();
       });
       block.append(
         h("div", { class: "row" }, label, h("span", { class: "path", text: settings[field] }), statusDot(true), use, disconnect),
@@ -1434,7 +1487,10 @@ async function main() {
     shortcutsListener?.settingsChanged();
     for (const redraw of declaredViews) redraw();
     const after = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
-    if (before !== after) localRedraw?.();
+    if (before !== after) {
+      localRedraw?.();
+      chatCliRedraw?.();
+    }
     applyLanguage();
   });
 }
@@ -1447,6 +1503,7 @@ async function render() {
   const agents = await Bridge.agentHooksList();
 
   const hasKey = (await Bridge.secretPresent("anthropic-api-key")) ?? false;
+  const cliPath = await Bridge.chatCliPath();
   const shortcutReport = await Bridge.shortcutsStatus();
 
   const keys = [
@@ -1480,14 +1537,15 @@ async function render() {
 
   declaredViews.length = 0;
   localRedraw = null;
+  chatCliRedraw = null;
   shortcutsListener = null;
   // One page at a time, picked in the column on the left.
   const pages: Page[] = [
     { id: "claude", label: "Claude Code", color: "#F29B38", sections: [claudeSection(status), planSection(status), agentsSection(agents)] },
-    { id: "chat", label: t("Chat"), color: "#60A5FA", sections: [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
+    { id: "chat", label: t("Chat"), color: "#60A5FA", sections: [claudeCodeChatSection(cliPath), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
     { id: "pills", label: t("Active pills"), color: "#22C55E", sections: [activePillsSection(connected), integrationsSection(present)] },
     { id: "launcher", label: t("Launcher"), color: "#E879F9", sections: [launcherSection(() => settings, save)] },
-    { id: "general", label: t("General"), color: "#2DD4BF", sections: [generalSection()] },
+    { id: "general", label: t("General"), color: "#A78BFA", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EAB308", sections: [shortcutsSection(shortcutReport)] },
   ];
   if (!pages.some((p) => p.id === currentPage)) currentPage = pages[0].id;

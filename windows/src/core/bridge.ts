@@ -200,6 +200,8 @@ export const Bridge = {
   chatSend: (query: string, context: ChatContext | null) =>
     callOrThrow<{ text: string }>("chat_send", { query, context }),
   chatReset: () => call<void>("chat_reset"),
+  /** Where the Claude Code CLI is, for Settings → Chat; null when it is not installed. */
+  chatCliPath: () => call<string>("chat_cli_path"),
   /**
    * The models a provider offers, for the picker in the chat view. Rust asks
    * the provider only when it has a key (or a server address).

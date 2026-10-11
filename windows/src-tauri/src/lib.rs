@@ -5,6 +5,7 @@ mod agents;
 mod beat;
 mod chat;
 mod claude;
+mod claude_cli;
 mod claude_plan;
 mod codex_plan;
 mod config_file;
@@ -584,6 +585,12 @@ fn local_set_key(url: String, key: String) -> Result<(), String> {
     local_chat::set_custom_key(&url, &key)
 }
 
+/// Where the Claude Code CLI is, for Settings → Chat; nothing when it is not installed.
+#[tauri::command]
+fn chat_cli_path() -> Option<String> {
+    claude_cli::path()
+}
+
 #[tauri::command]
 fn chat_reset(chat: State<Chat>) {
     chat.reset();
@@ -890,6 +897,7 @@ pub fn run() {
             local_connect,
             local_set_key,
             chat_reset,
+            chat_cli_path,
             ingest_file,
             secret_present,
             secret_set,

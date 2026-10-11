@@ -41,3 +41,20 @@ export function formatClock(format: string, when: Date, language: string): strin
     return `${when.getHours()}:${String(when.getMinutes()).padStart(2, "0")}`;
   }
 }
+
+// ── Its size ──────────────────────────────────────────────────────────────────
+
+/** The clock's largest letters, in px: what the compact island's height leaves room for. */
+export const CLOCK_MAX_FONT = 23;
+const CLOCK_MIN_FONT = 9;
+
+/**
+ * The size at which the clock fills its stretch of the compact island: a text
+ * `width` px wide when set at `at` px, in `room` px. As large as fits, never
+ * taller than the island. A text that could not be measured keeps `at`.
+ */
+export function clockFontSize(width: number, at: number, room: number): number {
+  if (!(width > 0) || !(room > 0)) return at;
+  const fit = Math.floor(((at * room) / width) * 2) / 2;
+  return Math.max(CLOCK_MIN_FONT, Math.min(CLOCK_MAX_FONT, fit));
+}

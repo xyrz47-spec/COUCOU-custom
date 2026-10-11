@@ -4359,6 +4359,90 @@
    "ru": "Показываются в компактном острове, когда музыка не играет.",
    "id": "Ditampilkan di pulau ringkas saat tidak ada lagu yang diputar.",
    "ko": "노래가 재생 중이 아닐 때 작은 아일랜드에 표시됩니다."
+  },
+  "Claude Code isn't installed on this computer.": {
+   "zh-Hans": "这台电脑上没有安装 Claude Code。",
+   "hi": "इस कंप्यूटर पर Claude Code इंस्टॉल नहीं है।",
+   "es": "Claude Code no está instalado en este ordenador.",
+   "ar": "Claude Code غير مثبّت على هذا الحاسوب.",
+   "fr": "Claude Code n'est pas installé sur cet ordinateur.",
+   "bn": "এই কম্পিউটারে Claude Code ইনস্টল করা নেই।",
+   "pt-BR": "O Claude Code não está instalado neste computador.",
+   "ru": "Claude Code не установлен на этом компьютере.",
+   "id": "Claude Code belum terpasang di komputer ini.",
+   "ko": "이 컴퓨터에 Claude Code가 설치되어 있지 않습니다."
+  },
+  "Searching the web…": {
+   "zh-Hans": "正在搜索网页…",
+   "hi": "वेब पर खोज रहा है…",
+   "es": "Buscando en la web…",
+   "ar": "جارٍ البحث في الويب…",
+   "fr": "Recherche sur le web…",
+   "bn": "ওয়েবে খোঁজা হচ্ছে…",
+   "pt-BR": "Pesquisando na web…",
+   "ru": "Ищу в интернете…",
+   "id": "Mencari di web…",
+   "ko": "웹 검색 중…"
+  },
+  "Claude Code took too long to answer.": {
+   "zh-Hans": "Claude Code 回答超时。",
+   "hi": "Claude Code ने जवाब देने में बहुत देर लगाई।",
+   "es": "Claude Code tardó demasiado en responder.",
+   "ar": "استغرق Claude Code وقتًا طويلًا جدًا للرد.",
+   "fr": "Claude Code a mis trop de temps à répondre.",
+   "bn": "Claude Code উত্তর দিতে অনেক বেশি সময় নিয়েছে।",
+   "pt-BR": "O Claude Code demorou demais para responder.",
+   "ru": "Claude Code отвечал слишком долго.",
+   "id": "Claude Code terlalu lama menjawab.",
+   "ko": "Claude Code의 응답이 너무 오래 걸렸습니다."
+  },
+  "Claude Code ended without an answer.": {
+   "zh-Hans": "Claude Code 没有给出回答就结束了。",
+   "hi": "Claude Code बिना जवाब दिए बंद हो गया।",
+   "es": "Claude Code terminó sin dar una respuesta.",
+   "ar": "انتهى Claude Code دون إجابة.",
+   "fr": "Claude Code s'est arrêté sans réponse.",
+   "bn": "Claude Code কোনো উত্তর ছাড়াই শেষ হয়েছে।",
+   "pt-BR": "O Claude Code terminou sem dar uma resposta.",
+   "ru": "Claude Code завершился без ответа.",
+   "id": "Claude Code berakhir tanpa jawaban.",
+   "ko": "Claude Code가 응답 없이 끝났습니다."
+  },
+  "Chat with Claude Code": {
+   "zh-Hans": "用 Claude Code 聊天",
+   "hi": "Claude Code से चैट",
+   "es": "Chat con Claude Code",
+   "ar": "الدردشة عبر Claude Code",
+   "fr": "Discuter avec Claude Code",
+   "bn": "Claude Code দিয়ে চ্যাট",
+   "pt-BR": "Chat com o Claude Code",
+   "ru": "Чат через Claude Code",
+   "id": "Chat dengan Claude Code",
+   "ko": "Claude Code로 채팅"
+  },
+  "Chat with the Claude plan you already have, through Claude Code: no API key. Each question counts against the plan's limits. It can search the web and nothing else: it opens no file of yours and runs nothing. Pick the model above the chat box.": {
+   "zh-Hans": "通过 Claude Code，用你已有的 Claude 套餐聊天：不需要 API 密钥。每个问题都计入套餐限额。它只能搜索网页：不会打开你的任何文件，也不会运行任何东西。在聊天框上方选择模型。",
+   "hi": "Claude Code के ज़रिए अपने मौजूदा Claude प्लान से चैट करें: कोई API कुंजी नहीं चाहिए। हर सवाल प्लान की सीमा में गिना जाता है। यह केवल वेब पर खोज सकता है: आपकी कोई फ़ाइल नहीं खोलता और कुछ नहीं चलाता। मॉडल चैट बॉक्स के ऊपर चुनें।",
+   "es": "Chatea con el plan de Claude que ya tienes, a través de Claude Code: sin clave de API. Cada pregunta cuenta para los límites del plan. Solo puede buscar en la web: no abre ningún archivo tuyo ni ejecuta nada. Elige el modelo encima del cuadro de chat.",
+   "ar": "تحدّث باستخدام خطة Claude التي لديك أصلًا، عبر Claude Code: بلا مفتاح API. كل سؤال يُحتسب من حدود الخطة. يستطيع البحث في الويب فقط: لا يفتح أي ملف من ملفاتك ولا يشغّل شيئًا. اختر النموذج فوق مربع الدردشة.",
+   "fr": "Discutez avec le forfait Claude que vous avez déjà, par Claude Code : sans clé d'API. Chaque question compte dans les limites du forfait. Il peut chercher sur le web et rien d'autre : il n'ouvre aucun de vos fichiers et n'exécute rien. Choisissez le modèle au-dessus de la zone de chat.",
+   "bn": "Claude Code-এর মাধ্যমে আপনার বর্তমান Claude প্ল্যান দিয়ে চ্যাট করুন: কোনো API কী লাগে না। প্রতিটি প্রশ্ন প্ল্যানের সীমায় গণনা হয়। এটি শুধু ওয়েবে খুঁজতে পারে: আপনার কোনো ফাইল খোলে না এবং কিছু চালায় না। চ্যাট বক্সের উপরে মডেল বেছে নিন।",
+   "pt-BR": "Converse com o plano do Claude que você já tem, pelo Claude Code: sem chave de API. Cada pergunta conta nos limites do plano. Ele só pode pesquisar na web: não abre nenhum arquivo seu e não executa nada. Escolha o modelo acima da caixa de chat.",
+   "ru": "Общайтесь по уже имеющемуся тарифу Claude через Claude Code: без ключа API. Каждый вопрос учитывается в лимитах тарифа. Он может только искать в интернете: не открывает ваши файлы и ничего не запускает. Модель выбирается над полем чата.",
+   "id": "Mengobrol dengan paket Claude yang sudah Anda miliki, lewat Claude Code: tanpa kunci API. Setiap pertanyaan dihitung dalam batas paket. Ia hanya bisa mencari di web: tidak membuka berkas Anda dan tidak menjalankan apa pun. Pilih model di atas kotak chat.",
+   "ko": "이미 쓰고 있는 Claude 플랜으로 Claude Code를 통해 채팅합니다. API 키가 필요 없습니다. 질문할 때마다 플랜 사용량에 포함됩니다. 웹 검색만 할 수 있고, 내 파일을 열거나 무언가를 실행하지 않습니다. 모델은 채팅 입력창 위에서 고릅니다."
+  },
+  "Not found. Install Claude Code and sign in with it, then open this window again.": {
+   "zh-Hans": "未找到。请安装 Claude Code 并登录，然后重新打开此窗口。",
+   "hi": "नहीं मिला। Claude Code इंस्टॉल करके उसमें साइन इन करें, फिर यह विंडो दोबारा खोलें।",
+   "es": "No se encontró. Instala Claude Code, inicia sesión y vuelve a abrir esta ventana.",
+   "ar": "غير موجود. ثبّت Claude Code وسجّل الدخول به، ثم افتح هذه النافذة من جديد.",
+   "fr": "Introuvable. Installez Claude Code, connectez-vous, puis rouvrez cette fenêtre.",
+   "bn": "পাওয়া যায়নি। Claude Code ইনস্টল করে সাইন ইন করুন, তারপর এই উইন্ডোটি আবার খুলুন।",
+   "pt-BR": "Não encontrado. Instale o Claude Code, entre com sua conta e abra esta janela de novo.",
+   "ru": "Не найден. Установите Claude Code, войдите в него и откройте это окно снова.",
+   "id": "Tidak ditemukan. Pasang Claude Code dan masuk, lalu buka jendela ini lagi.",
+   "ko": "찾을 수 없습니다. Claude Code를 설치하고 로그인한 뒤 이 창을 다시 열어 주세요."
   }
  }
 }
