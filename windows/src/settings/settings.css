@@ -878,3 +878,298 @@ body.settings-window:has(#settings-root.app) {
     transition: none;
   }
 }
+
+/* ── The settings window's controls ───────────────────────────────────────
+   Everything under .app (only the settings window wears it), so the
+   launcher's "add" window keeps the plain controls above. The page's colour
+   (--page) is the accent: a section's tick, a field's ring, a key being
+   recorded. */
+
+/* A section's title, with a tick in the page's colour. */
+.app section > h2 {
+  position: relative;
+  padding-left: 13px;
+}
+
+.app section > h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 2px;
+  background: var(--page, #fff);
+}
+
+.app .hint {
+  line-height: 1.55;
+}
+
+/* Rows read as a list: each lights up under the pointer. */
+.app section > .row,
+.app .launch-list .row {
+  margin: 0 -10px;
+  padding: 7px 10px;
+  border-radius: 11px;
+  transition: background 0.18s;
+}
+
+.app section > .row:hover,
+.app .launch-list .row:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.app .row > label {
+  color: #a3a8b1;
+}
+
+/* Buttons: a soft slab that lifts under the pointer and gives under a press. */
+.app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
+  padding: 7px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.1));
+  transform: translateY(-1px);
+}
+
+.app button.primary:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
+  border-color: transparent;
+  background: linear-gradient(180deg, #ffffff, #dde0e6);
+  color: #0b0c0e;
+}
+
+.app button.primary:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+  background: #fff;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--page, #fff) 38%, transparent);
+}
+
+.app button.danger:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
+  border-color: rgba(244, 80, 94, 0.26);
+  background: rgba(244, 80, 94, 0.12);
+  color: #ff8d97;
+}
+
+.app button.danger:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+  border-color: rgba(244, 80, 94, 0.5);
+  background: rgba(244, 80, 94, 0.22);
+}
+
+.app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* Fields: a ring in the page's colour while they are being typed in. */
+.app :is(input[type="number"], input[type="text"], input[type="password"], select) {
+  min-height: 32px;
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+
+.app :is(input[type="number"], input[type="text"], input[type="password"], select):hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.app :is(input[type="number"], input[type="text"], input[type="password"], select):focus {
+  border-color: var(--page, #fff);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--page, #fff) 22%, transparent);
+}
+
+/* Switches: a little larger, and lit when on. */
+.app .switch {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 23px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: background 0.24s, box-shadow 0.24s;
+}
+
+.app .switch::after {
+  width: 19px;
+  height: 19px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.app .switch.on {
+  background: var(--green);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 12px rgba(34, 197, 94, 0.35);
+}
+
+.app .switch.on::after {
+  transform: translateX(17px);
+}
+
+/* Sliders: a thumb to take hold of. */
+.app input[type="range"] {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.app input[type="range"]::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+
+.app input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+/* The pills' list: a small heading over each group, a row that steps aside under the pointer. */
+.app .pill-group {
+  gap: 2px;
+  padding-top: 12px;
+}
+
+.app .pill-group > h3 {
+  padding: 0 10px 4px;
+  font: 600 10.5px var(--font);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim-2);
+}
+
+.app .pill-row {
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 11px;
+  transition: background 0.18s, transform 0.22s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.app .pill-row:hover {
+  background: rgba(255, 255, 255, 0.045);
+  transform: translateX(2px);
+}
+
+/* Shortcuts: keys that look like keys, and one that pulses while it listens. */
+.app .shortcut-list {
+  gap: 2px;
+}
+
+.app .row.shortcut {
+  margin: 0 -10px;
+  padding: 6px 10px;
+  border-radius: 11px;
+  transition: background 0.18s;
+}
+
+.app .row.shortcut:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.app .keycap {
+  padding: 6px 11px;
+  border-color: rgba(255, 255, 255, 0.11);
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+
+.app button.keycap:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.app .keycap.recording {
+  border-color: var(--page, #fff);
+  animation: key-listening 1.1s ease-in-out infinite;
+}
+
+.app .keycap.static {
+  background: transparent;
+  box-shadow: none;
+}
+
+@keyframes key-listening {
+  50% {
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.35), 0 0 0 4px color-mix(in srgb, var(--page, #fff) 28%, transparent);
+  }
+}
+
+.app .subhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.app .subhead::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* What the window says back — a notice, the diff of a change — comes in from above. */
+.app .notice {
+  padding: 10px 14px 10px 16px;
+  border-radius: 11px;
+  line-height: 1.5;
+  box-shadow: inset 3px 0 0 currentColor;
+  animation: notice-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.app .diff {
+  padding: 12px 14px;
+  border-radius: 12px;
+  animation: notice-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes notice-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.app .path {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.app .tag {
+  border-radius: 7px;
+}
+
+/* The colour palette of a pill's dot pops out of it. */
+.palette {
+  animation: palette-in 0.2s cubic-bezier(0.3, 1.3, 0.4, 1) both;
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app .notice,
+  .app .diff,
+  .app .keycap.recording,
+  .palette {
+    animation: none;
+  }
+
+  .app .pill-row:hover,
+  .app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+    transform: none;
+  }
+}
