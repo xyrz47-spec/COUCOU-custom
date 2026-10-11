@@ -859,6 +859,34 @@ unsafe fn icon_pixels(
     pixels
 }
 
+/// The system's "choose a folder" window; what was chosen, or nothing when it
+/// was closed. Blocks until then: call it off the main thread.
+pub fn pick_folder() -> Option<std::path::PathBuf> {
+    use ::windows::Win32::System::Com::{
+        CoCreateInstance, CoInitializeEx, CoTaskMemFree, CoUninitialize, CLSCTX_INPROC_SERVER, COINIT_APARTMENTTHREADED,
+    };
+    use ::windows::Win32::UI::Shell::{FileOpenDialog, IFileOpenDialog, FOS_FORCEFILESYSTEM, FOS_PICKFOLDERS, SIGDN_FILESYSPATH};
+
+    unsafe {
+        let init = CoInitializeEx(None, COINIT_APARTMENTTHREADED);
+        let picked = (|| {
+            let dialog: IFileOpenDialog = CoCreateInstance(&FileOpenDialog, None, CLSCTX_INPROC_SERVER).ok()?;
+            let options = dialog.GetOptions().ok()?;
+            dialog.SetOptions(options | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM).ok()?;
+            // Closed without a choice: an error by the API's lights, nothing by ours.
+            dialog.Show(None).ok()?;
+            let name = dialog.GetResult().ok()?.GetDisplayName(SIGDN_FILESYSPATH).ok()?;
+            let path = name.to_string().ok();
+            CoTaskMemFree(Some(name.0 as *const _));
+            path.map(std::path::PathBuf::from)
+        })();
+        if init.is_ok() {
+            CoUninitialize();
+        }
+        picked
+    }
+}
+
 /// Sends a file or folder to the Recycle Bin, where it can be restored from.
 pub fn move_to_bin(path: &std::path::Path) -> bool {
     use std::os::windows::ffi::OsStrExt;

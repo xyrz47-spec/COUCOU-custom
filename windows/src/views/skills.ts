@@ -13,6 +13,12 @@
 // what they are working on, and gets a plan for the folder chosen at the top —
 // skills to add, installed ones to remove, each with its reason. Nothing
 // changes until the lines left ticked are applied; removed skills go to the bin.
+// A request that says so ("my global skills too") may bring lines about
+// another folder: each of those says which.
+//
+// The folder at the top is the user's own skills, a project Claude Code has
+// worked in, or any folder picked with "Choose a folder…" (kept in the
+// settings, skillFolders).
 
 import { Bridge, onEvent, type FoundSkill, type SkillAdvice, type SkillGroup, type SkillInfo } from "../core/bridge";
 import { State } from "../core/state";
@@ -20,6 +26,11 @@ import { clear, h } from "./dom";
 import { enhanceSelect } from "./select";
 import type { ViewActions, ViewHost } from "./views";
 import { N_, t, tl } from "../i18n/i18n";
+
+/** The value of the folder list's last line: not a folder, the way to pick one. */
+const PICK_FOLDER = "::choose-a-folder::";
+/** As many picked folders as skills.rs keeps (MAX_NAMED). */
+const MAX_FOLDERS = 20;
 
 /** Search words for the fields people look for most. Words to search with, not labels: left as they are. */
 const FIELDS = ["design", "frontend", "react", "testing", "docs", "deploy", "database", "mobile", "ai", "security"];
@@ -65,6 +76,8 @@ export function buildSkills(actions: ViewActions): ViewHost {
   /** The plan's lines left unticked, and what became of those applied ("" done, else why not). */
   const skipped = new Set<string>();
   const outcome = new Map<string, string>();
+  /** The list was just filled anew (another tab, a search, a plan): its rows come in. */
+  let fresh = true;
 
   const tabInstalled = h("button", { text: tl("Installed"), onclick: () => show("mine") });
   const tabFind = h("button", { text: tl("Find"), onclick: () => show("find") });
@@ -115,10 +128,11 @@ export function buildSkills(actions: ViewActions): ViewHost {
   // ── Data ────────────────────────────────────────────────────────────────────
 
   async function load() {
-    const [fresh, known] = await Promise.all([Bridge.skillsList(), Bridge.skillsProjects()]);
-    groups = fresh ?? [];
+    const [listed, known] = await Promise.all([Bridge.skillsList(), Bridge.skillsProjects()]);
+    groups = listed ?? [];
     projects = known ?? [];
     if (dest && !projects.includes(dest)) dest = "";
+    fresh = true;
     drawWhere();
     draw();
   }
@@ -127,7 +141,29 @@ export function buildSkills(actions: ViewActions): ViewHost {
     clear(where);
     where.append(h("option", { value: "", text: t("My skills") }));
     for (const project of projects) where.append(h("option", { value: project, text: folderName(project), title: project }));
+    where.append(h("option", { value: PICK_FOLDER, text: t("Choose a folder…") }));
     where.value = dest;
+  }
+
+  /** Lets the user pick any folder as a project, and remembers it. */
+  async function pickFolder() {
+    const picked = await Bridge.skillsPickFolder();
+    if (picked && !State.settings.skillFolders.includes(picked)) {
+      State.settings = { ...State.settings, skillFolders: [picked, ...State.settings.skillFolders].slice(0, MAX_FOLDERS) };
+      await Bridge.saveSettings(State.settings);
+    }
+    if (picked) setDest(picked);
+    await load();
+  }
+
+  function setDest(folder: string) {
+    dest = folder;
+    // A plan is for one folder: another folder, another plan.
+    if (advice && adviceFor !== dest && !applying) {
+      advice = null;
+      skipped.clear();
+      outcome.clear();
+    }
   }
 
   function runSearch() {
@@ -147,6 +183,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
       .then((skills) => {
         if (mine !== asked) return;
         found = skills ?? [];
+        fresh = true;
         say("");
       })
       .catch((err) => {
@@ -181,6 +218,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
       if (mine !== advised) return;
       advice = plan;
       adviceFor = folder;
+      fresh = true;
     } catch (err) {
       if (mine === advised) say(errorText(err), true);
     } finally {
@@ -191,7 +229,10 @@ export function buildSkills(actions: ViewActions): ViewHost {
     }
   }
 
-  const addKey = (skill: { source: string; skillId: string }) => `add:${skill.source}/${skill.skillId}`;
+  const addKey = (skill: { source: string; skillId: string; dest: string }) => `add:${skill.dest}|${skill.source}/${skill.skillId}`;
+  /** A line about another folder than the plan's own says which. */
+  const elsewhere = (folder: string): HTMLElement | null =>
+    folder === adviceFor ? null : h("span", { class: "sk-tag where", text: folder ? folderName(folder) : t("My skills"), title: folder });
   const removeKey = (skill: { path: string }) => `remove:${skill.path}`;
 
   /**
@@ -212,7 +253,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
       const key = addKey(skill);
       if (skipped.has(key) || outcome.has(key)) continue;
       try {
-        await Bridge.skillInstall(skill.source, skill.skillId, adviceFor);
+        await Bridge.skillInstall(skill.source, skill.skillId, skill.dest);
         outcome.set(key, "");
         added++;
       } catch (err) {
@@ -286,12 +327,16 @@ export function buildSkills(actions: ViewActions): ViewHost {
       const key = addKey(skill);
       if (!skipped.has(key) && !outcome.has(key)) open++;
       const facts = h("span", { class: "sk-tag", text: `${skill.source} · ${t("{n} installs", { n: compact(skill.installs) })}` });
-      list.append(planRow("add", key, skill.name, skill.reason, [skill.verified ? h("span", { class: "sk-tag ok", text: t("Verified") }) : null, facts]));
+      list.append(planRow("add", key, skill.name, skill.reason, [
+        elsewhere(skill.dest),
+        skill.verified ? h("span", { class: "sk-tag ok", text: t("Verified") }) : null,
+        facts,
+      ]));
     }
     for (const skill of advice.remove) {
       const key = removeKey(skill);
       if (!skipped.has(key) && !outcome.has(key)) open++;
-      list.append(planRow("remove", key, skill.name, skill.reason));
+      list.append(planRow("remove", key, skill.name, skill.reason, [elsewhere(skill.dest)]));
     }
     apply.style.display = open > 0 || applying ? "" : "none";
     apply.disabled = applying || open === 0;
@@ -435,6 +480,9 @@ export function buildSkills(actions: ViewActions): ViewHost {
     apply.style.display = "none";
     search.placeholder = tab === "plan" ? t("What are you working on?") : t("Search skills…");
     clear(list);
+    // Rows come in when the list is filled anew, not at every tick of a switch.
+    list.classList.toggle("fresh", fresh);
+    fresh = false;
     const query = search.value.trim().toLowerCase();
 
     if (tab === "plan") {
@@ -474,6 +522,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
   function show(next: "mine" | "find" | "plan") {
     actions.blip();
     tab = next;
+    fresh = true;
     say("");
     if (tab === "find") runSearch();
     else draw();
@@ -496,13 +545,14 @@ export function buildSkills(actions: ViewActions): ViewHost {
     searchTimer = window.setTimeout(runSearch, 350);
   });
   where.addEventListener("change", () => {
-    dest = where.value;
-    // A plan is for one folder: another folder, another plan.
-    if (advice && adviceFor !== dest && !applying) {
-      advice = null;
-      skipped.clear();
-      outcome.clear();
+    if (where.value === PICK_FOLDER) {
+      // Not a folder: the list goes back to where it was while one is picked.
+      where.value = dest;
+      void pickFolder();
+      return;
     }
+    setDest(where.value);
+    fresh = true;
     draw();
   });
   verifiedBox.addEventListener("click", () => {

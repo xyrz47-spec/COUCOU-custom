@@ -4217,3 +4217,154 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     animation: none;
   }
 }
+
+/* ── The temperature, a size up ─────────────────────────────────────────────── */
+#compact-clock .wx em {
+  font-size: 14px;
+}
+
+/* ── Soft colours for the island's own tabs ────────────────────────────────────
+   Pastels in place of the saturated greens and reds, and a wash so faint it
+   reads as light rather than as colour: easy on the eyes late at night. */
+.skills .card {
+  background:
+    radial-gradient(130% 110% at 0% 0%, rgba(189, 178, 247, 0.09) 0%, transparent 70%),
+    radial-gradient(120% 120% at 100% 100%, rgba(156, 196, 245, 0.06) 0%, transparent 65%),
+    var(--card);
+}
+
+.launcher .card {
+  background:
+    radial-gradient(130% 110% at 0% 0%, rgba(232, 174, 230, 0.08) 0%, transparent 70%),
+    radial-gradient(120% 120% at 100% 100%, rgba(245, 185, 138, 0.05) 0%, transparent 65%),
+    var(--card);
+}
+
+.sk-switch {
+  transition: background 0.22s;
+}
+
+.sk-switch.on {
+  background: #8fd9a8;
+}
+
+.sk-switch::after {
+  transition: transform 0.22s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.sk-check::before {
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.sk-check.on::before {
+  background: #8fd9a8;
+  border-color: #8fd9a8;
+}
+
+.sk-tag.ok {
+  background: rgba(143, 217, 168, 0.14);
+  color: #a9e4bf;
+}
+
+.sk-tag.bad {
+  background: rgba(242, 160, 170, 0.14);
+  color: #f5b3bb;
+}
+
+.sk-tag.where {
+  background: rgba(189, 178, 247, 0.16);
+  color: #cfc7fa;
+}
+
+.sk-note.err,
+.sk-plan .sk-desc.err {
+  color: #f5b3bb;
+}
+
+.sk-btn.primary {
+  background: linear-gradient(135deg, #ece8ff 0%, #d9d2fb 100%);
+}
+
+.picker-effort-btn.on,
+.picker-chip.on {
+  text-shadow: none;
+}
+
+/* ── Motion where there was none ───────────────────────────────────────────────
+   The Skills tab's rows come in when its list is filled anew (.fresh, set by
+   views/skills.ts for that one drawing), its buttons answer the pointer and a
+   press, and what it says fades in. The header's tabs give under a press. */
+.sk-list.fresh > .sk-row,
+.sk-list.fresh > .sk-empty,
+.sk-list.fresh > .sk-plan-note {
+  animation: sk-row-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+
+.sk-list.fresh > :nth-child(2) { animation-delay: 30ms; }
+.sk-list.fresh > :nth-child(3) { animation-delay: 60ms; }
+.sk-list.fresh > :nth-child(4) { animation-delay: 90ms; }
+.sk-list.fresh > :nth-child(5) { animation-delay: 120ms; }
+.sk-list.fresh > :nth-child(6) { animation-delay: 150ms; }
+.sk-list.fresh > :nth-child(n + 7) { animation-delay: 180ms; }
+
+@keyframes sk-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* A plan's lines come in with the rest, and not again when one is unticked. */
+.sk-plan {
+  animation: none;
+}
+
+.sk-row {
+  transition: background 0.18s;
+}
+
+.sk-seg button,
+.sk-chip,
+.sk-btn,
+.sk-check {
+  transition: background 0.18s, color 0.18s, transform 0.15s, opacity 0.18s;
+}
+
+.sk-chip:active,
+.sk-btn:active:not(:disabled),
+.sk-seg button:active {
+  transform: scale(0.94);
+}
+
+.sk-search,
+.sk-where {
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.sk-note:not(:empty) {
+  animation: sk-note-in 0.25s ease-out backwards;
+}
+
+@keyframes sk-note-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+
+#header button {
+  transition: transform 0.15s, background 0.18s, color 0.18s, opacity 0.18s;
+}
+
+#header button:active {
+  transform: scale(0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk-list.fresh > .sk-row,
+  .sk-list.fresh > .sk-empty,
+  .sk-list.fresh > .sk-plan-note,
+  .sk-note:not(:empty) {
+    animation: none;
+  }
+}

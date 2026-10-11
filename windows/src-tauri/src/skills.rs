@@ -11,6 +11,7 @@
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+use std::sync::Mutex;
 
 use serde::Serialize;
 
@@ -41,6 +42,28 @@ pub struct SkillGroup {
     pub skills: Vec<Skill>,
 }
 
+/// Project folders the user named themselves (settings.skill_folders), kept
+/// here so the listing below needs no settings handed to it. Set at launch
+/// and each time the settings are saved.
+static NAMED: Mutex<Vec<PathBuf>> = Mutex::new(Vec::new());
+/// As many named folders as are kept.
+pub const MAX_NAMED: usize = 20;
+
+/// The folders named in the settings: full paths only, each once.
+pub fn set_named_folders(folders: &[String]) {
+    let mut named: Vec<PathBuf> = Vec::new();
+    for folder in folders {
+        let path = PathBuf::from(folder.trim());
+        if path.is_absolute() && !named.contains(&path) {
+            named.push(path);
+        }
+        if named.len() == MAX_NAMED {
+            break;
+        }
+    }
+    *NAMED.lock().unwrap() = named;
+}
+
 pub(crate) fn user_root() -> PathBuf {
     platform::home_dir().join(".claude").join("skills")
 }
@@ -65,8 +88,8 @@ fn session_cwd(dir: &Path) -> Option<PathBuf> {
     None
 }
 
-/// The folders Claude Code has worked in that are still there, sorted: the
-/// projects a skill can be added to (skill_store.rs).
+/// The folders Claude Code has worked in, and those the user named, that are
+/// still there, sorted: the projects a skill can be added to (skill_store.rs).
 pub(crate) fn project_dirs() -> Vec<PathBuf> {
     let mut projects: Vec<PathBuf> = Vec::new();
     if let Ok(entries) = fs::read_dir(platform::home_dir().join(".claude").join("projects")) {
@@ -82,6 +105,11 @@ pub(crate) fn project_dirs() -> Vec<PathBuf> {
             }
         }
     }
+    for named in NAMED.lock().unwrap().iter() {
+        if named.is_dir() && !projects.contains(named) {
+            projects.push(named.clone());
+        }
+    }
     projects.sort();
     projects
 }
@@ -90,22 +118,7 @@ pub(crate) fn project_dirs() -> Vec<PathBuf> {
 fn roots() -> Vec<(String, PathBuf)> {
     let user = user_root();
     let mut out = vec![(String::new(), user.clone())];
-    let mut projects: Vec<PathBuf> = Vec::new();
-    if let Ok(entries) = fs::read_dir(platform::home_dir().join(".claude").join("projects")) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if !path.is_dir() {
-                continue;
-            }
-            if let Some(cwd) = session_cwd(&path) {
-                if !projects.contains(&cwd) {
-                    projects.push(cwd);
-                }
-            }
-        }
-    }
-    projects.sort();
-    for project in projects {
+    for project in project_dirs() {
         let root = project.join(".claude").join("skills");
         if root.is_dir() && root != user {
             out.push((project.to_string_lossy().into_owned(), root));
@@ -311,6 +324,29 @@ mod tests {
         assert!(set_enabled(&dir, false).is_err());
         assert_eq!(fs::read_to_string(dir.join(DISABLED_FILE)).unwrap(), "other");
         let _ = fs::remove_dir_all(&root);
+    }
+
+    #[test]
+    fn a_folder_the_user_named_is_a_project_like_any_other() {
+        let project = temp("named");
+        let dir = project.join(".claude").join("skills").join("one");
+        fs::create_dir_all(&dir).unwrap();
+        fs::write(dir.join(SKILL_FILE), "---\nname: one\n---\n").unwrap();
+        assert!(!project_dirs().contains(&project));
+        assert!(!known_skill(&dir));
+
+        set_named_folders(&["relative/path".into(), project.to_string_lossy().into_owned(), project.to_string_lossy().into_owned()]);
+        assert_eq!(NAMED.lock().unwrap().len(), 1);
+        assert!(project_dirs().contains(&project));
+        assert!(known_skill(&dir));
+        // A named folder that is gone is not offered.
+        set_named_folders(&[project.join("gone").to_string_lossy().into_owned()]);
+        assert!(!project_dirs().contains(&project.join("gone")));
+        let many: Vec<String> = (0..50).map(|i| project.join(format!("p{i}")).to_string_lossy().into_owned()).collect();
+        set_named_folders(&many);
+        assert_eq!(NAMED.lock().unwrap().len(), MAX_NAMED);
+        set_named_folders(&[]);
+        let _ = fs::remove_dir_all(&project);
     }
 
     #[test]

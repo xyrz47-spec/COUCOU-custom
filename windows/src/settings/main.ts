@@ -391,7 +391,7 @@ function apiSection(hasKey: boolean): HTMLElement {
 
   async function refresh() {
     const present = (await Bridge.secretPresent("anthropic-api-key")) ?? false;
-    dot.style.background = present ? "#22c55e" : "#f4505e";
+    dot.style.background = present ? "#8fd9a8" : "#f2a0aa";
     state.textContent = present
       ? t("Key saved in the {store}.", { store: KEY_STORE })
       : t("No key yet — the chat needs one.");
@@ -637,7 +637,7 @@ function chatProvidersSection(
     const removeBtn = h("button", { class: "danger", text: CHAT_STRINGS.remove });
     const refresh = () => {
       input.placeholder = present[key] ? CHAT_STRINGS.stored : def.placeholder;
-      dotEl.style.background = present[key] ? "#22c55e" : "#f4505e";
+      dotEl.style.background = present[key] ? "#8fd9a8" : "#f2a0aa";
       removeBtn.style.display = present[key] ? "" : "none";
     };
     saveBtn.addEventListener("click", async () => {
@@ -649,7 +649,7 @@ function chatProvidersSection(
         input.value = "";
         keyChanged(key, true);
       } catch {
-        dotEl.style.background = "#f5a524";
+        dotEl.style.background = "#f0cd8a";
         return;
       }
       refresh();
@@ -660,7 +660,7 @@ function chatProvidersSection(
         present[key] = false;
         keyChanged(key, false);
       } catch {
-        dotEl.style.background = "#f5a524";
+        dotEl.style.background = "#f0cd8a";
         return;
       }
       refresh();
@@ -859,7 +859,7 @@ interface IntegrationDef {
 const INTEGRATIONS: IntegrationDef[] = [
   { id: "integration_stripe", name: "Stripe", color: "#0570DE",
     fields: [{ key: "stripe-api-key", label: N_("Secret key"), placeholder: "sk_live_…", secret: true }] },
-  { id: "integration_github", name: "GitHub", color: "#F4505E",
+  { id: "integration_github", name: "GitHub", color: "#f2a0aa",
     fields: [{ key: "github-token", label: N_("Token"), placeholder: "ghp_…", secret: true }],
     hint: N_("Classic token with the repo scope, or fine-grained with read access to Pull requests, Commit statuses and Actions.") },
   { id: "integration_vercel", name: "Vercel", color: "#7C5CFF",
@@ -869,7 +869,7 @@ const INTEGRATIONS: IntegrationDef[] = [
       { key: "n8n-url", label: N_("Instance URL"), placeholder: "https://n8n.example.com", secret: false },
       { key: "n8n-api-key", label: N_("API key"), placeholder: "…", secret: true },
     ] },
-  { id: "integration_resend", name: "Resend", color: "#22C55E",
+  { id: "integration_resend", name: "Resend", color: "#8fd9a8",
     fields: [{ key: "resend-api-key", label: N_("API key"), placeholder: "re_…", secret: true }] },
   { id: "integration_notion", name: "Notion", color: "#8C8C8C",
     fields: [{ key: "notion-api-key", label: N_("Integration token"), placeholder: "ntn_…", secret: true }] },
@@ -933,9 +933,9 @@ function integrationsSection(present: Record<string, boolean>): HTMLElement {
           present[field.key] = value.length > 0;
           input.value = "";
           input.placeholder = value ? CHAT_STRINGS.stored : field.placeholder;
-          dotEl.style.background = value ? "#22c55e" : "#f4505e";
+          dotEl.style.background = value ? "#8fd9a8" : "#f2a0aa";
         } catch {
-          dotEl.style.background = "#f5a524";
+          dotEl.style.background = "#f0cd8a";
         }
       });
       rows.append(
@@ -1660,12 +1660,12 @@ async function render() {
   shortcutsListener = null;
   // One page at a time, picked in the column on the left.
   const pages: Page[] = [
-    { id: "claude", label: "Claude Code", color: "#F29B38", sections: [claudeSection(status), autoApproveSection(), planSection(status), agentsSection(agents)] },
-    { id: "chat", label: t("Chat"), color: "#60A5FA", sections: [claudeCodeChatSection(cliPath), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
-    { id: "pills", label: t("Active pills"), color: "#22C55E", sections: [activePillsSection(connected), integrationsSection(present)] },
-    { id: "launcher", label: t("Launcher"), color: "#E879F9", sections: [launcherSection(() => settings, save)] },
-    { id: "general", label: t("General"), color: "#A78BFA", sections: [generalSection()] },
-    { id: "shortcuts", label: t("Shortcuts"), color: "#EAB308", sections: [shortcutsSection(shortcutReport)] },
+    { id: "claude", label: "Claude Code", color: "#F5B98A", sections: [claudeSection(status), autoApproveSection(), planSection(status), agentsSection(agents)] },
+    { id: "chat", label: t("Chat"), color: "#9CC4F5", sections: [claudeCodeChatSection(cliPath), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
+    { id: "pills", label: t("Active pills"), color: "#9ADBB3", sections: [activePillsSection(connected), integrationsSection(present)] },
+    { id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save)] },
+    { id: "general", label: t("General"), color: "#BDB2F7", sections: [generalSection()] },
+    { id: "shortcuts", label: t("Shortcuts"), color: "#EBD58A", sections: [shortcutsSection(shortcutReport)] },
   ];
   if (!pages.some((p) => p.id === currentPage)) currentPage = pages[0].id;
 

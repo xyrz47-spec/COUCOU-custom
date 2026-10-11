@@ -104,6 +104,8 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         settings.desktop_mochi = current.desktop_mochi.clone();
         settings.launcher.truncate(launcher::MAX_ITEMS);
         launcher::prune_images(&settings.launcher);
+        settings.skill_folders.truncate(skills::MAX_NAMED);
+        skills::set_named_folders(&settings.skill_folders);
         *current = settings;
         (screen_changed, autostart_changed, shortcuts_changed)
     };
@@ -829,6 +831,7 @@ fn open_settings_window(app: AppHandle) {
 pub fn run() {
     platform::prepare_environment();
     let loaded = settings::load();
+    skills::set_named_folders(&loaded.skill_folders);
     i18n::set_picked(&loaded.language);
     let gate = Arc::new(PollGate::new());
 
@@ -897,6 +900,7 @@ pub fn run() {
             skill_store::skill_install,
             skill_store::skill_copy,
             skill_store::skill_remove,
+            skill_store::skills_pick_folder,
             skill_advisor::skills_advise,
             launcher::launcher_open,
             launcher::launcher_icon,

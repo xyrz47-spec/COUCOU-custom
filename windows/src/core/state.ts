@@ -198,6 +198,8 @@ export interface Settings {
   weather: WeatherPlace | null;
   /** Permission requests answered "allow" with no card (core/auto-approve.ts): "" none, "edits", "all". */
   autoApprove: string;
+  /** Project folders the user named for skills, beside those Claude Code worked in (skills.rs). */
+  skillFolders: string[];
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -244,6 +246,7 @@ export const DEFAULT_SETTINGS: Settings = {
   chatEffort: "",
   weather: null,
   autoApprove: "",
+  skillFolders: [],
 };
 
 type Listener = () => void;

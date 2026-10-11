@@ -22,10 +22,10 @@ const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 const PLAN = {
   add: [
-    { source: "anthropics/skills", skillId: "frontend-design", name: "frontend-design", installs: 5200, verified: true, reason: "Serves the UI work." },
-    { source: "someone/skills", skillId: "react-tests", name: "react-tests", installs: 40, verified: false, reason: "Covers the tests." },
+    { source: "anthropics/skills", skillId: "frontend-design", name: "frontend-design", installs: 5200, verified: true, dest: "", reason: "Serves the UI work." },
+    { source: "someone/skills", skillId: "react-tests", name: "react-tests", installs: 40, verified: false, dest: "", reason: "Covers the tests." },
   ],
-  remove: [{ path: "C:\\p\\.claude\\skills\\old-design", name: "old-design", reason: "Replaced by frontend-design." }],
+  remove: [{ path: "C:\\p\\.claude\\skills\\old-design", name: "old-design", dest: "", reason: "Replaced by frontend-design." }],
   note: "Two in, one out.",
 };
 
@@ -119,4 +119,58 @@ test("why a plan could not be made is said", async () => {
   assert.match($(".sk-note").textContent, /isn't installed/);
   assert.ok($(".sk-note").classList.contains("err"));
   assert.equal(rows().length, 0);
+});
+
+test("a line about another folder says which, and is applied there", async () => {
+  answers.skills_advise = {
+    add: [{ source: "anthropics/skills", skillId: "pdf", name: "pdf", installs: 9, verified: true, dest: "C:\\p", reason: "Asked for the project too." }],
+    remove: [{ path: "C:\\p\\.claude\\skills\\old", name: "old", dest: "C:\\p", reason: "Asked to tidy it." }],
+    note: "",
+  };
+  $(".sk-search").value = "PDFs, and tidy project p too";
+  $(".sk-ask").fire("click");
+  await flush();
+  // The plan is for the user's own skills: both lines are about another folder.
+  assert.deepEqual(view.el.find(".where").map((tag) => tag.textContent), ["p", "p"]);
+  $(".sk-apply").fire("click");
+  await flush();
+  assert.deepEqual(sent("skill_install"), [{ source: "anthropics/skills", skillId: "pdf", dest: "C:\\p" }]);
+  assert.deepEqual(sent("skill_remove"), [{ path: "C:\\p\\.claude\\skills\\old" }]);
+});
+
+test("any folder can be picked as a project, and is remembered", async () => {
+  const { DEFAULT_SETTINGS } = await import("../src/core/state.ts");
+  State.settings = { ...DEFAULT_SETTINGS, skillFolders: [] };
+  answers.skills_pick_folder = "D:\\games\\modpack";
+  answers.skills_projects = () => ["C:\\p", ...State.settings.skillFolders];
+  const where = $(".sk-where");
+  const options = () => where.children.map((option) => option.textContent);
+  assert.equal(options().at(-1), "Choose a folder…");
+  where.value = where.children.at(-1).getAttribute("value");
+  where.fire("change");
+  await flush();
+  await flush();
+  assert.deepEqual(State.settings.skillFolders, ["D:\\games\\modpack"]);
+  assert.deepEqual(sent("save_settings").at(-1).settings.skillFolders, ["D:\\games\\modpack"]);
+  assert.ok(options().includes("modpack"));
+  assert.equal(where.value, "D:\\games\\modpack");
+  // A plan asked for now is for that folder.
+  $(".sk-search").value = "KubeJS scripts";
+  $(".sk-ask").fire("click");
+  await flush();
+  assert.equal(sent("skills_advise").at(-1).dest, "D:\\games\\modpack");
+});
+
+test("closing the folder window without a choice changes nothing", async () => {
+  const { DEFAULT_SETTINGS } = await import("../src/core/state.ts");
+  State.settings = { ...DEFAULT_SETTINGS, skillFolders: [] };
+  answers.skills_pick_folder = null;
+  const where = $(".sk-where");
+  where.value = where.children.at(-1).getAttribute("value");
+  where.fire("change");
+  await flush();
+  await flush();
+  assert.deepEqual(State.settings.skillFolders, []);
+  assert.deepEqual(sent("save_settings"), []);
+  assert.equal(where.value, "");
 });

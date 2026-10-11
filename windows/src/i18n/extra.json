@@ -4766,7 +4766,7 @@
    "pt-BR": "Diga no que você está trabalhando e pergunte: o Claude Code procura skills que sirvam à pasta escolhida acima, e as instaladas que ali não servem ou atrapalhariam. Nada muda até você aplicar; as skills removidas vão para a lixeira.",
    "ru": "Опишите, над чем работаете, и спросите: Claude Code подберёт навыки для папки, выбранной выше, и найдёт установленные, которые там не нужны или будут мешать. Ничего не меняется, пока вы не примените; удалённые навыки попадают в корзину.",
    "id": "Sebutkan apa yang sedang Anda kerjakan, lalu tanyakan: Claude Code mencari skill yang cocok untuk folder yang dipilih di atas, dan skill terpasang yang tidak berguna di sana atau akan mengganggu. Tidak ada yang berubah sampai Anda menerapkan; skill yang dihapus masuk ke tempat sampah.",
-   "ko": "하려는 작업을 적고 물어보세요. Claude Code가 위에서 고른 폴더에 맞는 스킬을 찾고, 설치된 스킬 중 쓸모없거나 충돌할 만한 것도 골라 줍니다. 적용하기 전에는 아무것도 바뀌지 않고, 제거한 스킬은 휴지통으로 갑니다."
+   "ko": "하려는 작업을 적고 물어보세요. Claude Code가 위에서 고른 폴더에 맞는 스킬을 찾고, 설치된 스킬 중 쓸모없거나 충돌할 만한 것도 골라 줍니다. \"전역 스킬도 정리해 줘\"처럼 적으면 다른 폴더도 함께 다룹니다. 적용하기 전에는 아무것도 바뀌지 않고, 제거한 스킬은 휴지통으로 갑니다."
   },
   "Nothing to change: the skills here already fit.": {
    "zh-Hans": "无需改动：这里的技能已经合适。",
@@ -4863,6 +4863,18 @@
    "ru": "Приложения с таким названием нет.",
    "id": "Tidak ada aplikasi dengan nama itu.",
    "ko": "그 이름의 앱이 없습니다."
+  },
+  "Choose a folder…": {
+   "zh-Hans": "选择文件夹…",
+   "hi": "फ़ोल्डर चुनें…",
+   "es": "Elegir una carpeta…",
+   "ar": "اختر مجلدًا…",
+   "fr": "Choisir un dossier…",
+   "bn": "ফোল্ডার বেছে নিন…",
+   "pt-BR": "Escolher uma pasta…",
+   "ru": "Выбрать папку…",
+   "id": "Pilih folder…",
+   "ko": "폴더 선택…"
   }
  }
 }

@@ -891,6 +891,11 @@ mod tests {
 }
 
 /// Windows only for now: where there is no icon the launcher draws its own tile.
+/// No folder window here: the Skills tab lists the projects Claude Code worked in.
+pub fn pick_folder() -> Option<std::path::PathBuf> {
+    None
+}
+
 /// The Start menu's apps are Windows's to list (platform/windows.rs).
 pub fn start_apps() -> Vec<(String, String)> {
     Vec::new()

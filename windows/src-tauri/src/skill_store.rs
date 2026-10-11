@@ -130,6 +130,14 @@ pub fn skills_projects() -> Vec<String> {
     skills::project_dirs().into_iter().map(|p| p.to_string_lossy().into_owned()).collect()
 }
 
+/// The system's own "choose a folder" window, for a project to keep skills in
+/// that Claude Code has not worked in yet. The page adds what comes back to
+/// the settings (skillFolders); nothing is written here.
+#[tauri::command(async)]
+pub fn skills_pick_folder() -> Option<String> {
+    platform::pick_folder().map(|path| path.to_string_lossy().into_owned())
+}
+
 /// The skills folder `dest` names: the user's for "", else that project's —
 /// which has to be one Claude Code worked in.
 pub(crate) fn dest_root(dest: &str) -> Result<PathBuf, String> {

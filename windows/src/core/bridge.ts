@@ -164,7 +164,9 @@ export const Bridge = {
    */
   skillsAdvise: (request: string, dest: string, verifiedOnly: boolean) =>
     callOrThrow<SkillAdvice>("skills_advise", { request, dest, verifiedOnly }),
-  /** The projects a skill can be added to: the folders Claude Code has worked in. */
+  /** The system's "choose a folder" window: the folder picked, or null when it was closed. */
+  skillsPickFolder: () => call<string>("skills_pick_folder"),
+  /** The projects a skill can be added to: the folders Claude Code has worked in, and those named in the settings. */
   skillsProjects: () => call<string[]>("skills_projects"),
   /** Adds a found skill to the user's skills (`dest` "") or a project's. Throws with the reason. */
   skillInstall: (source: string, skillId: string, dest: string) =>
@@ -328,8 +330,9 @@ export interface FoundSkill {
 
 /** What Claude Code proposes for a folder's skills: to add, to remove, and a word on why. */
 export interface SkillAdvice {
-  add: (FoundSkill & { reason: string })[];
-  remove: { path: string; name: string; reason: string }[];
+  /** `dest`: the folder a line is about, "" the user's own skills, else a project's. */
+  add: (FoundSkill & { dest: string; reason: string })[];
+  remove: { path: string; name: string; dest: string; reason: string }[];
   note: string;
 }
 

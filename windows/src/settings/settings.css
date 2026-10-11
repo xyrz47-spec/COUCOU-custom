@@ -1753,3 +1753,163 @@ section.add-finder {
 #settings-root.appear > .add-finder {
   animation: window-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
 }
+
+/* ── Softer ────────────────────────────────────────────────────────────────────
+   Last in the file. The pages wear pastels now (main.ts), and what they tint
+   is turned down with them: a box is lit by a faint, wide wash of its page's
+   colour instead of a bright corner, borders and shadows are quieter, and the
+   greens and reds of switches, states and warnings are the soft ones. */
+.app section {
+  border: 1px solid color-mix(in srgb, var(--page, #fff) 15%, rgba(255, 255, 255, 0.07));
+  background:
+    radial-gradient(150% 130% at 0% 0%, color-mix(in srgb, var(--page, #fff) 12%, transparent) 0%, transparent 80%),
+    radial-gradient(120% 120% at 100% 100%, color-mix(in srgb, var(--page, #fff) 5%, transparent) 0%, transparent 70%),
+    linear-gradient(165deg, color-mix(in srgb, var(--page, #fff) 5%, #18191e) 0%, #17181c 55%, color-mix(in srgb, var(--page, #fff) 4%, #15161a) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 18px 34px -24px rgba(0, 0, 0, 0.62);
+}
+
+.app section:hover {
+  border-color: color-mix(in srgb, var(--page, #fff) 26%, rgba(255, 255, 255, 0.08));
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 24px 40px -26px rgba(0, 0, 0, 0.7),
+    0 0 34px -18px color-mix(in srgb, var(--page, #fff) 45%, transparent);
+}
+
+.app section > h2::before {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--page, #fff) 55%, transparent);
+}
+
+.app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
+  border-color: color-mix(in srgb, var(--page, #fff) 24%, transparent);
+  background: color-mix(in srgb, var(--page, #fff) 11%, transparent);
+  color: color-mix(in srgb, var(--page, #fff) 55%, #fff);
+}
+
+.app button:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--page, #fff) 42%, transparent);
+  background: color-mix(in srgb, var(--page, #fff) 19%, transparent);
+  box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--page, #fff) 55%, transparent);
+}
+
+.app button.primary:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--page, #fff) 62%, #fff) 0%, color-mix(in srgb, var(--page, #fff) 88%, #fff) 100%);
+  box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--page, #fff) 60%, transparent);
+}
+
+.app button.primary:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--page, #fff) 48%, #fff) 0%, color-mix(in srgb, var(--page, #fff) 76%, #fff) 100%);
+  box-shadow: 0 14px 26px -14px color-mix(in srgb, var(--page, #fff) 70%, transparent);
+}
+
+.app button.danger:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)) {
+  border-color: rgba(242, 160, 170, 0.3);
+  background: rgba(242, 160, 170, 0.1);
+  color: #f5b3bb;
+}
+
+.app button.danger:where(:not(.switch, .nav-item, .swatch, .color-dot, .keycap)):hover:not(:disabled) {
+  border-color: rgba(242, 160, 170, 0.5);
+  background: rgba(242, 160, 170, 0.18);
+  color: #fbd3d8;
+  box-shadow: 0 10px 22px -14px rgba(242, 160, 170, 0.55);
+}
+
+.app .switch.on {
+  background: linear-gradient(90deg, #7fcf9f, #a9e4bf);
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.18),
+    0 0 12px rgba(143, 217, 168, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.app .nav-item.on .nav-dot {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--page, #fff) 60%, transparent);
+}
+
+.app .notice.ok {
+  color: #a9e4bf;
+}
+
+.app .notice.err {
+  color: #f5b3bb;
+}
+
+.app .notice.warn {
+  color: #f0d79b;
+}
+
+.cselect-menu {
+  box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.settings-window button.add-app.on {
+  border-color: rgba(232, 174, 230, 0.45);
+  background: rgba(232, 174, 230, 0.12);
+}
+
+/* ── Motion where there was none ───────────────────────────────────────────────
+   What appears on a page after it was drawn comes in instead of popping: a
+   notice, the places found for the weather, the apps of the "add" window. */
+.app .notice {
+  animation: soft-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+
+.weather-places > * {
+  animation: soft-in 0.26s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+
+.weather-places > :nth-child(2) { animation-delay: 35ms; }
+.weather-places > :nth-child(3) { animation-delay: 70ms; }
+.weather-places > :nth-child(4) { animation-delay: 105ms; }
+.weather-places > :nth-child(n + 5) { animation-delay: 140ms; }
+
+.add-apps > .add-app {
+  animation: soft-in 0.24s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+
+.add-apps > :nth-child(2) { animation-delay: 20ms; }
+.add-apps > :nth-child(3) { animation-delay: 40ms; }
+.add-apps > :nth-child(4) { animation-delay: 60ms; }
+.add-apps > :nth-child(5) { animation-delay: 80ms; }
+.add-apps > :nth-child(n + 6) { animation-delay: 100ms; }
+
+.settings-window button.add-app:active {
+  transform: scale(0.98);
+}
+
+.app .row > label,
+.app .hint,
+.app .path {
+  transition: color 0.2s;
+}
+
+.app input[type="range"]::-webkit-slider-thumb {
+  transition: transform 0.15s;
+}
+
+.app input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+@keyframes soft-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app .notice,
+  .weather-places > *,
+  .add-apps > .add-app {
+    animation: none;
+  }
+
+  .app section:hover {
+    transform: none;
+  }
+}
