@@ -39,3 +39,17 @@ test("the clock keeps its size while it fits, and a long form is brought down to
   assert.equal(clockFontSize(0, CLOCK_MAX_FONT, 164), CLOCK_MAX_FONT);
   assert.equal(clockFontSize(undefined, CLOCK_MAX_FONT, undefined), CLOCK_MAX_FONT);
 });
+
+test("the clock's text is cut into figures and what stands between them", async () => {
+  const { clockParts } = await import("../src/core/clock.ts");
+  assert.deepEqual(clockParts("오후 5:07"), [
+    { text: "오후 ", figure: false },
+    { text: "5", figure: true },
+    { text: ":", figure: false },
+    { text: "0", figure: true },
+    { text: "7", figure: true },
+  ]);
+  assert.equal(clockParts("17:28:09").filter((p) => p.figure).length, 6);
+  assert.equal(clockParts("10월 11일 오후 5:07").map((p) => p.text).join(""), "10월 11일 오후 5:07");
+  assert.deepEqual(clockParts(""), []);
+});

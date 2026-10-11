@@ -45,7 +45,7 @@ export function formatClock(format: string, when: Date, language: string): strin
 // ── Its size ──────────────────────────────────────────────────────────────────
 
 /** The clock's largest letters, in px: easy to read at a glance, with air above and below. */
-export const CLOCK_MAX_FONT = 16;
+export const CLOCK_MAX_FONT = 15;
 const CLOCK_MIN_FONT = 9;
 
 /**
@@ -57,4 +57,15 @@ export function clockFontSize(width: number, at: number, room: number): number {
   if (!(width > 0) || !(room > 0)) return at;
   const fit = Math.floor(((at * room) / width) * 2) / 2;
   return Math.max(CLOCK_MIN_FONT, Math.min(CLOCK_MAX_FONT, fit));
+}
+
+/**
+ * The clock's text cut into its figures and what stands between them, in
+ * order: the island gives every figure a cell of the same width.
+ */
+export function clockParts(text: string): { text: string; figure: boolean }[] {
+  return text
+    .split(/([0-9])/)
+    .filter(Boolean)
+    .map((part) => ({ text: part, figure: /^[0-9]$/.test(part) }));
 }

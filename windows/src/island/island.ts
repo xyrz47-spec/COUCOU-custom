@@ -12,7 +12,7 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
-import { CLOCK_MAX_FONT, clockFontSize, formatClock } from "../core/clock";
+import { CLOCK_MAX_FONT, clockFontSize, clockParts, formatClock } from "../core/clock";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
 import { language, t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
@@ -328,6 +328,11 @@ export class Island {
       (this.compactClock = h("div", { id: "compact-clock" }, (this.compactClockText = h("span", {})))),
       this.countdown,
     );
+    // The clock's own font (style.css) arrives a moment after the page: what
+    // was measured in the fallback is measured again at the next tick.
+    void document.fonts?.ready.then(() => {
+      this.compactClockShape = "";
+    });
 
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     this.greetingCanvas.width = Math.round(EXPANDED_W * dpr);
@@ -1318,11 +1323,17 @@ export class Island {
   private paintCompactClock() {
     // In the form picked in Settings → General (core/clock.ts).
     const text = formatClock(State.settings.clockFormat, new Date(), language());
-    if (this.compactClockText.textContent === text) return;
-    this.compactClockText.textContent = text;
-    // As large as its stretch of the island takes. Digits are all one width
-    // (tabular), so a turning minute or second changes nothing: the text is
-    // measured again only when its shape does (another form, 9:59 → 10:00).
+    if (this.compactClockText.textContent !== text) {
+      // The clock's face draws each figure at its own width (a 1 is narrow):
+      // every figure gets a cell as wide as a 0 (style.css), so a turning
+      // second moves nothing beside it.
+      this.compactClockText.replaceChildren(
+        ...clockParts(text).map((part) => (part.figure ? h("i", { text: part.text }) : part.text)),
+      );
+    }
+    // Brought down to fit its stretch of the island when it is long. Figures
+    // are all one width, so a turning minute or second changes nothing: the
+    // text is measured again only when its shape does (another form, 9:59 → 10:00).
     const shape = text.replace(/\d/g, "0");
     if (shape === this.compactClockShape) return;
     this.compactClock.style.fontSize = `${CLOCK_MAX_FONT}px`;
