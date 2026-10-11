@@ -13,7 +13,7 @@ import {
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
 import { CLOCK_MAX_FONT, clockFontSize, clockParts, formatClock } from "../core/clock";
-import { WEATHER_REFRESH_MS, weatherKind } from "../core/weather";
+import { WEATHER_REFRESH_MS, weatherDegrees, weatherKind } from "../core/weather";
 import { weatherIcon } from "../views/weather";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
 import { language, t } from "../i18n/i18n";
@@ -77,7 +77,7 @@ export class Island {
   private compactWeather!: HTMLElement;
   /** The place the weather was last asked for, "" for none. */
   private weatherPlace = "";
-  /** The kind of sky the icon shows, "" for none. */
+  /** The sky and the temperature shown ("rain 18°"), "" for none. */
   private weatherShown = "";
   private weatherTimer: number | null = null;
   private compactClockTimer: number | null = null;
@@ -1357,11 +1357,17 @@ export class Island {
         this.weatherTimer = window.setInterval(() => void this.askWeather(key), WEATHER_REFRESH_MS);
       }
     }
-    const kind = State.weather ? weatherKind(State.weather.code, State.weather.isDay) : "";
-    if (kind === this.weatherShown) return;
-    this.weatherShown = kind;
-    this.compactWeather.replaceChildren(...(kind ? [weatherIcon(kind, 23)] : []));
-    this.compactWeather.classList.toggle("on", kind !== "");
+    const now = State.weather;
+    const kind = now ? weatherKind(now.code, now.isDay) : "";
+    const degrees = now ? weatherDegrees(now.temperature) : "";
+    // The icon, and the temperature to its right: drawn again only when one of them changes.
+    const shown = kind ? `${kind} ${degrees}` : "";
+    if (shown === this.weatherShown) return;
+    this.weatherShown = shown;
+    this.compactWeather.replaceChildren(
+      ...(kind ? [weatherIcon(kind, 23), ...(degrees ? [h("em", { text: degrees })] : [])] : []),
+    );
+    this.compactWeather.classList.toggle("on", shown !== "");
     // The time has less room beside an icon, or more without one.
     this.compactClockShape = "";
   }

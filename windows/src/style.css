@@ -4118,3 +4118,19 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     transition: none;
   }
 }
+
+/* The temperature, to the right of the weather's icon: the clock's own face,
+   a size down and a shade back, so the time stays what is read first. */
+#compact-clock .wx.on {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#compact-clock .wx em {
+  font: 700 12.5px/32px "Coucou Clock", "Bahnschrift", var(--font);
+  font-style: normal;
+  letter-spacing: 0;
+  color: #c3c9d3;
+  white-space: nowrap;
+}

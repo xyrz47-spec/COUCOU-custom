@@ -45,3 +45,9 @@ export function weatherKind(code: number, isDay: boolean): WeatherKind {
   if (code >= 95 && code <= 99) return "thunder";
   return "cloudy";
 }
+
+/** The temperature as the island writes it: whole degrees, "18°" (never "-0°"). Nothing for no number. */
+export function weatherDegrees(temperature: number): string {
+  if (!Number.isFinite(temperature)) return "";
+  return `${Math.round(temperature) || 0}°`;
+}

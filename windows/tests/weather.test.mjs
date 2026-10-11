@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { installFakeDom } from "./fakedom.mjs";
 
 installFakeDom();
-const { weatherKind } = await import("../src/core/weather.ts");
+const { weatherDegrees, weatherKind } = await import("../src/core/weather.ts");
 const { weatherIcon } = await import("../src/views/weather.ts");
 
 test("a clear or half-clear sky knows day from night; the rest look the same", () => {
@@ -46,4 +46,15 @@ test("every sky has an icon of the asked size", () => {
       assert.ok(!path.getAttribute("d").includes("NaN"), kind);
     }
   }
+});
+
+test("the temperature is written in whole degrees", () => {
+  assert.equal(weatherDegrees(17.4), "17°");
+  assert.equal(weatherDegrees(17.5), "18°");
+  assert.equal(weatherDegrees(-3.2), "-3°");
+  // Just under zero rounds to zero, not to "-0".
+  assert.equal(weatherDegrees(-0.2), "0°");
+  assert.equal(weatherDegrees(0), "0°");
+  assert.equal(weatherDegrees(NaN), "");
+  assert.equal(weatherDegrees(undefined), "");
 });
