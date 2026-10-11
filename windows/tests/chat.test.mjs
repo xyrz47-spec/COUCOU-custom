@@ -74,6 +74,12 @@ test("with a key, the models are listed and picking one saves it", async () => {
   view.el.find(".picker-model")[1].fire("click");
   assert.equal(State.settings.model, "claude-sonnet-5");
   assert.equal(sent("save_settings").at(-1).settings.model, "claude-sonnet-5");
+  // The tick goes to the picked model, which is seen picked before the picker folds.
+  const rows = view.el.find(".picker-model");
+  assert.ok(rows[1].classList.contains("on") && !rows[0].classList.contains("on"));
+  assert.equal(view.el.find(".picker-check").length, 1);
+  assert.ok($(".chat-body").classList.contains("picking"));
+  await new Promise((resolve) => setTimeout(resolve, 300));
   assert.ok(!$(".chat-body").classList.contains("picking"));
   assert.equal($(".model-name").textContent, "claude-sonnet-5");
 });

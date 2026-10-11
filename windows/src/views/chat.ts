@@ -57,6 +57,9 @@ const EFFORT_NAMES: Record<Effort, string> = {
   max: N_("Max"),
 };
 
+/** A picked model is seen picked for this long before the picker folds. */
+const PICKED_MS = 220;
+
 /** "Other…" keeps this many typed folders on the list. */
 const MAX_RECENT_DIRS = 8;
 
@@ -156,11 +159,12 @@ function buildPicker(onChange: () => void): Picker {
 
   function drawChips() {
     clear(chips);
-    for (const p of visibleProviders(State.settings)) {
+    for (const [index, p] of visibleProviders(State.settings).entries()) {
       const on = p.id === State.settings.chatProvider;
       const chip = h(
         "button",
-        { class: on ? "picker-chip on" : "picker-chip", style: `--accent:${p.accent}` },
+        // --i: its place in the column, for the moment it comes in (style.css).
+        { class: on ? "picker-chip on" : "picker-chip", style: `--accent:${p.accent};--i:${index}` },
         h("i", { class: "picker-dot" }),
         h("span", { text: t(p.name) }),
       );
@@ -169,7 +173,8 @@ function buildPicker(onChange: () => void): Picker {
         State.settings = { ...State.settings, chatProvider: p.id };
         saveSettings();
         Sound.play("pop");
-        drawChips();
+        // Only the mark moves: the chips stay, so the change is seen happening.
+        for (const other of chips.children) other.classList.toggle("on", other === chip);
         drawEffort();
         void loadModels();
         onChange();
@@ -178,30 +183,56 @@ function buildPicker(onChange: () => void): Picker {
     }
   }
 
+  /**
+   * Puts the mark behind the effort level in force: gliding there from where
+   * it was, or (`glide` false) there at once. Set by drawEffort.
+   */
+  let placeThumb: (glide: boolean) => void = () => {};
+  // The levels are laid out only once the picker shows: the mark is put in
+  // place then, and again whenever their row changes size.
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => placeThumb(false)).observe(effort);
+
   /** The effort levels, for a provider that takes one; nothing for the others. */
   function drawEffort() {
     clear(effort);
+    placeThumb = () => {};
     const p = providerDef(State.settings.chatProvider);
     effort.classList.toggle("on", Boolean(p.effort));
     if (!p.effort) return;
-    const current = activeEffort(State.settings);
-    const levels = h("div", { class: "picker-effort-levels", style: `--accent:${p.accent}` });
+    const thumb = h("i", { class: "picker-effort-thumb" });
+    const levels = h("div", { class: "picker-effort-levels", style: `--accent:${p.accent}` }, thumb);
+    const buttons = new Map<Effort, HTMLElement>();
+    const mark = () => {
+      const current = activeEffort(State.settings);
+      for (const [level, button] of buttons) button.classList.toggle("on", level === current);
+    };
+    placeThumb = (glide) => {
+      const button = buttons.get(activeEffort(State.settings));
+      // Nothing to measure while the picker is folded away: the level in
+      // force then wears the highlight itself (style.css).
+      if (!button || !(button.offsetWidth > 0)) return;
+      thumb.classList.toggle("still", !glide);
+      thumb.style.width = `${button.offsetWidth}px`;
+      thumb.style.transform = `translateX(${button.offsetLeft}px)`;
+      levels.classList.add("placed");
+    };
     for (const level of EFFORTS) {
-      const button = h("button", {
-        class: level === current ? "picker-effort-btn on" : "picker-effort-btn",
-        text: t(EFFORT_NAMES[level]),
-      });
+      const button = h("button", { class: "picker-effort-btn", text: t(EFFORT_NAMES[level]) });
       button.addEventListener("click", () => {
         if (level === activeEffort(State.settings)) return;
         State.settings = { ...State.settings, chatEffort: level };
         saveSettings();
         Sound.play("blip");
-        drawEffort();
+        mark();
+        placeThumb(true);
         onChange();
       });
+      buttons.set(level, button);
       levels.append(button);
     }
+    mark();
     effort.append(h("span", { class: "picker-effort-label", text: t(STRINGS.effort), title: tl(STRINGS.effortHint) }), levels);
+    placeThumb(false);
   }
 
   function status(text: string, withSettings = false) {
@@ -222,19 +253,35 @@ function buildPicker(onChange: () => void): Picker {
   function drawModels(p: ProviderDef, models: ModelInfo[]) {
     clear(list);
     const current = activeModel(State.settings);
-    for (const m of models) {
+    const check = () => {
+      const mark = svg(ICONS.check, 11, { stroke: 2.2 });
+      mark.classList.add("picker-check");
+      return mark;
+    };
+    for (const [index, m] of models.entries()) {
       const on = m.id === current;
       const row = h(
         "button",
-        { class: on ? "picker-model on" : "picker-model", style: `--accent:${p.accent}`, title: m.id },
+        { class: on ? "picker-model on" : "picker-model", style: `--accent:${p.accent};--i:${index}`, title: m.id },
         h("span", { class: "picker-model-name", text: m.label }),
-        on ? svg(ICONS.check, 11, { stroke: 2.2 }) : null,
+        on ? check() : null,
       );
       row.addEventListener("click", () => {
         State.settings = withModel(State.settings, p.id, m.id);
         saveSettings();
         Sound.play("blip");
-        close();
+        // The mark jumps to the picked model, and the picker folds once it
+        // has been seen there.
+        for (const other of list.children) {
+          if (other !== row) other.querySelector(".picker-check")?.remove();
+          other.classList.toggle("on", other === row);
+        }
+        if (!row.querySelector(".picker-check")) row.append(check());
+        onChange();
+        const ticket = request;
+        setTimeout(() => {
+          if (isOpen && ticket === request) close();
+        }, PICKED_MS);
       });
       list.append(row);
     }
@@ -278,6 +325,7 @@ function buildPicker(onChange: () => void): Picker {
     drawChips();
     drawEffort();
     onChange();
+    placeThumb(false);
     void loadModels();
   }
 
