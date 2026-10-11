@@ -12,6 +12,7 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
+import { formatClock } from "../core/clock";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
 import { language, t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
@@ -1279,7 +1280,7 @@ export class Island {
     const show = State.mode === "compact" && State.spotifyPlaying && track != null;
     this.compactSong.classList.toggle("on", show);
     // No song: the same stretch says what time it is.
-    const clock = State.mode === "compact" && !show;
+    const clock = State.mode === "compact" && !show && State.settings.clockFormat !== "off";
     this.compactClock.classList.toggle("on", clock);
     if (clock) {
       this.paintCompactClock();
@@ -1312,13 +1313,8 @@ export class Island {
   }
 
   private paintCompactClock() {
-    let text: string;
-    try {
-      text = new Intl.DateTimeFormat(language(), { hour: "numeric", minute: "2-digit" }).format(new Date());
-    } catch {
-      const now = new Date();
-      text = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
-    }
+    // In the form picked in Settings → General (core/clock.ts).
+    const text = formatClock(State.settings.clockFormat, new Date(), language());
     if (this.compactClock.textContent !== text) this.compactClock.textContent = text;
   }
 

@@ -94,6 +94,10 @@ pub struct Settings {
     pub editor_command: String,
     /// The launcher tab's websites and apps, in the order shown (launcher.rs).
     pub launcher: Vec<crate::launcher::LauncherItem>,
+    /// The form of the compact island's clock (src/core/clock.ts): "" follows
+    /// the language, "off" shows none. Kept as it comes: a form this build
+    /// doesn't know reads as "".
+    pub clock_format: String,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -160,6 +164,7 @@ impl Default for Settings {
             task_outputs_dir: String::new(),
             editor_command: String::new(),
             launcher: Vec::new(),
+            clock_format: String::new(),
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -446,6 +451,7 @@ mod tests {
   "taskOutputsDir": "/home/me/vault/outputs",
   "editorCommand": "kitty -e nvim",
   "launcher": [{ "name": "Docs", "target": "https://example.com/docs" }],
+  "clockFormat": "24h-seconds",
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -880,6 +886,7 @@ mod tests {
                 "taskOutputsDir",
                 "editorCommand",
                 "launcher",
+                "clockFormat",
                 "desktopMochi",
             ]
         );

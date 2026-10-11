@@ -10,6 +10,7 @@ import {
   recordPress, type Binding,
 } from "../core/shortcuts";
 import { DEFAULT_SETTINGS, type Settings } from "../core/state";
+import { CLOCK_FORMATS, formatClock, isClockFormat } from "../core/clock";
 import { SOUND_NAMES } from "../core/sound";
 import {
   MAX_DECLARED, PILL_CATEGORIES, availablePills, chooseMainPill, isComingSoon, mainPillChoices,
@@ -22,7 +23,7 @@ import { launcherSection } from "./launcher";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
 import {
-  LANGUAGES, N_, isRtl, onLanguageChange, resolveLanguage, setLanguage, systemLanguages, t, tn,
+  LANGUAGES, N_, isRtl, language, onLanguageChange, resolveLanguage, setLanguage, systemLanguages, t, tn,
 } from "../i18n/i18n";
 
 /** Where secrets.rs keeps the keys on this OS. */
@@ -998,6 +999,7 @@ function generalSection(): HTMLElement {
     h("div", { class: "hint", text: t("The command that opens a session's folder or a diff's file — e.g. kitty -e nvim. Empty: VS Code. The main pill takes the editor's name.") }),
     ...recapRows(),
     languageRow(),
+    ...clockRows(),
   );
 }
 
@@ -1065,6 +1067,33 @@ function languageRow(): HTMLElement {
     applyLanguage();
   });
   return h("div", { class: "row" }, h("label", { text: t("Language") }), select);
+}
+
+/**
+ * The compact island's clock: each form reads as the time would right now, so
+ * the list itself is the example.
+ */
+function clockRows(): HTMLElement[] {
+  const select = h("select", {}) as HTMLSelectElement;
+  const now = new Date();
+  const lang = language();
+  for (const format of CLOCK_FORMATS) {
+    const text = format === "off"
+      ? t("None")
+      : format === ""
+        ? `${t("System")} · ${formatClock(format, now, lang)}`
+        : formatClock(format, now, lang);
+    select.append(h("option", { value: format, text }));
+  }
+  select.value = isClockFormat(settings.clockFormat) ? settings.clockFormat : "";
+  select.addEventListener("change", () => {
+    settings.clockFormat = select.value;
+    void save();
+  });
+  return [
+    h("div", { class: "row" }, h("label", { text: t("Clock") }), select),
+    h("div", { class: "hint", text: t("Shown in the compact island while no song plays.") }),
+  ];
 }
 
 // ── Shortcuts section ─────────────────────────────────────────────────────────

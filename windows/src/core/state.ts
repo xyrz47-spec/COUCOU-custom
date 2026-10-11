@@ -189,6 +189,8 @@ export interface Settings {
   editorCommand: string;
   /** The launcher tab's websites and apps, in the order shown. */
   launcher: LauncherItem[];
+  /** The form of the compact island's clock (core/clock.ts): "" follows the language, "off" shows none. */
+  clockFormat: string;
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -231,6 +233,7 @@ export const DEFAULT_SETTINGS: Settings = {
   taskOutputsDir: "",
   editorCommand: "",
   launcher: [],
+  clockFormat: "",
 };
 
 type Listener = () => void;

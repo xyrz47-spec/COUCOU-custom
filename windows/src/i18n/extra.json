@@ -4335,6 +4335,30 @@
    "ru": "Не удалось добавить: {error}",
    "id": "Tidak dapat menambahkan: {error}",
    "ko": "추가하지 못했습니다: {error}"
+  },
+  "Clock": {
+   "zh-Hans": "时钟",
+   "hi": "घड़ी",
+   "es": "Reloj",
+   "ar": "الساعة",
+   "fr": "Horloge",
+   "bn": "ঘড়ি",
+   "pt-BR": "Relógio",
+   "ru": "Часы",
+   "id": "Jam",
+   "ko": "시계"
+  },
+  "Shown in the compact island while no song plays.": {
+   "zh-Hans": "没有歌曲播放时显示在紧凑岛上。",
+   "hi": "जब कोई गाना नहीं चल रहा हो, तब कॉम्पैक्ट आइलैंड में दिखती है।",
+   "es": "Se muestra en la isla compacta cuando no suena ninguna canción.",
+   "ar": "تظهر في الجزيرة المصغّرة عندما لا تُشغَّل أي أغنية.",
+   "fr": "Affichée dans l'île compacte quand aucun morceau ne joue.",
+   "bn": "কোনো গান না বাজলে কমপ্যাক্ট আইল্যান্ডে দেখায়।",
+   "pt-BR": "Aparece na ilha compacta quando nenhuma música está tocando.",
+   "ru": "Показываются в компактном острове, когда музыка не играет.",
+   "id": "Ditampilkan di pulau ringkas saat tidak ada lagu yang diputar.",
+   "ko": "노래가 재생 중이 아닐 때 작은 아일랜드에 표시됩니다."
   }
  }
 }
