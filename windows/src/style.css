@@ -3630,3 +3630,159 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     animation: none;
   }
 }
+
+/* ── The time, in the compact island while no song plays (island.ts) ───────────
+   In the stretch between Mochi and the mini grid, where a song is named
+   while one plays. It takes no clicks: a click opens the island. */
+#compact-clock {
+  position: absolute;
+  left: 62px;
+  right: 62px;
+  top: 0;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  font: 600 12px var(--font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+#compact-clock.on {
+  opacity: 1;
+}
+
+/* ── A drop-down drawn by the page (views/select.ts), for the skills tab ───────
+   The same button and list as in the settings window, at the island's size.
+   The list opens inside the tab's card. */
+.cselect {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.cselect.sk-where-box {
+  flex: 0 0 136px;
+  width: 136px;
+}
+
+.cselect select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cselect-button {
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 7px 0 9px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  font: 400 11px var(--font);
+  text-align: start;
+  cursor: default;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.cselect-button:hover,
+.cselect.open .cselect-button {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.cselect-label {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cselect-button svg {
+  flex: 0 0 auto;
+  color: var(--dim);
+  transition: transform 0.24s cubic-bezier(0.3, 1.3, 0.4, 1);
+}
+
+.cselect.open .cselect-button svg {
+  transform: rotate(180deg);
+}
+
+.cselect-menu {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 5px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: #1b1d22;
+  box-shadow: 0 18px 36px -10px rgba(0, 0, 0, 0.85), 0 3px 10px rgba(0, 0, 0, 0.4);
+  transform-origin: top center;
+  animation: cselect-in 0.18s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+/* Inside a panel: placed from that panel's corner (select.ts). */
+.cselect-menu.inside {
+  position: absolute;
+}
+
+.cselect-menu.up {
+  transform-origin: bottom center;
+}
+
+@keyframes cselect-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.97);
+  }
+}
+
+.cselect-option {
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 8px 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dim);
+  font: 400 11px var(--font);
+  text-align: start;
+  cursor: default;
+}
+
+.cselect-option svg {
+  flex: 0 0 auto;
+  opacity: 0;
+}
+
+.cselect-option.on {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.cselect-option.on svg {
+  opacity: 1;
+}
+
+.cselect-option.at {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+}

@@ -12,6 +12,7 @@
 import { Bridge, type FoundSkill, type SkillGroup, type SkillInfo } from "../core/bridge";
 import { State } from "../core/state";
 import { clear, h } from "./dom";
+import { enhanceSelect } from "./select";
 import type { ViewActions, ViewHost } from "./views";
 import { t, tl } from "../i18n/i18n";
 
@@ -52,13 +53,15 @@ export function buildSkills(actions: ViewActions): ViewHost {
   const verifiedBox = h("button", { class: "sk-check on", text: tl("Verified only") });
   const note = h("div", { class: "sk-note" });
   const list = h("div", { class: "sk-list" });
-  const el = h(
+  const el: HTMLElement = h(
     "div",
     { class: "view skills" },
     h(
       "div",
       { class: "card" },
-      h("div", { class: "sk-top" }, h("div", { class: "seg sk-seg" }, tabInstalled, tabFind), search, where),
+      h("div", { class: "sk-top" }, h("div", { class: "seg sk-seg" }, tabInstalled, tabFind), search,
+        // Drawn by the page, its list inside this card: the island's window takes the mouse nowhere else.
+        enhanceSelect(where, "sk-where-box", () => el.firstElementChild as HTMLElement | null)),
       h("div", { class: "sk-bar" }, chips, count, verifiedBox),
       note,
       list,

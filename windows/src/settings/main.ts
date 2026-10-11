@@ -16,6 +16,7 @@ import {
   sanitizeDeclared, toggleDeclared, type PillDefinition,
 } from "../core/pills";
 import { h, clear } from "../views/dom";
+import { drawSelects } from "../views/select";
 import { agentsSection } from "./agents";
 import { launcherSection } from "./launcher";
 import { colorDot } from "./colors";
@@ -1391,6 +1392,8 @@ async function main() {
     void rerender();
   });
   await render();
+  // Every drop-down is drawn by the page, now and as the sections redraw (views/select.ts).
+  drawSelects(root);
   appear();
   // Shown again (lib.rs, show_settings_window): the content settles in once more.
   void onEvent<null>("settings-shown", appear);
@@ -1455,7 +1458,7 @@ async function render() {
     { id: "chat", label: t("Chat"), color: "#60A5FA", sections: [apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
     { id: "pills", label: t("Active pills"), color: "#22C55E", sections: [activePillsSection(connected), integrationsSection(present)] },
     { id: "launcher", label: t("Launcher"), color: "#E879F9", sections: [launcherSection(() => settings, save)] },
-    { id: "general", label: t("General"), color: "#9398A1", sections: [generalSection()] },
+    { id: "general", label: t("General"), color: "#2DD4BF", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EAB308", sections: [shortcutsSection(shortcutReport)] },
   ];
   if (!pages.some((p) => p.id === currentPage)) currentPage = pages[0].id;

@@ -13,7 +13,7 @@ import {
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
 import { SPOTIFY_ID, Spotify, currentArtwork, isAd, islandDances, spotifyPosition } from "../core/spotify";
-import { t } from "../i18n/i18n";
+import { language, t } from "../i18n/i18n";
 import { BotEngine, hexToRGB } from "../mochi/engine";
 import { Greeting } from "../mochi/greeting";
 import { createMiniBot, pruneMiniBots, syncMiniBotStates, tickMiniBots } from "../mochi/minibots";
@@ -65,6 +65,9 @@ export class Island {
   private compactSongTitle!: HTMLElement;
   private compactSongTime!: HTMLElement;
   private compactSongTimer: number | null = null;
+  /** The time of day, in the compact island while no song plays (syncCompactSong). */
+  private compactClock!: HTMLElement;
+  private compactClockTimer: number | null = null;
   private wakeStrip!: HTMLElement;
 
   private header!: ViewHost;
@@ -318,6 +321,7 @@ export class Island {
       this.botCanvas,
       this.miniGrid,
       this.compactSong,
+      (this.compactClock = h("div", { id: "compact-clock" })),
       this.countdown,
     );
 
@@ -1274,6 +1278,19 @@ export class Island {
     const track = Spotify.state.track;
     const show = State.mode === "compact" && State.spotifyPlaying && track != null;
     this.compactSong.classList.toggle("on", show);
+    // No song: the same stretch says what time it is.
+    const clock = State.mode === "compact" && !show;
+    this.compactClock.classList.toggle("on", clock);
+    if (clock) {
+      this.paintCompactClock();
+      // Looked at once a second, written only when the minute turns.
+      if (this.compactClockTimer == null) {
+        this.compactClockTimer = window.setInterval(() => this.paintCompactClock(), 1000);
+      }
+    } else if (this.compactClockTimer != null) {
+      window.clearInterval(this.compactClockTimer);
+      this.compactClockTimer = null;
+    }
     // The line moves once a second, and only while it is on screen.
     if (show && this.compactSongTimer == null) {
       this.compactSongTimer = window.setInterval(() => this.paintCompactSongTime(), 1000);
@@ -1292,6 +1309,17 @@ export class Island {
     }
     this.compactSongArt.style.display = cover ? "" : "none";
     this.paintCompactSongTime();
+  }
+
+  private paintCompactClock() {
+    let text: string;
+    try {
+      text = new Intl.DateTimeFormat(language(), { hour: "numeric", minute: "2-digit" }).format(new Date());
+    } catch {
+      const now = new Date();
+      text = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
+    }
+    if (this.compactClock.textContent !== text) this.compactClock.textContent = text;
   }
 
   private paintCompactSongTime() {
