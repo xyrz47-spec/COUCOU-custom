@@ -44,14 +44,14 @@ export function formatClock(format: string, when: Date, language: string): strin
 
 // ── Its size ──────────────────────────────────────────────────────────────────
 
-/** The clock's largest letters, in px: what the compact island's height leaves room for. */
-export const CLOCK_MAX_FONT = 23;
+/** The clock's largest letters, in px: easy to read at a glance, with air above and below. */
+export const CLOCK_MAX_FONT = 16;
 const CLOCK_MIN_FONT = 9;
 
 /**
  * The size at which the clock fills its stretch of the compact island: a text
  * `width` px wide when set at `at` px, in `room` px. As large as fits, never
- * taller than the island. A text that could not be measured keeps `at`.
+ * past its largest. A text that could not be measured keeps `at`.
  */
 export function clockFontSize(width: number, at: number, room: number): number {
   if (!(width > 0) || !(room > 0)) return at;

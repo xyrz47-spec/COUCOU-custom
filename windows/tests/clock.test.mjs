@@ -25,16 +25,17 @@ test("a form this build doesn't know reads as the language's own", () => {
   assert.equal(new Set(CLOCK_FORMATS).size, CLOCK_FORMATS.length);
 });
 
-test("the clock is as large as its stretch takes, never taller than the island", () => {
-  // A short time has room to spare: the island's height is the limit.
-  assert.equal(clockFontSize(90, CLOCK_MAX_FONT, 164), CLOCK_MAX_FONT);
+test("the clock keeps its size while it fits, and a long form is brought down to fit", () => {
+  // A short time has room to spare: it stays at its largest.
+  assert.equal(clockFontSize(70, CLOCK_MAX_FONT, 164), CLOCK_MAX_FONT);
+  assert.equal(clockFontSize(164, CLOCK_MAX_FONT, 164), CLOCK_MAX_FONT);
   // A long one is brought down until it fits, in half pixels, and does fit.
-  const size = clockFontSize(230, CLOCK_MAX_FONT, 164);
-  assert.equal(size, 16);
-  assert.ok((230 * size) / CLOCK_MAX_FONT <= 164);
-  assert.equal(clockFontSize(205, CLOCK_MAX_FONT, 164), 18);
+  const size = clockFontSize(205, 16, 164);
+  assert.equal(size, 12.5);
+  assert.ok((205 * size) / 16 <= 164);
+  assert.equal(clockFontSize(180, 16, 164), 14.5);
   // Never unreadable, and a text that could not be measured keeps its size.
-  assert.equal(clockFontSize(5000, CLOCK_MAX_FONT, 164), 9);
+  assert.equal(clockFontSize(5000, 16, 164), 9);
   assert.equal(clockFontSize(0, CLOCK_MAX_FONT, 164), CLOCK_MAX_FONT);
   assert.equal(clockFontSize(undefined, CLOCK_MAX_FONT, undefined), CLOCK_MAX_FONT);
 });
