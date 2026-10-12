@@ -179,8 +179,8 @@ export const Bridge = {
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
   // ── JEV (src-tauri/src/jev.rs) ────────────────────────────────────────────
-  /** JEV's risk for a permission request; throws when nothing is asked (feature off, no key) or the call fails. */
-  jevAssess: (tool: string, command: string) => callOrThrow<JevRisk>("jev_assess", { tool, command }),
+  /** How a message sounds, by JEV. Throws with the reason (feature off, no key, the call failed). */
+  jevCheckMessage: (text: string) => callOrThrow<JevMessageRead>("jev_check_message", { text }),
   /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
   jevCheckKey: () => callOrThrow<string>("jev_check_key"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
@@ -343,15 +343,18 @@ export interface SkillAdvice {
   note: string;
 }
 
-/** What JEV makes of a permission request (src-tauri/src/jev.rs). */
-export interface JevRisk {
-  level: "low" | "medium" | "high" | "unsure";
-  destructive: number;
-  exfiltration: number;
-  /** read_only, edit_files, run_code, network or system; empty when JEV did not say. */
-  scope: string;
-  score: number;
-  confidence: number;
+/** What JEV makes of a message (src-tauri/src/jev.rs). */
+export interface JevMessageRead {
+  /** friendly, neutral, formal, stern or upset; empty when JEV did not say. */
+  tone: string;
+  toneConfidence: number;
+  /** 0 (not urgent) to 2 (urgent now). */
+  urgency: number;
+  urgencyConfidence: number;
+  /** 0 to 1: how likely it asks for an answer. */
+  needsReply: number;
+  /** 0 to 1: how likely it could sound rude. */
+  rude: number;
 }
 
 export interface SkillGroup {

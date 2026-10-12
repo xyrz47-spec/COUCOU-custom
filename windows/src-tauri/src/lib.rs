@@ -898,7 +898,7 @@ pub fn run() {
             task_cancel,
             task_projects,
             task_reveal,
-            jev::jev_assess,
+            jev::jev_check_message,
             jev::jev_check_key,
             launcher::launcher_status,
             skills::skills_list,

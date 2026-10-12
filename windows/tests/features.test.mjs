@@ -76,13 +76,16 @@ test("the header shows the launcher's and the skills' tabs while they are on", (
   const tabs = header.el.find(".tab");
   const shown = () => tabs.map((tab) => tab.style.display !== "none");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, true]);
+  assert.deepEqual(shown(), [true, true, true, true, true, true]);
   State.settings = off("launcherTab");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, false, true]);
+  assert.deepEqual(shown(), [true, true, true, false, true, true]);
   State.settings = off("skillsTab");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, false]);
+  assert.deepEqual(shown(), [true, true, true, true, false, true]);
+  State.settings = off("messageCheck");
+  header.sync();
+  assert.deepEqual(shown(), [true, true, true, true, true, false]);
   State.settings = { ...DEFAULT_SETTINGS };
 });
 
@@ -181,7 +184,7 @@ test("the code only checks features that are declared", async () => {
 
 test("the header's tabs and the island's checks follow the declarations, in order", async () => {
   const { featureTabs } = await import("../src/core/features.ts");
-  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills"]);
+  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills", "check"]);
 });
 
 test("Spotify off takes its pill and the music features with it, and keeps what was declared", async () => {

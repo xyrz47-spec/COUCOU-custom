@@ -226,7 +226,7 @@ side (tray, errors) embeds the same two files.
 
 ## Features: turning parts of Coucou on and off
 
-Settings → **Features** lists what this build adds, by module — Claude Code (chat, skills, plugin skills, skill suggestions), Launcher, Music · Spotify (the pill, the big player, the song in the compact island), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
+Settings → **Features** lists what this build adds, by module — Claude Code (chat, skills, plugin skills, skill suggestions), Launcher, JEV (message check), Music · Spotify (the pill, the big player, the song in the compact island), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
 
 For whoever adds or removes a feature, it is declared in one place and checked where it plugs in:
 
@@ -236,11 +236,11 @@ For whoever adds or removes a feature, it is declared in one place and checked w
 
 `tests/features.test.mjs` fails when a declaration has no words, names a parent, icon or pill that does not exist, or when the code checks a feature that is not declared. To remove a feature, delete its entry, its words and its code.
 
-## JEV: a second opinion on permission requests
+## JEV: checking a message
 
-Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, and Settings → Features → *Risk check by JEV* on, each permission card from an agent gets one more line from JEV: *looks routine*, *worth reading before you allow*, or *could change or send things you may not want*, with what the request mainly does (reads, edits project files, runs code, uses the network, touches the system). It is advice only: it never allows or denies, never delays the card, and the two buttons stay the only way to decide. Without a key nothing is sent.
+Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, the island's **Check** tab (Settings → Features → *Message check*) reads a message you paste — one you got, or one you are about to send — and answers in four short lines: how it sounds (friendly, neutral, formal, stern, upset), how urgent it is, whether it asks for an answer, and whether it could sound rude. `Ctrl+Enter` checks. JEV reads; it does not write anything for you.
 
-What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the tool's name and the line the card shows (the command, file path or address), with keys and tokens masked and cut to 1,500 characters — never file contents, your prompt or the project's path. JEV is asked four typed questions in one call (destroys or overwrites, sends data away or reveals secrets, what it mainly does, how risky to allow unread); the thresholds that turn the answers into a level are in `src-tauri/src/jev.rs`.
+What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the message you pasted, cut to 3,000 characters, and only when you press Check. Nothing is kept once you leave the tab, and without a key nothing is sent. The four typed questions (one choice, one score, two yes/no) are in `src-tauri/src/jev.rs`.
 
 ## Task mode
 

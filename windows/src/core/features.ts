@@ -79,9 +79,9 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
     name: N_("Skills picked by Claude Code"),
     about: N_("In the skills tab, Claude Code says what to add and what to remove for a project. Each ask counts against your plan."),
   },
-  approvalRisk: {
-    name: N_("Risk check by JEV"), page: N_("JEV"),
-    about: N_("When an agent asks permission, JEV (TypeSafe's model) adds one line to the card: routine, worth reading, or could change or send things. Advice only, with your TypeSafe API key; nothing is sent without one."),
+  messageCheck: {
+    name: N_("Message check"), tab: N_("Check"), page: N_("JEV"),
+    about: N_("The island's check tab: paste a message you got, or one you are about to send, and JEV (TypeSafe's model) tells how it sounds, how urgent it is, whether it needs a reply and whether it could sound rude. Needs your TypeSafe API key."),
   },
   launcherTab: {
     name: N_("Launcher tab"), tab: N_("Launcher"), page: N_("Launcher"),
@@ -117,6 +117,7 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
 const GROUP_TITLES: Record<string, string> = {
   claude: "Claude Code",
   launcher: N_("Launcher"),
+  jev: N_("JEV"),
   music: N_("Music · Spotify"),
   time: N_("Time and weather"),
   look: N_("Look"),

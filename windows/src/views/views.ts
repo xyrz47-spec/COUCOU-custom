@@ -25,7 +25,7 @@ import { buildWardrobe } from "./wardrobe";
 import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
 import { featureOn, featureTabs } from "../core/features";
-import { riskLine } from "../core/jev";
+import { buildCheck } from "./check";
 import { buildLauncher } from "./launcher";
 import { buildSkills } from "./skills";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
@@ -606,16 +606,12 @@ function foldButton(actions: ViewActions): HTMLElement {
   );
 }
 
-export function buildApproval(actions: ViewActions): ViewHost {
+function buildApproval(actions: ViewActions): ViewHost {
   const who = h("div");
   const code = h("div", { class: "code" });
   const row = h("div", { class: "actions" });
-  // JEV's line on the request (core/jev.ts): there only with the feature on and a TypeSafe key saved.
-  const risk = h("div", { class: "jev-risk" });
-  risk.style.display = "none";
-  let riskFor: string | null = null;
   const el = h("div", { class: "view" },
-    card("amber", stack(116, 16, who, code, risk, row), foldButton(actions)));
+    card("amber", stack(116, 16, who, code, row), foldButton(actions)));
   let rowKey = "";
   // The card pops up under a cursor that was busy with something else: a click
   // meant for the window underneath must not land on Allow. Clicks in the first
@@ -633,22 +629,6 @@ export function buildApproval(actions: ViewActions): ViewHost {
       if (req !== shownFor) {
         shownFor = req;
         shownAt = performance.now();
-      }
-      if (req !== riskFor) {
-        riskFor = req;
-        risk.style.display = "none";
-        const pending = State.pendingApproval;
-        if (req && pending && featureOn(State.settings, "approvalRisk")) {
-          // Never waited for: a slow or failed answer leaves the card as it was.
-          Bridge.jevAssess(pending.tool, pending.command || pending.tool)
-            .then((found) => {
-              if (State.pendingApproval?.requestId !== req) return;
-              risk.textContent = riskLine(found);
-              risk.className = `jev-risk ${found.level}`;
-              risk.style.display = "";
-            })
-            .catch(() => {});
-        }
       }
       clear(who);
       who.append(agentWho(State.focusTask, t("needs permission")));
@@ -954,6 +934,7 @@ export function buildViews(
   map.set("wardrobe", buildWardrobe(actions));
   map.set("launcher", buildLauncher(actions));
   map.set("skills", buildSkills(actions));
+  map.set("check", buildCheck(actions));
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));

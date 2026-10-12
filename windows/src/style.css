@@ -4471,12 +4471,3 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     animation: none;
   }
 }
-
-/* JEV's line under a permission request (views/views.ts, core/jev.ts). Hidden until JEV has answered. */
-.jev-risk {
-  font: 500 11px var(--font);
-  color: var(--dim);
-  margin: -2px 0 6px;
-}
-.jev-risk.medium { color: var(--amber, #f5a524); }
-.jev-risk.high { color: var(--red-text); }
