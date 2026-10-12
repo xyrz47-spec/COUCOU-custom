@@ -224,6 +224,18 @@ turned into `src/i18n/strings.json` by `node scripts/gen-strings.mjs`), plus
 the English text; a string missing in a language shows in English. The Rust
 side (tray, errors) embeds the same two files.
 
+## Features: turning parts of Coucou on and off
+
+Settings → **Features** lists what this build adds, by module — Claude Code (chat, skills, plugin skills, skill suggestions), Launcher, Menu, Music · Spotify (the pill, the big player, the song in the compact island), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
+
+For whoever adds or removes a feature, it is declared in one place and checked where it plugs in:
+
+1. `src/core/features.json` — its entry: `id`, `group`, optionally `needs` (the feature it is part of), `tab` (an island header tab: view, icon, order), `settingsPage` (a settings page of its own, there while it is on), `page`/`anchor` (a link to where its settings already are), `pills` (pills that belong to it). The Rust side reads the same file (`src-tauri/src/features.rs`).
+2. `src/core/features.ts` — its name and description (and the tab's and page's words), in the `TEXT` table.
+3. The code of the feature asks `featureOn(settings, "id")` (TypeScript) or `features::on(settings, "id")` (Rust) before it shows or works. A tab's view goes in `src/views/views.ts`, a page's sections in `featureSections` in `src/settings/main.ts`.
+
+`tests/features.test.mjs` fails when a declaration has no words, names a parent, icon or pill that does not exist, or when the code checks a feature that is not declared. To remove a feature, delete its entry, its words and its code.
+
 ## Task mode
 
 The **Task** chip next to the chat's model button hands the next message to

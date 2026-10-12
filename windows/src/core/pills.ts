@@ -10,6 +10,7 @@
 
 import type { AgentSource } from "./state";
 import { N_ } from "../i18n/i18n";
+import { pillAllowed } from "./features";
 
 export type PillCategory = "workspace" | "agent" | "ai" | "service";
 
@@ -199,6 +200,8 @@ export function sessionSubtitle(id: string): string {
 export interface Declared {
   mainPill: string;
   activeIntegrations: string[];
+  /** Settings → Features: a pill that belongs to a feature turned off is not used. */
+  disabledFeatures?: unknown;
 }
 
 /**
@@ -207,10 +210,10 @@ export interface Declared {
  * without the main pill, which never takes a slot. Same rules as
  * AppState.loadIntegrationTasks on macOS.
  */
-export function sanitizeDeclared(d: Declared, os: HostOs = HOST_OS): Declared {
+export function sanitizeDeclared(d: Declared, os: HostOs = HOST_OS): Pick<Declared, "mainPill" | "activeIntegrations"> {
   const mains = new Set(mainPillChoices(os).map((p) => p.id));
   const mainPill = mains.has(d.mainPill) ? d.mainPill : DEFAULT_MAIN_PILL;
-  const offered = new Set(availablePills(os).map((p) => p.id));
+  const offered = new Set(availablePills(os).filter((p) => pillAllowed(d, p.id)).map((p) => p.id));
   const activeIntegrations: string[] = [];
   for (const id of d.activeIntegrations ?? []) {
     if (id !== mainPill && offered.has(id) && !activeIntegrations.includes(id)) {

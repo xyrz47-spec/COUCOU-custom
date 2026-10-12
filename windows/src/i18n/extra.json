@@ -4912,30 +4912,6 @@
    "id": "Perlu: {name}",
    "ko": "필요: {name}"
   },
-  "Island tabs": {
-   "zh-Hans": "岛的标签页",
-   "hi": "आइलैंड के टैब",
-   "es": "Pestañas de la isla",
-   "ar": "تبويبات الجزيرة",
-   "fr": "Onglets de l'île",
-   "bn": "আইল্যান্ডের ট্যাব",
-   "pt-BR": "Abas da ilha",
-   "ru": "Вкладки острова",
-   "id": "Tab pulau",
-   "ko": "아일랜드 탭"
-  },
-  "Compact island": {
-   "zh-Hans": "紧凑岛",
-   "hi": "कॉम्पैक्ट आइलैंड",
-   "es": "Isla compacta",
-   "ar": "الجزيرة المصغّرة",
-   "fr": "Île compacte",
-   "bn": "কমপ্যাক্ট আইল্যান্ড",
-   "pt-BR": "Ilha compacta",
-   "ru": "Компактный остров",
-   "id": "Pulau ringkas",
-   "ko": "작은 아일랜드"
-  },
   "Look": {
    "zh-Hans": "外观",
    "hi": "रूप",
@@ -5463,6 +5439,78 @@
    "ru": "Скажите, как вы себя чувствуете, и получите около пяти идей.",
    "id": "Ceritakan perasaanmu dan dapatkan sekitar lima ide.",
    "ko": "기분을 말하면 약 다섯 가지 아이디어를 드립니다."
+  },
+  "Spotify": {
+   "zh-Hans": "Spotify",
+   "hi": "Spotify",
+   "es": "Spotify",
+   "ar": "Spotify",
+   "fr": "Spotify",
+   "bn": "Spotify",
+   "pt-BR": "Spotify",
+   "ru": "Spotify",
+   "id": "Spotify",
+   "ko": "Spotify"
+  },
+  "The Spotify pill: what is playing, with play/pause and skip. Off, Coucou does not look at Spotify at all, and the music features below wait for it.": {
+   "zh-Hans": "Spotify 胶囊:显示正在播放的内容,带播放/暂停和下一首。关闭后,Coucou 完全不会查看 Spotify,下面的音乐功能也随之关闭。",
+   "hi": "Spotify पिल: क्या बज रहा है, प्ले/पॉज़ और स्किप के साथ। बंद होने पर Coucou Spotify को बिल्कुल नहीं देखता, और नीचे की संगीत सुविधाएँ भी इसके साथ बंद रहती हैं।",
+   "es": "La píldora de Spotify: lo que suena, con reproducir/pausar y saltar. Desactivada, Coucou no mira Spotify en absoluto y las funciones de música de abajo esperan a que vuelva.",
+   "ar": "شارة Spotify: ما يُشغَّل مع التشغيل/الإيقاف المؤقت والتخطي. عند الإيقاف لا ينظر Coucou إلى Spotify إطلاقًا وتتوقف ميزات الموسيقى أدناه معها.",
+   "fr": "La pastille Spotify : ce qui joue, avec lecture/pause et suivant. Désactivée, Coucou ne regarde pas du tout Spotify et les fonctions musique ci-dessous attendent son retour.",
+   "bn": "Spotify পিল: কী বাজছে, প্লে/পজ ও স্কিপ সহ। বন্ধ থাকলে Coucou Spotify মোটেই দেখে না, আর নিচের সংগীত ফিচারগুলোও এর অপেক্ষায় থাকে।",
+   "pt-BR": "A pílula do Spotify: o que está tocando, com reproduzir/pausar e pular. Desligada, o Coucou não olha o Spotify e os recursos de música abaixo esperam por ela.",
+   "ru": "Пилюля Spotify: что играет, с паузой и переключением. Когда выключена, Coucou вообще не смотрит на Spotify, а функции музыки ниже ждут её.",
+   "id": "Pil Spotify: lagu yang sedang diputar, dengan putar/jeda dan lewati. Jika mati, Coucou tidak melihat Spotify sama sekali dan fitur musik di bawah ikut menunggu.",
+   "ko": "Spotify 알약: 재생 중인 곡과 재생/일시정지, 다음 곡. 끄면 Coucou는 Spotify를 전혀 보지 않으며 아래 음악 기능도 함께 꺼집니다."
+  },
+  "Music · Spotify": {
+   "zh-Hans": "音乐 · Spotify",
+   "hi": "संगीत · Spotify",
+   "es": "Música · Spotify",
+   "ar": "الموسيقى · Spotify",
+   "fr": "Musique · Spotify",
+   "bn": "সংগীত · Spotify",
+   "pt-BR": "Música · Spotify",
+   "ru": "Музыка · Spotify",
+   "id": "Musik · Spotify",
+   "ko": "음악 · Spotify"
+  },
+  "Time and weather": {
+   "zh-Hans": "时间与天气",
+   "hi": "समय और मौसम",
+   "es": "Hora y tiempo",
+   "ar": "الوقت والطقس",
+   "fr": "Heure et météo",
+   "bn": "সময় ও আবহাওয়া",
+   "pt-BR": "Hora e clima",
+   "ru": "Время и погода",
+   "id": "Waktu dan cuaca",
+   "ko": "시간과 날씨"
+  },
+  "Turn all off": {
+   "zh-Hans": "全部关闭",
+   "hi": "सब बंद करें",
+   "es": "Desactivar todo",
+   "ar": "إيقاف الكل",
+   "fr": "Tout désactiver",
+   "bn": "সব বন্ধ করুন",
+   "pt-BR": "Desligar tudo",
+   "ru": "Выключить всё",
+   "id": "Matikan semua",
+   "ko": "모두 끄기"
+  },
+  "Turn all on": {
+   "zh-Hans": "全部开启",
+   "hi": "सब चालू करें",
+   "es": "Activar todo",
+   "ar": "تشغيل الكل",
+   "fr": "Tout activer",
+   "bn": "সব চালু করুন",
+   "pt-BR": "Ligar tudo",
+   "ru": "Включить всё",
+   "id": "Nyalakan semua",
+   "ko": "모두 켜기"
   }
  }
 }

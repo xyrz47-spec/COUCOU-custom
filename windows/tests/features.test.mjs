@@ -43,7 +43,7 @@ test("a settings file from elsewhere turns nothing off by accident", () => {
 
 test("a feature that is part of another is off with it, its own switch kept", () => {
   const parts = FEATURES.filter((def) => def.needs).map((def) => `${def.id}<${def.needs}`);
-  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillAdvice<skillsTab", "weather<clock"]);
+  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillAdvice<skillsTab", "musicPlayer<spotify", "compactSong<spotify", "weather<clock"]);
   const settings = off("clock");
   assert.equal(featureOn(settings, "weather"), false);
   assert.equal(featureSwitch(settings, "weather"), true);
@@ -127,4 +127,76 @@ test("Spotify's big player is not shown while its feature is off", () => {
   State.tasks = before.tasks;
   State.focusId = before.focus;
   State.settings = { ...DEFAULT_SETTINGS };
+});
+
+// ── The manager: features.json is the one declaration ────────────────────────
+
+test("every declaration has its words, and every word a declaration", async () => {
+  const { FEATURE_TEXT_IDS } = await import("../src/core/features.ts");
+  assert.deepEqual([...FEATURE_TEXT_IDS].sort(), FEATURES.map((f) => f.id).sort());
+});
+
+test("a feature only asks for what exists: a parent, an icon, a pill, a page of its own once", async () => {
+  const { ICONS } = await import("../src/views/icons.ts");
+  const { PILL_CATALOG } = await import("../src/core/pills.ts");
+  const ids = new Set(FEATURES.map((f) => f.id));
+  const pages = new Set();
+  const views = new Set();
+  for (const f of FEATURES) {
+    if (f.needs) assert.ok(ids.has(f.needs) && f.needs !== f.id, f.id);
+    if (f.tab) {
+      assert.ok(ICONS[f.tab.icon], `${f.id}: icon ${f.tab.icon}`);
+      assert.ok(!views.has(f.tab.view), `${f.id}: view used twice`);
+      views.add(f.tab.view);
+    }
+    if (f.settingsPage) {
+      assert.ok(!pages.has(f.settingsPage.id), `${f.id}: page used twice`);
+      pages.add(f.settingsPage.id);
+    }
+    for (const pill of f.pills) assert.ok(PILL_CATALOG.some((p) => p.id === pill), `${f.id}: pill ${pill}`);
+  }
+  // No parent chain loops.
+  for (const f of FEATURES) {
+    let at = f;
+    for (let n = 0; n <= FEATURES.length; n++) {
+      if (!at.needs) break;
+      at = FEATURES.find((o) => o.id === at.needs);
+      assert.ok(n < FEATURES.length, `${f.id}: loop`);
+    }
+  }
+});
+
+test("the code only checks features that are declared", async () => {
+  const { readdirSync, readFileSync, statSync } = await import("node:fs");
+  const { join } = await import("node:path");
+  const ids = new Set(FEATURES.map((f) => f.id));
+  const walk = (dir) => readdirSync(dir).flatMap((name) => {
+    const path = join(dir, name);
+    return statSync(path).isDirectory() ? walk(path) : path.endsWith(".ts") ? [path] : [];
+  });
+  const used = [];
+  for (const file of walk(new URL("../src", import.meta.url).pathname)) {
+    for (const m of readFileSync(file, "utf8").matchAll(/\b(?:featureOn|featureSwitch|featureDef)\([^,)]*,?\s*"(\w+)"\)/g)) used.push([file, m[1]]);
+  }
+  assert.ok(used.length > 10);
+  for (const [file, id] of used) assert.ok(ids.has(id), `${file}: ${id}`);
+});
+
+test("the header's tabs and the island's checks follow the declarations, in order", async () => {
+  const { featureTabs } = await import("../src/core/features.ts");
+  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills", "menu"]);
+});
+
+test("Spotify off takes its pill and the music features with it, and keeps what was declared", async () => {
+  const { sanitizeDeclared } = await import("../src/core/pills.ts");
+  const { pillAllowed } = await import("../src/core/features.ts");
+  const declared = { mainPill: "integration_vscode", activeIntegrations: ["integration_spotify"] };
+  assert.deepEqual(sanitizeDeclared({ ...declared, disabledFeatures: [] }, "windows").activeIntegrations, ["integration_spotify"]);
+  assert.deepEqual(sanitizeDeclared({ ...declared, disabledFeatures: ["spotify"] }, "windows").activeIntegrations, []);
+  assert.equal(pillAllowed(off("spotify"), "integration_spotify"), false);
+  assert.equal(pillAllowed(off("spotify"), "integration_github"), true);
+  assert.equal(featureOn(off("spotify"), "musicPlayer"), false);
+  assert.equal(featureOn(off("spotify"), "compactSong"), false);
+  // The declaration itself is untouched: turn it back on and the pill is there.
+  assert.deepEqual(declared.activeIntegrations, ["integration_spotify"]);
 });

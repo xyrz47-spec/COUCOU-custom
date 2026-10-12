@@ -24,7 +24,7 @@ import { buildRecap } from "./recap";
 import { buildWardrobe } from "./wardrobe";
 import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spotify";
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
-import { featureOn } from "../core/features";
+import { featureOn, featureTabs } from "../core/features";
 import { buildLauncher } from "./launcher";
 import { buildMenu } from "./menu";
 import { buildSkills } from "./skills";
@@ -115,9 +115,15 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const tabHome = h("button", { class: "tab", title: tl("Overview"), onclick: () => go("overview") }, svg(ICONS.house, 13));
   const tabChat = h("button", { class: "tab", title: tl("Ask"), onclick: () => go("prompt") }, svg(ICONS.bubble, 13));
   const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 13));
-  const tabApps = h("button", { class: "tab", title: tl("Launcher"), onclick: () => go("launcher") }, svg(ICONS.grid, 13));
-  const tabSkills = h("button", { class: "tab", title: tl("Skills"), onclick: () => go("skills") }, svg(ICONS.star, 13));
-  const tabMenu = h("button", { class: "tab", title: tl("Menu"), onclick: () => go("menu") }, svg(ICONS.menu, 13));
+  // The tabs the features add (core/features.json), left to right: each shows while its feature is on.
+  const featureButtons = featureTabs().map((def) => ({
+    def,
+    el: h(
+      "button",
+      { class: "tab", title: tl(def.tab!.title), onclick: () => go(def.tab!.view as IslandViewName) },
+      svg((ICONS as Record<string, string>)[def.tab!.icon], 13),
+    ),
+  }));
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 14));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 14));
@@ -136,7 +142,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { id: "header" },
-    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, tabApps, tabSkills, tabMenu),
+    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, ...featureButtons.map((b) => b.el)),
     h("div", { class: "header-actions" }, planPills, gearBtn, soundBtn),
   );
   const headerActions = el.lastElementChild as HTMLElement;
@@ -148,13 +154,11 @@ export function buildHeader(actions: ViewActions): ViewHost {
       tabHome.classList.toggle("on", v === "overview" || v === "empty");
       tabChat.classList.toggle("on", v === "prompt");
       tabDrop.classList.toggle("on", v === "upload");
-      tabApps.classList.toggle("on", v === "launcher");
-      tabSkills.classList.toggle("on", v === "skills");
-      tabMenu.classList.toggle("on", v === "menu");
       // Tabs of this build, each a switch in Settings → Features.
-      tabApps.style.display = featureOn(State.settings, "launcherTab") ? "" : "none";
-      tabSkills.style.display = featureOn(State.settings, "skillsTab") ? "" : "none";
-      tabMenu.style.display = featureOn(State.settings, "menuTab") ? "" : "none";
+      for (const { def, el: button } of featureButtons) {
+        button.classList.toggle("on", v === def.tab!.view);
+        button.style.display = featureOn(State.settings, def.id) ? "" : "none";
+      }
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
       gearBtn.append(svg(v === "settings" ? ICONS.gearFill : ICONS.gear, 14));

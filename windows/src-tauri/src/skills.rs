@@ -380,7 +380,7 @@ fn plugin_groups(claude_dir: &Path) -> Vec<SkillGroup> {
 #[tauri::command(async)]
 pub fn skills_list(shared: tauri::State<crate::Shared>) -> Vec<SkillGroup> {
     // Settings → Features → "Skills of installed plugins", off: only the skills folders.
-    let plugins = !shared.settings.lock().unwrap().disabled_features.iter().any(|f| f == "pluginSkills");
+    let plugins = crate::features::on(&shared.settings.lock().unwrap(), "pluginSkills");
     let mut groups: Vec<SkillGroup> = roots()
         .into_iter()
         .map(|(project, root)| SkillGroup {

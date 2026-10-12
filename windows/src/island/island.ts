@@ -12,7 +12,7 @@ import {
 } from "../core/layout";
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
-import { featureOn } from "../core/features";
+import { featureOn, featureTabs } from "../core/features";
 import { CLOCK_MAX_FONT, clockFace, clockFontSize, clockParts, formatClock } from "../core/clock";
 import { WEATHER_REFRESH_MS, weatherDegrees, weatherKind } from "../core/weather";
 import { weatherIcon } from "../views/weather";
@@ -1438,10 +1438,7 @@ export class Island {
     // Settings → Features: the animations of this build stop when asked to
     // (style.css, :root.still), and a tab turned off while it is open gives way to the home view.
     document.documentElement.classList.toggle("still", !featureOn(State.settings, "motion"));
-    const gone =
-      (State.view === "launcher" && !featureOn(State.settings, "launcherTab")) ||
-      (State.view === "skills" && !featureOn(State.settings, "skillsTab")) ||
-      (State.view === "menu" && !featureOn(State.settings, "menuTab"));
+    const gone = featureTabs().some((f) => State.view === f.tab!.view && !featureOn(State.settings, f.id));
     if (gone) {
       if (State.mode === "expanded") this.setView(State.defaultView());
       else State.view = State.defaultView();

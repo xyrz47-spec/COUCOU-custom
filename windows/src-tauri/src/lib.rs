@@ -10,6 +10,7 @@ mod claude_plan;
 mod codex_plan;
 mod config_file;
 mod desktop;
+mod features;
 mod files;
 mod github;
 mod hooks;
@@ -128,7 +129,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         island::apply_geometry(&app, &settings.screen, collapsed);
     }
     integrations::settings_saved(&app, &settings.active_integrations);
-    spotify::sync(&app, &settings.active_integrations);
+    spotify::sync(&app, &features::allowed_pills(&settings, &settings.active_integrations));
     if shortcuts_changed {
         shortcuts::apply(&app, &settings.shortcuts);
     }
@@ -1010,7 +1011,7 @@ pub fn run() {
             hooks::ensure_hook_exe(&handle);
             pipe::start(handle.clone());
             integrations::start(handle.clone());
-            spotify::sync(&handle, &loaded.active_integrations);
+            spotify::sync(&handle, &features::allowed_pills(&loaded, &loaded.active_integrations));
             shortcuts::apply(&handle, &loaded.shortcuts);
             Ok(())
         })
