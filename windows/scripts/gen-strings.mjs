@@ -12,6 +12,8 @@
 // their categories ({ "one": …, "other": … }) and are keyed by the English
 // "other" form. English is the key itself, so it is not stored.
 //
+// Korean, which the Mac does not ship, comes from scripts/ko-mac.json.
+//
 // Strings the Mac does not have (Windows and Linux only) live in
 // src/i18n/extra.json, written by hand; see src/i18n/i18n.ts.
 
@@ -24,7 +26,14 @@ const SOURCE = resolve(here, "../../NotchBuddy/Resources/Localizable.xcstrings")
 const OUTPUT = resolve(here, "../src/i18n/strings.json");
 
 /** The languages Coucou ships, in the Mac's picker order. English is the source. */
-export const LANGUAGES = ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"];
+export const LANGUAGES = ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id", "ko"];
+
+/**
+ * The Mac does not ship Korean, so Korean is written here for the Mac's
+ * strings (scripts/ko-mac.json, by English text) and added to the catalog's
+ * own languages. A string with no entry has no Korean until one is written.
+ */
+const KOREAN = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), "ko-mac.json"), "utf8"));
 
 /**
  * Names for the placeholders of the Mac strings the Windows code uses, by Mac
@@ -95,6 +104,7 @@ export function generate(catalog) {
       const value = readLocalization(locs[lang], names);
       if (value !== undefined) out[lang] = value;
     }
+    if (KOREAN[key] !== undefined && out.ko === undefined) out.ko = KOREAN[key];
     // The English plural forms are needed to pick "one" in English too.
     if (typeof en !== "string") out.en = en;
     strings[key] = out;

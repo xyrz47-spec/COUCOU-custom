@@ -1945,18 +1945,6 @@
    "id": "Pembayaran",
    "ko": "결제"
   },
-  "Permissions": {
-   "zh-Hans": "权限",
-   "hi": "अनुमतियाँ",
-   "es": "Permisos",
-   "ar": "الأذونات",
-   "fr": "Permissions",
-   "bn": "অনুমতি",
-   "pt-BR": "Permissões",
-   "ru": "Разрешения",
-   "id": "Izin",
-   "ko": "권한"
-  },
   "Pick a model above the chat box first.": {
    "zh-Hans": "请先在聊天框上方选择一个模型。",
    "hi": "पहले चैट बॉक्स के ऊपर एक मॉडल चुनें।",
@@ -4539,18 +4527,6 @@
    "ru": "Погода",
    "id": "Cuaca",
    "ko": "날씨"
-  },
-  "City": {
-   "zh-Hans": "城市",
-   "hi": "शहर",
-   "es": "Ciudad",
-   "ar": "المدينة",
-   "fr": "Ville",
-   "bn": "শহর",
-   "pt-BR": "Cidade",
-   "ru": "Город",
-   "id": "Kota",
-   "ko": "도시"
   },
   "Search": {
    "zh-Hans": "搜索",
