@@ -13,16 +13,28 @@
 // each under platform::local_dir()/valorant/reviews and never leave the
 // machine from here; the user can delete one or all of them.
 //
-// Recording the match and asking an AI model for the analysis are not here:
-// they need the game window's capture and the JEV API, which are separate
-// pieces of work.
+// The analysis asks the chat provider the user already picked (chat.rs: Claude
+// Code, Anthropic, OpenAI, Google, OpenRouter, Ollama, LM Studio or a custom
+// OpenAI-compatible server — which is where a JEV endpoint goes, if it speaks
+// that API). It is given the match's structured events (what the video
+// processing layer saw, each with its time), never the video. Before anything
+// leaves the machine the user is shown what would be sent and to whom
+// (`valorant_analysis_plan`), and nothing is sent without their confirmation.
+// A reply is kept only if it passes `validate` and every moment sits near an
+// event it was given: the model cannot invent moments the events do not hold.
+//
+// Recording the match is not here: it needs the game window's capture.
 
 use std::fs;
 use std::path::PathBuf;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use tauri::{AppHandle, State};
 
-use crate::platform;
+use crate::chat::{self, Chat};
+use crate::{platform, Shared};
 
 /// What a moment is about, as the analysis names it.
 pub const CATEGORIES: &[&str] = &[
@@ -156,6 +168,194 @@ fn list_in(dir: &std::path::Path) -> (Vec<Review>, usize) {
     (reviews, skipped)
 }
 
+// ── Asking the chat provider ──────────────────────────────────────────────────
+
+const MAX_EVENTS: usize = 400;
+const MAX_EVENT_TEXT: usize = 300;
+/// A moment must start or end this close to an event it was given.
+const EVENT_SLACK_MS: u64 = 5_000;
+/// More than this is refused before anything is sent: the input is the cost.
+pub const MAX_INPUT_TOKENS: usize = 60_000;
+
+/// One thing the video processing layer saw, with when.
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default, rename_all = "camelCase")]
+pub struct MatchEvent {
+    pub at_ms: u64,
+    /// "kill", "death", "ability", "spike", "round-start"… free words.
+    pub kind: String,
+    pub detail: String,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default, rename_all = "camelCase")]
+pub struct MatchEvents {
+    pub video_ms: u64,
+    pub events: Vec<MatchEvent>,
+}
+
+pub fn check_events(m: &MatchEvents) -> Result<(), String> {
+    if m.video_ms == 0 {
+        return Err("the events do not say how long the video is".into());
+    }
+    if m.events.is_empty() || m.events.len() > MAX_EVENTS {
+        return Err(format!("give between 1 and {MAX_EVENTS} events"));
+    }
+    for (n, e) in m.events.iter().enumerate() {
+        if e.at_ms > m.video_ms {
+            return Err(format!("event {} is after the end of the video", n + 1));
+        }
+        if e.kind.trim().is_empty() || e.kind.chars().count() > 40 || e.detail.chars().count() > MAX_EVENT_TEXT {
+            return Err(format!("event {} has no kind, or is too long", n + 1));
+        }
+    }
+    Ok(())
+}
+
+/// What the model is told. Facts come only from the events; the rest is asked to be said as inference.
+pub fn build_prompt(m: &MatchEvents) -> String {
+    let mut out = String::from(
+        "You review one Valorant match for the player, after it ended. You are given only a list of \
+events, each with its time in milliseconds in the video. Rules:\n\
+- Every moment you report must sit at or near an event in the list. Never invent a moment.\n\
+- \"fact\" holds only what the events say. Put anything else in \"inference\" and say it is one.\n\
+- Do not state where enemies were, or what the team said in voice, unless an event says so. Say what you cannot know in \"uncertainty\".\n\
+- Judge the decision the player could make at that time, not only the result. Do not credit the player with information they could only have after the round.\n\
+- Give an alternative action and why, and one drill, for each moment.\n\
+- Name 1 to 3 main issues, what went well, and one goal for the next match.\n\
+Answer with one JSON object and nothing else: {\"didWell\":[string], \"topIssues\":[string], \"nextGoal\":string, \
+\"findings\":[{\"startMs\":number,\"endMs\":number,\"category\":one of aim|abilities|positioning|teamwork|round-management|economy|ultimate, \
+\"fact\":string,\"inference\":string,\"reasoning\":string,\"alternative\":string,\"uncertainty\":string,\"drill\":string}]}.\n\n",
+    );
+    out.push_str(&format!("Video length: {} ms\nEvents:\n", m.video_ms));
+    for e in &m.events {
+        out.push_str(&format!("{} ms | {} | {}\n", e.at_ms, e.kind.trim(), e.detail.trim()));
+    }
+    out
+}
+
+/// A rough count of tokens: four characters to a token, rounded up.
+pub fn estimate_tokens(text: &str) -> usize {
+    text.chars().count().div_ceil(4)
+}
+
+/// The first complete JSON object in a model's reply (it may wrap it in prose or a code fence).
+fn json_object(reply: &str) -> Option<Value> {
+    let bytes: Vec<char> = reply.chars().collect();
+    let mut start = 0;
+    while let Some(open) = bytes[start..].iter().position(|c| *c == '{').map(|i| i + start) {
+        let (mut depth, mut in_str, mut escaped) = (0usize, false, false);
+        for (i, c) in bytes.iter().enumerate().skip(open) {
+            if in_str {
+                match (escaped, *c) {
+                    (true, _) => escaped = false,
+                    (false, '\\') => escaped = true,
+                    (false, '"') => in_str = false,
+                    _ => {}
+                }
+                continue;
+            }
+            match c {
+                '"' => in_str = true,
+                '{' => depth += 1,
+                '}' => {
+                    depth -= 1;
+                    if depth == 0 {
+                        let text: String = bytes[open..=i].iter().collect();
+                        if let Ok(v) = serde_json::from_str::<Value>(&text) {
+                            return Some(v);
+                        }
+                        break;
+                    }
+                }
+                _ => {}
+            }
+        }
+        start = open + 1;
+    }
+    None
+}
+
+/// The review a model's reply holds, or why it is refused: not JSON, fails
+/// `validate`, or has a moment that no given event is near.
+pub fn review_from_reply(reply: &str, m: &MatchEvents, id: &str, created_at: i64) -> Result<Review, String> {
+    let value = json_object(reply).ok_or("the answer holds no review")?;
+    let mut review: Review = serde_json::from_value(value).map_err(|e| format!("the answer is not a review: {e}"))?;
+    review.id = id.to_string();
+    review.created_at = created_at;
+    review.video_ms = m.video_ms;
+    review.user_note.clear();
+    validate(&review)?;
+    for (n, f) in review.findings.iter().enumerate() {
+        let near = m.events.iter().any(|e| {
+            e.at_ms + EVENT_SLACK_MS >= f.start_ms && e.at_ms <= f.end_ms + EVENT_SLACK_MS
+        });
+        if !near {
+            return Err(format!("moment {} matches none of the events given", n + 1));
+        }
+    }
+    Ok(review)
+}
+
+/// What an analysis would send, and to whom: shown before the user confirms.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AnalysisPlan {
+    pub provider: String,
+    pub model: String,
+    /// The events leave this PC (every provider but a model server on it).
+    pub external: bool,
+    pub characters: usize,
+    pub estimated_tokens: usize,
+    pub token_limit: usize,
+}
+
+fn is_local(provider: &str) -> bool {
+    matches!(provider, "ollama" | "lmstudio")
+}
+
+#[tauri::command(async)]
+pub fn valorant_analysis_plan(shared: State<Shared>, events: MatchEvents) -> Result<AnalysisPlan, String> {
+    check_events(&events)?;
+    let settings = shared.settings.lock().unwrap().clone();
+    let prompt = build_prompt(&events);
+    let provider = if settings.chat_provider.is_empty() { "anthropic".to_string() } else { settings.chat_provider.clone() };
+    Ok(AnalysisPlan {
+        model: chat::model_for(&settings, &provider),
+        external: !is_local(&provider),
+        characters: prompt.chars().count(),
+        estimated_tokens: estimate_tokens(&prompt),
+        token_limit: MAX_INPUT_TOKENS,
+        provider,
+    })
+}
+
+/// Sends the events to the chat provider and keeps the review it returns.
+/// `confirmed` is the user's click on the plan shown: without it nothing is sent.
+#[tauri::command]
+pub async fn valorant_analyse(
+    app: AppHandle,
+    shared: State<'_, Shared>,
+    events: MatchEvents,
+    confirmed: bool,
+) -> Result<Review, String> {
+    if !confirmed {
+        return Err("Confirm what will be sent first.".into());
+    }
+    check_events(&events)?;
+    let prompt = build_prompt(&events);
+    if estimate_tokens(&prompt) > MAX_INPUT_TOKENS {
+        return Err("These events are too long to send in one go.".into());
+    }
+    let settings = shared.settings.lock().unwrap().clone();
+    // A conversation of its own: nothing of the chat goes in, nothing of this stays in it.
+    let reply = chat::send(&app, &Chat::default(), &settings, prompt, None).await?;
+    let now = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs() as i64).unwrap_or(0);
+    let review = review_from_reply(&reply.text, &events, &format!("match-{now}"), now)?;
+    save_in(&dir(), &review)?;
+    Ok(review)
+}
+
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ReviewList {
@@ -274,6 +474,53 @@ mod tests {
         r.top_issues.clear();
         assert!(validate(&r).is_err(), "no issue");
         assert!(validate(&review("../escape")).is_err());
+    }
+
+    fn events() -> MatchEvents {
+        MatchEvents {
+            video_ms: 60_000,
+            events: vec![
+                MatchEvent { at_ms: 2_000, kind: "death".into(), detail: "Killed in the corridor".into() },
+                MatchEvent { at_ms: 40_000, kind: "kill".into(), detail: "Operator kill".into() },
+            ],
+        }
+    }
+
+    fn reply_with(start: u64, end: u64) -> String {
+        format!(
+            "Here you go:\n```json\n{{\"topIssues\":[\"Peeks without cover\"],\"didWell\":[],\"nextGoal\":\"Hold angles\",\
+\"findings\":[{{\"startMs\":{start},\"endMs\":{end},\"category\":\"positioning\",\"fact\":\"Killed in the corridor {{x}}\",\
+\"uncertainty\":\"Enemy position unknown\"}}]}}\n```"
+        )
+    }
+
+    #[test]
+    fn events_are_checked_and_the_prompt_holds_only_them() {
+        assert!(check_events(&events()).is_ok());
+        let mut late = events();
+        late.events[0].at_ms = 61_000;
+        assert!(check_events(&late).is_err());
+        assert!(check_events(&MatchEvents { video_ms: 1, events: vec![] }).is_err());
+        let prompt = build_prompt(&events());
+        assert!(prompt.contains("2000 ms | death | Killed in the corridor"));
+        assert!(prompt.contains("Never invent a moment"));
+        assert!(estimate_tokens(&prompt) > 100 && estimate_tokens("abcd") == 1 && estimate_tokens("abcde") == 2);
+    }
+
+    #[test]
+    fn a_reply_is_kept_only_if_it_is_a_valid_review_near_the_given_events() {
+        let m = events();
+        // The JSON may sit inside prose and a code fence, braces in strings included.
+        let review = review_from_reply(&reply_with(1_000, 4_000), &m, "match-1", 5).unwrap();
+        assert_eq!((review.id.as_str(), review.created_at, review.video_ms), ("match-1", 5, 60_000));
+        assert_eq!(review.findings[0].fact, "Killed in the corridor {x}");
+        // Near an event within the slack: fine. Far from every event: refused.
+        assert!(review_from_reply(&reply_with(44_000, 46_000), &m, "m", 0).is_ok());
+        assert!(review_from_reply(&reply_with(20_000, 22_000), &m, "m", 0).is_err());
+        // Outside the video, or not a review at all.
+        assert!(review_from_reply(&reply_with(59_000, 61_000), &m, "m", 0).is_err());
+        assert!(review_from_reply("I cannot help with that.", &m, "m", 0).is_err());
+        assert!(review_from_reply("{\"topIssues\": []}", &m, "m", 0).is_err());
     }
 
     #[test]

@@ -180,6 +180,11 @@ export const Bridge = {
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
   // ── Valorant match reviews, kept locally (src-tauri/src/valorant.rs) ──────
   valorantReviews: () => call<ValorantReviewList>("valorant_reviews"),
+  /** What an analysis would send and to whom; nothing is sent. Throws with the reason when the events are not usable. */
+  valorantAnalysisPlan: (events: ValorantEvents) => callOrThrow<ValorantPlan>("valorant_analysis_plan", { events }),
+  /** Sends the events to the chat provider picked in Settings, after the user confirmed the plan. */
+  valorantAnalyse: (events: ValorantEvents, confirmed: boolean) =>
+    callOrThrow<ValorantReview>("valorant_analyse", { events, confirmed }),
   valorantReviewNote: (id: string, note: string) => callOrThrow<void>("valorant_review_note", { id, note }),
   valorantReviewDelete: (id: string) => callOrThrow<number>("valorant_review_delete", { id }),
   valorantReviewsDeleteAll: () => callOrThrow<number>("valorant_reviews_delete_all"),
@@ -365,6 +370,22 @@ export interface ValorantReview {
   nextGoal: string;
   findings: ValorantFinding[];
   userNote: string;
+}
+
+/** What the video processing layer saw in a match, each with its time. */
+export interface ValorantEvents {
+  videoMs: number;
+  events: { atMs: number; kind: string; detail: string }[];
+}
+
+export interface ValorantPlan {
+  provider: string;
+  model: string;
+  /** The events leave this PC. */
+  external: boolean;
+  characters: number;
+  estimatedTokens: number;
+  tokenLimit: number;
 }
 
 export interface ValorantReviewList {

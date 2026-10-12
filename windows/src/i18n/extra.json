@@ -5416,18 +5416,6 @@
    "id": "{n} berkas di folder ulasan bukan ulasan yang valid dan dibiarkan apa adanya.",
    "ko": "리뷰 폴더의 파일 {n}개는 올바른 리뷰가 아니어서 그대로 두었습니다."
   },
-  "Reviews of your matches stay on this PC. Nothing is sent anywhere from here. Recording a match and having it analysed are not in this build yet.": {
-   "zh-Hans": "对局复盘保存在本机,这里不会向任何地方发送数据。录制对局和分析功能尚未包含在此版本中。",
-   "hi": "आपके मैच रिव्यू इसी PC पर रहते हैं। यहाँ से कुछ भी कहीं नहीं भेजा जाता। मैच रिकॉर्ड करना और उसका विश्लेषण इस बिल्ड में अभी नहीं है।",
-   "es": "Las reseñas de tus partidas se quedan en este PC. Desde aquí no se envía nada. Grabar una partida y analizarla aún no está en esta versión.",
-   "ar": "تبقى مراجعات مبارياتك على هذا الحاسوب. لا يُرسل شيء من هنا. تسجيل المباراة وتحليلها غير متوفرين في هذا الإصدار بعد.",
-   "fr": "Les bilans de vos parties restent sur ce PC. Rien n'est envoyé d'ici. L'enregistrement d'une partie et son analyse ne sont pas encore dans cette version.",
-   "bn": "আপনার ম্যাচ রিভিউ এই পিসিতেই থাকে। এখান থেকে কিছু পাঠানো হয় না। ম্যাচ রেকর্ড ও বিশ্লেষণ এই বিল্ডে এখনও নেই।",
-   "pt-BR": "As revisões das suas partidas ficam neste PC. Nada é enviado daqui. Gravar uma partida e analisá-la ainda não está nesta versão.",
-   "ru": "Разборы матчей хранятся на этом ПК. Отсюда ничего не отправляется. Запись матча и его анализ пока не входят в эту сборку.",
-   "id": "Ulasan pertandingan tetap di PC ini. Tidak ada yang dikirim dari sini. Merekam pertandingan dan menganalisisnya belum ada di versi ini.",
-   "ko": "경기 리뷰는 이 PC에만 보관되며 여기서는 아무것도 전송되지 않습니다. 경기 녹화와 분석은 아직 이 빌드에 없습니다."
-  },
   "Seen": {
    "zh-Hans": "所见",
    "hi": "देखा",
@@ -5511,6 +5499,138 @@
    "ru": "Следующий матч",
    "id": "Pertandingan berikutnya",
    "ko": "다음 경기"
+  },
+  "Reviews of your matches are kept on this PC. Recording a match is not in this build yet.": {
+   "zh-Hans": "对局复盘保存在本机。此版本尚不支持录制对局。",
+   "hi": "आपके मैच रिव्यू इसी PC पर रखे जाते हैं। मैच रिकॉर्ड करना इस बिल्ड में अभी नहीं है।",
+   "es": "Las reseñas de tus partidas se guardan en este PC. Grabar una partida aún no está en esta versión.",
+   "ar": "تُحفظ مراجعات مبارياتك على هذا الحاسوب. تسجيل المباراة غير متوفر في هذا الإصدار بعد.",
+   "fr": "Les bilans de vos parties sont gardés sur ce PC. L'enregistrement d'une partie n'est pas encore dans cette version.",
+   "bn": "আপনার ম্যাচ রিভিউ এই পিসিতে রাখা হয়। ম্যাচ রেকর্ড করা এই বিল্ডে এখনও নেই।",
+   "pt-BR": "As revisões das suas partidas ficam neste PC. Gravar uma partida ainda não está nesta versão.",
+   "ru": "Разборы матчей хранятся на этом ПК. Запись матча пока не входит в эту сборку.",
+   "id": "Ulasan pertandingan disimpan di PC ini. Merekam pertandingan belum ada di versi ini.",
+   "ko": "경기 리뷰는 이 PC에 보관됩니다. 경기 녹화는 아직 이 빌드에 없습니다."
+  },
+  "Analyse a match": {
+   "zh-Hans": "分析对局",
+   "hi": "मैच का विश्लेषण करें",
+   "es": "Analizar una partida",
+   "ar": "تحليل مباراة",
+   "fr": "Analyser une partie",
+   "bn": "ম্যাচ বিশ্লেষণ করুন",
+   "pt-BR": "Analisar uma partida",
+   "ru": "Проанализировать матч",
+   "id": "Analisis pertandingan",
+   "ko": "경기 분석"
+  },
+  "Paste the events of a match. The analysis uses the chat provider picked in Settings → Chat (a JEV server goes there as a custom server); nothing is sent until you confirm.": {
+   "zh-Hans": "粘贴一场对局的事件。分析使用在设置 → 聊天中选择的提供商(JEV 服务器可作为自定义服务器填入);确认前不会发送任何内容。",
+   "hi": "किसी मैच के इवेंट पेस्ट करें। विश्लेषण सेटिंग्स → चैट में चुने प्रदाता से होता है (JEV सर्वर कस्टम सर्वर के रूप में वहाँ जाता है); आपकी पुष्टि तक कुछ नहीं भेजा जाता।",
+   "es": "Pega los eventos de una partida. El análisis usa el proveedor elegido en Ajustes → Chat (un servidor JEV va ahí como servidor personalizado); no se envía nada hasta que confirmes.",
+   "ar": "الصق أحداث مباراة. يستخدم التحليل مزوّد الدردشة المختار في الإعدادات ← الدردشة (يُضاف خادم JEV هناك كخادم مخصص)؛ لا يُرسل شيء حتى تؤكد.",
+   "fr": "Collez les événements d'une partie. L'analyse utilise le fournisseur choisi dans Réglages → Chat (un serveur JEV s'y met comme serveur personnalisé) ; rien n'est envoyé avant votre confirmation.",
+   "bn": "একটি ম্যাচের ইভেন্ট পেস্ট করুন। বিশ্লেষণ সেটিংস → চ্যাটে বেছে নেওয়া প্রদানকারী ব্যবহার করে (JEV সার্ভার সেখানে কাস্টম সার্ভার হিসেবে যায়); আপনি নিশ্চিত না করা পর্যন্ত কিছু পাঠানো হয় না।",
+   "pt-BR": "Cole os eventos de uma partida. A análise usa o provedor escolhido em Ajustes → Chat (um servidor JEV entra lá como servidor personalizado); nada é enviado até você confirmar.",
+   "ru": "Вставьте события матча. Анализ использует провайдера, выбранного в Настройки → Чат (сервер JEV указывается там как свой сервер); пока вы не подтвердите, ничего не отправляется.",
+   "id": "Tempel peristiwa sebuah pertandingan. Analisis memakai penyedia yang dipilih di Pengaturan → Obrolan (server JEV dimasukkan di sana sebagai server khusus); tidak ada yang dikirim sebelum Anda mengonfirmasi.",
+   "ko": "경기 이벤트를 붙여 넣으세요. 분석은 설정 → 채팅에서 고른 제공자를 사용하며(JEV 서버는 거기에 사용자 지정 서버로 넣습니다), 확인하기 전에는 아무것도 전송되지 않습니다."
+  },
+  "Show what would be sent": {
+   "zh-Hans": "显示将要发送的内容",
+   "hi": "क्या भेजा जाएगा दिखाएँ",
+   "es": "Mostrar qué se enviaría",
+   "ar": "عرض ما سيُرسل",
+   "fr": "Voir ce qui serait envoyé",
+   "bn": "কী পাঠানো হবে দেখান",
+   "pt-BR": "Mostrar o que seria enviado",
+   "ru": "Показать, что будет отправлено",
+   "id": "Tampilkan yang akan dikirim",
+   "ko": "전송될 내용 보기"
+  },
+  "Send and analyse": {
+   "zh-Hans": "发送并分析",
+   "hi": "भेजें और विश्लेषण करें",
+   "es": "Enviar y analizar",
+   "ar": "أرسل وحلّل",
+   "fr": "Envoyer et analyser",
+   "bn": "পাঠান ও বিশ্লেষণ করুন",
+   "pt-BR": "Enviar e analisar",
+   "ru": "Отправить и проанализировать",
+   "id": "Kirim dan analisis",
+   "ko": "전송하고 분석"
+  },
+  "Analysing…": {
+   "zh-Hans": "分析中…",
+   "hi": "विश्लेषण हो रहा है…",
+   "es": "Analizando…",
+   "ar": "جارٍ التحليل…",
+   "fr": "Analyse en cours…",
+   "bn": "বিশ্লেষণ চলছে…",
+   "pt-BR": "Analisando…",
+   "ru": "Анализ…",
+   "id": "Menganalisis…",
+   "ko": "분석 중…"
+  },
+  "The events are not valid JSON.": {
+   "zh-Hans": "事件不是有效的 JSON。",
+   "hi": "इवेंट वैध JSON नहीं हैं।",
+   "es": "Los eventos no son JSON válido.",
+   "ar": "الأحداث ليست JSON صالحًا.",
+   "fr": "Les événements ne sont pas du JSON valide.",
+   "bn": "ইভেন্টগুলো বৈধ JSON নয়।",
+   "pt-BR": "Os eventos não são um JSON válido.",
+   "ru": "События — некорректный JSON.",
+   "id": "Peristiwa bukan JSON yang valid.",
+   "ko": "이벤트가 올바른 JSON이 아닙니다."
+  },
+  "{provider} · {model} — about {tokens} tokens ({limit} at most). {where}": {
+   "zh-Hans": "{provider} · {model} — 约 {tokens} 个 token(最多 {limit})。{where}",
+   "hi": "{provider} · {model} — लगभग {tokens} टोकन (अधिकतम {limit})। {where}",
+   "es": "{provider} · {model} — unos {tokens} tokens (máximo {limit}). {where}",
+   "ar": "{provider} · {model} — حوالي {tokens} رمزًا (الحد الأقصى {limit}). {where}",
+   "fr": "{provider} · {model} — environ {tokens} jetons ({limit} au plus). {where}",
+   "bn": "{provider} · {model} — প্রায় {tokens} টোকেন (সর্বোচ্চ {limit})। {where}",
+   "pt-BR": "{provider} · {model} — cerca de {tokens} tokens (no máximo {limit}). {where}",
+   "ru": "{provider} · {model} — около {tokens} токенов (не более {limit}). {where}",
+   "id": "{provider} · {model} — sekitar {tokens} token (maksimal {limit}). {where}",
+   "ko": "{provider} · {model} — 약 {tokens} 토큰 (최대 {limit}). {where}"
+  },
+  "The events leave this PC.": {
+   "zh-Hans": "事件将离开这台电脑。",
+   "hi": "इवेंट इस PC से बाहर जाएँगे।",
+   "es": "Los eventos salen de este PC.",
+   "ar": "ستغادر الأحداث هذا الحاسوب.",
+   "fr": "Les événements quittent ce PC.",
+   "bn": "ইভেন্টগুলো এই পিসি ছেড়ে যাবে।",
+   "pt-BR": "Os eventos saem deste PC.",
+   "ru": "События покинут этот ПК.",
+   "id": "Peristiwa akan keluar dari PC ini.",
+   "ko": "이벤트가 이 PC 밖으로 전송됩니다."
+  },
+  "The events stay on this PC.": {
+   "zh-Hans": "事件保留在这台电脑上。",
+   "hi": "इवेंट इसी PC पर रहेंगे।",
+   "es": "Los eventos se quedan en este PC.",
+   "ar": "ستبقى الأحداث على هذا الحاسوب.",
+   "fr": "Les événements restent sur ce PC.",
+   "bn": "ইভেন্টগুলো এই পিসিতেই থাকবে।",
+   "pt-BR": "Os eventos ficam neste PC.",
+   "ru": "События останутся на этом ПК.",
+   "id": "Peristiwa tetap di PC ini.",
+   "ko": "이벤트가 이 PC에 남습니다."
+  },
+  "Expected videoMs and a list of events, each with atMs, kind and detail.": {
+   "zh-Hans": "需要 videoMs 和事件列表,每个事件包含 atMs、kind 和 detail。",
+   "hi": "videoMs और इवेंट की सूची चाहिए, हर इवेंट में atMs, kind और detail हों।",
+   "es": "Se esperaba videoMs y una lista de eventos, cada uno con atMs, kind y detail.",
+   "ar": "المتوقع: videoMs وقائمة أحداث، لكل منها atMs وkind وdetail.",
+   "fr": "Attendu : videoMs et une liste d'événements, chacun avec atMs, kind et detail.",
+   "bn": "videoMs এবং ইভেন্টের তালিকা চাই, প্রতিটিতে atMs, kind ও detail থাকবে।",
+   "pt-BR": "Esperado: videoMs e uma lista de eventos, cada um com atMs, kind e detail.",
+   "ru": "Нужны videoMs и список событий, у каждого — atMs, kind и detail.",
+   "id": "Diharapkan videoMs dan daftar peristiwa, masing-masing dengan atMs, kind, dan detail.",
+   "ko": "videoMs와 이벤트 목록이 필요하며, 각 이벤트에는 atMs, kind, detail이 있어야 합니다."
   }
  }
 }

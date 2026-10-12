@@ -898,6 +898,8 @@ pub fn run() {
             task_projects,
             task_reveal,
             launcher::launcher_status,
+            valorant::valorant_analysis_plan,
+            valorant::valorant_analyse,
             valorant::valorant_reviews,
             valorant::valorant_review_note,
             valorant::valorant_review_delete,
