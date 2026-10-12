@@ -620,7 +620,7 @@ mod app_tests {
     #[ignore]
     #[cfg(windows)]
     fn live_apps_are_listed_with_their_pictures() {
-        let apps = launcher_apps();
+        let apps = tidy_apps(platform::start_apps());
         println!("{} apps; first: {:?}", apps.len(), apps.iter().take(8).map(|a| &a.name).collect::<Vec<_>>());
         assert!(apps.len() > 10);
         let pictured = apps.iter().take(12).filter(|a| launcher_app_icon(a.target.clone()).is_some()).count();
