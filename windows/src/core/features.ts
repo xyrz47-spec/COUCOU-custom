@@ -83,10 +83,6 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
     name: N_("Launcher tab"), tab: N_("Launcher"), page: N_("Launcher"),
     about: N_("The island's grid tab: your websites and apps, one click each, with the apps installed on this PC to search and add."),
   },
-  menuTab: {
-    name: N_("Menu tab"), tab: N_("Menu"), page: N_("Menu"),
-    about: N_("The island's menu tab: say how you feel like eating and get about five dishes back, from the chat provider or the one you pick (a JEV server goes in as the Custom server)."),
-  },
   spotify: {
     name: N_("Spotify"),
     about: N_("The Spotify pill: what is playing, with play/pause and skip. Off, Coucou does not look at Spotify at all, and the music features below wait for it."),
@@ -117,7 +113,6 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
 const GROUP_TITLES: Record<string, string> = {
   claude: "Claude Code",
   launcher: N_("Launcher"),
-  menu: N_("Menu"),
   music: N_("Music · Spotify"),
   time: N_("Time and weather"),
   look: N_("Look"),

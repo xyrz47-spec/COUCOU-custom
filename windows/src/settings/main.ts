@@ -25,7 +25,6 @@ import { h, clear } from "../views/dom";
 import { drawSelects } from "../views/select";
 import { agentsSection } from "./agents";
 import { launcherSection } from "./launcher";
-import { menuSection } from "./menu";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
 import {
@@ -1841,7 +1840,6 @@ async function render() {
   // The pages features bring with them (core/features.json, settingsPage): there while the feature is on.
   const featureSections: Record<string, () => HTMLElement[]> = {
     launcher: () => [launcherSection(() => settings, save, (redraw) => declaredViews.push(redraw))],
-    menu: () => [menuSection(() => settings, save)],
   };
   const featurePages: Page[] = FEATURES.filter((f) => f.settingsPage && featureOn(settings, f.id) && featureSections[f.settingsPage.id])
     .map((f) => ({ id: f.settingsPage!.id, label: t(f.settingsPage!.label), color: f.settingsPage!.color, sections: featureSections[f.settingsPage!.id]() }));

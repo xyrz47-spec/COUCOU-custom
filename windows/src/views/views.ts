@@ -26,7 +26,6 @@ import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spot
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
 import { featureOn, featureTabs } from "../core/features";
 import { buildLauncher } from "./launcher";
-import { buildMenu } from "./menu";
 import { buildSkills } from "./skills";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
@@ -934,7 +933,6 @@ export function buildViews(
   map.set("wardrobe", buildWardrobe(actions));
   map.set("launcher", buildLauncher(actions));
   map.set("skills", buildSkills(actions));
-  map.set("menu", buildMenu(actions));
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));

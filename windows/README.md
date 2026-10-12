@@ -226,7 +226,7 @@ side (tray, errors) embeds the same two files.
 
 ## Features: turning parts of Coucou on and off
 
-Settings → **Features** lists what this build adds, by module — Claude Code (chat, skills, plugin skills, skill suggestions), Launcher, Menu, Music · Spotify (the pill, the big player, the song in the compact island), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
+Settings → **Features** lists what this build adds, by module — Claude Code (chat, skills, plugin skills, skill suggestions), Launcher, Music · Spotify (the pill, the big player, the song in the compact island), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
 
 For whoever adds or removes a feature, it is declared in one place and checked where it plugs in:
 

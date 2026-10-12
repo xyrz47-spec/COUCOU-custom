@@ -178,10 +178,6 @@ export const Bridge = {
 
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
-  // ── The Menu tab (src-tauri/src/menu.rs) ──────────────────────────────────
-  menuProvider: () => call<MenuProviderInfo>("menu_provider"),
-  /** About five dishes for how the person feels; `avoid` are those already shown. Throws with the reason. */
-  menuRecommend: (mood: string, avoid: string[]) => callOrThrow<MenuItem[]>("menu_recommend", { mood, avoid }),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
   launcherStatus: () => call<boolean[]>("launcher_status"),
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
@@ -340,19 +336,6 @@ export interface SkillAdvice {
   add: (FoundSkill & { dest: string; reason: string })[];
   remove: { path: string; name: string; dest: string; reason: string }[];
   note: string;
-}
-
-export interface MenuItem {
-  name: string;
-  why: string;
-  tags: string[];
-}
-
-export interface MenuProviderInfo {
-  provider: string;
-  model: string;
-  /** What is typed leaves this PC. */
-  external: boolean;
 }
 
 export interface SkillGroup {
