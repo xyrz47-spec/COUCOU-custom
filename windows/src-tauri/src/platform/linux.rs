@@ -913,3 +913,17 @@ pub fn file_icon_rgba(_path: &std::path::Path, _size: i32) -> Option<(u32, u32, 
 pub fn move_to_bin(path: &std::path::Path) -> bool {
     Command::new("gio").arg("trash").arg(path).status().map(|s| s.success()).unwrap_or(false)
 }
+
+
+/// Windows only: there is no game window to find here.
+pub fn window_titled(_name: &str) -> Option<String> {
+    None
+}
+
+/// Free bytes on the filesystem `path` is on.
+pub fn free_disk_bytes(path: &std::path::Path) -> Option<u64> {
+    use std::os::unix::ffi::OsStrExt;
+    let c = std::ffi::CString::new(path.as_os_str().as_bytes()).ok()?;
+    let mut stat: libc::statvfs = unsafe { std::mem::zeroed() };
+    (unsafe { libc::statvfs(c.as_ptr(), &mut stat) } == 0).then(|| stat.f_bavail as u64 * stat.f_frsize as u64)
+}

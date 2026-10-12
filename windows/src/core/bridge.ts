@@ -185,6 +185,13 @@ export const Bridge = {
   /** Sends the events to the chat provider picked in Settings, after the user confirmed the plan. */
   valorantAnalyse: (events: ValorantEvents, confirmed: boolean) =>
     callOrThrow<ValorantReview>("valorant_analyse", { events, confirmed }),
+  valorantNotes: () => call<string>("valorant_notes"),
+  valorantNotesSet: (text: string) => callOrThrow<void>("valorant_notes_set", { text }),
+  valorantRecorderStatus: () => call<ValorantRecorderStatus>("valorant_recorder_status"),
+  valorantRecordings: () => call<ValorantRecording[]>("valorant_recordings"),
+  /** One recording by name, or all of them (`null`). */
+  valorantRecordingsDelete: (name: string | null) => callOrThrow<number>("valorant_recordings_delete", { name }),
+  valorantRecordingsReveal: () => call<void>("valorant_recordings_reveal"),
   valorantReviewNote: (id: string, note: string) => callOrThrow<void>("valorant_review_note", { id, note }),
   valorantReviewDelete: (id: string) => callOrThrow<number>("valorant_review_delete", { id }),
   valorantReviewsDeleteAll: () => callOrThrow<number>("valorant_reviews_delete_all"),
@@ -359,6 +366,8 @@ export interface ValorantFinding {
   alternative: string;
   uncertainty: string;
   drill: string;
+  /** The guide section it is judged against (`POS-1`…), or `NOTES`. */
+  guide: string;
 }
 
 export interface ValorantReview {
@@ -386,6 +395,19 @@ export interface ValorantPlan {
   characters: number;
   estimatedTokens: number;
   tokenLimit: number;
+}
+
+/** The recorder's state (src-tauri/src/recorder.rs). */
+export interface ValorantRecorderStatus {
+  state: "off" | "waiting" | "recording" | "noFfmpeg" | "lowDisk" | "failed";
+  file: string;
+  detail: string;
+}
+
+export interface ValorantRecording {
+  name: string;
+  bytes: number;
+  modified: number;
 }
 
 export interface ValorantReviewList {

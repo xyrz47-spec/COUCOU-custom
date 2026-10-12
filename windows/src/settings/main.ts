@@ -1834,7 +1834,7 @@ async function render() {
       ? [{ id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save, (redraw) => declaredViews.push(redraw))] }]
       : []),
     ...(featureOn(settings, "valorantReview")
-      ? [{ id: "valorant", label: t("Valorant"), color: "#F58A9A", sections: [valorantSection()] }]
+      ? [{ id: "valorant", label: t("Valorant"), color: "#F58A9A", sections: [valorantSection(() => settings, save)] }]
       : []),
     { id: "general", label: t("General"), color: "#BDB2F7", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EBD58A", sections: [shortcutsSection(shortcutReport)] },

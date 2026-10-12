@@ -54,8 +54,8 @@ export const FEATURES: readonly FeatureDef[] = [
     about: N_("The island's grid tab: your websites and apps, one click each, with the apps installed on this PC to search and add."),
   },
   {
-    id: "valorantReview", group: "tabs", name: N_("Valorant match reviews"), page: "valorant",
-    about: N_("A settings page for the reviews of your Valorant matches, kept on this PC: read them, add a note, delete one or all."),
+    id: "valorantReview", group: "tabs", name: N_("Valorant tab"), page: "valorant",
+    about: N_("The island's Valorant tab and its settings page: the reviews of your matches, kept on this PC, and the recorder's state. Recording itself is off until you turn it on."),
   },
   {
     id: "musicPlayer", group: "tabs", name: N_("Big music player"),

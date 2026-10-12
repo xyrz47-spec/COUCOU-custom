@@ -25,7 +25,8 @@ export type IslandViewName =
   | "recap"
   | "wardrobe"
   | "launcher"
-  | "skills";
+  | "skills"
+  | "valorant";
 
 export type BotStateName =
   | "idle"
@@ -99,6 +100,8 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   launcher: { height: 196, botX: 68, botY: 119, botDiameter: 58, agentMode: "none" },
   // A list to read and a field to type in: as tall as the chat, the whole width (no Mochi).
   skills: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
+  // The match reviews and the recorder: a list to read, as tall as the skills tab (no Mochi).
+  valorant: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
 };
 
 // The upload views above are only the fallback geometry. Once a file is actually

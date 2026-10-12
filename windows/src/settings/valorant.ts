@@ -4,15 +4,13 @@
 // what is inferred and how sure that is, what else could have been done, and
 // one drill. The user can add a note to a review and delete one or all of them.
 
-import { Bridge, type ValorantEvents, type ValorantPlan, type ValorantReview } from "../core/bridge";
+import { Bridge, onEvent, type ValorantRecorderStatus, type ValorantEvents, type ValorantPlan, type ValorantReview } from "../core/bridge";
+import type { Settings } from "../core/state";
 import { clear, h } from "../views/dom";
 import { t } from "../i18n/i18n";
 
-/** `m:ss` for a moment in the video. */
-export function clockText(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
-}
+export { clockText } from "../views/valorant";
+import { clockText, statusText } from "../views/valorant";
 
 function field(label: string, text: string): HTMLElement | null {
   return text.trim() ? h("div", { class: "hint", text: `${label}: ${text}` }) : null;
@@ -33,7 +31,7 @@ export function parseEvents(text: string): ValorantEvents | string {
   return v as ValorantEvents;
 }
 
-export function valorantSection(): HTMLElement {
+export function valorantSection(current: () => Settings, save: () => Promise<void>): HTMLElement {
   const list = h("div", { style: "display:flex;flex-direction:column;gap:14px" });
   const note = h("div", { class: "notice err", style: "display:none" });
   const wipe = h("button", { class: "danger", text: t("Delete all reviews") }) as HTMLButtonElement;
@@ -114,6 +112,28 @@ export function valorantSection(): HTMLElement {
     Bridge.valorantReviewsDeleteAll().then(() => load()).catch((err) => say(String(err)));
   });
 
+  // ── Recording the game window (src-tauri/src/recorder.rs) ───────────────────
+  const recState = h("div", { class: "hint" });
+  const recSwitch = h("button", { class: current().valorantRecord ? "switch on" : "switch", "aria-pressed": current().valorantRecord });
+  recSwitch.addEventListener("click", () => {
+    const next = !recSwitch.classList.contains("on");
+    recSwitch.classList.toggle("on", next);
+    current().valorantRecord = next;
+    void save();
+  });
+  const recText = statusText;
+  void Bridge.valorantRecorderStatus().then((s) => { recState.textContent = recText(s ?? null); });
+  void onEvent<ValorantRecorderStatus>("valorant-recorder", (s) => { recState.textContent = recText(s); });
+
+  // ── The player's own reference notes ────────────────────────────────────────
+  const notesBox = h("textarea", {
+    placeholder: t("Notes from pro or Radiant players you want the review to use"), style: "width:100%;min-height:72px",
+  }) as HTMLTextAreaElement;
+  void Bridge.valorantNotes().then((text) => { notesBox.value = text ?? ""; });
+  notesBox.addEventListener("change", () => {
+    Bridge.valorantNotesSet(notesBox.value).then(() => say("")).catch((err) => say(String(err)));
+  });
+
   // ── Analysing a match: show what would be sent, send only after a click ─────
   const eventsBox = h("textarea", {
     placeholder: '{"videoMs": 1500000, "events": [{"atMs": 61000, "kind": "death", "detail": "…"}]}',
@@ -175,6 +195,20 @@ export function valorantSection(): HTMLElement {
       class: "hint",
       text: t("Reviews of your matches are kept on this PC. Recording a match is not in this build yet."),
     }),
+    h("h2", {}, h("span", { text: t("Recording") })),
+    h("div", { class: "row" },
+      h("span", { text: t("Record the VALORANT window while the game runs") }), recSwitch),
+    h("div", {
+      class: "hint",
+      text: t("Only the game's window is captured, with no sound, by ffmpeg (it has to be installed). It starts when the window appears and stops when it closes, at 90 minutes, or when the drive is nearly full. The lobby is in the same window, so a recording holds more than one match."),
+    }),
+    recState,
+    h("h2", {}, h("span", { text: t("Reference notes") })),
+    h("div", {
+      class: "hint",
+      text: t("The review judges your play against a guide of commonly taught habits (general convention, not data from any player's games). Notes you paste here are added to it."),
+    }),
+    notesBox,
     h("h2", {}, h("span", { text: t("Analyse a match") })),
     h("div", {
       class: "hint",

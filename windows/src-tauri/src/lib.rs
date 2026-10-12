@@ -27,6 +27,7 @@ mod platform;
 #[cfg(target_os = "linux")]
 mod portal;
 mod recap;
+mod recorder;
 mod secrets;
 mod session_window;
 mod settings;
@@ -900,6 +901,12 @@ pub fn run() {
             launcher::launcher_status,
             valorant::valorant_analysis_plan,
             valorant::valorant_analyse,
+            recorder::valorant_recorder_status,
+            recorder::valorant_recordings,
+            recorder::valorant_recordings_delete,
+            recorder::valorant_recordings_reveal,
+            valorant::valorant_notes,
+            valorant::valorant_notes_set,
             valorant::valorant_reviews,
             valorant::valorant_review_note,
             valorant::valorant_review_delete,
@@ -1014,6 +1021,7 @@ pub fn run() {
             hooks::ensure_hook_exe(&handle);
             pipe::start(handle.clone());
             integrations::start(handle.clone());
+            recorder::start(handle.clone());
             spotify::sync(&handle, &loaded.active_integrations);
             shortcuts::apply(&handle, &loaded.shortcuts);
             Ok(())

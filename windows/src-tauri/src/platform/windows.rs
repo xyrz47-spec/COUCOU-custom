@@ -910,3 +910,21 @@ pub fn move_to_bin(path: &std::path::Path) -> bool {
     };
     unsafe { SHFileOperationW(&mut operation) == 0 && !operation.fAnyOperationsAborted.as_bool() }
 }
+
+
+/// The exact title of a visible top-level window whose title is `name` (case and
+/// surrounding spaces aside) — the game's window, to capture that window alone.
+pub fn window_titled(name: &str) -> Option<String> {
+    top_windows().into_iter().map(|(_, _, title)| title).find(|title| title.trim().eq_ignore_ascii_case(name))
+}
+
+/// Free bytes on the drive `path` is on, for the recorder to stop before the disk is full.
+pub fn free_disk_bytes(path: &std::path::Path) -> Option<u64> {
+    use ::windows::core::PCWSTR;
+    use ::windows::Win32::Storage::FileSystem::GetDiskFreeSpaceExW;
+    use std::os::windows::ffi::OsStrExt;
+    let wide: Vec<u16> = path.as_os_str().encode_wide().chain(std::iter::once(0)).collect();
+    let mut free = 0u64;
+    unsafe { GetDiskFreeSpaceExW(PCWSTR(wide.as_ptr()), Some(&mut free), None, None).ok()? };
+    Some(free)
+}
