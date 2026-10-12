@@ -1,7 +1,8 @@
 // Twenty questions, answered by JEV.
 //
-// Coucou thinks of something — an animal, a food, an object — and keeps it in
-// Rust: the page never sees it until the game is over. The player asks yes/no
+// Coucou thinks of something — one of nearly five hundred animals, foods,
+// objects, places, jobs and things of nature (twenty_items.txt), by kind and by
+// how rare — and keeps it in Rust: the page never sees it until the game is over. The player asks yes/no
 // questions, up to twenty; JEV answers each one with a Noul question ("is this
 // statement true?") about the secret, which comes back as a value from 0 to 1
 // that the tab turns into Yes / Probably yes / Not sure / Probably no / No. A
@@ -12,7 +13,8 @@
 // the secret's name and the player's question — nothing else is sent. Without a
 // key, or with the feature off, no game starts.
 
-use std::sync::Mutex;
+use std::collections::VecDeque;
+use std::sync::{Mutex, OnceLock};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::Serialize;
@@ -26,27 +28,82 @@ pub const TOTAL: usize = 20;
 const MAX_QUESTION_CHARS: usize = 200;
 const MAX_GUESS_CHARS: usize = 60;
 
-/// What Coucou may think of: (kind, name). Names are English; the tab translates them when the game ends.
-pub const ITEMS: &[(&str, &str)] = &[
-    ("animal", "Elephant"), ("animal", "Dog"), ("animal", "Penguin"),
-    ("animal", "Dolphin"), ("animal", "Butterfly"), ("animal", "Giraffe"),
-    ("food", "Pizza"), ("food", "Banana"), ("food", "Ice cream"),
-    ("food", "Bread"), ("food", "Egg"), ("food", "Rice"),
-    ("thing", "Umbrella"), ("thing", "Bicycle"), ("thing", "Telephone"),
-    ("thing", "Clock"), ("thing", "Book"), ("thing", "Toothbrush"),
-];
+/// One thing Coucou may think of.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Item {
+    pub kind: &'static str,
+    /// 1 common, 2 less common, 3 rare.
+    pub tier: u8,
+    pub en: &'static str,
+    pub ko: &'static str,
+}
 
-/// The index of the item to think of: of `kind` ("any" for all), by `seed`, not `last` if there is another.
-pub fn pick(kind: &str, seed: u64, last: Option<usize>) -> Option<usize> {
-    let pool: Vec<usize> = ITEMS.iter().enumerate().filter(|(_, (k, _))| kind == "any" || *k == kind).map(|(i, _)| i).collect();
-    if pool.is_empty() {
-        return None;
+const ITEMS_TEXT: &str = include_str!("twenty_items.txt");
+
+/// The kinds a game may be about.
+pub const KINDS: &[&str] = &["animal", "food", "thing", "place", "job", "nature"];
+
+/// What Coucou may think of, from twenty_items.txt: `kind | tier | English | 한국어` per line.
+pub fn items() -> &'static [Item] {
+    static ITEMS: OnceLock<Vec<Item>> = OnceLock::new();
+    ITEMS.get_or_init(|| {
+        ITEMS_TEXT
+            .lines()
+            .filter(|l| !l.trim().is_empty() && !l.starts_with('#'))
+            .filter_map(|line| {
+                let mut parts = line.split('|');
+                let (kind, tier, en, ko) = (parts.next()?, parts.next()?, parts.next()?, parts.next()?);
+                Some(Item { kind: kind.trim(), tier: tier.trim().parse().ok()?, en: en.trim(), ko: ko.trim() })
+            })
+            .collect()
+    })
+}
+
+/// The tiers a level draws from: easy the common ones, normal the common and less common,
+/// hard the less common and rare, any all of them.
+fn tiers(level: &str) -> Option<std::ops::RangeInclusive<u8>> {
+    match level {
+        "easy" => Some(1..=1),
+        "normal" => Some(1..=2),
+        "hard" => Some(2..=3),
+        "any" => Some(1..=3),
+        _ => None,
     }
-    let mut at = (seed % pool.len() as u64) as usize;
-    if pool.len() > 1 && Some(pool[at]) == last {
-        at = (at + 1) % pool.len();
+}
+
+/// How many of the last picks are not drawn again.
+const RECENT: usize = 60;
+
+/// The indexes Coucou may draw for `kind` ("any" for all) at `level`.
+pub fn pool(kind: &str, level: &str) -> Vec<usize> {
+    let Some(range) = tiers(level) else { return Vec::new() };
+    items()
+        .iter()
+        .enumerate()
+        .filter(|(_, item)| (kind == "any" || item.kind == kind) && range.contains(&item.tier))
+        .map(|(i, _)| i)
+        .collect()
+}
+
+/// A random number each call: xorshift64*, seeded once from the clock and the process.
+pub fn random() -> u64 {
+    static STATE: Mutex<u64> = Mutex::new(0);
+    let mut x = STATE.lock().unwrap();
+    if *x == 0 {
+        let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos() as u64).unwrap_or(1);
+        *x = nanos ^ ((std::process::id() as u64) << 32) ^ (&*x as *const u64 as u64) | 1;
     }
-    Some(pool[at])
+    *x ^= *x >> 12;
+    *x ^= *x << 25;
+    *x ^= *x >> 27;
+    x.wrapping_mul(0x2545_F491_4F6C_DD1D)
+}
+
+/// Draws one of `pool` that is not among `recent`, by `random`; any of the pool when all were recent.
+pub fn draw(pool: &[usize], recent: &VecDeque<usize>, random: u64) -> Option<usize> {
+    let fresh: Vec<usize> = pool.iter().copied().filter(|i| !recent.contains(i)).collect();
+    let from = if fresh.is_empty() { pool } else { &fresh };
+    (!from.is_empty()).then(|| from[(random % from.len() as u64) as usize])
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -83,7 +140,7 @@ impl Game {
 }
 
 static GAME: Mutex<Option<Game>> = Mutex::new(None);
-static LAST: Mutex<Option<usize>> = Mutex::new(None);
+static RECENT_PICKS: Mutex<VecDeque<usize>> = Mutex::new(VecDeque::new());
 
 /// The answer to a question, from JEV's 0–1.
 pub fn label(noul: f64) -> &'static str {
@@ -132,6 +189,21 @@ fn noul_of(response: &Value, name: &str) -> Result<f64, String> {
 #[serde(rename_all = "camelCase")]
 pub struct Started {
     pub total: usize,
+    /// How many things Coucou might have thought of.
+    pub pool: usize,
+}
+
+/// What Coucou had in mind, told when the game is over: the page picks the language.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Secret {
+    pub en: String,
+    pub ko: String,
+}
+
+fn secret_of(item: usize) -> Secret {
+    let it = &items()[item];
+    Secret { en: it.en.to_string(), ko: it.ko.to_string() }
 }
 
 #[derive(Serialize)]
@@ -144,7 +216,7 @@ pub struct Answer {
     /// The questions ran out without a guess: the game is over.
     pub over: bool,
     /// The secret, once the game is over.
-    pub secret: Option<String>,
+    pub secret: Option<Secret>,
 }
 
 #[derive(Serialize)]
@@ -154,7 +226,7 @@ pub struct GuessResult {
     pub asked: usize,
     pub left: usize,
     pub over: bool,
-    pub secret: Option<String>,
+    pub secret: Option<Secret>,
 }
 
 fn guard(shared: &Shared) -> Result<String, String> {
@@ -164,16 +236,22 @@ fn guard(shared: &Shared) -> Result<String, String> {
     secrets::get(KEY).ok_or_else(|| "No TypeSafe API key: add one in Settings → JEV.".to_string())
 }
 
-/// Coucou thinks of something of `kind` ("animal", "food", "thing" or "any").
+/// Coucou thinks of something of `kind` (a kind of KINDS, or "any") at `level` (easy, normal, hard or any).
 #[tauri::command]
-pub fn twenty_new(shared: State<Shared>, kind: String) -> Result<Started, String> {
+pub fn twenty_new(shared: State<Shared>, kind: String, level: String) -> Result<Started, String> {
     guard(&shared)?;
-    let seed = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos() as u64).unwrap_or(7);
-    let mut last = LAST.lock().unwrap();
-    let item = pick(&kind, seed, *last).ok_or("Pick animal, food, thing or any.")?;
-    *last = Some(item);
+    if kind != "any" && !KINDS.contains(&kind.as_str()) {
+        return Err("Pick a kind of thing.".into());
+    }
+    let pool = pool(&kind, &level);
+    let mut recent = RECENT_PICKS.lock().unwrap();
+    let item = draw(&pool, &recent, random()).ok_or("Pick easy, normal, hard or any.")?;
+    recent.push_back(item);
+    while recent.len() > RECENT {
+        recent.pop_front();
+    }
     *GAME.lock().unwrap() = Some(Game::new(item));
-    Ok(Started { total: TOTAL })
+    Ok(Started { total: TOTAL, pool: pool.len() })
 }
 
 /// One yes/no question about the secret.
@@ -187,7 +265,8 @@ pub async fn twenty_ask(shared: State<'_, Shared>, question: String) -> Result<A
     let (kind, name) = {
         let game = GAME.lock().unwrap();
         let game = game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
-        ITEMS[game.item]
+        let it = &items()[game.item];
+        (it.kind, it.en)
     };
     let noul = noul_of(&call(&key, &ask_body(name, kind, &question)).await?, "answer")?;
     let mut slot = GAME.lock().unwrap();
@@ -199,7 +278,7 @@ pub async fn twenty_ask(shared: State<'_, Shared>, question: String) -> Result<A
         asked: game.asked,
         left: game.left(),
         over,
-        secret: over.then(|| ITEMS[game.item].1.to_string()),
+        secret: over.then(|| secret_of(game.item)),
     })
 }
 
@@ -211,11 +290,12 @@ pub async fn twenty_guess(shared: State<'_, Shared>, guess: String) -> Result<Gu
     if guess.is_empty() {
         return Err("Type a guess first.".into());
     }
-    let name = {
+    let (name, name_ko) = {
         let game = GAME.lock().unwrap();
-        ITEMS[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item].1
+        let it = &items()[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item];
+        (it.en, it.ko)
     };
-    let correct = if normalise(&guess) == normalise(name) {
+    let correct = if normalise(&guess) == normalise(name) || normalise(&guess) == normalise(name_ko) {
         true
     } else {
         noul_of(&call(&key, &same_body(name, &guess)).await?, "same")? >= 0.8
@@ -228,17 +308,17 @@ pub async fn twenty_guess(shared: State<'_, Shared>, guess: String) -> Result<Gu
         asked: game.asked,
         left: game.left(),
         over: game.over,
-        secret: game.over.then(|| ITEMS[game.item].1.to_string()),
+        secret: game.over.then(|| secret_of(game.item)),
     })
 }
 
 /// Gives up: the secret is told and the game ends.
 #[tauri::command]
-pub fn twenty_give_up() -> Result<String, String> {
+pub fn twenty_give_up() -> Result<Secret, String> {
     let mut slot = GAME.lock().unwrap();
     let game = slot.as_mut().ok_or("No game on.")?;
     game.over = true;
-    Ok(ITEMS[game.item].1.to_string())
+    Ok(secret_of(game.item))
 }
 
 #[cfg(test)]
@@ -246,27 +326,63 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_thinks_of_something_of_the_kind_asked_and_not_the_same_twice() {
-        for seed in 0..50 {
-            let i = pick("animal", seed, None).unwrap();
-            assert_eq!(ITEMS[i].0, "animal");
+    fn the_list_is_large_valid_and_every_name_is_unique() {
+        let all = items();
+        assert!(all.len() >= 450, "{} things", all.len());
+        let mut names: Vec<String> = all.iter().map(|i| normalise(i.en)).collect();
+        names.sort();
+        names.dedup();
+        assert_eq!(names.len(), all.len(), "an English name is used twice");
+        let mut korean: Vec<String> = all.iter().map(|i| normalise(i.ko)).collect();
+        korean.sort();
+        korean.dedup();
+        assert_eq!(korean.len(), all.len(), "a Korean name is used twice");
+        for item in all {
+            assert!(KINDS.contains(&item.kind), "{}: kind {}", item.en, item.kind);
+            assert!((1..=3).contains(&item.tier) && !item.en.is_empty() && !item.ko.is_empty(), "{}", item.en);
         }
-        let any: std::collections::HashSet<_> = (0..50).filter_map(|s| pick("any", s, None)).map(|i| ITEMS[i].0).collect();
-        assert_eq!(any.len(), 3, "any reaches every kind");
-        let first = pick("food", 3, None).unwrap();
-        assert_ne!(pick("food", 3, Some(first)).unwrap(), first, "not the one just played");
-        assert_eq!(pick("vegetable", 1, None), None);
+        let lines = ITEMS_TEXT.lines().filter(|l| !l.trim().is_empty() && !l.starts_with('#')).count();
+        assert_eq!(lines, all.len(), "a line of twenty_items.txt could not be read");
     }
 
     #[test]
-    fn every_kind_has_several_items_and_each_name_once() {
-        for kind in ["animal", "food", "thing"] {
-            assert!(ITEMS.iter().filter(|(k, _)| *k == kind).count() >= 5, "{kind}");
+    fn every_kind_has_plenty_at_every_level() {
+        for kind in KINDS {
+            assert!(pool(kind, "any").len() >= 40, "{kind}: {}", pool(kind, "any").len());
+            for level in ["easy", "normal", "hard"] {
+                assert!(pool(kind, level).len() >= 10, "{kind} {level}");
+            }
         }
-        let mut names: Vec<_> = ITEMS.iter().map(|(_, n)| normalise(n)).collect();
-        names.sort();
-        names.dedup();
-        assert_eq!(names.len(), ITEMS.len());
+        assert!(pool("any", "any").len() >= 450);
+        assert!(pool("any", "easy").iter().all(|&i| items()[i].tier == 1));
+        assert!(pool("any", "hard").iter().all(|&i| items()[i].tier >= 2));
+        assert!(pool("any", "normal").iter().all(|&i| items()[i].tier <= 2));
+        assert!(pool("animal", "any").iter().all(|&i| items()[i].kind == "animal"));
+        assert!(pool("vegetable", "any").is_empty() && pool("any", "impossible").is_empty());
+    }
+
+    #[test]
+    fn the_draw_is_spread_over_the_pool_and_skips_what_was_played_lately() {
+        let big = pool("any", "any");
+        let mut seen = std::collections::HashSet::new();
+        let mut recent = VecDeque::new();
+        for _ in 0..400 {
+            let pick = draw(&big, &recent, random()).unwrap();
+            assert!(!recent.contains(&pick), "a recent pick came again");
+            seen.insert(pick);
+            recent.push_back(pick);
+            if recent.len() > RECENT {
+                recent.pop_front();
+            }
+        }
+        assert!(seen.len() >= 250, "only {} different things in 400 games", seen.len());
+        let small = vec![5, 6];
+        let recent: VecDeque<usize> = [5].into_iter().collect();
+        assert!((0..20).all(|n| draw(&small, &recent, n) == Some(6)));
+        let all_recent: VecDeque<usize> = [5, 6].into_iter().collect();
+        assert!(draw(&small, &all_recent, 3).is_some(), "when all were recent, any may come");
+        assert_eq!(draw(&[], &VecDeque::new(), 1), None);
+        assert_ne!(random(), random());
     }
 
     #[test]

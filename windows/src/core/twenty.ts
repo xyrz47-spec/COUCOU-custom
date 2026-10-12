@@ -2,15 +2,26 @@
 // choose from and the words for JEV's answers. Pure, so they can be tested
 // without a webview.
 
-import type { TwentyLabel } from "./bridge";
-import { N_, t } from "../i18n/i18n";
+import type { TwentyLabel, TwentySecret } from "./bridge";
+import { N_, language, t } from "../i18n/i18n";
 
 /** What Coucou can think of: the id twenty.rs knows, and the button's words. */
 export const KINDS: readonly { id: string; label: string }[] = [
   { id: "animal", label: N_("An animal") },
   { id: "food", label: N_("A food") },
   { id: "thing", label: N_("An object") },
+  { id: "place", label: N_("A place") },
+  { id: "job", label: N_("A job") },
+  { id: "nature", label: N_("Something in nature") },
   { id: "any", label: N_("Anything") },
+];
+
+/** How rare the things are: the ids twenty.rs knows. */
+export const LEVELS: readonly { id: string; label: string }[] = [
+  { id: "easy", label: N_("Easy") },
+  { id: "normal", label: N_("Normal") },
+  { id: "hard", label: N_("Hard") },
+  { id: "any", label: N_("Any level") },
 ];
 
 const ANSWERS: Record<TwentyLabel, { text: string; mood: "ok" | "bad" | "" }> = {
@@ -26,16 +37,9 @@ export function answerText(label: TwentyLabel): { text: string; mood: "ok" | "ba
   return { text: t(found.text), mood: found.mood };
 }
 
-/** The names Coucou may think of (twenty.rs, ITEMS), as keys to translate when the secret is told. */
-export const ITEM_NAMES = [
-  N_("Elephant"), N_("Dog"), N_("Penguin"), N_("Dolphin"), N_("Butterfly"), N_("Giraffe"),
-  N_("Pizza"), N_("Banana"), N_("Ice cream"), N_("Bread"), N_("Egg"), N_("Rice"),
-  N_("Umbrella"), N_("Bicycle"), N_("Telephone"), N_("Clock"), N_("Book"), N_("Toothbrush"),
-] as const;
-
-/** The secret in the interface language. */
-export function itemName(name: string): string {
-  return t(name);
+/** The secret as the game ends: in Korean (with the English beside it) on a Korean interface, else in English. */
+export function secretText(secret: TwentySecret, lang: string = language()): string {
+  return lang === "ko" ? `${secret.ko} (${secret.en})` : secret.en;
 }
 
 /** "Question 3 of 20". */
