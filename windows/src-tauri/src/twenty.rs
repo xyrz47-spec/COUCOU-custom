@@ -177,9 +177,9 @@ pub fn facts_of(name: &str) -> Option<&'static str> {
         .copied()
 }
 
-fn ask_body(secret: &str, kind: &str, question: &str) -> Value {
+fn ask_body(secret: &str, secret_ko: &str, kind: &str, question: &str) -> Value {
     let mut state = format!(
-        "A guessing game of twenty questions. The secret is: {secret} ({}). The player asks a yes/no question about the secret, \
+        "A guessing game of twenty questions. The secret is: {secret} (Korean name: {secret_ko}) ({}). The player asks a yes/no question about the secret, \
          in any language. Judge it as an expert who knows this subject well, from the facts below when there are any and from \
          general knowledge otherwise. Be decisive: answer true or false, and stay undecided only when the question is \
          ambiguous or nobody could know.",
@@ -196,9 +196,9 @@ fn ask_body(secret: &str, kind: &str, question: &str) -> Value {
     })
 }
 
-fn same_body(secret: &str, guess: &str) -> Value {
+fn same_body(secret: &str, secret_ko: &str, guess: &str) -> Value {
     json!({
-        "state": format!("The secret: {secret}\nThe guess: {guess}"),
+        "state": format!("The secret: {secret} (Korean name: {secret_ko})\nThe guess: {guess}"),
         "model": "jev-latest",
         "questions": { "same": { "type": "noul", "instructions": "The guess names the same thing as the secret. A translation, a plural or a close synonym counts." } }
     })
@@ -292,13 +292,13 @@ pub async fn twenty_ask(shared: State<'_, Shared>, question: String) -> Result<A
     if question.is_empty() {
         return Err("Ask a question first.".into());
     }
-    let (kind, name) = {
+    let (kind, name, name_ko) = {
         let game = GAME.lock().unwrap();
         let game = game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
         let it = &items()[game.item];
-        (it.kind, it.en)
+        (it.kind, it.en, it.ko)
     };
-    let noul = noul_of(&call(&key, &ask_body(name, kind, &question)).await?, "answer")?;
+    let noul = noul_of(&call(&key, &ask_body(name, name_ko, kind, &question)).await?, "answer")?;
     let mut slot = GAME.lock().unwrap();
     let game = slot.as_mut().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
     game.spend();
@@ -328,7 +328,7 @@ pub async fn twenty_guess(shared: State<'_, Shared>, guess: String) -> Result<Gu
     let correct = if normalise(&guess) == normalise(name) || normalise(&guess) == normalise(name_ko) {
         true
     } else {
-        noul_of(&call(&key, &same_body(name, &guess)).await?, "same")? >= 0.8
+        noul_of(&call(&key, &same_body(name, name_ko, &guess)).await?, "same")? >= 0.8
     };
     let mut slot = GAME.lock().unwrap();
     let game = slot.as_mut().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
@@ -386,14 +386,15 @@ mod tests {
         for i in pool("pokemon") {
             assert!(facts_of(items()[i].en).is_some(), "no facts for {}", items()[i].en);
         }
-        let body = ask_body("Rhyhorn", "pokemon", "4세대 전 포켓몬이야?");
+        let body = ask_body("Rhyhorn", "코뿌리", "pokemon", "4세대 전 포켓몬이야?");
         let state = body["state"].as_str().unwrap();
-        assert!(state.contains("Generation 1 (Kanto)") && state.contains("before Generation 4"), "{state}");
+        assert!(state.contains("코뿌리") && state.contains("Generation 1 (Kanto)") && state.contains("before Generation 4"), "{state}");
         assert!(state.contains("Rock Head") && state.contains("Evolution: basic"));
-        let skin = ask_body("Mega Dragonite", "pokemon", "스킨 특성이 있어?");
+        assert!(state.contains("Weaknesses/resistances") && state.contains("Moves it can learn") && state.contains("Smogon singles tier"));
+        let skin = ask_body("Mega Dragonite", "메가망나뇽", "pokemon", "스킨 특성이 있어?");
         assert!(facts_of("Sylveon").unwrap().contains("Pixilate") && facts_of("Sylveon").unwrap().contains("'Skin' ability"));
         assert!(skin["state"].as_str().unwrap().contains("Mega Evolution of Dragonite"));
-        let plain = ask_body("Elephant", "animal", "Is it big?");
+        let plain = ask_body("Elephant", "코끼리", "animal", "Is it big?");
         assert!(!plain["state"].as_str().unwrap().contains("Facts about"));
     }
 
@@ -465,7 +466,7 @@ mod tests {
 
     #[test]
     fn the_secret_goes_to_jev_with_the_question_and_nothing_else() {
-        let body = ask_body("Elephant", "animal", "Is it bigger than a car?");
+        let body = ask_body("Elephant", "코끼리", "animal", "Is it bigger than a car?");
         let state = body["state"].as_str().unwrap();
         assert!(state.contains("Elephant") && state.contains("an animal"));
         assert!(kind_phrase("pokemon").contains("Pokémon") && kind_phrase("body").contains("body"));
@@ -475,7 +476,7 @@ mod tests {
         assert_eq!(body["questions"]["answer"]["type"], "noul");
         assert!(body["questions"]["answer"]["instructions"].as_str().unwrap().ends_with("Is it bigger than a car?"));
         assert_eq!(body["model"], "jev-latest");
-        let same = same_body("Elephant", "코끼리");
+        let same = same_body("Elephant", "코끼리", "코끼리");
         assert!(same["state"].as_str().unwrap().contains("코끼리"));
         assert!(same["questions"]["same"]["instructions"].as_str().unwrap().contains("translation"));
     }
