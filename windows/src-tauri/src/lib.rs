@@ -896,6 +896,7 @@ pub fn run() {
             task_cancel,
             task_projects,
             task_reveal,
+            launcher::launcher_status,
             skills::skills_list,
             skills::skill_set_enabled,
             skills::skill_reveal,

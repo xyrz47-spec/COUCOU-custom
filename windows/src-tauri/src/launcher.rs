@@ -134,6 +134,14 @@ fn openable(target: &str) -> bool {
     path.is_absolute() && path.exists()
 }
 
+/// For each entry of the saved list, whether it can be opened now: a path
+/// that is gone is not removed — Settings says so beside it, and the user decides.
+#[tauri::command(async)]
+pub fn launcher_status(shared: State<Shared>) -> Vec<bool> {
+    let items = shared.settings.lock().unwrap().launcher.clone();
+    items.iter().map(|item| openable(&item.target)).collect()
+}
+
 /// Opens entry `index` of the saved list.
 #[tauri::command]
 pub fn launcher_open(shared: State<Shared>, index: usize) -> Result<(), String> {

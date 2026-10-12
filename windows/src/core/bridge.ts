@@ -178,6 +178,8 @@ export const Bridge = {
 
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
+  /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
+  launcherStatus: () => call<boolean[]>("launcher_status"),
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
   /** The entry's icon as RGBA pixels (base64), for a file the system has one for. */
   launcherIcon: (index: number) =>
@@ -342,6 +344,12 @@ export interface SkillGroup {
   /** The folder the skills are in. */
   root: string;
   skills: SkillInfo[];
+  /** An installed Claude Code plugin's id (`name@marketplace`); absent for a skills folder. Its skills are read-only. */
+  plugin?: string;
+  /** Whether Claude Code has that plugin turned on. */
+  pluginEnabled?: boolean;
+  /** Why a plugin's skills could not be listed; absent when they could. */
+  problem?: string;
 }
 
 export type SpotifyAction = "playPause" | "next" | "previous" | "seek" | "shuffle" | "repeat" | "volume";

@@ -2,6 +2,7 @@
 // (views/launcher.ts). An entry is a name and a web address, or the full path
 // of an app, a shortcut, a folder or a file.
 
+import { Bridge } from "../core/bridge";
 import type { LauncherItem, Settings } from "../core/state";
 import { clear, h } from "../views/dom";
 import { t } from "../i18n/i18n";
@@ -44,8 +45,14 @@ export function defaultName(target: string): string {
 /**
  * `current` hands over the settings in force when it is called: the window
  * swaps the object for a fresh one whenever a change comes in from elsewhere.
+ * `redrawOnChange` is given the list's redraw, to call when it does: an entry
+ * added in the launcher's "add" window is saved there, and shows here at once.
  */
-export function launcherSection(current: () => Settings, save: () => Promise<void>): HTMLElement {
+export function launcherSection(
+  current: () => Settings,
+  save: () => Promise<void>,
+  redrawOnChange: (redraw: () => void) => void = () => {},
+): HTMLElement {
   const list = h("div", { class: "launch-list" });
   const note = h("div", { class: "notice err", style: "display:none" });
   const name = h("input", { type: "text", placeholder: t("Name"), style: "width:150px" }) as HTMLInputElement;
@@ -57,17 +64,33 @@ export function launcherSection(current: () => Settings, save: () => Promise<voi
   const items = (): LauncherItem[] => current().launcher ?? [];
   const commit = (next: LauncherItem[]) => {
     current().launcher = next;
+    openable = [];
     void save();
     draw();
   };
 
-  function draw() {
+  /** Which entries could be opened when last asked; none known yet means none flagged. */
+  let openable: boolean[] = [];
+  let asked = 0;
+  function checkTargets() {
+    const ticket = ++asked;
+    void Bridge.launcherStatus().then((status) => {
+      if (ticket !== asked || !status) return;
+      openable = status;
+      draw(false);
+    });
+  }
+
+  function draw(check = true) {
     clear(list);
     items().forEach((item, index) => {
       list.append(h(
         "div",
         { class: "row" },
         h("span", { style: "font-size:12.5px;min-width:132px", text: item.name }),
+        ...(openable[index] === false
+          ? [h("span", { class: "path", style: "color:var(--red)", text: t("Not found"), title: t("This path is not there any more. It is kept: put the file back, or remove the entry.") })]
+          : []),
         h("span", {
           class: "path",
           style: "flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap",
@@ -82,6 +105,7 @@ export function launcherSection(current: () => Settings, save: () => Promise<voi
       ));
     });
     add.disabled = items().length >= MAX_ITEMS;
+    if (check) checkTargets();
   }
 
   function submit() {
@@ -106,6 +130,7 @@ export function launcherSection(current: () => Settings, save: () => Promise<voi
   }
 
   draw();
+  redrawOnChange(draw);
   return h(
     "section",
     {},

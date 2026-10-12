@@ -8,7 +8,7 @@
 import { N_ } from "../i18n/i18n";
 
 export type FeatureId =
-  | "claudeChat" | "skillsTab" | "skillAdvice" | "launcherTab"
+  | "claudeChat" | "skillsTab" | "pluginSkills" | "skillAdvice" | "launcherTab"
   | "musicPlayer" | "compactSong" | "clock" | "weather" | "motion";
 
 export type FeatureGroup = "claude" | "tabs" | "compact" | "look";
@@ -40,6 +40,10 @@ export const FEATURES: readonly FeatureDef[] = [
   {
     id: "skillsTab", group: "tabs", name: N_("Skills tab"),
     about: N_("The island's star tab: Claude Code's skills, turned on and off, searched for and added, in a folder of your choice."),
+  },
+  {
+    id: "pluginSkills", group: "tabs", name: N_("Skills of installed plugins"), needs: "skillsTab",
+    about: N_("In the skills tab, the skills that come with the plugins installed in Claude Code (/plugin install…), read-only: Claude Code turns a plugin on or off."),
   },
   {
     id: "skillAdvice", group: "tabs", name: N_("Skills picked by Claude Code"), needs: "skillsTab",

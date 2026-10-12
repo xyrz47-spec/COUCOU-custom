@@ -1830,7 +1830,7 @@ async function render() {
     { id: "chat", label: t("Chat"), color: "#9CC4F5", sections: [...(featureOn(settings, "claudeChat") ? [claudeCodeChatSection(cliPath)] : []), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
     { id: "pills", label: t("Active pills"), color: "#9ADBB3", sections: [activePillsSection(connected), integrationsSection(present)] },
     ...(featureOn(settings, "launcherTab")
-      ? [{ id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save)] }]
+      ? [{ id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save, (redraw) => declaredViews.push(redraw))] }]
       : []),
     { id: "general", label: t("General"), color: "#BDB2F7", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EBD58A", sections: [shortcutsSection(shortcutReport)] },

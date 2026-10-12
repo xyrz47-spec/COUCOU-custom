@@ -5211,6 +5211,90 @@
    "ru": "Узкий",
    "id": "Sempit",
    "ko": "좁게"
+  },
+  "Plugin": {
+   "zh-Hans": "插件",
+   "hi": "प्लगइन",
+   "es": "Plugin",
+   "ar": "إضافة",
+   "fr": "Plugin",
+   "bn": "প্লাগইন",
+   "pt-BR": "Plugin",
+   "ru": "Плагин",
+   "id": "Plugin",
+   "ko": "플러그인"
+  },
+  "Plugin off": {
+   "zh-Hans": "插件已关闭",
+   "hi": "प्लगइन बंद",
+   "es": "Plugin desactivado",
+   "ar": "الإضافة متوقفة",
+   "fr": "Plugin désactivé",
+   "bn": "প্লাগইন বন্ধ",
+   "pt-BR": "Plugin desativado",
+   "ru": "Плагин выключен",
+   "id": "Plugin nonaktif",
+   "ko": "플러그인 꺼짐"
+  },
+  "Could not list its skills: {why}": {
+   "zh-Hans": "无法列出其技能:{why}",
+   "hi": "इसकी स्किल सूची नहीं बन सकी: {why}",
+   "es": "No se pudieron listar sus skills: {why}",
+   "ar": "تعذّر سرد مهاراتها: {why}",
+   "fr": "Impossible de lister ses skills : {why}",
+   "bn": "এর স্কিল তালিকা করা যায়নি: {why}",
+   "pt-BR": "Não foi possível listar as skills: {why}",
+   "ru": "Не удалось получить навыки: {why}",
+   "id": "Tidak bisa mendaftar skill-nya: {why}",
+   "ko": "스킬을 불러오지 못했습니다: {why}"
+  },
+  "Not found": {
+   "zh-Hans": "未找到",
+   "hi": "नहीं मिला",
+   "es": "No encontrado",
+   "ar": "غير موجود",
+   "fr": "Introuvable",
+   "bn": "পাওয়া যায়নি",
+   "pt-BR": "Não encontrado",
+   "ru": "Не найдено",
+   "id": "Tidak ditemukan",
+   "ko": "찾을 수 없음"
+  },
+  "This path is not there any more. It is kept: put the file back, or remove the entry.": {
+   "zh-Hans": "该路径已不存在。已保留:请放回文件,或删除此项。",
+   "hi": "यह पथ अब मौजूद नहीं है। इसे रखा गया है: फ़ाइल वापस रखें या प्रविष्टि हटाएँ।",
+   "es": "Esta ruta ya no existe. Se conserva: vuelve a poner el archivo o quita la entrada.",
+   "ar": "هذا المسار لم يعد موجودًا. تم الاحتفاظ به: أعد الملف أو احذف الإدخال.",
+   "fr": "Ce chemin n'existe plus. Il est conservé : remettez le fichier ou retirez l'entrée.",
+   "bn": "এই পথটি আর নেই। এটি রাখা হয়েছে: ফাইলটি ফিরিয়ে দিন বা এন্ট্রি সরান।",
+   "pt-BR": "Este caminho não existe mais. Ele foi mantido: coloque o arquivo de volta ou remova a entrada.",
+   "ru": "Путь больше не существует. Запись сохранена: верните файл или удалите её.",
+   "id": "Jalur ini sudah tidak ada. Tetap disimpan: kembalikan berkasnya atau hapus entrinya.",
+   "ko": "이 경로가 더 이상 없습니다. 항목은 유지됩니다. 파일을 되돌리거나 항목을 삭제하세요."
+  },
+  "Skills of installed plugins": {
+   "zh-Hans": "已安装插件的技能",
+   "hi": "इंस्टॉल किए गए प्लगइन की स्किल",
+   "es": "Skills de los plugins instalados",
+   "ar": "مهارات الإضافات المثبّتة",
+   "fr": "Skills des plugins installés",
+   "bn": "ইনস্টল করা প্লাগইনের স্কিল",
+   "pt-BR": "Skills dos plugins instalados",
+   "ru": "Навыки установленных плагинов",
+   "id": "Skill dari plugin terpasang",
+   "ko": "설치된 플러그인의 스킬"
+  },
+  "In the skills tab, the skills that come with the plugins installed in Claude Code (/plugin install…), read-only: Claude Code turns a plugin on or off.": {
+   "zh-Hans": "在技能标签中显示 Claude Code 已安装插件(/plugin install…)自带的技能,只读:插件的开关由 Claude Code 管理。",
+   "hi": "स्किल टैब में Claude Code में इंस्टॉल किए गए प्लगइन (/plugin install…) की स्किल, केवल पढ़ने के लिए: प्लगइन चालू/बंद Claude Code करता है।",
+   "es": "En la pestaña de skills, las skills de los plugins instalados en Claude Code (/plugin install…), solo lectura: Claude Code activa o desactiva un plugin.",
+   "ar": "في تبويب المهارات، مهارات الإضافات المثبّتة في Claude Code (/plugin install…) للقراءة فقط: Claude Code يشغّل الإضافة أو يوقفها.",
+   "fr": "Dans l'onglet skills, les skills des plugins installés dans Claude Code (/plugin install…), en lecture seule : c'est Claude Code qui active ou désactive un plugin.",
+   "bn": "স্কিল ট্যাবে Claude Code-এ ইনস্টল করা প্লাগইনের (/plugin install…) স্কিল, শুধু পড়ার জন্য: প্লাগইন চালু/বন্ধ Claude Code করে।",
+   "pt-BR": "Na aba de skills, as skills dos plugins instalados no Claude Code (/plugin install…), somente leitura: o Claude Code liga ou desliga um plugin.",
+   "ru": "Во вкладке навыков — навыки плагинов, установленных в Claude Code (/plugin install…), только для чтения: плагины включает и выключает Claude Code.",
+   "id": "Di tab skill, skill dari plugin yang dipasang di Claude Code (/plugin install…), hanya baca: Claude Code yang menyalakan atau mematikan plugin.",
+   "ko": "스킬 탭에 Claude Code에 설치된 플러그인(/plugin install…)의 스킬을 읽기 전용으로 표시합니다. 플러그인 켜기/끄기는 Claude Code가 합니다."
   }
  }
 }

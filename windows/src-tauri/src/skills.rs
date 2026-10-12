@@ -40,6 +40,16 @@ pub struct SkillGroup {
     /// The folder the skills are in.
     pub root: String,
     pub skills: Vec<Skill>,
+    /// For the skills of an installed Claude Code plugin: its id
+    /// (`name@marketplace`). Empty for a skills folder. A plugin's skills are
+    /// read, never renamed: the plugin is Claude Code's to turn on and off.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub plugin: String,
+    /// Whether Claude Code has the plugin turned on (only for a plugin).
+    pub plugin_enabled: bool,
+    /// Why a plugin's skills could not be listed; empty when they could.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub problem: String,
 }
 
 /// Project folders the user named themselves (settings.skill_folders), kept
@@ -221,18 +231,172 @@ fn set_enabled(dir: &Path, enabled: bool) -> Result<(), String> {
     fs::rename(&from, &to).map_err(|e| e.to_string())
 }
 
-/// The user's skills first, then each project's; folders without a skill are left out.
+// ── Skills that come with plugins ─────────────────────────────────────────────
+//
+// `/plugin install name@marketplace` does not copy anything into a skills
+// folder. Claude Code records the install in ~/.claude/plugins/installed_plugins.json
+// (the plugin's id, where it was put, its scope), whether it is on in the
+// `enabledPlugins` of a settings.json, and finds the plugin's skills in the
+// `skills` folder of the install (or the folders its .claude-plugin/plugin.json
+// names). These are listed read-only: turning a plugin on or off is a change to
+// settings.json, which hooks.rs alone writes, after a diff and a backup.
+
+/// A settings.json's `enabledPlugins`: `{"id": true}`, or a list of ids.
+fn enabled_plugins(settings: &Path) -> std::collections::HashMap<String, bool> {
+    let mut out = std::collections::HashMap::new();
+    let Ok(text) = fs::read(settings) else { return out };
+    let Ok(value) = serde_json::from_slice::<serde_json::Value>(&text) else { return out };
+    match value.get("enabledPlugins") {
+        Some(serde_json::Value::Object(map)) => {
+            for (id, on) in map {
+                if let Some(on) = on.as_bool() {
+                    out.insert(id.clone(), on);
+                }
+            }
+        }
+        Some(serde_json::Value::Array(ids)) => {
+            for id in ids.iter().filter_map(|i| i.as_str()) {
+                out.insert(id.to_string(), true);
+            }
+        }
+        _ => {}
+    }
+    out
+}
+
+/// Folders a plugin keeps skills in: `skills/`, and those its manifest names
+/// (relative paths that stay inside the plugin).
+fn plugin_skill_roots(install: &Path) -> Vec<PathBuf> {
+    let mut roots = vec![install.join("skills")];
+    let manifest = install.join(".claude-plugin").join("plugin.json");
+    if let Some(value) = fs::read(manifest).ok().and_then(|b| serde_json::from_slice::<serde_json::Value>(&b).ok()) {
+        let named: Vec<&str> = match value.get("skills") {
+            Some(serde_json::Value::String(one)) => vec![one.as_str()],
+            Some(serde_json::Value::Array(many)) => many.iter().filter_map(|m| m.as_str()).collect(),
+            _ => Vec::new(),
+        };
+        for relative in named {
+            let relative = relative.trim().trim_start_matches("./");
+            let inside = !relative.is_empty()
+                && Path::new(relative).components().all(|c| matches!(c, std::path::Component::Normal(_)));
+            if inside {
+                let path = install.join(relative);
+                if !roots.contains(&path) {
+                    roots.push(path);
+                }
+            }
+        }
+    }
+    roots
+}
+
+/// The skills of one plugin install: the folders inside each skills folder,
+/// or a folder that is itself a skill.
+fn plugin_skills(install: &Path, enabled: bool) -> Vec<Skill> {
+    let mut out: Vec<Skill> = Vec::new();
+    for root in plugin_skill_roots(install) {
+        let mut found = if root.join(SKILL_FILE).is_file() {
+            let parent = root.parent().unwrap_or(&root);
+            read_skills(parent).into_iter().filter(|s| Path::new(&s.path) == root).collect()
+        } else {
+            read_skills(&root)
+        };
+        out.append(&mut found);
+    }
+    out.sort_by_key(|s| s.name.to_lowercase());
+    out.dedup_by(|b, a| a.path == b.path);
+    for skill in &mut out {
+        skill.enabled = enabled;
+    }
+    out
+}
+
+/// Every installed plugin that brings skills, or that could not be read, from
+/// the Claude Code folder `claude_dir` (~/.claude).
+fn plugin_groups(claude_dir: &Path) -> Vec<SkillGroup> {
+    let registry = claude_dir.join("plugins").join("installed_plugins.json");
+    let Ok(bytes) = fs::read(&registry) else { return Vec::new() };
+    let failed = |why: String| SkillGroup {
+        project: String::new(),
+        root: registry.to_string_lossy().into_owned(),
+        skills: Vec::new(),
+        plugin: "installed_plugins.json".into(),
+        plugin_enabled: false,
+        problem: why,
+    };
+    let Ok(value) = serde_json::from_slice::<serde_json::Value>(&bytes) else {
+        return vec![failed("not valid JSON".into())];
+    };
+    let Some(plugins) = value.get("plugins").and_then(|p| p.as_object()) else {
+        return vec![failed("no plugins listed".into())];
+    };
+    let user_enabled = enabled_plugins(&claude_dir.join("settings.json"));
+
+    let mut ids: Vec<&String> = plugins.keys().collect();
+    ids.sort();
+    let mut groups = Vec::new();
+    for id in ids {
+        // Version 2 of the file keeps a list of installs per plugin; version 1, one.
+        let installs: Vec<&serde_json::Value> = match &plugins[id] {
+            serde_json::Value::Array(many) => many.iter().collect(),
+            one @ serde_json::Value::Object(_) => vec![one],
+            _ => Vec::new(),
+        };
+        for install in installs {
+            let text = |key: &str| install.get(key).and_then(|v| v.as_str()).unwrap_or("").trim().to_string();
+            let (path, project) = (text("installPath"), text("projectPath"));
+            let mut enabled = user_enabled.clone();
+            if !project.is_empty() {
+                let project_claude = Path::new(&project).join(".claude");
+                enabled.extend(enabled_plugins(&project_claude.join("settings.json")));
+                enabled.extend(enabled_plugins(&project_claude.join("settings.local.json")));
+            }
+            let on = enabled.get(id).copied().unwrap_or(false);
+            let dir = PathBuf::from(&path);
+            let mut group = SkillGroup {
+                project,
+                root: path.clone(),
+                skills: Vec::new(),
+                plugin: id.clone(),
+                plugin_enabled: on,
+                problem: String::new(),
+            };
+            if path.is_empty() || !dir.is_dir() {
+                group.problem = "its folder is not there".into();
+            } else {
+                group.skills = plugin_skills(&dir, on);
+            }
+            // A plugin with no skill (commands only, say) is not a skill list's business.
+            if !group.skills.is_empty() || !group.problem.is_empty() {
+                groups.push(group);
+            }
+        }
+    }
+    groups
+}
+
+/// The user's skills first, then each project's, then those of the installed
+/// plugins; folders without a skill are left out.
 #[tauri::command(async)]
-pub fn skills_list() -> Vec<SkillGroup> {
-    roots()
+pub fn skills_list(shared: tauri::State<crate::Shared>) -> Vec<SkillGroup> {
+    // Settings → Features → "Skills of installed plugins", off: only the skills folders.
+    let plugins = !shared.settings.lock().unwrap().disabled_features.iter().any(|f| f == "pluginSkills");
+    let mut groups: Vec<SkillGroup> = roots()
         .into_iter()
         .map(|(project, root)| SkillGroup {
             project,
             skills: read_skills(&root),
             root: root.to_string_lossy().into_owned(),
+            plugin: String::new(),
+            plugin_enabled: false,
+            problem: String::new(),
         })
         .filter(|group| !group.skills.is_empty())
-        .collect()
+        .collect();
+    if plugins {
+        groups.extend(plugin_groups(&platform::home_dir().join(".claude")));
+    }
+    groups
 }
 
 #[tauri::command(async)]
@@ -346,6 +510,75 @@ mod tests {
         set_named_folders(&many);
         assert_eq!(NAMED.lock().unwrap().len(), MAX_NAMED);
         set_named_folders(&[]);
+        let _ = fs::remove_dir_all(&project);
+    }
+
+    #[test]
+    fn a_plugins_skills_are_found_where_claude_code_put_them() {
+        let home = temp("plugins");
+        let install = home.join("plugins").join("cache").join("mk").join("superpowers").join("5.0.0");
+        let skill = install.join("skills").join("brainstorming");
+        fs::create_dir_all(&skill).unwrap();
+        fs::write(skill.join(SKILL_FILE), "---\nname: brainstorming\ndescription: Think first.\n---\n").unwrap();
+        // A folder the manifest names, and one that tries to leave the plugin.
+        let extra = install.join("extra").join("one");
+        fs::create_dir_all(&extra).unwrap();
+        fs::write(extra.join(SKILL_FILE), "---\nname: one\n---\n").unwrap();
+        fs::create_dir_all(install.join(".claude-plugin")).unwrap();
+        fs::write(install.join(".claude-plugin").join("plugin.json"), r#"{"skills":["./extra","../outside"]}"#).unwrap();
+        let gone = home.join("nowhere");
+        let registry = serde_json::json!({
+            "version": 2,
+            "plugins": {
+                "superpowers@claude-plugins-official": [{"scope": "user", "installPath": install, "version": "5.0.0"}],
+                "ghost@mk": [{"scope": "user", "installPath": gone}],
+                "commands-only@mk": [{"scope": "user", "installPath": home}],
+            }
+        });
+        fs::write(home.join("plugins").join("installed_plugins.json"), registry.to_string()).unwrap();
+
+        // Not in enabledPlugins: listed, shown as off.
+        let groups = plugin_groups(&home);
+        let sp = groups.iter().find(|g| g.plugin == "superpowers@claude-plugins-official").unwrap();
+        let names: Vec<_> = sp.skills.iter().map(|s| s.name.as_str()).collect();
+        assert_eq!(names, ["brainstorming", "one"]);
+        assert!(!sp.plugin_enabled && sp.skills.iter().all(|s| !s.enabled));
+        assert_eq!(sp.skills[0].description, "Think first.");
+
+        fs::write(home.join("settings.json"), r#"{"enabledPlugins":{"superpowers@claude-plugins-official":true}}"#).unwrap();
+        let sp = plugin_groups(&home).into_iter().find(|g| g.plugin.starts_with("superpowers")).unwrap();
+        assert!(sp.plugin_enabled && sp.skills.iter().all(|s| s.enabled));
+
+        // A missing folder is said, a plugin without skills is left out.
+        let groups = plugin_groups(&home);
+        assert!(groups.iter().find(|g| g.plugin == "ghost@mk").is_some_and(|g| !g.problem.is_empty()));
+        assert!(!groups.iter().any(|g| g.plugin == "commands-only@mk"));
+        // Nothing the page could rename: a plugin's skill is no listed skills folder.
+        assert!(!known_skill(&skill));
+        let _ = fs::remove_dir_all(&home);
+    }
+
+    #[test]
+    fn a_project_plugin_is_on_by_its_projects_settings_and_the_old_registry_form_is_read() {
+        let home = temp("plugins-project");
+        let project = temp("plugins-project-dir");
+        let install = home.join("p");
+        fs::create_dir_all(install.join("skills").join("s")).unwrap();
+        fs::write(install.join("skills").join("s").join(SKILL_FILE), "---\nname: s\n---\n").unwrap();
+        fs::create_dir_all(project.join(".claude")).unwrap();
+        fs::write(project.join(".claude").join("settings.json"), r#"{"enabledPlugins":{"p@mk":true}}"#).unwrap();
+        fs::write(project.join(".claude").join("settings.local.json"), r#"{"enabledPlugins":{"p@mk":false}}"#).unwrap();
+        fs::create_dir_all(home.join("plugins")).unwrap();
+        // Version 1: one install per plugin, an object.
+        let registry = serde_json::json!({"version": 1, "plugins": {"p@mk": {"installPath": install, "projectPath": project}}});
+        fs::write(home.join("plugins").join("installed_plugins.json"), registry.to_string()).unwrap();
+        let group = plugin_groups(&home).pop().unwrap();
+        assert_eq!(group.project, project.to_string_lossy());
+        assert!(!group.plugin_enabled, "the local settings win over the project's");
+
+        fs::write(home.join("plugins").join("installed_plugins.json"), "{oops").unwrap();
+        assert!(!plugin_groups(&home)[0].problem.is_empty());
+        let _ = fs::remove_dir_all(&home);
         let _ = fs::remove_dir_all(&project);
     }
 
