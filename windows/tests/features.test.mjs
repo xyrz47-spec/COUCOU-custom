@@ -43,7 +43,7 @@ test("a settings file from elsewhere turns nothing off by accident", () => {
 
 test("a feature that is part of another is off with it, its own switch kept", () => {
   const parts = FEATURES.filter((def) => def.needs).map((def) => `${def.id}<${def.needs}`);
-  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillAdvice<skillsTab", "musicPlayer<spotify", "compactSong<spotify", "weather<clock"]);
+  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillFind<skillsTab", "skillAdvice<skillsTab", "launcherApps<launcherTab", "launcherFavicons<launcherTab", "decidePresets<decide", "decideRemember<decide", "musicPlayer<spotify", "compactSong<spotify", "spotifyDance<spotify", "songAnnounce<spotify", "weather<clock"]);
   const settings = off("clock");
   assert.equal(featureOn(settings, "weather"), false);
   assert.equal(featureSwitch(settings, "weather"), true);
@@ -83,7 +83,7 @@ test("the header shows the launcher's and the skills' tabs while they are on", (
   State.settings = off("skillsTab");
   header.sync();
   assert.deepEqual(shown(), [true, true, true, true, false, true]);
-  State.settings = off("messageCheck");
+  State.settings = off("decide");
   header.sync();
   assert.deepEqual(shown(), [true, true, true, true, true, false]);
   State.settings = { ...DEFAULT_SETTINGS };
@@ -184,7 +184,7 @@ test("the code only checks features that are declared", async () => {
 
 test("the header's tabs and the island's checks follow the declarations, in order", async () => {
   const { featureTabs } = await import("../src/core/features.ts");
-  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills", "check"]);
+  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills", "decide"]);
 });
 
 test("Spotify off takes its pill and the music features with it, and keeps what was declared", async () => {
@@ -199,4 +199,53 @@ test("Spotify off takes its pill and the music features with it, and keeps what 
   assert.equal(featureOn(off("spotify"), "compactSong"), false);
   // The declaration itself is untouched: turn it back on and the pill is there.
   assert.deepEqual(declared.activeIntegrations, ["integration_spotify"]);
+});
+
+// ── The finer switches: each one really changes something ────────────────────
+
+test("\"Find skills\" off takes the Find tab and its chips out of the skills tab", async () => {
+  State.settings = off("skillFind");
+  State.mode = "expanded";
+  State.view = "skills";
+  const view = buildSkills({ blip: () => {}, openUrl: () => {} });
+  view.sync();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  const tabs = view.el.find(".sk-seg")[0].children;
+  assert.equal(tabs[1].style.display, "none", "the Find tab");
+  assert.equal(view.el.find(".sk-chips")[0].style.display, "none", "the fields to pick from");
+  assert.equal(tabs[0].style.display === "none", false, "Installed stays");
+  State.settings = { ...DEFAULT_SETTINGS };
+  view.sync();
+  assert.equal(tabs[1].style.display, "");
+});
+
+test("\"Plan usage\" off keeps the plan pills out of the header, whatever the other settings say", async () => {
+  const { claudePillVisible, codexPillVisible } = await import("../src/views/usage.ts");
+  State.view = "overview";
+  State.settings = { ...DEFAULT_SETTINGS, showPlanInNotch: true, planRelayInstalled: true, showCodexPlanInNotch: true };
+  assert.equal(claudePillVisible() && codexPillVisible(), true);
+  State.settings = { ...State.settings, disabledFeatures: ["planUsage"] };
+  assert.equal(claudePillVisible() || codexPillVisible(), false);
+  State.settings = { ...DEFAULT_SETTINGS };
+});
+
+test("\"Mochi dances\" off stops the dancing but not the music", () => {
+  State.settings = { ...DEFAULT_SETTINGS };
+  const playing = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(State), "spotifyPlaying");
+  Object.defineProperty(State, "spotifyPlaying", { get: () => true, configurable: true });
+  assert.equal(State.mochiDances, true);
+  State.settings = off("spotifyDance");
+  assert.equal(State.mochiDances, false);
+  assert.equal(State.spotifyPlaying, true);
+  State.settings = off("spotify");
+  assert.equal(State.mochiDances, false, "off with Spotify");
+  delete State.spotifyPlaying;
+  if (playing) Object.defineProperty(Object.getPrototypeOf(State), "spotifyPlaying", playing);
+  State.settings = { ...DEFAULT_SETTINGS };
+});
+
+test("the manager has many small switches, grouped in modules, none of them alone in the dark", () => {
+  assert.ok(FEATURES.length >= 20, `${FEATURES.length} features`);
+  assert.ok(FEATURE_GROUPS.length >= 7);
+  for (const group of FEATURE_GROUPS) assert.ok(FEATURES.some((f) => f.group === group.id), group.id);
 });

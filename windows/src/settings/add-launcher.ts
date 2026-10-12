@@ -59,8 +59,12 @@ const APP_ROWS = 60;
 /** As large as launcher.rs keeps (IMAGE_LIMIT). */
 const IMAGE_LIMIT = 4 * 1024 * 1024;
 
+/** Settings → Features → "Installed apps": the window shows the list of apps, or only the form. */
+let appsOn = true;
+
 async function applyLanguage() {
   const boot = await Bridge.boot();
+  appsOn = boot == null || featureOn(boot.settings, "launcherApps");
   setLanguage(resolveLanguage(boot?.settings.language ?? "", systemLanguages()));
   // Settings → Features → Animations, off: this window too stays still (settings.css).
   document.documentElement.classList.toggle("still", boot != null && !featureOn(boot.settings, "motion"));
@@ -229,16 +233,18 @@ function draw() {
     target.value = first.target;
     void submit();
   });
-  installed ??= Bridge.launcherApps().then((list) => list ?? []);
-  void installed.then((list) => {
-    all = list;
-    listed = true;
-    drawApps();
-  });
+  if (appsOn) {
+    installed ??= Bridge.launcherApps().then((list) => list ?? []);
+    void installed.then((list) => {
+      all = list;
+      listed = true;
+      drawApps();
+    });
+  }
 
   clear(root);
   root.append(
-    h("section", { class: "add-finder" }, find, apps),
+    ...(appsOn ? [h("section", { class: "add-finder" }, find, apps)] : []),
     h(
       "section",
       { class: "add-form" },
@@ -248,8 +254,12 @@ function draw() {
       h("div", { class: "add-buttons" }, cancel, add),
     ),
   );
-  drawApps();
-  find.focus();
+  if (appsOn) {
+    drawApps();
+    find.focus();
+  } else {
+    name.focus();
+  }
 
   return {
     /** A file dropped on the window: an image is the tile's picture, anything else what it opens. */

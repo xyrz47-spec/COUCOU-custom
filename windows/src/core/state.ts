@@ -354,7 +354,12 @@ class AppState {
     return this.stateOverride ?? this.focusTask?.state ?? "idle";
   }
 
-  /** Spotify plays on a declared pill: Mochi dances. */
+  /** Mochi dances to the music: Spotify plays, and Settings → Features lets him dance. */
+  get mochiDances(): boolean {
+    return this.spotifyPlaying && featureOn(this.settings, "spotifyDance");
+  }
+
+  /** Spotify plays on a declared pill. */
   get spotifyPlaying(): boolean {
     return musicPlaying(Spotify.state, sanitizeDeclared(this.settings, this.os).activeIntegrations);
   }

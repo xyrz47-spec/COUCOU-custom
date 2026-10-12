@@ -75,21 +75,53 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
     name: N_("Skills of installed plugins"),
     about: N_("In the skills tab, the skills that come with the plugins installed in Claude Code (/plugin install…), read-only: Claude Code turns a plugin on or off."),
   },
+  skillFind: {
+    name: N_("Find skills"),
+    about: N_("In the skills tab, the search of skills.sh with its fields to pick from, and adding a result with one click. Off, no search is made."),
+  },
   skillAdvice: {
     name: N_("Skills picked by Claude Code"),
     about: N_("In the skills tab, Claude Code says what to add and what to remove for a project. Each ask counts against your plan."),
   },
-  messageCheck: {
-    name: N_("Message check"), tab: N_("Check"), page: N_("JEV"),
-    about: N_("The island's check tab: paste a message you got, or one you are about to send, and JEV (TypeSafe's model) tells how it sounds, how urgent it is, whether it needs a reply and whether it could sound rude. Needs your TypeSafe API key."),
+  planUsage: {
+    name: N_("Plan usage in the header"),
+    about: N_("Claude's and Codex's 5-hour and weekly limits, as pills in the island's header once you turn them on in Settings → Claude Code."),
   },
   launcherTab: {
     name: N_("Launcher tab"), tab: N_("Launcher"), page: N_("Launcher"),
     about: N_("The island's grid tab: your websites and apps, one click each, with the apps installed on this PC to search and add."),
   },
+  launcherApps: {
+    name: N_("Installed apps"),
+    about: N_("In the launcher's add window, the list of the apps installed on this PC, to search and add. Off, the Start menu is not read."),
+  },
+  launcherFavicons: {
+    name: N_("Website icons"),
+    about: N_("A site's own icon on its launcher tile, fetched from that site once. Off, the site is not asked and the tile keeps its mini Mochi."),
+  },
+  decide: {
+    name: N_("Decide tab"), tab: N_("Decide"), page: N_("JEV"),
+    about: N_("The island's decide tab: say how you feel, list a few options — what to eat, drink or do — and JEV ranks them. Needs your TypeSafe API key."),
+  },
+  decidePresets: {
+    name: N_("Presets for the options"),
+    about: N_("Meal, drink and activity lists that fill the options box in one click."),
+  },
+  decideRemember: {
+    name: N_("Remember the last options"),
+    about: N_("The options box comes back with what you last chose between. Kept in this window only; the feeling is never kept."),
+  },
   spotify: {
     name: N_("Spotify"),
     about: N_("The Spotify pill: what is playing, with play/pause and skip. Off, Coucou does not look at Spotify at all, and the music features below wait for it."),
+  },
+  spotifyDance: {
+    name: N_("Mochi dances to the music"),
+    about: N_("While a song plays, Mochi dances: in the island, on the Spotify card and on the desktop."),
+  },
+  songAnnounce: {
+    name: N_("Announce songs"),
+    about: N_("The island names a new song when it starts, if Settings → General asks for it."),
   },
   musicPlayer: {
     name: N_("Big music player"),
@@ -116,6 +148,7 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
 /** The modules' titles, by group id. */
 const GROUP_TITLES: Record<string, string> = {
   claude: "Claude Code",
+  skills: N_("Claude skills"),
   launcher: N_("Launcher"),
   jev: N_("JEV"),
   music: N_("Music · Spotify"),

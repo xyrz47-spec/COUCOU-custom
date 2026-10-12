@@ -505,6 +505,10 @@ export function buildSkills(actions: ViewActions): ViewHost {
   function draw() {
     // "Suggest" is a feature of its own (Settings → Features): off, the tab goes with its plan.
     const suggests = featureOn(State.settings, "skillAdvice");
+    // Settings → Features → "Find skills": the search of skills.sh, its tab and its field of chips.
+    const finds = featureOn(State.settings, "skillFind");
+    tabFind.style.display = finds ? "" : "none";
+    if (!finds && tab === "find") tab = "mine";
     tabPlan.style.display = suggests ? "" : "none";
     if (!suggests && tab === "plan") {
       tab = "mine";
@@ -516,7 +520,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
     verifiedBox.classList.toggle("on", verifiedOnly);
     verifiedBox.style.display = tab === "mine" ? "none" : "";
     // "Suggest" takes a sentence, not a word to filter by, and has its own buttons.
-    chips.style.display = tab === "plan" ? "none" : "";
+    chips.style.display = tab === "plan" || !finds ? "none" : "";
     ask.style.display = tab === "plan" ? "" : "none";
     ask.disabled = advising || applying;
     apply.style.display = "none";
@@ -620,6 +624,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
       wasShown = shown;
       // "Suggest" was turned on or off in Settings → Features: its tab follows.
       if ((tabPlan.style.display !== "none") !== featureOn(State.settings, "skillAdvice")) draw();
+      if ((tabFind.style.display !== "none") !== featureOn(State.settings, "skillFind")) draw();
     },
   };
 }

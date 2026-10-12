@@ -179,8 +179,8 @@ export const Bridge = {
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
   // ── JEV (src-tauri/src/jev.rs) ────────────────────────────────────────────
-  /** How a message sounds, by JEV. Throws with the reason (feature off, no key, the call failed). */
-  jevCheckMessage: (text: string) => callOrThrow<JevMessageRead>("jev_check_message", { text }),
+  /** Which option suits the person best, by JEV. Throws with the reason (feature off, no key, the call failed). */
+  jevDecide: (feeling: string, options: string[]) => callOrThrow<JevDecision>("jev_decide", { feeling, options }),
   /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
   jevCheckKey: () => callOrThrow<string>("jev_check_key"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
@@ -343,18 +343,12 @@ export interface SkillAdvice {
   note: string;
 }
 
-/** What JEV makes of a message (src-tauri/src/jev.rs). */
-export interface JevMessageRead {
-  /** friendly, neutral, formal, stern or upset; empty when JEV did not say. */
-  tone: string;
-  toneConfidence: number;
-  /** 0 (not urgent) to 2 (urgent now). */
-  urgency: number;
-  urgencyConfidence: number;
-  /** 0 to 1: how likely it asks for an answer. */
-  needsReply: number;
-  /** 0 to 1: how likely it could sound rude. */
-  rude: number;
+/** JEV's ranking of the options a person typed (src-tauri/src/jev.rs). */
+export interface JevDecision {
+  /** Best first; `share` is 0 to 1 and they add up to about 1. */
+  ranking: { option: string; share: number }[];
+  /** 0 to 1: how sure JEV is of the first. */
+  confidence: number;
 }
 
 export interface SkillGroup {

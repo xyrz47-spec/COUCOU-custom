@@ -26,7 +26,7 @@ export type IslandViewName =
   | "wardrobe"
   | "launcher"
   | "skills"
-  | "check";
+  | "decide";
 
 export type BotStateName =
   | "idle"
@@ -100,8 +100,8 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   launcher: { height: 196, botX: 68, botY: 119, botDiameter: 58, agentMode: "none" },
   // A list to read and a field to type in: as tall as the chat, the whole width (no Mochi).
   skills: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
-  // A message to paste and the read of it: as tall as the skills tab (no Mochi).
-  check: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
+  // A feeling, a few options and their ranking: as tall as the skills tab (no Mochi).
+  decide: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
 };
 
 // The upload views above are only the fallback geometry. Once a file is actually

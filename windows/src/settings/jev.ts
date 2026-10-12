@@ -61,7 +61,7 @@ export function jevSection(): HTMLElement {
     h("h2", {}, h("span", { text: t("JEV") })),
     h("div", {
       class: "hint",
-      text: t("JEV is TypeSafe's model for quick, structured judgements. With a key, the Check tab reads a message you paste: how it sounds, how urgent it is, whether it needs a reply, whether it could sound rude. It reads; it does not write."),
+      text: t("JEV is TypeSafe's model for quick, structured judgements. With a key, the Decide tab ranks the options you list for how you feel: what to eat, drink or do. It picks among your options; it makes none up."),
     }),
     h("div", { class: "row" }, input, save),
     h("div", { class: "row" }, test, remove),
@@ -69,7 +69,7 @@ export function jevSection(): HTMLElement {
     note,
     h("div", {
       class: "hint",
-      text: t("What is sent to api.typesafe.ai: the message you pasted, cut to 3,000 characters, only when you press Check, and nothing is kept once you leave the tab. The key is kept in the system credential store."),
+      text: t("What is sent to api.typesafe.ai: the feeling and the options you typed, only when you press Decide. The feeling is never kept, and the options only if \"Remember the last options\" is on, in this window. The key is kept in the system credential store."),
     }),
   );
 }

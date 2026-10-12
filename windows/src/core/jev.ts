@@ -1,60 +1,59 @@
-// JEV's read of a message (src-tauri/src/jev.rs) put into words for the Check
-// tab: how it sounds, how urgent it is, whether it needs a reply, whether it
-// could sound rude. Pure, so it can be tested without a webview.
+// Everyday help to pick, by JEV (src-tauri/src/jev.rs): the options a person
+// types, the presets that fill them in, and the ranking that comes back in
+// words. Pure, so it can be tested without a webview.
 
-import type { JevMessageRead } from "./bridge";
+import type { JevDecision } from "./bridge";
 import { N_, t } from "../i18n/i18n";
 
-const TONES: Record<string, string> = {
-  friendly: N_("friendly"),
-  neutral: N_("neutral"),
-  formal: N_("formal"),
-  stern: N_("stern"),
-  upset: N_("upset"),
-};
+/** As many options as jev.rs sends (MAX_OPTIONS). */
+export const MAX_OPTIONS = 10;
 
-/** A tone is only named when JEV is reasonably sure of it. */
-const TONE_SURE = 0.4;
-/** From this likelihood on, a yes/no question counts as yes. */
-const YES = 0.5;
+/** Presets for the options box: a label, and what it fills in. Strings are English keys, shown with `t()`. */
+export const PRESETS: readonly { label: string; options: readonly string[] }[] = [
+  { label: N_("Meal"), options: [N_("Rice dish"), N_("Noodles"), N_("Soup"), N_("Salad"), N_("Sandwich"), N_("Pizza"), N_("Sushi"), N_("Fried chicken")] },
+  { label: N_("Drink"), options: [N_("Coffee"), N_("Tea"), N_("Water"), N_("Juice"), N_("Milk")] },
+  { label: N_("Activity"), options: [N_("Go for a walk"), N_("Take a nap"), N_("Read"), N_("Watch a movie"), N_("Work out"), N_("Call a friend")] },
+];
 
-export type Mood = "good" | "watch" | "warn";
+/** The text a preset puts in the box, one option per line, in the interface language. */
+export function presetText(index: number): string {
+  return (PRESETS[index]?.options ?? []).map((o) => t(o)).join("\n");
+}
 
-export interface ReadLine {
-  label: string;
-  value: string;
-  mood: Mood;
+/** The options in a box: one per line or separated by commas, each once, trimmed, at most MAX_OPTIONS. */
+export function parseOptions(text: string): string[] {
+  const out: string[] = [];
+  for (const part of text.split(/[\n,，、;]+/)) {
+    const option = part.trim();
+    if (option && !out.some((o) => o.toLowerCase() === option.toLowerCase())) out.push(option);
+  }
+  return out.slice(0, MAX_OPTIONS);
 }
 
 export function percent(x: number): string {
   return `${Math.round(Math.min(1, Math.max(0, x)) * 100)}%`;
 }
 
-/** The four lines of a read, in the order the tab shows them. */
-export function describe(read: JevMessageRead): ReadLine[] {
-  const tone = TONES[read.tone];
-  const sure = tone != null && read.toneConfidence >= TONE_SURE;
-  const urgency = read.urgency < 0.5
-    ? { value: t("not urgent"), mood: "good" as const }
-    : read.urgency < 1.5
-      ? { value: t("soon"), mood: "watch" as const }
-      : { value: t("urgent"), mood: "warn" as const };
-  return [
-    {
-      label: t("Sounds"),
-      value: sure ? t(tone) : t("hard to tell"),
-      mood: sure && (read.tone === "stern" || read.tone === "upset") ? "watch" : "good",
-    },
-    { label: t("Urgency"), ...urgency },
-    {
-      label: t("Reply"),
-      value: read.needsReply >= YES ? t("asks for an answer ({n})", { n: percent(read.needsReply) }) : t("none needed ({n})", { n: percent(read.needsReply) }),
-      mood: read.needsReply >= YES ? "watch" : "good",
-    },
-    {
-      label: t("Could sound rude"),
-      value: read.rude >= YES ? t("yes ({n})", { n: percent(read.rude) }) : t("no ({n})", { n: percent(read.rude) }),
-      mood: read.rude >= YES ? "warn" : "good",
-    },
-  ];
+export interface Row {
+  option: string;
+  share: string;
+  /** 0 to 100: the bar's width, relative to the best one. */
+  width: number;
+  best: boolean;
+}
+
+/** The ranking as rows: the best first, each bar measured against it. */
+export function rows(decision: JevDecision): Row[] {
+  const top = Math.max(...decision.ranking.map((r) => r.share), 0.0001);
+  return decision.ranking.map((r, i) => ({
+    option: r.option,
+    share: percent(r.share),
+    width: Math.round((r.share / top) * 100),
+    best: i === 0,
+  }));
+}
+
+/** A line under the ranking when JEV is not sure of the first. */
+export function doubt(decision: JevDecision): string | null {
+  return decision.confidence < 0.5 ? t("JEV is not very sure: the first ones are close.") : null;
 }

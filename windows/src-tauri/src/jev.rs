@@ -1,19 +1,20 @@
-// JEV (TypeSafe's System One model): a quick read of a message.
+// JEV (TypeSafe's System One model): helping to pick, in everyday life.
 //
-// The Check tab takes a message — one received, or one about to be sent — and
-// asks JEV four typed questions about it in one call: how it sounds (friendly,
-// neutral, formal, stern, upset), how urgent it is, whether it asks for an
-// answer, and whether it could come across as rude. JEV does not write text; it
-// answers with values the tab can show at a glance.
+// The Decide tab takes how the person feels ("tired, something warm") and a few
+// options they type, one per line — what to eat, what to drink, what to do —
+// and asks JEV one typed Choice question: which of these fits best? JEV answers
+// with a probability for each option, so the tab can show a ranking instead of
+// one verdict. JEV picks among the options given; it does not make any up.
 //
 // It needs a TypeSafe API key (Settings → JEV, kept in the credential store,
 // never on disk). Without one, or with the feature off, nothing is sent. What
-// is sent is the text the user pasted, cut at MAX_SENT characters — nothing
-// else — and only when they press Check.
+// is sent is the feeling and the options typed, and only when the user presses
+// Decide.
 //
 // The API: POST https://api.typesafe.ai/v1/systemone with a Bearer key, a
 // `state` and typed `questions` (docs.typesafe.ai).
 
+use std::collections::HashMap;
 use std::time::Duration;
 
 use reqwest::Url;
@@ -27,40 +28,49 @@ const ENDPOINT: &str = "https://api.typesafe.ai/v1/systemone";
 pub const KEY: &str = "typesafe-api-key";
 const MODEL: &str = "jev-latest";
 const TIMEOUT: Duration = Duration::from_secs(10);
-/// Most characters of a message sent.
-pub const MAX_SENT: usize = 3000;
-/// How the message may sound, as the tone question names them.
-pub const TONES: &[&str] = &["friendly", "neutral", "formal", "stern", "upset"];
+pub const MIN_OPTIONS: usize = 2;
+pub const MAX_OPTIONS: usize = 10;
+const MAX_OPTION_CHARS: usize = 60;
+const MAX_FEELING_CHARS: usize = 200;
 
-pub fn request_body(text: &str) -> Value {
-    let message: String = text.trim().chars().take(MAX_SENT).collect();
+/// The options typed, trimmed, each once (whatever the case), at most MAX_OPTIONS.
+pub fn clean_options(options: &[String]) -> Result<Vec<String>, String> {
+    let mut out: Vec<String> = Vec::new();
+    for option in options {
+        let option: String = option.trim().chars().take(MAX_OPTION_CHARS).collect();
+        if !option.is_empty() && !out.iter().any(|o| o.to_lowercase() == option.to_lowercase()) {
+            out.push(option);
+        }
+    }
+    out.truncate(MAX_OPTIONS);
+    if out.len() < MIN_OPTIONS {
+        return Err(format!("Give at least {MIN_OPTIONS} different options."));
+    }
+    Ok(out)
+}
+
+/// The id JEV is given for option `n`: criteria are keyed by it, the text is the description.
+fn option_id(n: usize) -> String {
+    format!("o{}", n + 1)
+}
+
+pub fn request_body(feeling: &str, options: &[String]) -> Value {
+    let feeling: String = feeling.trim().chars().take(MAX_FEELING_CHARS).collect();
+    let state = if feeling.is_empty() {
+        "The person has no particular preference right now.".to_string()
+    } else {
+        format!("What the person feels like right now: {feeling}")
+    };
+    let criteria: serde_json::Map<String, Value> =
+        options.iter().enumerate().map(|(n, o)| (option_id(n), Value::String(o.clone()))).collect();
     json!({
-        "state": format!("A message:\n{message}"),
+        "state": state,
         "model": MODEL,
         "questions": {
-            "tone": {
+            "pick": {
                 "type": "choice",
-                "instructions": "How the message sounds",
-                "criteria": {
-                    "friendly": "Warm, kind or cheerful",
-                    "neutral": "Plain and matter-of-fact",
-                    "formal": "Polite and businesslike",
-                    "stern": "Firm, curt or demanding",
-                    "upset": "Angry, annoyed or hurt"
-                }
-            },
-            "urgency": {
-                "type": "score",
-                "instructions": "How urgent the message is for the reader",
-                "criteria": ["Not urgent, no deadline", "Should be answered soon", "Urgent, needs attention right now"]
-            },
-            "needs_reply": {
-                "type": "noul",
-                "instructions": "The message asks for an answer or an action from the reader."
-            },
-            "rude": {
-                "type": "noul",
-                "instructions": "The message could come across as rude or hurtful."
+                "instructions": "Which option suits the person best right now",
+                "criteria": criteria
             }
         }
     })
@@ -68,38 +78,43 @@ pub fn request_body(text: &str) -> Value {
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct MessageRead {
-    /// One of TONES; empty when JEV did not say.
-    pub tone: String,
-    pub tone_confidence: f64,
-    /// 0 (not urgent) to 2 (urgent now), in between when unsure.
-    pub urgency: f64,
-    pub urgency_confidence: f64,
-    /// 0 to 1: how likely the message asks for an answer.
-    pub needs_reply: f64,
-    /// 0 to 1: how likely it could sound rude.
-    pub rude: f64,
+pub struct Ranked {
+    pub option: String,
+    /// 0 to 1: JEV's probability for this option; they add up to about 1.
+    pub share: f64,
 }
 
-fn number(v: &Value, key: &str) -> Option<f64> {
-    v.get(key).and_then(Value::as_f64).filter(|n| n.is_finite())
+#[derive(Debug, Clone, PartialEq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Decision {
+    /// Best first.
+    pub ranking: Vec<Ranked>,
+    /// 0 to 1: how sure JEV is of the first.
+    pub confidence: f64,
 }
 
-/// The read in a /v1/systemone response, or why it is not usable.
-pub fn read_from_response(response: &Value) -> Result<MessageRead, String> {
-    let answers = response.get("answers").ok_or("the answer holds no answers")?;
-    let get = |name: &str| answers.get(name).ok_or_else(|| format!("the answer holds no \"{name}\""));
-    let tone = get("tone")?;
-    let urgency = get("urgency")?;
-    let choice = tone.get("choice").and_then(Value::as_str).unwrap_or("");
-    Ok(MessageRead {
-        tone: if TONES.contains(&choice) { choice.to_string() } else { String::new() },
-        tone_confidence: number(tone, "confidence").unwrap_or(0.0).clamp(0.0, 1.0),
-        urgency: number(urgency, "score").ok_or("\"urgency\" has no score")?.clamp(0.0, 2.0),
-        urgency_confidence: number(urgency, "confidence").unwrap_or(0.0).clamp(0.0, 1.0),
-        needs_reply: number(get("needs_reply")?, "noul").ok_or("\"needs_reply\" has no value")?.clamp(0.0, 1.0),
-        rude: number(get("rude")?, "noul").ok_or("\"rude\" has no value")?.clamp(0.0, 1.0),
-    })
+/// The ranking in a /v1/systemone response for `options`, or why it is not usable.
+pub fn decision_from_response(response: &Value, options: &[String]) -> Result<Decision, String> {
+    let pick = response.get("answers").and_then(|a| a.get("pick")).ok_or("the answer holds no \"pick\"")?;
+    let probabilities: HashMap<String, f64> = pick
+        .get("probabilities")
+        .and_then(Value::as_object)
+        .ok_or("the answer holds no probabilities")?
+        .iter()
+        .filter_map(|(k, v)| v.as_f64().filter(|p| p.is_finite()).map(|p| (k.clone(), p.clamp(0.0, 1.0))))
+        .collect();
+    let mut ranking: Vec<Ranked> = options
+        .iter()
+        .enumerate()
+        .map(|(n, option)| Ranked { option: option.clone(), share: probabilities.get(&option_id(n)).copied().unwrap_or(0.0) })
+        .collect();
+    if ranking.iter().all(|r| r.share == 0.0) {
+        return Err("the answer ranks none of the options".into());
+    }
+    // Best first; options JEV rated the same stay in the order they were typed.
+    ranking.sort_by(|a, b| b.share.partial_cmp(&a.share).unwrap_or(std::cmp::Ordering::Equal));
+    let confidence = pick.get("confidence").and_then(Value::as_f64).filter(|c| c.is_finite()).unwrap_or(0.0).clamp(0.0, 1.0);
+    Ok(Decision { ranking, confidence })
 }
 
 fn status_message(status: u16) -> String {
@@ -129,17 +144,15 @@ async fn call(key: &str, body: &Value) -> Result<Value, String> {
     serde_json::from_slice(&bytes).map_err(|e| format!("Bad answer from TypeSafe: {e}"))
 }
 
-/// How a message sounds. Asked only when the user presses Check, with the saved key.
+/// Which option suits the person best. Asked only when the user presses Decide, with the saved key.
 #[tauri::command]
-pub async fn jev_check_message(shared: State<'_, Shared>, text: String) -> Result<MessageRead, String> {
-    if text.trim().is_empty() {
-        return Err("Paste a message first.".into());
-    }
-    if !crate::features::on(&shared.settings.lock().unwrap(), "messageCheck") {
-        return Err("The message check is off in Settings → Features.".into());
+pub async fn jev_decide(shared: State<'_, Shared>, feeling: String, options: Vec<String>) -> Result<Decision, String> {
+    let options = clean_options(&options)?;
+    if !crate::features::on(&shared.settings.lock().unwrap(), "decide") {
+        return Err("Decide is off in Settings → Features.".into());
     }
     let key = secrets::get(KEY).ok_or("No TypeSafe API key: add one in Settings → JEV.")?;
-    read_from_response(&call(&key, &request_body(&text)).await?)
+    decision_from_response(&call(&key, &request_body(&feeling, &options)).await?, &options)
 }
 
 /// Asks JEV one harmless question with the saved key, to say whether the key works.
@@ -159,47 +172,53 @@ pub async fn jev_check_key() -> Result<String, String> {
 mod tests {
     use super::*;
 
+    fn opts(list: &[&str]) -> Vec<String> {
+        list.iter().map(|s| s.to_string()).collect()
+    }
+
     #[test]
-    fn the_request_asks_four_typed_questions_about_the_message_cut_short() {
-        let body = request_body(&format!("  Hi  {}", "a".repeat(5000)));
+    fn options_are_trimmed_once_each_and_between_two_and_ten() {
+        assert_eq!(clean_options(&opts(&[" Ramen ", "ramen", "", "Salad"])).unwrap(), ["Ramen", "Salad"]);
+        assert!(clean_options(&opts(&["Ramen", "RAMEN", " "])).is_err(), "one option is no choice");
+        let many: Vec<String> = (0..20).map(|n| format!("Dish {n}")).collect();
+        assert_eq!(clean_options(&many).unwrap().len(), MAX_OPTIONS);
+        assert_eq!(clean_options(&opts(&[&"x".repeat(200), "y"])).unwrap()[0].chars().count(), MAX_OPTION_CHARS);
+    }
+
+    #[test]
+    fn the_request_is_one_choice_question_over_the_options() {
+        let body = request_body("  tired, something warm ", &opts(&["Soup", "Salad", "Pizza"]));
         assert_eq!(body["model"], "jev-latest");
-        let state = body["state"].as_str().unwrap();
-        assert!(state.starts_with("A message:\nHi"));
-        assert!(state.chars().count() <= MAX_SENT + 20);
-        let q = &body["questions"];
-        assert_eq!((q["tone"]["type"].as_str(), q["urgency"]["type"].as_str()), (Some("choice"), Some("score")));
-        assert_eq!((q["needs_reply"]["type"].as_str(), q["rude"]["type"].as_str()), (Some("noul"), Some("noul")));
-        let tones: Vec<_> = q["tone"]["criteria"].as_object().unwrap().keys().map(String::as_str).collect();
-        for tone in TONES {
-            assert!(tones.contains(tone), "{tone}");
-        }
-        assert_eq!(q["urgency"]["criteria"].as_array().unwrap().len(), 3);
+        assert_eq!(body["state"], "What the person feels like right now: tired, something warm");
+        let q = &body["questions"]["pick"];
+        assert_eq!(q["type"], "choice");
+        assert_eq!(q["criteria"]["o1"], "Soup");
+        assert_eq!(q["criteria"]["o3"], "Pizza");
+        assert_eq!(q["criteria"].as_object().unwrap().len(), 3);
+        // No feeling typed: the state says so, rather than being empty.
+        assert!(request_body("  ", &opts(&["a", "b"]))["state"].as_str().unwrap().contains("no particular preference"));
     }
 
     #[test]
-    fn a_response_becomes_a_read() {
-        let response = json!({"model":"jev-1.13.0","answers":{
-            "tone":{"type":"choice","choice":"stern","confidence":0.8,"probabilities":{"stern":0.9}},
-            "urgency":{"type":"score","score":1.0,"confidence":1.0,"legend":{},"probabilities":{}},
-            "needs_reply":{"type":"noul","noul":1.0},
-            "rude":{"type":"noul","noul":0.25}}});
-        let read = read_from_response(&response).unwrap();
-        assert_eq!(read.tone, "stern");
-        assert_eq!((read.tone_confidence, read.urgency, read.urgency_confidence), (0.8, 1.0, 1.0));
-        assert_eq!((read.needs_reply, read.rude), (1.0, 0.25));
+    fn the_probabilities_make_a_ranking_in_the_order_of_the_options_given() {
+        let response = json!({"model":"jev-1.13.0","answers":{"pick":{
+            "type":"choice","choice":"o2","confidence":0.7,
+            "probabilities":{"o1":0.1,"o2":0.6,"o3":0.3}}}});
+        let d = decision_from_response(&response, &opts(&["Soup", "Salad", "Pizza"])).unwrap();
+        assert_eq!(d.ranking.iter().map(|r| r.option.as_str()).collect::<Vec<_>>(), ["Salad", "Pizza", "Soup"]);
+        assert_eq!(d.ranking[0].share, 0.6);
+        assert_eq!(d.confidence, 0.7);
+        // An option JEV left out counts for nothing and goes last; ties keep the typed order.
+        let partial = json!({"answers":{"pick":{"probabilities":{"o1":0.5,"o3":0.5}}}});
+        let d = decision_from_response(&partial, &opts(&["A", "B", "C"])).unwrap();
+        assert_eq!(d.ranking.iter().map(|r| r.option.as_str()).collect::<Vec<_>>(), ["A", "C", "B"]);
     }
 
     #[test]
-    fn a_response_that_is_not_what_was_asked_is_an_error_and_odd_values_are_dropped() {
-        assert!(read_from_response(&json!({})).is_err());
-        assert!(read_from_response(&json!({"answers":{"tone":{"choice":"stern"}}})).is_err());
-        let odd = json!({"answers":{
-            "tone":{"choice":"sarcastic","confidence":7.0},
-            "urgency":{"score":9.0,"confidence":0.5},
-            "needs_reply":{"noul":3.0},"rude":{"noul":-1.0}}});
-        let read = read_from_response(&odd).unwrap();
-        assert_eq!(read.tone, "", "a tone that was not offered is dropped");
-        assert_eq!((read.tone_confidence, read.urgency, read.needs_reply, read.rude), (1.0, 2.0, 1.0, 0.0), "kept in range");
+    fn an_answer_that_ranks_nothing_is_an_error() {
+        assert!(decision_from_response(&json!({}), &opts(&["a", "b"])).is_err());
+        assert!(decision_from_response(&json!({"answers":{"pick":{}}}), &opts(&["a", "b"])).is_err());
+        assert!(decision_from_response(&json!({"answers":{"pick":{"probabilities":{"zzz":1.0}}}}), &opts(&["a", "b"])).is_err());
         assert!(status_message(401).contains("refused") && status_message(429).contains("too many"));
     }
 }

@@ -226,7 +226,7 @@ side (tray, errors) embeds the same two files.
 
 ## Features: turning parts of Coucou on and off
 
-Settings → **Features** lists what this build adds, by module — Claude Code (chat, skills, plugin skills, skill suggestions), Launcher, JEV (message check), Music · Spotify (the pill, the big player, the song in the compact island), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
+Settings → **Features** lists what this build adds, by module — Claude Code (chat, plan usage), Claude skills (the tab, plugin skills, finding skills, suggestions), Launcher (the tab, installed apps, website icons), JEV (Decide, its presets, remembering the options), Music · Spotify (the pill, the big player, the song in the compact island, Mochi dancing, announcing songs), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
 
 For whoever adds or removes a feature, it is declared in one place and checked where it plugs in:
 
@@ -236,11 +236,11 @@ For whoever adds or removes a feature, it is declared in one place and checked w
 
 `tests/features.test.mjs` fails when a declaration has no words, names a parent, icon or pill that does not exist, or when the code checks a feature that is not declared. To remove a feature, delete its entry, its words and its code.
 
-## JEV: checking a message
+## JEV: helping to decide
 
-Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, the island's **Check** tab (Settings → Features → *Message check*) reads a message you paste — one you got, or one you are about to send — and answers in four short lines: how it sounds (friendly, neutral, formal, stern, upset), how urgent it is, whether it asks for an answer, and whether it could sound rude. `Ctrl+Enter` checks. JEV reads; it does not write anything for you.
+Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, the island's **Decide** tab (Settings → Features → *Decide tab*) answers the everyday "what should I eat / drink / do?": say how you feel ("tired, something warm"), list a few options — one per line or separated by commas, or fill them from a preset (meal, drink, activity) — and press Decide (`Enter` in the feeling box, `Ctrl+Enter` in the options box). JEV ranks your options with a share for each; it picks among them and makes none up.
 
-What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the message you pasted, cut to 3,000 characters, and only when you press Check. Nothing is kept once you leave the tab, and without a key nothing is sent. The four typed questions (one choice, one score, two yes/no) are in `src-tauri/src/jev.rs`.
+What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the feeling and the options typed, and only when you press Decide. The feeling is never kept; the options are kept in the window's storage only while *Remember the last options* is on. Without a key nothing is sent. The one typed question (a Choice over your options) is in `src-tauri/src/jev.rs`.
 
 ## Task mode
 

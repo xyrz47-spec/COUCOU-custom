@@ -110,7 +110,11 @@ fn tidy_apps(listed: Vec<(String, String)>) -> Vec<InstalledApp> {
 
 /// The apps installed on this PC, for the "add" window's search.
 #[tauri::command(async)]
-pub fn launcher_apps() -> Vec<InstalledApp> {
+pub fn launcher_apps(shared: State<Shared>) -> Vec<InstalledApp> {
+    // Settings → Features → "Installed apps", off: the Start menu is not read.
+    if !crate::features::on(&shared.settings.lock().unwrap(), "launcherApps") {
+        return Vec::new();
+    }
     tidy_apps(platform::start_apps())
 }
 
@@ -288,9 +292,16 @@ fn image_data_url(path: &Path) -> Option<String> {
 /// the site has none we could read.
 #[tauri::command]
 pub async fn launcher_favicon(shared: State<'_, Shared>, index: usize) -> Result<Option<String>, ()> {
-    let target = shared.settings.lock().unwrap().launcher.get(index).map(|item| item.target.trim().to_string());
+    let (target, allowed) = {
+        let settings = shared.settings.lock().unwrap();
+        (
+            settings.launcher.get(index).map(|item| item.target.trim().to_string()),
+            crate::features::on(&settings, "launcherFavicons"),
+        )
+    };
     match target {
-        Some(target) if is_web(&target) => Ok(favicon(&target).await),
+        // Settings → Features → "Website icons", off: the site is not asked.
+        Some(target) if allowed && is_web(&target) => Ok(favicon(&target).await),
         _ => Ok(None),
     }
 }

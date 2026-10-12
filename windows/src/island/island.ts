@@ -1189,7 +1189,7 @@ export class Island {
     // Dances while music plays: always in the compact island, expanded only on
     // the music pill's card (BotCanvasView, macOS). Asked every frame.
     this.engine.setDancing(islandDances({
-      music: State.spotifyPlaying,
+      music: State.mochiDances,
       state: State.effectiveState,
       mode: State.mode,
       view: State.view,
@@ -1262,7 +1262,7 @@ export class Island {
     // island is allowed to take keyboard focus.
     if (this.lastSyncedView !== State.view) {
       // …and the skills tab, for its search field.
-      const typing = (view: IslandViewName | null) => view === "prompt" || view === "skills" || view === "check";
+      const typing = (view: IslandViewName | null) => view === "prompt" || view === "skills" || view === "decide";
       const wasTyping = typing(this.lastSyncedView);
       this.lastSyncedView = State.view;
       if (typing(State.view)) {
