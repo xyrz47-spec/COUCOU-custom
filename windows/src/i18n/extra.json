@@ -6340,54 +6340,6 @@
    "id": "Sesuatu di alam",
    "ko": "자연의 것"
   },
-  "Easy": {
-   "zh-Hans": "简单",
-   "hi": "आसान",
-   "es": "Fácil",
-   "ar": "سهل",
-   "fr": "Facile",
-   "bn": "সহজ",
-   "pt-BR": "Fácil",
-   "ru": "Легко",
-   "id": "Mudah",
-   "ko": "쉬움"
-  },
-  "Normal": {
-   "zh-Hans": "普通",
-   "hi": "सामान्य",
-   "es": "Normal",
-   "ar": "عادي",
-   "fr": "Normal",
-   "bn": "স্বাভাবিক",
-   "pt-BR": "Normal",
-   "ru": "Обычно",
-   "id": "Normal",
-   "ko": "보통"
-  },
-  "Hard": {
-   "zh-Hans": "困难",
-   "hi": "कठिन",
-   "es": "Difícil",
-   "ar": "صعب",
-   "fr": "Difficile",
-   "bn": "কঠিন",
-   "pt-BR": "Difícil",
-   "ru": "Сложно",
-   "id": "Sulit",
-   "ko": "어려움"
-  },
-  "Any level": {
-   "zh-Hans": "任意难度",
-   "hi": "कोई भी स्तर",
-   "es": "Cualquier nivel",
-   "ar": "أي مستوى",
-   "fr": "N'importe quel niveau",
-   "bn": "যেকোনো স্তর",
-   "pt-BR": "Qualquer nível",
-   "ru": "Любой уровень",
-   "id": "Semua tingkat",
-   "ko": "모든 난이도"
-  },
   "I am thinking of one of {n} things.": {
    "zh-Hans": "我想的是 {n} 样东西中的一个。",
    "hi": "मैं {n} चीज़ों में से एक के बारे में सोच रहा हूँ।",

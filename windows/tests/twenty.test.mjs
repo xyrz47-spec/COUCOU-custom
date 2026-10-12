@@ -6,7 +6,7 @@ import { installFakeDom } from "./fakedom.mjs";
 import "./tauri.mjs";
 
 installFakeDom();
-const { KINDS, LEVELS, answerText, progress, secretText } = await import("../src/core/twenty.ts");
+const { KINDS, answerText, progress, secretText } = await import("../src/core/twenty.ts");
 const { buildTwenty } = await import("../src/views/twenty.ts");
 const { State } = await import("../src/core/state.ts");
 
@@ -19,12 +19,11 @@ test("JEV's five answers have their words, and the good and bad ones their mood"
   assert.equal(answerText("nonsense").text, "Not sure", "an unknown answer reads as not sure");
 });
 
-test("the kinds and levels are the ones Rust knows, and progress counts the question being asked", async () => {
+test("the kinds are the ones Rust knows, and progress counts the question being asked", async () => {
   const { readFileSync } = await import("node:fs");
   const rust = readFileSync(new URL("../src-tauri/src/twenty.rs", import.meta.url), "utf8");
   const known = rust.match(/pub const KINDS: &\[&str\] = &\[([^\]]+)\]/)[1].match(/"(\w+)"/g).map((k) => k.slice(1, -1));
   assert.deepEqual(KINDS.map((k) => k.id), [...known, "any"]);
-  assert.deepEqual(LEVELS.map((l) => l.id), ["easy", "normal", "hard", "any"]);
   assert.equal(progress(0, 20), "Question 1 of 20");
   assert.equal(progress(7, 20), "Question 8 of 20");
   assert.equal(progress(20, 20), "Question 20 of 20", "never past the last");
@@ -40,10 +39,10 @@ test("the tab starts at the choice of a kind and asks nothing by itself", () => 
   State.view = "twenty";
   const view = buildTwenty({ blip() {} });
   view.sync();
-  const [levels, chips] = view.el.find(".sk-chips");
+  const chips = view.el.find(".sk-chips")[0];
   assert.equal(chips.style.display, "");
   assert.equal(chips.children.length, 11, "ten kinds and anything");
-  assert.equal(levels.children.length, 4, "the levels");
+  assert.equal(view.el.find(".sk-chips").length, 1, "no choice of level");
   assert.equal(view.el.find(".sk-top")[0].style.display, "none", "no box to type in before a game");
   assert.equal(view.el.find(".sk-empty").length, 1);
 });

@@ -33,8 +33,6 @@ const MAX_GUESS_CHARS: usize = 60;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Item {
     pub kind: &'static str,
-    /// 1 common, 2 less common, 3 rare.
-    pub tier: u8,
     pub en: &'static str,
     pub ko: &'static str,
 }
@@ -44,7 +42,7 @@ const ITEMS_TEXT: &str = include_str!("twenty_items.txt");
 /// The kinds a game may be about.
 pub const KINDS: &[&str] = &["animal", "food", "thing", "place", "job", "nature", "pokemon", "character", "body", "activity"];
 
-/// What Coucou may think of, from twenty_items.txt: `kind | tier | English | 한국어` per line.
+/// What Coucou may think of, from twenty_items.txt: `kind | English | 한국어` per line.
 pub fn items() -> &'static [Item] {
     static ITEMS: OnceLock<Vec<Item>> = OnceLock::new();
     ITEMS.get_or_init(|| {
@@ -53,35 +51,22 @@ pub fn items() -> &'static [Item] {
             .filter(|l| !l.trim().is_empty() && !l.starts_with('#'))
             .filter_map(|line| {
                 let mut parts = line.split('|');
-                let (kind, tier, en, ko) = (parts.next()?, parts.next()?, parts.next()?, parts.next()?);
-                Some(Item { kind: kind.trim(), tier: tier.trim().parse().ok()?, en: en.trim(), ko: ko.trim() })
+                let (kind, en, ko) = (parts.next()?, parts.next()?, parts.next()?);
+                Some(Item { kind: kind.trim(), en: en.trim(), ko: ko.trim() })
             })
             .collect()
     })
 }
 
-/// The tiers a level draws from: easy the common ones, normal the common and less common,
-/// hard the less common and rare, any all of them.
-fn tiers(level: &str) -> Option<std::ops::RangeInclusive<u8>> {
-    match level {
-        "easy" => Some(1..=1),
-        "normal" => Some(1..=2),
-        "hard" => Some(2..=3),
-        "any" => Some(1..=3),
-        _ => None,
-    }
-}
-
 /// How many of the last picks are not drawn again.
 const RECENT: usize = 60;
 
-/// The indexes Coucou may draw for `kind` ("any" for all) at `level`.
-pub fn pool(kind: &str, level: &str) -> Vec<usize> {
-    let Some(range) = tiers(level) else { return Vec::new() };
+/// The indexes Coucou may draw for `kind` ("any" for all).
+pub fn pool(kind: &str) -> Vec<usize> {
     items()
         .iter()
         .enumerate()
-        .filter(|(_, item)| (kind == "any" || item.kind == kind) && range.contains(&item.tier))
+        .filter(|(_, item)| kind == "any" || item.kind == kind)
         .map(|(i, _)| i)
         .collect()
 }
@@ -253,16 +238,16 @@ fn guard(shared: &Shared) -> Result<String, String> {
     secrets::get(KEY).ok_or_else(|| "No TypeSafe API key: add one in Settings → JEV.".to_string())
 }
 
-/// Coucou thinks of something of `kind` (a kind of KINDS, or "any") at `level` (easy, normal, hard or any).
+/// Coucou thinks of something of `kind`, a kind of KINDS or "any".
 #[tauri::command]
-pub fn twenty_new(shared: State<Shared>, kind: String, level: String) -> Result<Started, String> {
+pub fn twenty_new(shared: State<Shared>, kind: String) -> Result<Started, String> {
     guard(&shared)?;
     if kind != "any" && !KINDS.contains(&kind.as_str()) {
         return Err("Pick a kind of thing.".into());
     }
-    let pool = pool(&kind, &level);
+    let pool = pool(&kind);
     let mut recent = RECENT_PICKS.lock().unwrap();
-    let item = draw(&pool, &recent, random()).ok_or("Pick easy, normal, hard or any.")?;
+    let item = draw(&pool, &recent, random()).ok_or("Pick a kind of thing.")?;
     recent.push_back(item);
     while recent.len() > RECENT {
         recent.pop_front();
@@ -345,38 +330,43 @@ mod tests {
     #[test]
     fn the_list_is_large_valid_and_every_english_name_is_unique() {
         let all = items();
-        assert!(all.len() >= 3000, "{} things", all.len());
+        assert!(all.len() >= 4000, "{} things", all.len());
         let mut names: Vec<String> = all.iter().map(|i| normalise(i.en)).collect();
         names.sort();
         names.dedup();
         assert_eq!(names.len(), all.len(), "an English name is used twice");
         for item in all {
             assert!(KINDS.contains(&item.kind), "{}: kind {}", item.en, item.kind);
-            assert!((1..=3).contains(&item.tier) && !item.en.is_empty() && !item.ko.is_empty(), "{}", item.en);
+            assert!(!item.en.is_empty() && !item.ko.is_empty(), "{}", item.en);
         }
         let lines = ITEMS_TEXT.lines().filter(|l| !l.trim().is_empty() && !l.starts_with('#')).count();
         assert_eq!(lines, all.len(), "a line of twenty_items.txt could not be read");
     }
 
     #[test]
-    fn every_kind_has_plenty_at_every_level() {
+    fn every_kind_has_plenty() {
         for kind in KINDS {
-            assert!(pool(kind, "any").len() >= 90, "{kind}: {}", pool(kind, "any").len());
-            for level in ["easy", "normal", "hard"] {
-                assert!(pool(kind, level).len() >= 10, "{kind} {level}");
-            }
+            assert!(pool(kind).len() >= 90, "{kind}: {}", pool(kind).len());
         }
-        assert!(pool("any", "any").len() >= 3000);
-        assert!(pool("any", "easy").iter().all(|&i| items()[i].tier == 1));
-        assert!(pool("any", "hard").iter().all(|&i| items()[i].tier >= 2));
-        assert!(pool("any", "normal").iter().all(|&i| items()[i].tier <= 2));
-        assert!(pool("animal", "any").iter().all(|&i| items()[i].kind == "animal"));
-        assert!(pool("vegetable", "any").is_empty() && pool("any", "impossible").is_empty());
+        assert!(pool("any").len() >= 4000);
+        assert!(pool("animal").iter().all(|&i| items()[i].kind == "animal"));
+        assert!(pool("vegetable").is_empty());
+    }
+
+    #[test]
+    fn every_pokemon_is_in_the_pool_with_its_megas() {
+        let names: Vec<&str> = pool("pokemon").iter().map(|&i| items()[i].en).collect();
+        let species = names.iter().filter(|n| !n.starts_with("Mega ")).count();
+        assert_eq!(species, 1025, "the National Pokédex has 1025 species");
+        for must in ["Bulbasaur", "Pecharunt", "Mega Charizard X", "Mega Charizard Y", "Mega Mewtwo Y", "Mega Clefable", "Mega Garchomp Z", "Mega Raichu X"] {
+            assert!(names.contains(&must), "{must}");
+        }
+        assert!(names.len() >= 1025 + 90, "{} with the Megas", names.len());
     }
 
     #[test]
     fn the_draw_is_spread_over_the_pool_and_skips_what_was_played_lately() {
-        let big = pool("any", "any");
+        let big = pool("any");
         let mut seen = std::collections::HashSet::new();
         let mut recent = VecDeque::new();
         for _ in 0..400 {

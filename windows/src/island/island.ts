@@ -1120,7 +1120,7 @@ export class Island {
     // desktop, he isn't here at all.
     const away = State.mochiOnDesktop;
     // The big Spotify player takes the whole card: Mochi steps aside for it.
-    const player = State.spotifyPlayerShown || (State.mode === "expanded" && State.view === "skills");
+    const player = State.spotifyPlayerShown || (State.mode === "expanded" && (State.view === "skills" || State.view === "decide" || State.view === "twenty"));
     const visible = p.opacity > 0 && !greetingActive && !this.uploadActive && !away && !player;
     this.botCanvas.style.opacity = visible ? "1" : "0";
 

@@ -20,14 +20,6 @@ export const KINDS: readonly { id: string; label: string }[] = [
   { id: "any", label: N_("Anything") },
 ];
 
-/** How rare the things are: the ids twenty.rs knows. */
-export const LEVELS: readonly { id: string; label: string }[] = [
-  { id: "easy", label: N_("Easy") },
-  { id: "normal", label: N_("Normal") },
-  { id: "hard", label: N_("Hard") },
-  { id: "any", label: N_("Any level") },
-];
-
 const ANSWERS: Record<TwentyLabel, { text: string; mood: "ok" | "bad" | "" }> = {
   yes: { text: N_("Yes"), mood: "ok" },
   probablyYes: { text: N_("Probably yes"), mood: "ok" },

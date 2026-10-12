@@ -4471,3 +4471,27 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
     animation: none;
   }
 }
+
+/* Twenty questions: the kinds to pick from are capsules of one size, 2.4 wide for 1 high, the label centred. */
+.twenty .sk-chips {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 100px);
+  justify-content: center;
+  gap: 6px;
+  overflow: visible;
+}
+
+.twenty .sk-chip {
+  width: 100%;
+  aspect-ratio: 2.4 / 1;
+  box-sizing: border-box;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.15;
+  overflow: hidden;
+}

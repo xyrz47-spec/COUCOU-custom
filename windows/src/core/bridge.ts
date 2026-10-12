@@ -183,7 +183,7 @@ export const Bridge = {
   jevDecide: (feeling: string, options: string[]) => callOrThrow<JevDecision>("jev_decide", { feeling, options }),
   // ── Twenty questions, answered by JEV (src-tauri/src/twenty.rs) ───────────
   /** Coucou thinks of something of this kind: animal, food, thing or any. The secret stays in Rust. */
-  twentyNew: (kind: string, level: string) => callOrThrow<{ total: number; pool: number }>("twenty_new", { kind, level }),
+  twentyNew: (kind: string) => callOrThrow<{ total: number; pool: number }>("twenty_new", { kind }),
   twentyAsk: (question: string) => callOrThrow<TwentyAnswer>("twenty_ask", { question }),
   twentyGuess: (guess: string) => callOrThrow<TwentyGuess>("twenty_guess", { guess }),
   /** Gives up: the secret, in English and Korean. */

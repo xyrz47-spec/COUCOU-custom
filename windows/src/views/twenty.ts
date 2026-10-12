@@ -9,7 +9,7 @@
 // (style.css, .sk-*): no new style.
 
 import { Bridge, type TwentyLabel, type TwentySecret } from "../core/bridge";
-import { KINDS, LEVELS, answerText, progress, secretText } from "../core/twenty";
+import { KINDS, answerText, progress, secretText } from "../core/twenty";
 import { clear, h } from "./dom";
 import type { ViewActions, ViewHost } from "./views";
 import { t, tl } from "../i18n/i18n";
@@ -30,7 +30,6 @@ export function buildTwenty(actions: ViewActions): ViewHost {
   let turns: Turn[] = [];
   /** How the game ended: won in this many questions, or the secret that was missed. */
   let ending: { won: boolean; asked: number; secret: TwentySecret | null } | null = null;
-  let level = "any";
   let pool = 0;
 
   const input = h("input", { type: "text", class: "sk-search", maxlength: "200" }) as HTMLInputElement;
@@ -39,37 +38,18 @@ export function buildTwenty(actions: ViewActions): ViewHost {
   const giveUp = h("button", { class: "sk-btn danger", text: t("Give up"), onclick: () => void quit() }) as HTMLButtonElement;
   const again = h("button", { class: "sk-btn primary", text: t("New game"), onclick: () => { phase = "start"; error = ""; draw(); } });
   const count = h("span", { class: "sk-count" });
-  const levels = h("div", { class: "sk-chips" });
   const kinds = h("div", { class: "sk-chips" });
   const note = h("div", { class: "sk-note" });
   const list = h("div", { class: "sk-list" });
   const play = h("div", { class: "sk-top" }, input, send);
   const bar = h("div", { class: "sk-bar" }, count, guess, giveUp);
-  const el: HTMLElement = h("div", { class: "view skills twenty" }, h("div", { class: "card" }, levels, kinds, play, bar, note, list));
-
-  for (const option of LEVELS) {
-    const chip = h("button", {
-      class: option.id === level ? "sk-chip on" : "sk-chip",
-      text: tl(option.label),
-      onclick: () => {
-        actions.blip();
-        level = option.id;
-        drawLevels();
-      },
-    });
-    chip.dataset.level = option.id;
-    levels.append(chip);
-  }
-  function drawLevels() {
-    for (const chip of levels.children as unknown as HTMLElement[]) chip.classList.toggle("on", chip.dataset.level === level);
-  }
+  const el: HTMLElement = h("div", { class: "view skills twenty" }, h("div", { class: "card" }, kinds, play, bar, note, list));
 
   for (const kind of KINDS) {
     kinds.append(h("button", { class: "sk-chip", text: tl(kind.label), onclick: () => void start(kind.id) }));
   }
 
   function draw() {
-    levels.style.display = phase === "start" ? "" : "none";
     kinds.style.display = phase === "start" ? "" : "none";
     play.style.display = phase === "play" ? "" : "none";
     bar.style.display = phase === "play" ? "" : "none";
@@ -114,7 +94,7 @@ export function buildTwenty(actions: ViewActions): ViewHost {
     actions.blip();
     error = "";
     try {
-      const started = await Bridge.twentyNew(kind, level);
+      const started = await Bridge.twentyNew(kind);
       total = started?.total ?? 20;
       pool = started?.pool ?? 0;
       asked = 0;

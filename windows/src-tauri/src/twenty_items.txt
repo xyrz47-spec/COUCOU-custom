@@ -1,3302 +1,4152 @@
 # What Coucou may think of in twenty questions (twenty.rs).
-# kind | tier | English | 한국어
-# tier: 1 common, 2 less common, 3 rare. English names are unique (a Korean name may repeat, for
-# things that share a word); # lines are comments. Add a line to add a thing.
-animal|1|Dog|개
-animal|1|Cat|고양이
-animal|1|Cow|소
-animal|1|Pig|돼지
-animal|1|Chicken|닭
-animal|1|Horse|말
-animal|1|Rabbit|토끼
-animal|1|Bear|곰
-animal|1|Tiger|호랑이
-animal|1|Lion|사자
-animal|1|Elephant|코끼리
-animal|1|Monkey|원숭이
-animal|1|Giraffe|기린
-animal|1|Penguin|펭귄
-animal|1|Dolphin|돌고래
-animal|1|Whale|고래
-animal|1|Shark|상어
-animal|1|Butterfly|나비
-animal|1|Bee|벌
-animal|1|Duck|오리
-animal|1|Sheep|양
-animal|1|Frog|개구리
-animal|1|Snake|뱀
-animal|1|Fish|물고기
-animal|1|Bird|새
-animal|1|Mouse|쥐
-animal|1|Deer|사슴
-animal|1|Fox|여우
-animal|1|Wolf|늑대
-animal|1|Turtle|거북이
-animal|1|Crocodile|악어
-animal|1|Panda|판다
-animal|1|Goose|거위
-animal|1|Turkey|칠면조
-animal|1|Pigeon|비둘기
-animal|1|Sparrow|참새
-animal|1|Crow|까마귀
-animal|1|Magpie|까치
-animal|1|Swallow|제비
-animal|1|Seagull|갈매기
-animal|1|Calf|송아지
-animal|1|Puppy|강아지
-animal|1|Kitten|새끼 고양이
-animal|1|Lamb|어린 양
-animal|1|Ox|황소
-animal|1|Cockroach|바퀴벌레
-animal|1|Mosquito|모기
-animal|1|Fly|파리
-animal|1|Caterpillar|애벌레
-animal|1|Worm|지렁이
-animal|1|Beetle|딱정벌레
-animal|1|Cicada|매미
-animal|1|Grasshopper|메뚜기
-animal|1|Cricket|귀뚜라미
-animal|1|Crayfish|가재
-animal|1|Salmon|연어
-animal|1|Goldfish|금붕어
-animal|1|Squid|오징어
-animal|1|Clam|조개
-animal|1|Shrimp|새우
-animal|1|Cat fish|메기
-animal|1|Carp|잉어
-animal|1|Tuna|참치
-animal|1|Eel (fish)|뱀장어
-animal|1|Lizard|도마뱀
-animal|1|Gecko|도마뱀붙이
-animal|1|Toad|두꺼비
-animal|1|Hen|암탉
-animal|1|Rooster|수탉
-animal|1|Chick|병아리
-animal|1|Duckling|새끼 오리
-animal|1|Pony|조랑말
-animal|1|Baby camel|새끼 낙타
-animal|1|Wild boar|멧돼지
-animal|1|Bull|수소
-animal|1|Black bear|반달가슴곰
-animal|1|Chimpanzee|침팬지
-animal|1|Orangutan|오랑우탄
-animal|1|Baboon|개코원숭이
-animal|1|Hyena|하이에나
-animal|1|Jaguar|재규어
-animal|1|Puma|퓨마
-animal|1|Lynx|스라소니
-animal|1|Wolverine|울버린
-animal|1|Skunk|스컹크
-animal|1|Weasel|족제비
-animal|1|Ferret|페럿
-animal|1|Guinea pig|기니피그
-animal|1|Chinchilla|친칠라
-animal|1|Capybara|카피바라
-animal|1|Moose|말코손바닥사슴
-animal|1|Elk|엘크
-animal|1|Reindeer|순록
-animal|1|Antelope|영양
-animal|1|Gazelle|가젤
-animal|1|Buffalo|물소
-animal|1|Yak|야크
-animal|1|Alpaca|알파카
-animal|1|Hare|산토끼
-animal|1|Fruit bat|과일박쥐
-animal|1|Dingo|딩고
-animal|1|Coyote|코요테
-animal|1|Jackal|자칼
-animal|1|Panther|흑표범
-animal|1|Mammoth|매머드
-animal|1|Dinosaur|공룡
-animal|1|Dragon|용
-animal|1|Unicorn|유니콘
-animal|2|Owl|부엉이
-animal|2|Eagle|독수리
-animal|2|Squirrel|다람쥐
-animal|2|Kangaroo|캥거루
-animal|2|Koala|코알라
-animal|2|Zebra|얼룩말
-animal|2|Hippopotamus|하마
-animal|2|Rhinoceros|코뿔소
-animal|2|Camel|낙타
-animal|2|Octopus|문어
-animal|2|Jellyfish|해파리
-animal|2|Crab|게
-animal|2|Lobster|바닷가재
-animal|2|Seal|물개
-animal|2|Otter|수달
-animal|2|Hedgehog|고슴도치
-animal|2|Bat|박쥐
-animal|2|Spider|거미
-animal|2|Ant|개미
-animal|2|Snail|달팽이
-animal|2|Ladybug|무당벌레
-animal|2|Dragonfly|잠자리
-animal|2|Peacock|공작
-animal|2|Flamingo|홍학
-animal|2|Parrot|앵무새
-animal|2|Swan|백조
-animal|2|Goat|염소
-animal|2|Donkey|당나귀
-animal|2|Hamster|햄스터
-animal|2|Raccoon|너구리
-animal|2|Polar bear|북극곰
-animal|2|Gorilla|고릴라
-animal|2|Cheetah|치타
-animal|2|Leopard|표범
-animal|2|Falcon|매
-animal|2|Hawk|새매
-animal|2|Vulture|대머리수리
-animal|2|Condor|콘도르
-animal|2|Kingfisher|물총새
-animal|2|Hummingbird|벌새
-animal|2|Toucan|큰부리새
-animal|2|Cockatoo|유황앵무
-animal|2|Macaw|마코앵무
-animal|2|Canary|카나리아
-animal|2|Nightingale|나이팅게일
-animal|2|Cuckoo|뻐꾸기
-animal|2|Stork|황새
-animal|2|Crane|두루미
-animal|2|Heron|왜가리
-animal|2|Pheasant|꿩
-animal|2|Quail|메추라기
-animal|2|Emperor penguin|황제펭귄
-animal|2|Albatross|알바트로스
-animal|2|Puffin|퍼핀
-animal|2|Kiwi bird|키위새
-animal|2|Emu|에뮤
-animal|2|Raven|큰까마귀
-animal|2|Jay|어치
-animal|2|Robin|울새
-animal|2|Woodcock|멧도요
-animal|2|Sea turtle|바다거북
-animal|2|Tortoise|땅거북
-animal|2|Iguana|이구아나
-animal|2|Komodo dragon|코모도왕도마뱀
-animal|2|Cobra|코브라
-animal|2|Python|비단뱀
-animal|2|Anaconda|아나콘다
-animal|2|Rattlesnake|방울뱀
-animal|2|Alligator|앨리게이터
-animal|2|Salamander|도롱뇽
-animal|2|Newt|영원
-animal|2|Tree frog|청개구리
-animal|2|Bullfrog|황소개구리
-animal|2|Clownfish|흰동가리
-animal|2|Angelfish|엔젤피시
-animal|2|Pufferfish|복어
-animal|2|Swordfish|황새치
-animal|2|Barracuda|바라쿠다
-animal|2|Sturgeon|철갑상어
-animal|2|Trout|송어
-animal|2|Mackerel|고등어
-animal|2|Herring|청어
-animal|2|Anchovy|멸치
-animal|2|Sardine|정어리
-animal|2|Cod|대구
-animal|2|Flounder|광어
-animal|2|Moray eel|곰치
-animal|2|Piranha|피라냐
-animal|2|Great white shark|백상아리
-animal|2|Hammerhead shark|귀상어
-animal|2|Whale shark|고래상어
-animal|2|Orca|범고래
-animal|2|Blue whale|대왕고래
-animal|2|Sperm whale|향유고래
-animal|2|Beluga|벨루가
-animal|2|Manatee|매너티
-animal|2|Sea lion|바다사자
-animal|2|Sea otter|해달
-animal|2|Baby sea turtle|새끼 바다거북
-animal|2|Nautilus|앵무조개
-animal|2|Cuttlefish|갑오징어
-animal|2|Sea cucumber|해삼
-animal|2|Sea anemone|말미잘
-animal|2|Mussel|홍합
-animal|2|Scallop|가리비
-animal|2|Mantis shrimp|갯가재
-animal|2|Bumblebee|호박벌
-animal|2|Wasp|말벌
-animal|2|Hornet|장수말벌
-animal|2|Moth|나방
-animal|2|Stag beetle|사슴벌레
-animal|2|Rhinoceros beetle|장수풍뎅이
-animal|2|Termite|흰개미
-animal|2|Centipede|지네
-animal|2|Millipede|노래기
-animal|2|Tick|진드기
-animal|2|Flea|벼룩
-animal|2|Louse|이
-animal|2|Locust|풀무치
-animal|2|Earwig|집게벌레
-animal|2|Weevil|바구미
-animal|2|Dung beetle|쇠똥구리
-animal|2|Water strider|소금쟁이
-animal|2|Mayfly|하루살이
-animal|2|Baby ostrich|새끼 타조
-animal|2|Wombat|웜뱃
-animal|2|Tasmanian devil|태즈메이니아 데빌
-animal|2|Opossum|주머니쥐
-animal|2|Mongoose|몽구스
-animal|2|Badger|오소리
-animal|2|Marmot|마멋
-animal|2|Prairie dog|프레리독
-animal|2|Porcupine|호저
-animal|2|Chipmunk|줄무늬다람쥐
-animal|2|Gerbil|저빌
-animal|2|Lemming|레밍
-animal|2|Vole|들쥐
-animal|2|Baby manatee|새끼 매너티
-animal|2|Okapi|오카피
-animal|2|Warthog|혹멧돼지
-animal|2|Wildebeest|누
-animal|2|Impala|임팔라
-animal|2|Springbok|스프링복
-animal|2|Mule|노새
-animal|2|Shetland pony|셰틀랜드 포니
-animal|2|Bulldog|불독
-animal|2|Poodle|푸들
-animal|2|Husky|허스키
-animal|2|Golden retriever|골든 리트리버
-animal|2|Chihuahua|치와와
-animal|2|Dalmatian|달마티안
-animal|2|Shiba Inu|시바견
-animal|2|Jindo dog|진돗개
-animal|2|Persian cat|페르시안 고양이
-animal|2|Siamese cat|샴 고양이
-animal|3|Platypus|오리너구리
-animal|3|Armadillo|아르마딜로
-animal|3|Sloth|나무늘보
-animal|3|Chameleon|카멜레온
-animal|3|Seahorse|해마
-animal|3|Stingray|가오리
-animal|3|Axolotl|우파루파
-animal|3|Pangolin|천산갑
-animal|3|Narwhal|일각고래
-animal|3|Ostrich|타조
-animal|3|Pelican|펠리컨
-animal|3|Woodpecker|딱따구리
-animal|3|Scorpion|전갈
-animal|3|Praying mantis|사마귀
-animal|3|Firefly|반딧불이
-animal|3|Starfish|불가사리
-animal|3|Hermit crab|소라게
-animal|3|Walrus|바다코끼리
-animal|3|Llama|라마
-animal|3|Meerkat|미어캣
-animal|3|Lemur|여우원숭이
-animal|3|Tapir|맥
-animal|3|Mole|두더지
-animal|3|Beaver|비버
-animal|3|Bison|들소
-animal|3|Aye-aye|아이아이
-animal|3|Quokka|쿼카
-animal|3|Numbat|넘벳
-animal|3|Echidna|가시두더지
-animal|3|Bilby|빌비
-animal|3|Kakapo|카카포
-animal|3|Cassowary|화식조
-animal|3|Secretary bird|뱀잡이수리
-animal|3|Shoebill|넓적부리황새
-animal|3|Hoatzin|호아친
-animal|3|Frigatebird|군함조
-animal|3|Bird of paradise|극락조
-animal|3|Lyrebird|금조
-animal|3|Hornbill|코뿔새
-animal|3|Roadrunner|로드러너
-animal|3|Kookaburra|쿠카부라
-animal|3|Oilbird|기름쏙독새
-animal|3|Lammergeier|수염수리
-animal|3|Mudskipper|짱뚱어
-animal|3|Anglerfish|아귀
-animal|3|Oarfish|산갈치
-animal|3|Sunfish|개복치
-animal|3|Lungfish|폐어
-animal|3|Coelacanth|실러캔스
-animal|3|Lamprey|칠성장어
-animal|3|Hagfish|먹장어
-animal|3|Gar|가아
-animal|3|Arapaima|아라파이마
-animal|3|Electric eel|전기뱀장어
-animal|3|Leafy seadragon|리피 시드래곤
-animal|3|Pipefish|실고기
-animal|3|Blobfish|블롭피시
-animal|3|Horseshoe crab|투구게
-animal|3|Coconut crab|야자게
-animal|3|Spider crab|대게
-animal|3|Barnacle|따개비
-animal|3|Sea slug|갯민숭달팽이
-animal|3|Giant squid|대왕오징어
-animal|3|Vampire squid|흡혈오징어
-animal|3|Box jellyfish|상자해파리
-animal|3|Portuguese man o' war|작은부레관해파리
-animal|3|Tardigrade|물곰
-animal|3|Planarian|플라나리아
-animal|3|Leech|거머리
-animal|3|Velvet worm|유조동물
-animal|3|Glowworm|반딧불이 유충
-animal|3|Atlas moth|아틀라스나방
-animal|3|Goliath beetle|골리앗비단벌레
-animal|3|Hercules beetle|헤라클레스장수풍뎅이
-animal|3|Orchid mantis|난초사마귀
-animal|3|Walking stick|대벌레
-animal|3|Leafcutter ant|잎꾼개미
-animal|3|Army ant|군대개미
-animal|3|Bullet ant|총알개미
-animal|3|Tarantula|타란툴라
-animal|3|Black widow|검은과부거미
-animal|3|Trapdoor spider|문닫이거미
-animal|3|Emperor scorpion|황제전갈
-animal|3|Giant tortoise|코끼리거북
-animal|3|Gharial|가비알
-animal|3|Thorny devil|가시도마뱀
-animal|3|Frilled lizard|목도리도마뱀
-animal|3|Basilisk lizard|바실리스크도마뱀
-animal|3|Gila monster|힐라몬스터
-animal|3|King cobra|킹코브라
-animal|3|Sea snake|바다뱀
-animal|3|Caecilian|무족영원
-animal|3|Poison dart frog|독화살개구리
-animal|3|Glass frog|유리개구리
-animal|3|Pacman frog|뿔개구리
-animal|3|Hellbender|거대도롱뇽
-animal|3|Fossa|포사
-animal|3|Aardvark|땅돼지
-animal|3|Aardwolf|땅늑대
-animal|3|Binturong|빈투롱
-animal|3|Kinkajou|킨카주
-animal|3|Coati|코아티
-animal|3|Tamandua|작은개미핥기
-animal|3|Giant anteater|큰개미핥기
-animal|3|Maned wolf|갈기늑대
-animal|3|Dhole|승냥이
-animal|3|Fennec fox|사막여우
-animal|3|Arctic fox|북극여우
-animal|3|Red panda|레서판다
-animal|3|Snow leopard|눈표범
-animal|3|Clouded leopard|구름무늬표범
-animal|3|Sun bear|말레이곰
-animal|3|Sloth bear|느림보곰
-animal|3|Saola|사올라
-animal|3|Pronghorn|가지뿔영양
-animal|3|Musk ox|사향소
-animal|3|Saiga|사이가영양
-animal|3|Dik-dik|딕딕
-animal|3|Kudu|쿠두
-animal|3|Gnu|검은꼬리누
-animal|3|Tenrec|텐렉
-animal|3|Solenodon|솔레노돈
-animal|3|Dugong|듀공
-animal|3|Pika|우는토끼
-animal|3|Naked mole-rat|벌거숭이두더지쥐
-animal|3|Flying squirrel|날다람쥐
-animal|3|Sugar glider|슈가글라이더
-animal|3|Colugo|날원숭이
-animal|3|Tarsier|안경원숭이
-animal|3|Slow loris|느림보로리스
-animal|3|Proboscis monkey|코주부원숭이
-animal|3|Mandrill|맨드릴
-animal|3|Howler monkey|짖는원숭이
-animal|3|Capuchin|카푸친원숭이
-animal|3|Gibbon|긴팔원숭이
-animal|3|Siamang|시아망
-food|1|Rice|밥
-food|1|Bread|빵
-food|1|Egg|달걀
-food|1|Milk|우유
-food|1|Cheese|치즈
-food|1|Pizza|피자
-food|1|Hamburger|햄버거
-food|1|Ramen|라면
-food|1|Kimchi|김치
-food|1|Noodles|국수
-food|1|Apple|사과
-food|1|Banana|바나나
-food|1|Orange|오렌지
-food|1|Grapes|포도
-food|1|Strawberry|딸기
-food|1|Watermelon|수박
-food|1|Tomato|토마토
-food|1|Potato|감자
-food|1|Carrot|당근
-food|1|Onion|양파
-food|1|Fried chicken|치킨
-food|1|Ice cream|아이스크림
-food|1|Chocolate|초콜릿
-food|1|Cake|케이크
-food|1|Cookie|쿠키
-food|1|Candy|사탕
-food|1|Soup|국
-food|1|Salad|샐러드
-food|1|Sandwich|샌드위치
-food|1|Sushi|초밥
-food|1|Coffee|커피
-food|1|Tea|차
-food|1|Juice|주스
-food|1|Cucumber|오이
-food|1|Corn|옥수수
-food|1|Pork cutlet|돈가스
-food|1|Rice porridge|죽
-food|1|Fried rice|볶음밥
-food|1|Rice ball|주먹밥
-food|1|Toast|토스트
-food|1|Cereal|시리얼
-food|1|Oatmeal|오트밀
-food|1|Jelly|젤리
-food|1|Pudding|푸딩
-food|1|Cupcake|컵케이크
-food|1|Brownie|브라우니
-food|1|Pie|파이
-food|1|Muffin|머핀
-food|1|Bagel|베이글
-food|1|Hot dog|핫도그
-food|1|Fried egg|계란후라이
-food|1|Boiled egg|삶은 달걀
-food|1|Scrambled eggs|스크램블 에그
-food|1|Omelet|오믈렛
-food|1|Meatball|미트볼
-food|1|Ham|햄
-food|1|Tuna sandwich|참치 샌드위치
-food|1|Spaghetti sauce|토마토 소스
-food|1|Ketchup|케첩
-food|1|Mayonnaise|마요네즈
-food|1|Mustard|겨자
-food|1|Soy sauce|간장
-food|1|Salt|소금
-food|1|Sugar|설탕
-food|1|Pepper spice|후추
-food|1|Vinegar|식초
-food|1|Cooking oil|식용유
-food|1|Sesame oil|참기름
-food|1|Red pepper paste|고추장
-food|1|Soybean paste|된장
-food|1|Peach juice|복숭아 주스
-food|1|Orange juice|오렌지 주스
-food|1|Apple juice|사과 주스
-food|1|Lemonade|레모네이드
-food|1|Cola|콜라
-food|1|Soda|사이다
-food|1|Beer|맥주
-food|1|Wine|와인
-food|1|Milk tea|밀크티
-food|1|Green tea|녹차
-food|1|Hot chocolate|핫초코
-food|1|Smoothie|스무디
-food|1|Milkshake|밀크셰이크
-food|1|Water melon juice|수박 주스
-food|1|Grapefruit|자몽
-food|1|Melon|멜론
-food|1|Plum|자두
-food|1|Blueberry|블루베리
-food|1|Raspberry|라즈베리
-food|1|Tangerine|귤
-food|1|Coconut|코코넛
-food|1|Dried persimmon|곶감
-food|1|Chestnut|밤
-food|1|Walnut|호두
-food|1|Cashew|캐슈넛
-food|1|Pistachio|피스타치오
-food|1|Raisin|건포도
-food|1|Lettuce|상추
-food|1|Spinach|시금치
-food|1|Radish|무
-food|1|Eggplant|가지
-food|1|Green onion|대파
-food|1|Bean sprouts|콩나물
-food|1|Bell pepper|파프리카
-food|1|Zucchini|애호박
-food|1|Celery|셀러리
-food|1|Peas|완두콩
-food|1|Green beans|강낭콩
-food|1|Soybean|콩
-food|1|Cheese pizza|치즈피자
-food|1|Pepperoni pizza|페퍼로니 피자
-food|1|Cheeseburger|치즈버거
-food|1|Fried shrimp|새우튀김
-food|1|Tempura|튀김
-food|1|Yakitori|꼬치구이
-food|1|Skewer|꼬치
-food|1|Pork ribs|갈비
-food|1|Beef|소고기
-food|1|Pork|돼지고기
-food|1|Chicken breast|닭가슴살
-food|1|Fish cake|어묵
-food|1|Fish stew|매운탕
-food|1|Kimchi stew|김치찌개
-food|1|Soybean paste stew|된장찌개
-food|1|Seaweed soup|미역국
-food|1|Beef soup|설렁탕
-food|1|Ginseng chicken soup|삼계탕
-food|1|Rice cake soup|떡국
-food|1|Dumpling soup|만둣국
-food|1|Spicy noodle soup|짬뽕
-food|1|Sweet and sour pork|탕수육
-food|1|Hallabong|한라봉
-food|1|Apricot|살구
-food|1|Fig|무화과
-food|1|Date|대추야자
-food|1|Guava|구아바
-food|1|Papaya|파파야
-food|1|Passion fruit|패션프루트
-food|1|Dragon fruit|용과
-food|1|Star fruit|스타프루트
-food|1|Plantain|플랜틴
-food|1|Blackberry|블랙베리
-food|1|Cranberry|크랜베리
-food|1|Gooseberry|구스베리
-food|1|Olive|올리브
-food|1|Beet|비트
-food|1|Turnip|순무
-food|1|Parsnip|파스닙
-food|1|Leek|리크
-food|1|Asparagus|아스파라거스
-food|1|Cauliflower|콜리플라워
-food|1|Kale|케일
-food|1|Brussels sprouts|방울양배추
-food|1|Artichoke heart|아티초크 속
-food|1|Okra|오크라
-food|1|Yam|마
-food|1|Taro|토란
-food|1|Lotus root|연근
-food|1|Burdock|우엉
-food|1|Bellflower root|도라지
-food|1|Fernbrake|고사리 나물
-food|1|Perilla leaf|깻잎
-food|1|Chives|부추
-food|1|Mugwort|쑥
-food|1|Shepherd's purse|냉이
-food|1|Sesame|참깨
-food|1|Sunflower seed|해바라기씨
-food|1|Pumpkin seed|호박씨
-food|1|Hazelnut|헤이즐넛
-food|1|Pecan|피칸
-food|1|Macadamia|마카다미아
-food|1|Basil|바질
-food|1|Parsley|파슬리
-food|1|Mint|민트
-food|1|Rosemary|로즈마리
-food|1|Thyme|타임
-food|1|Cinnamon|계피
-food|1|Nutmeg|육두구
-food|1|Clove|정향
-food|1|Curry powder|카레가루
-food|1|Turmeric|강황
-food|1|Paprika powder|파프리카 가루
-food|2|Tteokbokki|떡볶이
-food|2|Bibimbap|비빔밥
-food|2|Gimbap|김밥
-food|2|Dumpling|만두
-food|2|Pancake|팬케이크
-food|2|Waffle|와플
-food|2|Donut|도넛
-food|2|Pasta|파스타
-food|2|Spaghetti|스파게티
-food|2|Steak|스테이크
-food|2|Sausage|소시지
-food|2|Bacon|베이컨
-food|2|Yogurt|요거트
-food|2|Butter|버터
-food|2|Honey|꿀
-food|2|Jam|잼
-food|2|Peanut|땅콩
-food|2|Almond|아몬드
-food|2|Mushroom|버섯
-food|2|Broccoli|브로콜리
-food|2|Cabbage|양배추
-food|2|Chili pepper|고추
-food|2|Garlic|마늘
-food|2|Ginger|생강
-food|2|Lemon|레몬
-food|2|Peach|복숭아
-food|2|Pineapple|파인애플
-food|2|Mango|망고
-food|2|Kiwi|키위
-food|2|Cherry|체리
-food|2|Pear|배
-food|2|Persimmon|감
-food|2|Pumpkin|호박
-food|2|Sweet potato|고구마
-food|2|Tofu|두부
-food|2|Seaweed|김
-food|2|Popcorn|팝콘
-food|2|French fries|감자튀김
-food|2|Curry|카레
-food|2|Jajangmyeon|짜장면
-food|2|Cold noodles|냉면
-food|2|Grilled pork belly|삼겹살
-food|2|Bulgogi|불고기
-food|2|Japchae|잡채
-food|2|Bossam|보쌈
-food|2|Galbijjim|갈비찜
-food|2|Dakgalbi|닭갈비
-food|2|Haejangguk|해장국
-food|2|Sundubu stew|순두부찌개
-food|2|Budae stew|부대찌개
-food|2|Gamjatang|감자탕
-food|2|Spicy cold noodles|비빔냉면
-food|2|Kalguksu|칼국수
-food|2|Sujebi|수제비
-food|2|Jjolmyeon|쫄면
-food|2|Kongguksu|콩국수
-food|2|Bibim guksu|비빔국수
-food|2|Soondae|순대
-food|2|Dakbal|닭발
-food|2|Gopchang|곱창
-food|2|Yukhoe|육회
-food|2|Hobak-juk|호박죽
-food|2|Patjuk|팥죽
-food|2|Songpyeon|송편
-food|2|Yakgwa|약과
-food|2|Yugwa|유과
-food|2|Bingsu|빙수
-food|2|Hoeddeok|호떡 반죽
-food|2|Pajeon|파전
-food|2|Kimchi pancake|김치전
-food|2|Mung bean pancake|빈대떡
-food|2|Gyeran-jjim|계란찜
-food|2|Eomuk-tang|어묵탕
-food|2|Ssam|쌈
-food|2|Banchan|반찬
-food|2|Jeotgal|젓갈
-food|2|Kkakdugi|깍두기
-food|2|Baek-kimchi|백김치
-food|2|Chonggak kimchi|총각김치
-food|2|Dongchimi|동치미
-food|2|Pickled radish|단무지
-food|2|Pickled plum|매실절임
-food|2|Plum tea|매실차
-food|2|Citron tea|유자차
-food|2|Ginger tea|생강차
-food|2|Barley tea|보리차
-food|2|Corn silk tea|옥수수차
-food|2|Sikhye rice drink|단술
-food|2|Makgeolli|막걸리
-food|2|Soju|소주
-food|2|Whisky|위스키
-food|2|Vodka|보드카
-food|2|Champagne|샴페인
-food|2|Cocktail|칵테일
-food|2|Espresso|에스프레소
-food|2|Latte|라떼
-food|2|Cappuccino|카푸치노
-food|2|Americano|아메리카노
-food|2|Mocha|모카
-food|2|Matcha|말차
-food|2|Bubble tea|버블티
-food|2|Japanese ramen|일본 라멘
-food|2|Udon|우동
-food|2|Soba|소바
-food|2|Okonomiyaki|오코노미야키
-food|2|Takoyaki|타코야키
-food|2|Tonkatsu|돈카츠 정식
-food|2|Gyudon|규동
-food|2|Onigiri|오니기리
-food|2|Miso soup|미소국
-food|2|Sashimi|회
-food|2|Maki roll|마키
-food|2|Dim sum|딤섬
-food|2|Peking duck|베이징덕
-food|2|Mapo tofu|마파두부
-food|2|Kung pao chicken|깐풍기
-food|2|Fried noodles|볶음면
-food|2|Spring roll|춘권
-food|2|Pad thai|팟타이
-food|2|Tom yum|똠얌꿍
-food|2|Pho|쌀국수
-food|2|Banh mi|반미
-food|2|Nasi goreng|나시고렝
-food|2|Satay|사테
-food|2|Naan|난
-food|2|Samosa|사모사
-food|2|Butter chicken|버터치킨
-food|2|Tandoori chicken|탄두리 치킨
-food|2|Falafel|팔라펠
-food|2|Shawarma|샤와르마
-food|2|Gyro|기로스
-food|2|Moussaka|무사카
-food|2|Lasagna|라자냐
-food|2|Gnocchi|뇨키
-food|2|Carbonara|카르보나라
-food|2|Bolognese|볼로네제
-food|2|Pesto|페스토
-food|2|Bruschetta|브루스케타
-food|2|Focaccia|포카치아
-food|2|Calzone|칼조네
-food|2|Ciabatta|치아바타
-food|2|Pretzel|프레첼
-food|2|Schnitzel|슈니첼
-food|2|Bratwurst|브라트부어스트
-food|2|Sauerkraut|사워크라우트
-food|2|Goulash|굴라시
-food|2|Borscht|보르시
-food|2|Pierogi|피에로기
-food|2|Crepe|크레페
-food|2|Quiche|키슈
-food|2|Escargot|에스카르고
-food|2|Foie gras|푸아그라
-food|2|Eclair|에클레어
-food|2|Madeleine|마들렌
-food|2|Churros|츄러스
-food|2|Nachos|나초
-food|2|Quesadilla|케사디아
-food|2|Guacamole|과카몰리
-food|2|Salsa|살사
-food|2|Chili con carne|칠리
-food|2|Enchilada|엔칠라다
-food|2|Fajita|파히타
-food|2|Barbecue ribs|바비큐 립
-food|2|Mac and cheese|맥앤치즈
-food|2|Meatloaf|미트로프
-food|2|Clam chowder|클램차우더
-food|2|Corn dog|콘도그
-food|2|Apple pie|애플파이
-food|2|Pumpkin pie|펌킨파이
-food|2|Cheesecake|치즈케이크
-food|2|Pancake syrup|메이플 시럽
-food|2|Bagel cream cheese|크림치즈 베이글
-food|2|Granola|그래놀라
-food|2|Trail mix|트레일 믹스
-food|2|Beef jerky|육포
-food|2|Dried squid|오징어포
-food|2|Rice cracker|쌀과자
-food|2|Potato chips|감자칩
-food|2|Pretzel stick|스틱 과자
-food|2|Marshmallow|마시멜로
-food|2|Lollipop|막대사탕
-food|2|Gum|껌
-food|2|Caramel|캐러멜
-food|2|Cotton candy|솜사탕
-food|2|Nougat|누가
-food|2|Fudge|퍼지
-food|2|Gummy bear|곰젤리
-food|2|Jelly bean|젤리빈
-food|2|Wafer|웨하스
-food|2|Biscuit|비스킷
-food|2|Cracker|크래커
-food|2|Scone|스콘
-food|2|Crumpet|크럼핏
-food|2|Danish pastry|데니시
-food|2|Strudel|슈트루델
-food|2|Baklava|바클라바
-food|2|Turkish delight|터키쉬 딜라이트
-food|3|Avocado|아보카도
-food|3|Artichoke|아티초크
-food|3|Pomegranate|석류
-food|3|Lychee|리치
-food|3|Durian|두리안
-food|3|Caviar|캐비아
-food|3|Truffle|트러플
-food|3|Croissant|크루아상
-food|3|Tiramisu|티라미수
-food|3|Macaron|마카롱
-food|3|Baguette|바게트
-food|3|Burrito|부리토
-food|3|Taco|타코
-food|3|Kebab|케밥
-food|3|Hummus|후무스
-food|3|Ratatouille|라따뚜이
-food|3|Paella|빠에야
-food|3|Risotto|리조또
-food|3|Fondue|퐁뒤
-food|3|Oyster|굴
-food|3|Sea urchin|성게
-food|3|Abalone|전복
-food|3|Eel|장어
-food|3|Rice cake|떡
-food|3|Sikhye|식혜
-food|3|Hotteok|호떡
-food|3|Fish-shaped pastry|붕어빵
-food|3|Braised aged kimchi|묵은지찜
-food|3|Hongeo|홍어
-food|3|Gaebul|개불
-food|3|Sannakji|산낙지
-food|3|Mung bean jelly|청포묵
-food|3|Acorn jelly|도토리묵
-food|3|Gungjung tteokbokki|궁중떡볶이
-food|3|Sinseollo|신선로
-food|3|Gujeolpan|구절판
-food|3|Tteok-galbi|떡갈비
-food|3|Honey cookie|한과
-food|3|Dasik|다식
-food|3|Yaksik|약식
-food|3|Misutgaru|미숫가루
-food|3|Sujeonggwa|수정과
-food|3|Omija tea|오미자차
-food|3|Jujube tea|대추차
-food|3|Ssanghwa tea|쌍화차
-food|3|Dongdongju|동동주
-food|3|Bokbunja wine|복분자주
-food|3|Baeksaju|백세주
-food|3|Cheongju|청주
-food|3|Sake|사케
-food|3|Umeshu|매실주
-food|3|Mochi|모찌
-food|3|Dango|경단
-food|3|Taiyaki|타이야키
-food|3|Dorayaki|도라야키
-food|3|Natto|낫토
-food|3|Unagi don|장어덮밥
-food|3|Kaiseki|가이세키
-food|3|Shabu-shabu|샤부샤부
-food|3|Sukiyaki|스키야키
-food|3|Oden|오뎅
-food|3|Tsukemen|츠케멘
-food|3|Xiaolongbao|샤오롱바오
-food|3|Hot pot|훠궈
-food|3|Zongzi|쭝쯔
-food|3|Century egg|피단
-food|3|Char siu|차슈
-food|3|Congee|광동죽
-food|3|Laksa|락사
-food|3|Rendang|렌당
-food|3|Gado-gado|가도가도
-food|3|Bibingka|비빙카
-food|3|Adobo|아도보
-food|3|Sinigang|시니강
-food|3|Lechon|레촌
-food|3|Tikka masala|티카 마살라
-food|3|Biryani|비리야니
-food|3|Dosa|도사
-food|3|Idli|이들리
-food|3|Paneer|파니르
-food|3|Lassi|라씨
-food|3|Chai|차이
-food|3|Gulab jamun|굴랍자문
-food|3|Jalebi|잘레비
-food|3|Kebab doner|되네르 케밥
-food|3|Baba ganoush|바바가누쉬
-food|3|Tabbouleh|타불레
-food|3|Dolma|돌마
-food|3|Kofta|코프타
-food|3|Shakshuka|샥슈카
-food|3|Couscous|쿠스쿠스
-food|3|Tagine|타진
-food|3|Injera|인제라
-food|3|Jollof rice|졸로프 라이스
-food|3|Biltong|빌통
-food|3|Feijoada|페이조아다
-food|3|Ceviche|세비체
-food|3|Empanada|엠파나다
-food|3|Arepa|아레파
-food|3|Tamale|타말레
-food|3|Mole sauce|몰레
-food|3|Pozole|포솔레
-food|3|Churrasco|슈하스코
-food|3|Poutine|푸틴
-food|3|Pavlova|파블로바
-food|3|Haggis|해기스
-food|3|Fish and chips|피시앤칩스
-food|3|Yorkshire pudding|요크셔푸딩
-food|3|Bangers and mash|방거스 앤 매시
-food|3|Smorrebrod|스뫼레브뢰
-food|3|Gravlax|그라블락스
-food|3|Pickled herring|절인 청어
-food|3|Raclette|라클레트
-food|3|Cassoulet|카술레
-food|3|Bouillabaisse|부야베스
-food|3|Coq au vin|코코뱅
-food|3|Ratatouille stew|라따뚜이 스튜
-food|3|Tarte tatin|타르트 타탱
-food|3|Macaron pistachio|피스타치오 마카롱
-food|3|Opera cake|오페라 케이크
-food|3|Mille-feuille|밀푀유
-food|3|Profiterole|프로피테롤
-food|3|Panna cotta|판나코타
-food|3|Cannoli|칸놀리
-food|3|Gelato|젤라토
-food|3|Affogato|아포가토
-food|3|Prosciutto|프로슈토
-food|3|Salami|살라미
-food|3|Mozzarella|모차렐라
-food|3|Parmesan|파르메산
-food|3|Gorgonzola|고르곤졸라
-food|3|Brie|브리
-food|3|Camembert|카망베르
-food|3|Gouda|고다
-food|3|Feta|페타
-food|3|Halloumi|할루미
-food|3|Ricotta|리코타
-food|3|Mascarpone|마스카르포네
-food|3|Saffron|사프란
-food|3|Wasabi|와사비
-food|3|Truffle chocolate|트러플 초콜릿
-food|3|Terrine|테린
-food|3|Garlic butter snails|버터 달팽이
-food|3|Frog legs|개구리 다리
-food|3|Octopus salad|문어 샐러드
-food|3|Sea bream|도미
-food|3|Pufferfish sashimi|복어회
-food|3|Monkfish|아귀찜
-food|3|Braised sea cucumber|해삼 요리
-food|3|Bird's nest soup|제비집 수프
-food|3|Shark fin soup|샥스핀
-food|3|Roast duck|오리구이
-food|3|Suckling pig|새끼돼지구이
-thing|1|Umbrella|우산
-thing|1|Bicycle|자전거
-thing|1|Telephone|전화기
-thing|1|Clock|시계
-thing|1|Book|책
-thing|1|Toothbrush|칫솔
-thing|1|Chair|의자
-thing|1|Table|탁자
-thing|1|Bed|침대
-thing|1|Door|문
-thing|1|Window|창문
-thing|1|Key|열쇠
-thing|1|Pen|펜
-thing|1|Pencil|연필
-thing|1|Scissors|가위
-thing|1|Cup|컵
-thing|1|Spoon|숟가락
-thing|1|Bottle|병
-thing|1|Bag|가방
-thing|1|Shoes|신발
-thing|1|Hat|모자
-thing|1|Glasses|안경
-thing|1|Television|텔레비전
-thing|1|Computer|컴퓨터
-thing|1|Car|자동차
-thing|1|Bus|버스
-thing|1|Train|기차
-thing|1|Airplane|비행기
-thing|1|Ball|공
-thing|1|Mirror|거울
-thing|1|Lamp|전등
-thing|1|Towel|수건
-thing|1|Soap|비누
-thing|1|Camera|카메라
-thing|1|Guitar|기타
-thing|1|Piano|피아노
-thing|1|Ring|반지
-thing|1|Wristwatch|손목시계
-thing|1|Refrigerator|냉장고
-thing|1|Backpack|배낭
-thing|1|Spoon and fork set|수저
-thing|1|Toilet|변기
-thing|1|Sink|싱크대
-thing|1|Bathtub|욕조
-thing|1|Shower|샤워기
-thing|1|Faucet|수도꼭지
-thing|1|Trash can|쓰레기통
-thing|1|Dustpan|쓰레받기
-thing|1|Mop|걸레
-thing|1|Sponge|스펀지
-thing|1|Detergent|세제
-thing|1|Shampoo|샴푸
-thing|1|Hair dryer|헤어드라이어
-thing|1|Toilet paper|휴지
-thing|1|Tissue|티슈
-thing|1|Nail clipper|손톱깎이
-thing|1|Cotton swab|면봉
-thing|1|Mask|마스크
-thing|1|Slippers|슬리퍼
-thing|1|Sandals|샌들
-thing|1|Boots|부츠
-thing|1|Sneakers|운동화
-thing|1|Raincoat|우비
-thing|1|Jacket|재킷
-thing|1|Coat|코트
-thing|1|Sweater|스웨터
-thing|1|T-shirt|티셔츠
-thing|1|Shirt|셔츠
-thing|1|Pants|바지
-thing|1|Jeans|청바지
-thing|1|Skirt|치마
-thing|1|Dress|원피스
-thing|1|Pajamas|잠옷
-thing|1|Underwear|속옷
-thing|1|Uniform|교복
-thing|1|Tie|넥타이
-thing|1|Suit|양복
-thing|1|Cap|야구모자
-thing|1|Hairpin|머리핀
-thing|1|Hair tie|머리끈
-thing|1|Earrings|귀걸이
-thing|1|Bracelet|팔찌
-thing|1|Handkerchief|손수건
-thing|1|Umbrella stand|우산꽂이
-thing|1|Doormat|현관 매트
-thing|1|Doorbell|초인종
-thing|1|Door lock|자물쇠
-thing|1|Elevator|엘리베이터
-thing|1|Stairs|계단
-thing|1|Escalator|에스컬레이터
-thing|1|Fan|선풍기
-thing|1|Air conditioner|에어컨
-thing|1|Heater|히터
-thing|1|Humidifier|가습기
-thing|1|Rice cooker|밥솥
-thing|1|Gas stove|가스레인지
-thing|1|Oven|오븐
-thing|1|Blender|믹서기
-thing|1|Cutting board|도마
-thing|1|Ladle|국자
-thing|1|Pot|냄비
-thing|1|Teapot|찻주전자
-thing|1|Mug|머그컵
-thing|1|Glass cup|유리컵
-thing|1|Straw|빨대
-thing|1|Thermos|보온병
-thing|1|Lunch box|도시락
-thing|1|Tray|쟁반
-thing|1|Apron|앞치마
-thing|1|Trash bag|쓰레기봉투
-thing|1|Plastic bag|비닐봉지
-thing|1|Paper bag|종이봉투
-thing|1|Box|상자
-thing|1|Rope|밧줄
-thing|1|String|끈
-thing|1|Tape|테이프
-thing|1|Glue|풀
-thing|1|Paper|종이
-thing|1|Crayon|크레용
-thing|1|Marker|사인펜
-thing|1|Paintbrush|붓
-thing|1|Palette|팔레트
-thing|1|Canvas|캔버스
-thing|1|Easel|이젤
-thing|1|Blackboard|칠판
-thing|1|Chalk|분필
-thing|1|Desk|책상
-thing|1|Schoolbag|책가방
-thing|1|Textbook|교과서
-thing|1|Dictionary|사전
-thing|1|Newspaper|신문
-thing|1|Magazine|잡지
-thing|1|Comic book|만화책
-thing|1|Map|지도
-thing|1|Globe|지구본
-thing|1|Calendar|달력
-thing|1|Alarm clock|알람시계
-thing|1|Photo|사진
-thing|1|Picture frame|액자
-thing|1|Postcard|엽서
-thing|1|Letter|편지
-thing|1|Gift|선물
-thing|1|Birthday cake|생일 케이크
-thing|1|Toy|장난감
-thing|1|Doll|인형
-thing|1|Teddy bear|곰인형
-thing|1|Lego|레고
-thing|1|Puzzle|퍼즐
-thing|1|Playing cards|카드
-thing|1|Dice|주사위
-thing|1|Chess|체스
-thing|1|Go stones|바둑돌
-thing|1|Jump rope|줄넘기
-thing|1|Swing|그네
-thing|1|Slide|미끄럼틀
-thing|1|Seesaw|시소
-thing|1|Soccer ball|축구공
-thing|1|Basketball|농구공
-thing|1|Baseball bat|야구방망이
-thing|1|Tennis racket|테니스 라켓
-thing|1|Badminton racket|배드민턴 라켓
-thing|1|Ping-pong paddle|탁구채
-thing|1|Swimsuit|수영복
-thing|1|Goggles|물안경
-thing|1|Life jacket|구명조끼
-thing|1|Fishing rod|낚싯대
-thing|1|Sleeping bag|침낭
-thing|1|Campfire|모닥불
-thing|1|Smartphone|스마트폰
-thing|1|Laptop|노트북
-thing|1|Tablet|태블릿
-thing|1|Charger|충전기
-thing|1|Earphones|이어폰
-thing|1|Speaker|스피커
-thing|1|Radio|라디오
-thing|1|Printer|프린터
-thing|1|Router|공유기
-thing|1|USB drive|USB 메모리
-thing|1|Game console|게임기
-thing|1|Game controller|게임 패드
-thing|1|Taxi|택시
-thing|1|Motorcycle|오토바이
-thing|1|Truck|트럭
-thing|1|Ambulance|구급차
-thing|1|Fire truck|소방차
-thing|1|Police car|경찰차
-thing|1|Subway|지하철
-thing|1|Boat|배
-thing|1|Ship|큰 배
-thing|1|Helicopter|헬리콥터
-thing|1|Rocket|로켓
-thing|1|Wheelchair|휠체어
-thing|1|Stroller|유모차
-thing|1|Scooter|킥보드
-thing|1|Traffic light|신호등
-thing|1|Road sign|표지판
-thing|1|Mailbox|우체통
-thing|1|Bench|벤치
-thing|1|Fountain|분수
-thing|2|Calculator|계산기
-thing|2|Stapler|스테이플러
-thing|2|Ruler|자
-thing|2|Eraser|지우개
-thing|2|Notebook|공책
-thing|2|Envelope|봉투
-thing|2|Stamp|우표
-thing|2|Wallet|지갑
-thing|2|Headphones|헤드폰
-thing|2|Microphone|마이크
-thing|2|Keyboard|키보드
-thing|2|Computer mouse|마우스
-thing|2|Remote control|리모컨
-thing|2|Battery|건전지
-thing|2|Flashlight|손전등
-thing|2|Candle|양초
-thing|2|Matchstick|성냥
-thing|2|Hammer|망치
-thing|2|Screwdriver|드라이버
-thing|2|Saw|톱
-thing|2|Ladder|사다리
-thing|2|Broom|빗자루
-thing|2|Bucket|양동이
-thing|2|Vacuum cleaner|청소기
-thing|2|Washing machine|세탁기
-thing|2|Microwave oven|전자레인지
-thing|2|Toaster|토스터
-thing|2|Kettle|주전자
-thing|2|Frying pan|프라이팬
-thing|2|Knife|칼
-thing|2|Fork|포크
-thing|2|Chopsticks|젓가락
-thing|2|Plate|접시
-thing|2|Bowl|그릇
-thing|2|Pillow|베개
-thing|2|Blanket|이불
-thing|2|Curtain|커튼
-thing|2|Carpet|카펫
-thing|2|Sofa|소파
-thing|2|Bookshelf|책장
-thing|2|Tent|텐트
-thing|2|Kite|연
-thing|2|Balloon|풍선
-thing|2|Drum|북
-thing|2|Violin|바이올린
-thing|2|Trumpet|트럼펫
-thing|2|Skateboard|스케이트보드
-thing|2|Helmet|헬멧
-thing|2|Sunglasses|선글라스
-thing|2|Necklace|목걸이
-thing|2|Scarf|목도리
-thing|2|Gloves|장갑
-thing|2|Socks|양말
-thing|2|Belt|허리띠
-thing|2|Button|단추
-thing|2|Zipper|지퍼
-thing|2|Thermometer|체온계
-thing|2|Bandage|반창고
-thing|2|Toothpaste|치약
-thing|2|Comb|빗
-thing|2|Razor|면도기
-thing|2|Perfume|향수
-thing|2|Lipstick|립스틱
-thing|2|Timer|타이머
-thing|2|Stopwatch|스톱워치
-thing|2|Barometer|기압계
-thing|2|Thermostat|온도조절기
-thing|2|Smoke detector|화재경보기
-thing|2|Fire extinguisher|소화기
-thing|2|First aid kit|구급상자
-thing|2|Crutch|목발
-thing|2|Cane|지팡이
-thing|2|Hearing aid|보청기
-thing|2|Contact lens|콘택트렌즈
-thing|2|Braces|치아 교정기
-thing|2|Blood pressure monitor|혈압계
-thing|2|Wrench|렌치
-thing|2|Pliers|펜치
-thing|2|Electric drill|전동 드릴
-thing|2|Chainsaw|전기톱
-thing|2|Axe|도끼
-thing|2|Shovel|삽
-thing|2|Rake|갈퀴
-thing|2|Hoe|호미
-thing|2|Sickle|낫
-thing|2|Watering can|물뿌리개
-thing|2|Wheelbarrow|손수레
-thing|2|Lawn mower|잔디깎이
-thing|2|Hose|호스
-thing|2|Flowerpot|화분
-thing|2|Scarecrow|허수아비
-thing|2|Birdhouse|새집
-thing|2|Fishing net|그물
-thing|2|Anchor|닻
-thing|2|Sail|돛
-thing|2|Steering wheel|핸들
-thing|2|Tire|타이어
-thing|2|Car horn|경적
-thing|2|Seat belt|안전벨트
-thing|2|Rearview mirror|백미러
-thing|2|Wiper|와이퍼
-thing|2|Engine|엔진
-thing|2|Gas pump|주유기
-thing|2|Electric car|전기차
-thing|2|Charging station|충전소
-thing|2|Solar panel|태양광 패널
-thing|2|Wind turbine|풍력발전기
-thing|2|Light bulb|전구
-thing|2|Plug|플러그
-thing|2|Extension cord|멀티탭
-thing|2|Switch|스위치
-thing|2|Fuse|퓨즈
-thing|2|Magnet|자석
-thing|2|Lens|렌즈
-thing|2|Prism|프리즘
-thing|2|Tripod|삼각대
-thing|2|Binoculars|쌍안경
-thing|2|Film camera|필름 카메라
-thing|2|Instant camera|폴라로이드
-thing|2|Projector|프로젝터
-thing|2|Cassette tape|카세트테이프
-thing|2|Vinyl record|레코드판
-thing|2|Record player|턴테이블
-thing|2|Jukebox|주크박스
-thing|2|Walkie-talkie|무전기
-thing|2|Drone|드론
-thing|2|Robot|로봇
-thing|2|Robot vacuum|로봇청소기
-thing|2|3D printer|3D 프린터
-thing|2|Smartwatch|스마트워치
-thing|2|VR headset|VR 헤드셋
-thing|2|Barcode scanner|바코드 스캐너
-thing|2|Cash register|계산대
-thing|2|Vending machine|자판기
-thing|2|ATM|현금인출기
-thing|2|Credit card|신용카드
-thing|2|Coin|동전
-thing|2|Banknote|지폐
-thing|2|Piggy bank|저금통
-thing|2|Safe|금고
-thing|2|Passport|여권
-thing|2|ID card|신분증
-thing|2|Ticket|표
-thing|2|Suitcase|여행가방
-thing|2|Luggage cart|짐수레
-thing|2|Flag|깃발
-thing|2|Banner|현수막
-thing|2|Trophy|트로피
-thing|2|Medal|메달
-thing|2|Crown|왕관
-thing|2|Throne|왕좌
-thing|2|Sword|검
-thing|2|Shield|방패
-thing|2|Bow and arrow|활과 화살
-thing|2|Spear|창
-thing|2|Armor|갑옷
-thing|2|Knight helmet|투구
-thing|2|Cannon|대포
-thing|2|Catapult|투석기
-thing|2|Treasure chest|보물상자
-thing|2|Pirate flag|해적기
-thing|2|Magic wand|마술봉
-thing|2|Crystal ball|수정구
-thing|2|Cauldron|가마솥
-thing|2|Witch broom|마법 빗자루
-thing|2|Top hat|실크햇
-thing|2|Wig|가발
-thing|2|Carnival mask|가면
-thing|2|Costume|의상
-thing|2|Fireworks|불꽃놀이
-thing|2|Sparkler|폭죽
-thing|2|Rattle|딸랑이
-thing|2|Pacifier|젖꼭지
-thing|2|Diaper|기저귀
-thing|2|Baby bottle|젖병
-thing|2|Crib|아기 침대
-thing|2|High chair|유아용 의자
-thing|2|Bunk bed|이층 침대
-thing|2|Futon|요
-thing|2|Hammock|해먹
-thing|2|Rocking chair|흔들의자
-thing|2|Bean bag|빈백
-thing|2|Wardrobe|옷장
-thing|2|Dresser|서랍장
-thing|2|Nightstand|협탁
-thing|2|Vanity table|화장대
-thing|2|Shoe rack|신발장
-thing|2|Coat rack|옷걸이
-thing|2|Hanger|행거
-thing|2|Iron (clothes)|다리미
-thing|2|Ironing board|다림판
-thing|2|Clothespin|빨래집게
-thing|2|Laundry basket|빨래 바구니
-thing|2|Needle|바늘
-thing|2|Thread|실
-thing|2|Yarn|털실
-thing|2|Knitting needles|뜨개바늘
-thing|2|Pin cushion|바늘꽂이
-thing|2|Measuring tape|줄자
-thing|2|Spirit level|수평계
-thing|2|Protractor|각도기
-thing|2|Drawing compass|컴퍼스
-thing|2|Pencil case|필통
-thing|2|Pencil sharpener|연필깎이
-thing|2|Highlighter|형광펜
-thing|2|Whiteboard|화이트보드
-thing|2|Bulletin board|게시판
-thing|2|Folder|파일철
-thing|2|Binder|바인더
-thing|2|Clipboard|클립보드
-thing|2|Hole punch|펀치
-thing|2|Rubber band|고무줄
-thing|2|Sticky note|포스트잇
-thing|2|Paper shredder|파쇄기
-thing|2|Photocopier|복사기
-thing|2|Fax machine|팩스
-thing|2|Cello|첼로
-thing|2|Flute|플루트
-thing|2|Clarinet|클라리넷
-thing|2|Saxophone|색소폰
-thing|2|Oboe|오보에
-thing|2|Bassoon|바순
-thing|2|Harp|하프
-thing|2|Xylophone|실로폰
-thing|2|Tambourine|탬버린
-thing|2|Triangle|트라이앵글
-thing|2|Cymbals|심벌즈
-thing|2|Castanets|캐스터네츠
-thing|2|Ukulele|우쿨렐레
-thing|2|Banjo|밴조
-thing|2|Mandolin|만돌린
-thing|2|Electric guitar|전자기타
-thing|2|Bass guitar|베이스 기타
-thing|2|Synthesizer|신시사이저
-thing|2|Organ|오르간
-thing|2|Recorder|리코더
-thing|2|Gayageum|가야금
-thing|2|Geomungo|거문고
-thing|2|Haegeum|해금
-thing|2|Janggu|장구
-thing|2|Buk|북통
-thing|2|Kkwaenggwari|꽹과리
-thing|2|Daegeum|대금
-thing|2|Hand fan|부채
-thing|2|Hanbok|한복
-thing|2|Gat|갓
-thing|2|Folding screen|병풍
-thing|2|Mortar|절구
-thing|2|Millstone|맷돌
-thing|2|Earthenware jar|항아리
-thing|2|Rice paddle|주걱
-thing|2|Straw shoes|짚신
-thing|2|Gourd dipper|바가지
-thing|2|Brazier|화로
-thing|2|Marbles|구슬
-thing|2|Spinning top|팽이
-thing|2|Yut sticks|윷
-thing|2|Kite flying|연날리기
-thing|2|Hula hoop|훌라후프
-thing|2|Frisbee|프리스비
-thing|2|Slingshot|새총
-thing|2|Water gun|물총
-thing|2|Bubble wand|비눗방울
-thing|2|Snow sled|눈썰매
-thing|2|Ice skates|스케이트
-thing|2|Ski|스키
-thing|2|Snowboard|스노보드
-thing|2|Surfboard|서핑보드
-thing|2|Kayak|카약
-thing|2|Canoe|카누
-thing|2|Rowboat|노 젓는 배
-thing|2|Sailboat|범선
-thing|2|Yacht|요트
-thing|2|Cruise ship|유람선
-thing|2|Ferry|여객선
-thing|2|Tugboat|예인선
-thing|2|Aircraft carrier|항공모함
-thing|2|Space shuttle|우주왕복선
-thing|2|Satellite|인공위성
-thing|2|Space station|우주정거장
-thing|2|Space telescope|우주망원경
-thing|2|Spacesuit|우주복
-thing|2|Lunar rover|월면차
-thing|2|Sauna|사우나
-thing|2|Massage chair|안마의자
-thing|2|Dumbbell|아령
-thing|2|Treadmill|러닝머신
-thing|2|Yoga mat|요가 매트
-thing|2|Punching bag|샌드백
-thing|2|Boxing gloves|권투 글러브
-thing|2|Golf club|골프채
-thing|2|Golf ball|골프공
-thing|2|Bowling ball|볼링공
-thing|2|Bowling pin|볼링핀
-thing|2|Billiard cue|당구 큐
-thing|2|Dartboard|다트판
-thing|2|Pinball machine|핀볼 기계
-thing|2|Arcade machine|오락기
-thing|2|Slot machine|슬롯머신
-thing|2|Roulette wheel|룰렛
-thing|2|Domino|도미노
-thing|2|Jigsaw puzzle|직소 퍼즐
-thing|2|Rubik's cube|큐브
-thing|2|Kendama|켄다마
-thing|2|Fidget spinner|핸드 스피너
-thing|2|Snow globe|스노볼
-thing|2|Music box|오르골
-thing|2|Rotary phone|다이얼 전화기
-thing|2|Payphone|공중전화
-thing|2|Pager|삐삐
-thing|2|Floppy disk|플로피 디스크
-thing|2|CD|시디
-thing|2|DVD|디브이디
-thing|2|VHS tape|비디오테이프
-thing|2|Walkman|워크맨
-thing|2|Gramophone|축음기
-thing|2|Telegraph|전신기
-thing|2|Quill|깃펜
-thing|2|Inkwell|잉크병
-thing|2|Scroll|두루마리
-thing|2|Seal stamp|도장
-thing|2|Candlestick|촛대
-thing|2|Chandelier|샹들리에
-thing|2|Oil lamp|기름등
-thing|2|Torch|횃불
-thing|2|Pocket watch|회중시계
-thing|2|Monocle|외알안경
-thing|2|Cloak|망토
-thing|2|Corset|코르셋
-thing|2|Kimono|기모노
-thing|2|Sari|사리
-thing|2|Poncho|판초
-thing|2|Beret|베레모
-thing|2|Cowboy hat|카우보이 모자
-thing|2|Chef hat|요리사 모자
-thing|2|Hard hat|안전모
-thing|2|Safety vest|안전조끼
-thing|2|Lab coat|실험복
-thing|2|Diploma|졸업장
-thing|2|Graduation cap|학사모
-thing|2|Name tag|명찰
-thing|2|Badge|배지
-thing|2|Whistle|호루라기
-thing|2|Megaphone|확성기
-thing|2|Siren|사이렌
-thing|2|Handcuffs|수갑
-thing|2|Gavel|판사 망치
-thing|2|Scales of justice|저울
-thing|2|Bathroom scale|체중계
-thing|2|Kitchen scale|주방 저울
-thing|2|Measuring cup|계량컵
-thing|2|Rolling pin|밀대
-thing|2|Whisk|거품기
-thing|2|Colander|체
-thing|2|Grater|강판
-thing|2|Peeler|필러
-thing|2|Can opener|깡통따개
-thing|2|Bottle opener|병따개
-thing|2|Corkscrew|와인 오프너
-thing|2|Nutcracker|호두까기
-thing|2|Tongs|집게
-thing|2|Spatula|뒤집개
-thing|2|Mortar and pestle|막자사발
-thing|2|Steamer|찜기
-thing|2|Wok|웍
-thing|2|Pressure cooker|압력솥
-thing|2|Slow cooker|슬로우쿠커
-thing|2|Air fryer|에어프라이어
-thing|2|Coffee maker|커피머신
-thing|2|Coffee grinder|커피 그라인더
-thing|2|Tea strainer|차 거름망
-thing|2|Ice cube tray|얼음 틀
-thing|2|Cooler box|아이스박스
-thing|2|Picnic mat|돗자리
-thing|2|Parasol|양산
-thing|2|Folding fan|접이식 부채
-thing|2|Handwarmer|손난로
-thing|2|Hot water bottle|물주머니
-thing|2|Earmuffs|귀마개
-thing|2|Neck pillow|목베개
-thing|2|Eye mask|안대
-thing|2|Pill case|약통
-thing|3|Compass|나침반
-thing|3|Telescope|망원경
-thing|3|Microscope|현미경
-thing|3|Hourglass|모래시계
-thing|3|Abacus|주판
-thing|3|Typewriter|타자기
-thing|3|Sewing machine|재봉틀
-thing|3|Anvil|모루
-thing|3|Lantern|등불
-thing|3|Sundial|해시계
-thing|3|Metronome|메트로놈
-thing|3|Harmonica|하모니카
-thing|3|Accordion|아코디언
-thing|3|Boomerang|부메랑
-thing|3|Yo-yo|요요
-thing|3|Kaleidoscope|만화경
-thing|3|Periscope|잠망경
-thing|3|Stethoscope|청진기
-thing|3|Parachute|낙하산
-thing|3|Submarine|잠수함
-thing|3|Trampoline|트램펄린
-thing|3|Hot air balloon|열기구
-thing|3|Magnifying glass|돋보기
-thing|3|Paper clip|클립
-thing|3|Safety pin|안전핀
-thing|3|Thimble|골무
-thing|3|Astrolabe|아스트롤라베
-thing|3|Sextant|육분의
-thing|3|Armillary sphere|혼천의
-thing|3|Water clock|물시계
-thing|3|Cuckoo clock|뻐꾸기시계
-thing|3|Orrery|태양계의
-thing|3|Zoetrope|조트로프
-thing|3|Magic lantern|환등기
-thing|3|Enigma machine|에니그마
-thing|3|Slide rule|계산자
-thing|3|Difference engine|차분기관
-thing|3|Loom|베틀
-thing|3|Spinning wheel|물레
-thing|3|Potter's wheel|도자기 물레
-thing|3|Bellows|풀무
-thing|3|Crucible|도가니
-thing|3|Alembic|증류기
-thing|3|Retort|레토르트
-thing|3|Bunsen burner|분젠 버너
-thing|3|Test tube|시험관
-thing|3|Petri dish|페트리 접시
-thing|3|Beaker|비커
-thing|3|Pipette|피펫
-thing|3|Centrifuge|원심분리기
-thing|3|Seismograph|지진계
-thing|3|Geiger counter|가이거 계수기
-thing|3|Oscilloscope|오실로스코프
-thing|3|Tesla coil|테슬라 코일
-thing|3|Particle accelerator|입자가속기
-thing|3|Space probe|우주 탐사선
-thing|3|Airship|비행선
-thing|3|Zeppelin|제플린
-thing|3|Glider|글라이더
-thing|3|Hang glider|행글라이더
-thing|3|Paraglider|패러글라이더
-thing|3|Biplane|복엽기
-thing|3|Seaplane|수상비행기
-thing|3|Hovercraft|호버크라프트
-thing|3|Bathyscaphe|심해잠수정
-thing|3|Diving bell|잠수종
-thing|3|Snorkel|스노클
-thing|3|Harpoon|작살
-thing|3|Trident|삼지창
-thing|3|Totem pole|토템 폴
-thing|3|Dreamcatcher|드림캐처
-thing|3|Tomahawk|토마호크
-thing|3|Longbow|장궁
-thing|3|Crossbow|석궁
-thing|3|Trebuchet|트레뷰셋
-thing|3|Battering ram|공성퇴
-thing|3|Drawbridge|도개교
-thing|3|Portcullis|내리닫이 쇠창살
-thing|3|Gargoyle|가고일
-thing|3|Stained glass|스테인드글라스
-thing|3|Pipe organ|파이프 오르간
-thing|3|Church bell|교회 종
-thing|3|Prayer wheel|마니차
-thing|3|Rosary|묵주
-thing|3|Incense burner|향로
-thing|3|Gong|징
-thing|3|Singing bowl|싱잉볼
-thing|3|Prayer beads|염주
-thing|3|Wind chime|풍경
-thing|3|Stone lantern|석등
-thing|3|Torii gate|도리이
-thing|3|Lucky cat|마네키네코
-thing|3|Daruma doll|달마 인형
-thing|3|Matryoshka|마트료시카
-thing|3|Samovar|사모바르
-thing|3|Faberge egg|파베르제 달걀
-thing|3|Venetian mask|베네치아 가면
-thing|3|Bagpipes|백파이프
-thing|3|Alphorn|알펜호른
-thing|3|Didgeridoo|디저리두
-thing|3|Sitar|시타르
-thing|3|Tabla|타블라
-thing|3|Erhu|얼후
-thing|3|Pipa|비파
-thing|3|Guzheng|고쟁
-thing|3|Shamisen|샤미센
-thing|3|Koto|고토
-thing|3|Shakuhachi|샤쿠하치
-thing|3|Taiko drum|타이코
-thing|3|Steel drum|스틸드럼
-thing|3|Djembe|젬베
-thing|3|Panpipes|팬파이프
-thing|3|Theremin|테레민
-thing|3|Hurdy-gurdy|하디거디
-thing|3|Tuning fork|소리굽쇠
-thing|3|Conductor's baton|지휘봉
-thing|3|Music stand|보면대
-thing|3|Sheet music|악보
-thing|3|Grandfather clock|괘종시계
-thing|3|Weather vane|풍향계
-thing|3|Anemometer|풍속계
-thing|3|Rain gauge|우량계
-thing|3|Hygrometer|습도계
-thing|3|Altimeter|고도계
-thing|3|Chronometer|크로노미터
-thing|3|Message in a bottle|유리병 편지
-thing|3|Buoy|부표
-thing|3|Life ring|구명환
-thing|3|Ship's wheel|선박 키
-thing|3|Ship's bell|선종
-thing|3|Telegraph key|전신 키
-thing|3|Signal flags|수기 신호기
-place|1|School|학교
-place|1|Hospital|병원
-place|1|Library|도서관
-place|1|Park|공원
-place|1|Beach|해변
-place|1|Mountain|산
-place|1|River|강
-place|1|Sea|바다
-place|1|Airport|공항
-place|1|Train station|기차역
-place|1|Supermarket|슈퍼마켓
-place|1|Restaurant|식당
-place|1|Bank|은행
-place|1|Post office|우체국
-place|1|Cinema|영화관
-place|1|Zoo|동물원
-place|1|Museum|박물관
-place|1|Kitchen|부엌
-place|1|Bathroom|화장실
-place|1|Bedroom|침실
-place|1|Playground|놀이터
-place|1|Farm|농장
-place|1|Forest|숲
-place|1|Desert|사막
-place|1|Island|섬
-place|1|South Korea|대한민국
-place|1|Japan|일본
-place|1|China|중국
-place|1|United States|미국
-place|1|Canada|캐나다
-place|1|Mexico|멕시코
-place|1|Brazil|브라질
-place|1|Argentina|아르헨티나
-place|1|United Kingdom|영국
-place|1|France|프랑스
-place|1|Germany|독일
-place|1|Italy|이탈리아
-place|1|Spain|스페인
-place|1|Russia|러시아
-place|1|India|인도
-place|1|Australia|호주
-place|1|Egypt|이집트
-place|1|Thailand|태국
-place|1|Vietnam|베트남
-place|1|Turkey (country)|터키
-place|2|Lighthouse|등대
-place|2|Bridge|다리
-place|2|Tunnel|터널
-place|2|Castle|성
-place|2|Temple|절
-place|2|Church|교회
-place|2|Stadium|경기장
-place|2|Aquarium|수족관
-place|2|Amusement park|놀이공원
-place|2|Pharmacy|약국
-place|2|Barbershop|이발소
-place|2|Bakery|빵집
-place|2|Convenience store|편의점
-place|2|Gas station|주유소
-place|2|Parking lot|주차장
-place|2|Harbor|항구
-place|2|Waterfall|폭포
-place|2|Volcano|화산
-place|2|Cave|동굴
-place|2|Lake|호수
-place|2|Market|시장
-place|2|Theater|극장
-place|2|Laboratory|실험실
-place|2|Factory|공장
-place|2|Greenhouse|온실
-place|2|North Korea|북한
-place|2|Mongolia|몽골
-place|2|Taiwan|대만
-place|2|Philippines|필리핀
-place|2|Indonesia|인도네시아
-place|2|Malaysia|말레이시아
-place|2|Singapore|싱가포르
-place|2|Cambodia|캄보디아
-place|2|Laos|라오스
-place|2|Myanmar|미얀마
-place|2|Nepal|네팔
-place|2|Bhutan|부탄
-place|2|Bangladesh|방글라데시
-place|2|Sri Lanka|스리랑카
-place|2|Pakistan|파키스탄
-place|2|Afghanistan|아프가니스탄
-place|2|Iran|이란
-place|2|Iraq|이라크
-place|2|Israel|이스라엘
-place|2|Saudi Arabia|사우디아라비아
-place|2|United Arab Emirates|아랍에미리트
-place|2|Qatar|카타르
-place|2|Jordan|요르단
-place|2|Lebanon|레바논
-place|2|Syria|시리아
-place|2|Kazakhstan|카자흐스탄
-place|2|Uzbekistan|우즈베키스탄
-place|2|Ukraine|우크라이나
-place|2|Poland|폴란드
-place|2|Czech Republic|체코
-place|2|Hungary|헝가리
-place|2|Romania|루마니아
-place|2|Bulgaria|불가리아
-place|2|Greece|그리스
-place|2|Austria|오스트리아
-place|2|Switzerland|스위스
-place|2|Netherlands|네덜란드
-place|2|Belgium|벨기에
-place|2|Portugal|포르투갈
-place|2|Ireland|아일랜드
-place|2|Iceland|아이슬란드
-place|2|Norway|노르웨이
-place|2|Sweden|스웨덴
-place|2|Finland|핀란드
-place|2|Denmark|덴마크
-place|2|Estonia|에스토니아
-place|2|Croatia|크로아티아
-place|2|Serbia|세르비아
-place|2|Cuba|쿠바
-place|2|Jamaica|자메이카
-place|2|Peru|페루
-place|2|Chile|칠레
-place|2|Colombia|콜롬비아
-place|2|Venezuela|베네수엘라
-place|2|Ecuador|에콰도르
-place|2|Bolivia|볼리비아
-place|2|Uruguay|우루과이
-place|2|Paraguay|파라과이
-place|2|Panama|파나마
-place|2|Costa Rica|코스타리카
-place|2|Morocco|모로코
-place|2|Algeria|알제리
-place|2|Tunisia|튀니지
-place|2|Libya|리비아
-place|2|Ethiopia|에티오피아
-place|2|Kenya|케냐
-place|2|Tanzania|탄자니아
-place|2|Nigeria|나이지리아
-place|2|Ghana|가나
-place|2|South Africa|남아프리카공화국
-place|2|Madagascar|마다가스카르
-place|2|New Zealand|뉴질랜드
-place|2|Fiji|피지
-place|2|Maldives|몰디브
-place|2|Seoul|서울
-place|2|Busan|부산
-place|2|Incheon|인천
-place|2|Daegu|대구
-place|2|Daejeon|대전
-place|2|Gwangju|광주
-place|2|Jeju Island|제주도
-place|2|Gyeongju|경주
-place|2|Suwon|수원
-place|2|Ulsan|울산
-place|2|Chuncheon|춘천
-place|2|Sokcho|속초
-place|2|Jeonju|전주
-place|2|Tokyo|도쿄
-place|2|Osaka|오사카
-place|2|Kyoto|교토
-place|2|Sapporo|삿포로
-place|2|Beijing|베이징
-place|2|Shanghai|상하이
-place|2|Hong Kong|홍콩
-place|2|Bangkok|방콕
-place|2|Hanoi|하노이
-place|2|Manila|마닐라
-place|2|Jakarta|자카르타
-place|2|Delhi|델리
-place|2|Mumbai|뭄바이
-place|2|Dubai|두바이
-place|2|Istanbul|이스탄불
-place|2|Cairo|카이로
-place|2|Moscow|모스크바
-place|2|London|런던
-place|2|Paris|파리
-place|2|Berlin|베를린
-place|2|Rome|로마
-place|2|Madrid|마드리드
-place|2|Barcelona|바르셀로나
-place|2|Amsterdam|암스테르담
-place|2|Vienna|빈
-place|2|Prague|프라하
-place|2|Venice|베네치아
-place|2|Florence|피렌체
-place|2|Athens|아테네
-place|2|Lisbon|리스본
-place|2|New York|뉴욕
-place|2|Los Angeles|로스앤젤레스
-place|2|San Francisco|샌프란시스코
-place|2|Las Vegas|라스베이거스
-place|2|Chicago|시카고
-place|2|Washington D.C.|워싱턴 D.C.
-place|2|Hawaii|하와이
-place|2|Toronto|토론토
-place|2|Vancouver|밴쿠버
-place|2|Rio de Janeiro|리우데자네이루
-place|2|Buenos Aires|부에노스아이레스
-place|2|Sydney|시드니
-place|2|Melbourne|멜버른
-place|2|Eiffel Tower|에펠탑
-place|2|Statue of Liberty|자유의 여신상
-place|2|Big Ben|빅벤
-place|2|Colosseum|콜로세움
-place|2|Great Wall of China|만리장성
-place|2|Taj Mahal|타지마할
-place|2|Machu Picchu|마추픽추
-place|2|Sydney Opera House|시드니 오페라 하우스
-place|2|Leaning Tower of Pisa|피사의 사탑
-place|2|Pyramids of Giza|기자의 피라미드
-place|2|Sphinx|스핑크스
-place|2|Golden Gate Bridge|금문교
-place|2|Mount Fuji|후지산
-place|2|Niagara Falls|나이아가라 폭포
-place|2|Grand Canyon|그랜드 캐니언
-place|2|Great Barrier Reef|그레이트 배리어 리프
-place|2|Angkor Wat|앙코르와트
-place|2|Petra|페트라
-place|2|Stonehenge|스톤헨지
-place|2|Acropolis|아크로폴리스
-place|2|Louvre|루브르 박물관
-place|2|Buckingham Palace|버킹엄 궁전
-place|2|Tower Bridge|타워 브리지
-place|2|Empire State Building|엠파이어 스테이트 빌딩
-place|2|Times Square|타임스 스퀘어
-place|2|Central Park|센트럴 파크
-place|2|White House|백악관
-place|2|Hollywood sign|할리우드 사인
-place|2|Mount Rushmore|러시모어 산
-place|2|Burj Khalifa|부르즈 할리파
-place|2|Forbidden City|자금성
-place|2|Terracotta Army|병마용
-place|2|Kremlin|크렘린
-place|2|Red Square|붉은 광장
-place|2|Sagrada Familia|사그라다 파밀리아
-place|2|Neuschwanstein Castle|노이슈반슈타인 성
-place|2|Versailles|베르사유 궁전
-place|2|Notre-Dame|노트르담 대성당
-place|2|Arc de Triomphe|개선문
-place|2|Brandenburg Gate|브란덴부르크 문
-place|2|Tokyo Tower|도쿄 타워
-place|2|Tokyo Skytree|도쿄 스카이트리
-place|2|Fushimi Inari|후시미 이나리
-place|2|Gyeongbokgung|경복궁
-place|2|Changdeokgung|창덕궁
-place|2|Namsan Tower|남산타워
-place|2|Lotte World Tower|롯데월드타워
-place|2|Bulguksa|불국사
-place|2|Seokguram|석굴암
-place|2|Haeinsa|해인사
-place|2|Hwaseong Fortress|수원화성
-place|2|Bukchon Hanok Village|북촌 한옥마을
-place|2|Han River|한강
-place|2|Hallasan|한라산
-place|2|Seoraksan|설악산
-place|2|Baekdusan|백두산
-place|2|Dokdo|독도
-place|2|Ulleungdo|울릉도
-place|2|Gwanghwamun|광화문
-place|2|Dongdaemun|동대문
-place|2|Myeongdong|명동
-place|2|Gangnam|강남
-place|2|Hongdae|홍대
-place|2|Itaewon|이태원
-place|2|Haeundae|해운대
-place|2|Gamcheon Culture Village|감천문화마을
-place|2|Nami Island|남이섬
-place|2|Everland|에버랜드
-place|2|Lotte World|롯데월드
-place|2|Disneyland|디즈니랜드
-place|2|Universal Studios|유니버설 스튜디오
-place|2|Mount Everest|에베레스트
-place|2|Mount Kilimanjaro|킬리만자로
-place|2|Amazon River|아마존강
-place|2|Nile River|나일강
-place|2|Sahara Desert|사하라 사막
-place|2|Dead Sea|사해
-place|2|Antarctica|남극
-place|2|North Pole|북극점
-place|2|Bermuda Triangle|버뮤다 삼각지대
-place|2|Panama Canal|파나마 운하
-place|2|Suez Canal|수에즈 운하
-place|2|Berlin Wall|베를린 장벽
-place|2|Vatican|바티칸
-place|2|Santorini|산토리니
-place|2|Bali|발리
-place|2|Maldives resort|몰디브 리조트
-place|2|Venice canal|베네치아 운하
-place|2|Swiss Alps|알프스
-place|2|Yellowstone|옐로스톤
-place|2|Alcatraz|알카트라즈
-place|2|Pentagon|펜타곤
-place|2|Hagia Sophia|아야 소피아
-place|2|Blue Mosque|블루 모스크
-place|2|Alhambra|알함브라 궁전
-place|2|Tower of London|런던 탑
-place|2|Westminster Abbey|웨스트민스터 사원
-place|2|London Eye|런던 아이
-place|2|Trevi Fountain|트레비 분수
-place|2|Spanish Steps|스페인 계단
-place|2|Pantheon|판테온
-place|2|Duomo|두오모
-place|2|Rialto Bridge|리알토 다리
-place|3|Observatory|천문대
-place|3|Planetarium|천체투영관
-place|3|Monastery|수도원
-place|3|Pyramid|피라미드
-place|3|Canyon|협곡
-place|3|Glacier|빙하
-place|3|Oasis|오아시스
-place|3|Igloo|이글루
-place|3|Windmill|풍차
-place|3|Fortress|요새
-place|3|Palace|궁전
-place|3|Subway station|지하철역
-place|3|Bunker|벙커
-place|3|Cathedral|대성당
-place|3|Mosque|모스크
-place|3|Synagogue|유대교 회당
-place|3|Shrine|신사
-place|3|Monastery temple|사찰
-place|3|Graveyard|묘지
-place|3|Town hall|시청
-place|3|Courthouse|법원
-place|3|Police station|경찰서
-place|3|Fire station|소방서
-place|3|Prison|감옥
-place|3|Embassy|대사관
-place|3|Parliament|국회의사당
-place|3|Palace garden|궁궐 정원
-place|3|University|대학교
-place|3|Kindergarten|유치원
-place|3|Classroom|교실
-place|3|Gym|체육관
-place|3|Swimming pool|수영장
-place|3|Sports field|운동장
-place|3|Tennis court|테니스장
-place|3|Golf course|골프장
-place|3|Ski resort|스키장
-place|3|Skating rink|스케이트장
-place|3|Race track|경주장
-place|3|Bowling alley|볼링장
-place|3|Karaoke room|노래방
-place|3|PC room PC|방
-place|3|Arcade|오락실
-place|3|Escape room|방탈출 카페
-place|3|Cafe|카페
-place|3|Bar|술집
-place|3|Pub|펍
-place|3|Night market|야시장
-place|3|Food court|푸드코트
-place|3|Department store|백화점
-place|3|Shopping mall|쇼핑몰
-place|3|Bookstore|서점
-place|3|Flower shop|꽃집
-place|3|Butcher shop|정육점
-place|3|Fish market|수산시장
-place|3|Traditional market|재래시장
-place|3|Laundromat|빨래방
-place|3|Hair salon|미용실
-place|3|Spa|스파
-place|3|Public bath|대중목욕탕
-place|3|Sauna jjimjilbang|찜질방
-place|3|Clinic|의원
-place|3|Dental clinic|치과
-place|3|Veterinary clinic|동물병원
-place|3|Pet shop|애완동물 가게
-place|3|Nursery|어린이집
-place|3|Nursing home|요양원
-place|3|Orphanage|보육원
-place|3|Hotel|호텔
-place|3|Motel|모텔
-place|3|Hostel|호스텔
-place|3|Guesthouse|게스트하우스
-place|3|Hanok stay|한옥 스테이
-place|3|Campsite|캠핑장
-place|3|Cabin|오두막
-place|3|Lodge|산장
-place|3|Apartment|아파트
-place|3|Villa|빌라
-place|3|Mansion|저택
-place|3|Studio apartment|원룸
-place|3|Rooftop|옥상
-place|3|Basement|지하실
-place|3|Attic|다락방
-place|3|Garage|차고
-place|3|Balcony|발코니
-place|3|Living room|거실
-place|3|Dining room|식당방
-place|3|Laundry room|세탁실
-place|3|Pantry|식료품 창고
-place|3|Garden|정원
-place|3|Backyard|뒷마당
-place|3|Courtyard|안뜰
-place|3|Porch|현관
-place|3|Hallway|복도
-place|3|Cellar|지하 저장고
-place|3|Warehouse|창고
-place|3|Barn|헛간
-place|3|Stable|마구간
-place|3|Chicken coop|닭장
-place|3|Fish farm|양식장
-place|3|Orchard|과수원
-place|3|Rice field|논
-place|3|Vegetable field|밭
-place|3|Vineyard|포도밭
-place|3|Tea plantation|차밭
-place|3|Pasture|목초지
-place|3|Greenhouse farm|비닐하우스
-place|3|Ranch|목장
-place|3|Dam|댐
-place|3|Power plant|발전소
-place|3|Nuclear plant|원자력 발전소
-place|3|Oil rig|석유 시추선
-place|3|Mine|광산
-place|3|Quarry|채석장
-place|3|Construction site|공사장
-place|3|Shipyard|조선소
-place|3|Port crane|항만 크레인
-place|3|Bus stop|버스 정류장
-place|3|Bus terminal|버스 터미널
-place|3|Subway platform|지하철 승강장
-place|3|Highway rest stop|휴게소
-place|3|Toll gate|톨게이트
-place|3|Crosswalk|횡단보도
-place|3|Overpass|육교
-place|3|Underpass|지하도
-place|3|Intersection|사거리
-place|3|Alley|골목
-place|3|Roundabout|회전교차로
-place|3|Airport runway|활주로
-place|3|Control tower|관제탑
-place|3|Heliport|헬기장
-place|3|Launch pad|발사대
-place|3|Space center|우주센터
-place|3|Science museum|과학관
-place|3|Art gallery|미술관
-place|3|Concert hall|콘서트홀
-place|3|Opera house|오페라 하우스
-place|3|Movie studio|영화 스튜디오
-place|3|TV station|방송국
-place|3|Radio station|라디오 방송국
-place|3|Newspaper office|신문사
-place|3|Post sorting center|우편 집중국
-place|3|Data center|데이터센터
-place|3|Cell tower|기지국
-place|3|Weather station|기상 관측소
-place|3|Research station|연구기지
-place|3|Botanical garden|식물원
-place|3|Arboretum|수목원
-place|3|Safari park|사파리
-place|3|Wildlife reserve|야생동물 보호구역
-place|3|National park|국립공원
-place|3|Nature trail|산책로
-place|3|Hiking trail|등산로
-place|3|Summit|정상
-place|3|Campfire site|야영지
-place|3|Picnic area|소풍 장소
-place|3|Riverside|강변
-place|3|Lakeside|호숫가
-place|3|Seaside|바닷가
-place|3|Pier|부두
-place|3|Dock|선착장
-place|3|Fishing spot|낚시터
-place|3|Tidal flat|갯벌
-place|3|Coral reef|산호초
-place|3|Underwater cave|해저 동굴
-place|3|Hot spring|온천
-place|3|Geyser field|간헐천 지대
-place|3|Ice cave|얼음 동굴
-place|3|Salt flat|소금 평원
-place|3|Rainforest|열대우림
-place|3|Savanna|사바나
-place|3|Tundra|툰드라
-place|3|Steppe|초원
-place|3|Swamp|늪
-place|3|Marsh|습지
-place|3|Delta|삼각주
-place|3|Peninsula|반도
-place|3|Cape|곶
-place|3|Bay|만
-place|3|Strait|해협
-place|3|Archipelago|군도
-place|3|Atoll|환초
-place|3|Plateau|고원
-place|3|Valley|계곡
-place|3|Hill|언덕
-place|3|Cliff|절벽
-place|3|Ravine|협곡 골짜기
-job|1|Teacher|선생님
-job|1|Doctor|의사
-job|1|Nurse|간호사
-job|1|Police officer|경찰관
-job|1|Firefighter|소방관
-job|1|Cook|요리사
-job|1|Farmer|농부
-job|1|Driver|운전사
-job|1|Pilot|조종사
-job|1|Singer|가수
-job|1|Painter|화가
-job|1|Writer|작가
-job|1|Student|학생
-job|1|Baker|제빵사
-job|1|Hairdresser|미용사
-job|1|Dentist|치과의사
-job|1|Soldier|군인
-job|1|Athlete|운동선수
-job|1|Actor|배우
-job|1|Scientist|과학자
-job|1|Programmer|프로그래머
-job|1|Designer|디자이너
-job|1|Animator|애니메이터
-job|1|Game developer|게임 개발자
-job|1|Data scientist|데이터 과학자
-job|1|Teacher assistant|조교
-job|1|Professor|교수
-job|1|Principal|교장
-job|1|Nanny|보모
-job|1|Babysitter|베이비시터
-job|1|Social worker|사회복지사
-job|1|Counselor|상담사
-job|1|Psychologist|심리학자
-job|1|Psychiatrist|정신과 의사
-job|1|Surgeon|외과의사
-job|1|Pediatrician|소아과 의사
-job|1|Paramedic|응급구조사
-job|1|Midwife|조산사
-job|1|Radiologist|방사선사
-job|1|Physical therapist|물리치료사
-job|1|Optician|안경사
-job|1|Chef|셰프
-job|1|Waiter|웨이터
-job|1|Bartender|바텐더
-job|1|Butcher|정육점 주인
-job|1|Fishmonger|생선 장수
-job|1|Greengrocer|채소 장수
-job|1|Cashier|계산원
-job|1|Shopkeeper|가게 주인
-job|1|Salesperson|판매원
-job|1|Delivery driver|배달원
-job|1|Courier|택배기사
-job|1|Postman|우체부
-job|1|Taxi driver|택시기사
-job|1|Bus driver|버스기사
-job|1|Train conductor|열차 승무원
-job|1|Flight attendant|승무원
-job|1|Air traffic controller|항공관제사
-job|1|Sailor|선원
-job|1|Captain|선장
-job|1|Fisherman|어부
-job|1|Lighthouse keeper|등대지기
-job|1|Diver|잠수부
-job|1|Miner|광부
-job|1|Construction worker|건설 노동자
-job|1|Bricklayer|벽돌공
-job|1|Painter and decorator|도장공
-job|1|Welder|용접공
-job|1|Locksmith|열쇠 수리공
-job|1|Roofer|지붕장이
-job|1|Window cleaner|유리창 청소부
-job|1|Janitor|청소부
-job|1|Security guard|경비원
-job|1|Detective|탐정
-job|1|Spy|스파이
-job|1|Prosecutor|검사
-job|1|Notary|공증인
-job|1|Banker|은행원
-job|1|Stockbroker|증권 중개인
-job|1|Economist|경제학자
-job|1|Auditor|감사관
-job|1|Tax officer|세무공무원
-job|1|Politician|정치인
-job|1|Mayor|시장
-job|1|President|대통령
-job|1|Diplomat|외교관
-job|1|Ambassador|대사
-job|2|Engineer|엔지니어
-job|2|Architect|건축가
-job|2|Lawyer|변호사
-job|2|Judge|판사
-job|2|Journalist|기자
-job|2|Photographer|사진작가
-job|2|Barista|바리스타
-job|2|Carpenter|목수
-job|2|Plumber|배관공
-job|2|Electrician|전기기술자
-job|2|Mechanic|정비사
-job|2|Librarian|사서
-job|2|Accountant|회계사
-job|2|Veterinarian|수의사
-job|2|Pharmacist|약사
-job|2|Astronaut|우주비행사
-job|2|Magician|마술사
-job|2|Clown|광대
-job|2|Referee|심판
-job|2|Tailor|재단사
-job|2|King|왕
-job|2|Queen|여왕
-job|2|Prince|왕자
-job|2|Princess|공주
-job|2|Knight|기사
-job|2|Samurai|사무라이
-job|2|Ninja|닌자
-job|2|Pirate|해적
-job|2|Cowboy|카우보이
-job|2|Gladiator|검투사
-job|2|Monk|승려
-job|2|Priest|신부
-job|2|Pastor|목사
-job|2|Nun|수녀
-job|2|Shaman|무당
-job|2|Fortune teller|점쟁이
-job|2|Astrologer|점성술사
-job|2|Wizard|마법사
-job|2|Witch|마녀
-job|2|Alchemist|연금술사
-job|2|Inventor|발명가
-job|2|Explorer|탐험가
-job|2|Mountaineer|산악인
-job|2|Park ranger|산림 감시원
-job|2|Zookeeper|사육사
-job|2|Animal trainer|조련사
-job|2|Dog walker|반려견 산책사
-job|2|Florist|플로리스트
-job|2|Gardener|정원사
-job|2|Forester|임업인
-job|2|Cattle rancher|목장주
-job|2|Beekeeper honey|양봉업자
-job|2|Winemaker|와인 제조자
-job|2|Brewer|양조업자
-job|2|Tea master|다도가
-job|2|Potter|도공
-job|2|Sculptor|조각가
-job|2|Weaver|직조공
-job|2|Goldsmith|금세공사
-job|2|Jeweler|보석상
-job|2|Watchmaker|시계 수리공
-job|2|Shoemaker|구두 수선공
-job|2|Tailor dress|양장점 주인
-job|2|Fashion model|패션 모델
-job|2|Makeup artist|메이크업 아티스트
-job|2|Stylist|스타일리스트
-job|2|Barber|이발사
-job|2|Tattoo artist|타투이스트
-job|2|Cartoonist|만화가
-job|2|Illustrator|일러스트레이터
-job|2|Poet|시인
-job|2|Novelist|소설가
-job|2|Screenwriter|시나리오 작가
-job|2|Editor|편집자
-job|2|Publisher|출판인
-job|2|Translator|번역가
-job|2|Announcer|아나운서
-job|2|News anchor|앵커
-job|2|DJ|디제이
-job|3|Archaeologist|고고학자
-job|3|Sommelier|소믈리에
-job|3|Interpreter|통역사
-job|3|Puppeteer|인형극 연출가
-job|3|Blacksmith|대장장이
-job|3|Beekeeper|양봉가
-job|3|Lifeguard|인명구조원
-job|3|Shepherd|양치기
-job|3|Mime|마임 배우
-job|3|Auctioneer|경매인
-job|3|Radio host|라디오 진행자
-job|3|YouTuber|유튜버
-job|3|Streamer|스트리머
-job|3|Comedian|코미디언
-job|3|Voice actor|성우
-job|3|Movie director|영화감독
-job|3|Cinematographer|촬영감독
-job|3|Stuntman|스턴트맨
-job|3|Dancer|무용수
-job|3|Ballerina|발레리나
-job|3|Choreographer|안무가
-job|3|Conductor|지휘자
-job|3|Composer|작곡가
-job|3|Pianist|피아니스트
-job|3|Violinist|바이올리니스트
-job|3|Rapper|래퍼
-job|3|Idol trainee|연습생
-job|3|Referee soccer|축구 심판
-job|3|Coach|코치
-job|3|Personal trainer|헬스 트레이너
-job|3|Swimmer|수영선수
-job|3|Marathon runner|마라톤 선수
-job|3|Golfer|골퍼
-job|3|Gamer pro|프로게이머
-job|3|Chess grandmaster|체스 그랜드마스터
-job|3|Baduk player|바둑기사
-job|3|Mathematician|수학자
-job|3|Physicist|물리학자
-job|3|Chemist|화학자
-job|3|Biologist|생물학자
-job|3|Geologist|지질학자
-job|3|Meteorologist|기상학자
-job|3|Oceanographer|해양학자
-job|3|Astronomer|천문학자
-job|3|Paleontologist|고생물학자
-job|3|Historian|역사학자
-job|3|Linguist|언어학자
-job|3|Philosopher|철학자
-job|3|Curator|큐레이터
-job|3|Tour guide|관광 가이드
-job|3|Interpreter conference|동시통역사
-nature|1|Tree|나무
-nature|1|Flower|꽃
-nature|1|Grass|풀
-nature|1|Rose|장미
-nature|1|Sunflower|해바라기
-nature|1|Cloud|구름
-nature|1|Rain|비
-nature|1|Snow|눈
-nature|1|Sun|해
-nature|1|Moon|달
-nature|1|Star|별
-nature|1|Rainbow|무지개
-nature|1|Wind|바람
-nature|1|Stone|돌
-nature|1|Sand|모래
-nature|1|Leaf|잎
-nature|1|Fire|불
-nature|1|Water|물
-nature|1|Ice|얼음
-nature|1|Lightning|번개
-nature|1|Oak|참나무
-nature|1|Willow|버드나무
-nature|1|Birch|자작나무
-nature|1|Ginkgo|은행나무
-nature|1|Cedar|삼나무
-nature|1|Cypress|편백나무
-nature|1|Palm tree|야자나무
-nature|1|Baobab|바오바브나무
-nature|1|Redwood|레드우드
-nature|1|Apple tree|사과나무
-nature|1|Persimmon tree|감나무
-nature|1|Plum blossom|매화
-nature|1|Magnolia|목련
-nature|1|Azalea|진달래
-nature|1|Forsythia|개나리
-nature|1|Camellia|동백
-nature|1|Hydrangea|수국
-nature|1|Lilac|라일락
-nature|1|Lavender|라벤더
-nature|1|Jasmine|재스민
-nature|1|Daisy|데이지
-nature|1|Dandelion|민들레
-nature|1|Clover|클로버
-nature|1|Lily|백합
-nature|1|Iris|붓꽃
-nature|1|Daffodil|수선화
-nature|1|Violet|제비꽃
-nature|1|Morning glory|나팔꽃
-nature|1|Cosmos|코스모스
-nature|1|Chrysanthemum|국화
-nature|1|Peony|모란
-nature|1|Carnation|카네이션
-nature|1|Poppy|양귀비
-nature|1|Lotus flower|연꽃 송이
-nature|1|Rice plant|벼
-nature|1|Wheat|밀
-nature|1|Barley|보리
-nature|1|Bamboo shoot|죽순
-nature|1|Ivy|담쟁이덩굴
-nature|1|Vine|덩굴
-nature|1|Seaweed sea|바닷말
-nature|1|Mushroom wild|야생 버섯
-nature|1|Acorn|도토리
-nature|1|Pine cone|솔방울
-nature|1|Seed|씨앗
-nature|1|Root|뿌리
-nature|1|Branch|나뭇가지
-nature|1|Bark|나무껍질
-nature|1|Thorn|가시
-nature|1|Pollen|꽃가루
-nature|1|Nectar|꿀
-nature|1|Spring|봄
-nature|1|Summer|여름
-nature|1|Autumn|가을
-nature|1|Winter|겨울
-nature|1|Morning|아침
-nature|1|Noon|한낮
-nature|1|Evening|저녁
-nature|1|Night|밤
-nature|1|Dawn|새벽
-nature|1|Sunset|노을
-nature|1|Sunrise|일출
-nature|1|Full moon|보름달
-nature|1|Crescent moon|초승달
-nature|1|Shooting star|별똥별
-nature|1|Milky Way|은하수
-nature|1|Sky|하늘
-nature|1|Thunder|천둥
-nature|1|Typhoon|태풍
-nature|1|Hurricane|허리케인
-nature|1|Blizzard|눈보라
-nature|1|Drizzle|이슬비
-nature|1|Rain shower|소나기
-nature|1|Monsoon|장마
-nature|1|Flood|홍수
-nature|1|Drought|가뭄
-nature|1|Heat wave|폭염
-nature|1|Cold wave|한파
-nature|1|Yellow dust|황사
-nature|1|Smog|스모그
-nature|1|Mist|안개비
-nature|1|Icicle|고드름
-nature|1|Snowman|눈사람
-nature|1|Snowflake|눈송이
-nature|1|Puddle|물웅덩이
-nature|1|Stream|시냇물
-nature|1|Pond|연못
-nature|1|Ocean|대양
-nature|1|Wave|파도
-nature|1|Tide|조수
-nature|1|Whirlpool|소용돌이
-nature|1|Iceberg|빙산
-nature|1|Shore|해안
-nature|1|Cliffside|해안 절벽
-nature|1|Boulder|바위
-nature|1|Pebble|조약돌
-nature|1|Gravel|자갈
-nature|1|Mud|진흙
-nature|1|Clay|점토
-nature|1|Soil|흙
-nature|1|Dust|먼지
-nature|1|Ash|재
-nature|1|Smoke|연기
-nature|1|Flame|불꽃
-nature|1|Ember|불씨
-nature|1|Lava|용암
-nature|1|Magma|마그마
-nature|1|Crater|분화구
-nature|1|Fossil|화석
-nature|1|Amber|호박
-nature|1|Pearl|진주
-nature|1|Shell|조개껍데기
-nature|1|Coral piece|산호 조각
-nature|1|Driftwood|유목
-nature|1|Moss rock|이끼 낀 바위
-nature|2|Tulip|튤립
-nature|2|Cherry blossom|벚꽃
-nature|2|Bamboo|대나무
-nature|2|Cactus|선인장
-nature|2|Pine tree|소나무
-nature|2|Maple tree|단풍나무
-nature|2|Fog|안개
-nature|2|Tornado|토네이도
-nature|2|Earthquake|지진
-nature|2|Comet|혜성
-nature|2|Planet|행성
-nature|2|Galaxy|은하
-nature|2|Shadow|그림자
-nature|2|Echo|메아리
-nature|2|Dew|이슬
-nature|2|Frost|서리
-nature|2|Hail|우박
-nature|2|Coral|산호
-nature|3|Aurora|오로라
-nature|3|Solar eclipse|일식
-nature|3|Black hole|블랙홀
-nature|3|Meteor|유성
-nature|3|Mirage|신기루
-nature|3|Geyser|간헐천
-nature|3|Quicksand|유사
-nature|3|Orchid|난초
-nature|3|Fern|고사리
-nature|3|Moss|이끼
-nature|3|Lotus|연꽃
-nature|3|Kelp|다시마
-nature|3|Diamond|다이아몬드
-nature|3|Ruby|루비
-nature|3|Sapphire|사파이어
-nature|3|Emerald|에메랄드
-nature|3|Amethyst|자수정
-nature|3|Topaz|토파즈
-nature|3|Opal|오팔
-nature|3|Jade|옥
-nature|3|Quartz|석영
-nature|3|Granite|화강암
-nature|3|Marble|대리석
-nature|3|Limestone|석회암
-nature|3|Basalt|현무암
-nature|3|Obsidian|흑요석
-nature|3|Gold|금
-nature|3|Silver|은
-nature|3|Copper|구리
-nature|3|Iron (metal)|철
-nature|3|Aluminum|알루미늄
-nature|3|Mercury|수은
-nature|3|Coal|석탄
-nature|3|Salt crystal|소금 결정
-nature|3|Sulfur|황
-nature|3|Mercury planet|수성
-nature|3|Venus|금성
-nature|3|Earth|지구
-nature|3|Mars|화성
-nature|3|Jupiter|목성
-nature|3|Saturn|토성
-nature|3|Uranus|천왕성
-nature|3|Neptune|해왕성
-nature|3|Pluto|명왕성
-nature|3|Asteroid|소행성
-nature|3|Nebula|성운
-nature|3|Supernova|초신성
-nature|3|Pulsar|펄서
-nature|3|Quasar|퀘이사
-nature|3|Wormhole|웜홀
-nature|3|Big Bang|빅뱅
-nature|3|Sun spot|흑점
-nature|3|Solar flare|태양 플레어
-nature|3|Lunar eclipse|월식
-nature|3|Moon crater|달 크레이터
-nature|3|Constellation|별자리
-nature|3|Orion|오리온자리
-nature|3|Big Dipper|북두칠성
-nature|3|North Star|북극성
-nature|3|Southern Cross|남십자성
-nature|3|Zodiac|황도 12궁
-nature|3|Gravity|중력
-nature|3|Magnetism|자기장
-nature|3|Electricity|전기
-nature|3|Static electricity|정전기
-nature|3|Sound wave|음파
-nature|3|Echo canyon|메아리 계곡
-nature|3|Light (visible)|빛
-nature|3|Rainbow double|쌍무지개
-nature|3|Shadow puppet|그림자 인형
-nature|3|Reflection|반사
-nature|3|Mirage desert|사막 신기루
-nature|3|Halo|달무리
-nature|3|Sun dog|환일
-nature|3|Glacier crevasse|빙하 틈
-nature|3|Permafrost|영구동토
-nature|3|Fjord|피오르
-nature|3|Mangrove|맹그로브
-nature|3|Peat bog|이탄 습지
-nature|3|Sand dune|모래언덕
-nature|3|Oasis palm|오아시스 야자
-nature|3|Rock arch|자연 아치
-nature|3|Stalactite|종유석
-nature|3|Stalagmite|석순
-nature|3|Sinkhole|싱크홀
-nature|3|Hot spring pool|온천 웅덩이
-nature|3|Mud volcano|진흙 화산
-nature|3|Underwater volcano|해저 화산
-nature|3|Tectonic plate|판
-nature|3|Fault line|단층
-nature|3|Tsunami|쓰나미
-nature|3|Avalanche|눈사태
-nature|3|Landslide|산사태
-nature|3|Wildfire|산불
-nature|3|Lightning rod|피뢰침
-nature|3|Ball lightning|구상 번개
-nature|3|Tornado funnel|용오름
-nature|3|Sandstorm|모래폭풍
-nature|3|Dust devil|먼지 회오리
-nature|3|Ocean current|해류
-nature|3|El Nino|엘니뇨
-nature|3|Ozone layer|오존층
-nature|3|Greenhouse gas|온실가스
-nature|3|Carbon dioxide|이산화탄소
-nature|3|Oxygen|산소
-nature|3|Hydrogen|수소
-nature|3|Nitrogen|질소
-nature|3|Helium|헬륨
-nature|3|Neon|네온
-nature|3|Atom|원자
-nature|3|Molecule|분자
-nature|3|Cell|세포
-nature|3|Virus|바이러스
-nature|3|Bacteria|박테리아
-nature|3|Microbe|미생물
-nature|3|Plankton|플랑크톤
-nature|3|Algae|조류
-nature|3|Lichen|지의류
-nature|3|Yeast|효모
-nature|3|Spore|포자
-pokemon|1|Pikachu|피카츄
-pokemon|1|Charmander|파이리
-pokemon|1|Bulbasaur|이상해씨
-pokemon|1|Squirtle|꼬부기
-pokemon|1|Charizard|리자몽
-pokemon|1|Eevee|이브이
-pokemon|1|Jigglypuff|푸린
-pokemon|1|Snorlax|잠만보
-pokemon|1|Meowth|나옹
-pokemon|1|Psyduck|고라파덕
-pokemon|1|Gengar|팬텀
-pokemon|1|Mewtwo|뮤츠
-pokemon|1|Mew|뮤
-pokemon|1|Magikarp|잉어킹
-pokemon|1|Gyarados|갸라도스
-pokemon|1|Pidgey|구구
-pokemon|1|Rattata|꼬렛
-pokemon|1|Caterpie|캐터피
-pokemon|1|Weedle|뿔충이
-pokemon|1|Geodude|꼬마돌
-pokemon|1|Onix|롱스톤
-pokemon|1|Ditto|메타몽
-pokemon|1|Togepi|토게피
-pokemon|1|Lapras|라프라스
-pokemon|1|Dragonite|망나뇽
-pokemon|1|Machop|알통몬
-pokemon|1|Abra|캐이시
-pokemon|1|Vulpix|식스테일
-pokemon|1|Zubat|주뱃
-pokemon|1|Oddish|뚜벅쵸
-pokemon|1|Slowpoke|야돈
-pokemon|1|Ponyta|포니타
-pokemon|1|Venusaur|이상해꽃
-pokemon|1|Blastoise|거북왕
-pokemon|2|Ivysaur|이상해풀
-pokemon|2|Charmeleon|리자드
-pokemon|2|Wartortle|어니부기
-pokemon|2|Metapod|단데기
-pokemon|2|Butterfree|버터플
-pokemon|2|Kakuna|딱충이
-pokemon|2|Beedrill|독침붕
-pokemon|2|Pidgeotto|피존
-pokemon|2|Pidgeot|피존투
-pokemon|2|Raticate|래트
-pokemon|2|Spearow|깨비참
-pokemon|2|Fearow|깨비드릴조
-pokemon|2|Ekans|아보
-pokemon|2|Arbok|아보크
-pokemon|2|Raichu|라이츄
-pokemon|2|Sandshrew|모래두지
-pokemon|2|Sandslash|고지
-pokemon|2|Nidoran|니드런
-pokemon|2|Nidorina|니드리나
-pokemon|2|Nidoqueen|니드퀸
-pokemon|2|Nidorino|니드리노
-pokemon|2|Nidoking|니드킹
-pokemon|2|Clefairy|삐삐
-pokemon|2|Clefable|픽시
-pokemon|2|Ninetales|나인테일
-pokemon|2|Wigglytuff|푸크린
-pokemon|2|Golbat|골뱃
-pokemon|2|Gloom|냄새꼬
-pokemon|2|Vileplume|라플레시아
-pokemon|2|Paras|파라스
-pokemon|2|Parasect|파라섹트
-pokemon|2|Venonat|콘팡
-pokemon|2|Venomoth|도나리
-pokemon|2|Diglett|디그다
-pokemon|2|Dugtrio|닥트리오
-pokemon|2|Persian|페르시온
-pokemon|2|Golduck|골덕
-pokemon|2|Mankey|망키
-pokemon|2|Primeape|성원숭
-pokemon|2|Growlithe|가디
-pokemon|2|Arcanine|윈디
-pokemon|2|Poliwag|발챙이
-pokemon|2|Poliwhirl|슈륙챙이
-pokemon|2|Poliwrath|강챙이
-pokemon|2|Kadabra|윤겔라
-pokemon|2|Alakazam|후딘
-pokemon|2|Machoke|근육몬
-pokemon|2|Machamp|괴력몬
-pokemon|2|Bellsprout|모다피
-pokemon|2|Weepinbell|우츠동
-pokemon|2|Victreebel|우츠보트
-pokemon|2|Tentacool|왕눈해
-pokemon|2|Tentacruel|독파리
-pokemon|2|Graveler|데구리
-pokemon|2|Golem|딱구리
-pokemon|2|Rapidash|날쌩마
-pokemon|2|Slowbro|야도란
-pokemon|2|Magnemite|코일
-pokemon|2|Magneton|레어코일
-pokemon|2|Farfetch'd|파오리
-pokemon|2|Doduo|두두
-pokemon|2|Dodrio|두트리오
-pokemon|2|Seel|쥬쥬
-pokemon|2|Dewgong|쥬레곤
-pokemon|2|Grimer|질퍽이
-pokemon|2|Muk|질뻐기
-pokemon|2|Shellder|셀러
-pokemon|2|Cloyster|파르셀
-pokemon|2|Gastly|고오스
-pokemon|2|Haunter|고스
-pokemon|2|Drowzee|슬리프
-pokemon|2|Hypno|슬리퍼
-pokemon|2|Krabby|크랩
-pokemon|2|Kingler|킹크랩
-pokemon|2|Voltorb|찌리리공
-pokemon|2|Electrode|붐볼
-pokemon|2|Exeggcute|아라리
-pokemon|2|Exeggutor|나시
-pokemon|2|Cubone|탕구리
-pokemon|2|Marowak|텅구리
-pokemon|2|Hitmonlee|시라소몬
-pokemon|2|Hitmonchan|홍수몬
-pokemon|2|Lickitung|내루미
-pokemon|2|Koffing|또가스
-pokemon|2|Weezing|또도가스
-pokemon|2|Rhyhorn|뿔카노
-pokemon|2|Rhydon|코뿌리
-pokemon|2|Chansey|럭키
-pokemon|2|Tangela|덩쿠리
-pokemon|2|Kangaskhan|캥카
-pokemon|2|Horsea|쏘드라
-pokemon|2|Seadra|시드라
-pokemon|2|Goldeen|콘치
-pokemon|2|Seaking|왕콘치
-pokemon|2|Staryu|별가사리
-pokemon|2|Starmie|아쿠스타
-pokemon|2|Mr. Mime|마임맨
-pokemon|2|Scyther|스라크
-pokemon|2|Jynx|루주라
-pokemon|2|Electabuzz|에레브
-pokemon|2|Magmar|마그마
-pokemon|2|Pinsir|쁘사이저
-pokemon|2|Tauros|켄타로스
-pokemon|2|Vaporeon|샤미드
-pokemon|2|Jolteon|쥬피썬더
-pokemon|2|Flareon|부스터
-pokemon|2|Porygon|폴리곤
-pokemon|2|Omanyte|암나이트
-pokemon|2|Omastar|암스타
-pokemon|2|Kabuto|투구
-pokemon|2|Kabutops|투구푸스
-pokemon|2|Aerodactyl|프테라
-pokemon|2|Articuno|프리져
-pokemon|2|Zapdos|썬더
-pokemon|2|Moltres|파이어
-pokemon|2|Dratini|미뇽
-pokemon|2|Dragonair|신뇽
-pokemon|3|Chikorita|치코리타
-pokemon|3|Cyndaquil|브케인
-pokemon|3|Totodile|리아코
-pokemon|3|Typhlosion|블레이범
-pokemon|3|Feraligatr|장크로다일
-pokemon|3|Meganium|메가니움
-pokemon|3|Pichu|피츄
-pokemon|3|Togetic|토게틱
-pokemon|3|Mareep|메리프
-pokemon|3|Ampharos|전룡
-pokemon|3|Marill|마릴
-pokemon|3|Sudowoodo|꼬지모
-pokemon|3|Espeon|에스퍼
-pokemon|3|Umbreon|블래키
-pokemon|3|Steelix|강철톤
-pokemon|3|Scizor|핫삼
-pokemon|3|Heracross|헤라크로스
-pokemon|3|Tyranitar|마기라스
-pokemon|3|Larvitar|애버라스
-pokemon|3|Lugia|루기아
-pokemon|3|Ho-Oh|칠색조
-pokemon|3|Celebi|세레비
-pokemon|3|Raikou|라이코
-pokemon|3|Entei|앤테이
-pokemon|3|Suicune|스이쿤
-pokemon|3|Blissey|해피너스
-pokemon|3|Wobbuffet|마자용
-pokemon|3|Miltank|밀탱크
-pokemon|3|Kingdra|킹드라
-pokemon|3|Smeargle|루브도
-pokemon|3|Treecko|나무지기
-pokemon|3|Torchic|아차모
-pokemon|3|Mudkip|물짱이
-pokemon|3|Sceptile|나무킹
-pokemon|3|Blaziken|번치코
-pokemon|3|Swampert|대짱이
-pokemon|3|Ralts|랄토스
-pokemon|3|Gardevoir|가디안
-pokemon|3|Aggron|보스로라
-pokemon|3|Salamence|보만다
-pokemon|3|Metagross|메타그로스
-pokemon|3|Rayquaza|레쿠쟈
-pokemon|3|Groudon|그란돈
-pokemon|3|Kyogre|가이오가
-pokemon|3|Latios|라티오스
-pokemon|3|Latias|라티아스
-pokemon|3|Absol|앱솔
-pokemon|3|Flygon|플라이곤
-pokemon|3|Milotic|밀로틱
-pokemon|3|Sableye|깜까미
-pokemon|3|Mawile|입치트
-pokemon|3|Slaking|게을킹
-pokemon|3|Wailord|고래왕자
-pokemon|3|Turtwig|모부기
-pokemon|3|Chimchar|불꽃숭이
-pokemon|3|Piplup|팽도리
-pokemon|3|Torterra|토대부기
-pokemon|3|Infernape|초염몽
-pokemon|3|Empoleon|엠페르트
-pokemon|3|Lucario|루카리오
-pokemon|3|Riolu|리오르
-pokemon|3|Garchomp|한카리아스
-pokemon|3|Gible|딱검인
-pokemon|3|Dialga|디아루가
-pokemon|3|Palkia|펄기아
-pokemon|3|Giratina|기라티나
-pokemon|3|Arceus|아르세우스
-pokemon|3|Darkrai|다크라이
-pokemon|3|Cresselia|크레세리아
-pokemon|3|Togekiss|토게키스
-pokemon|3|Gallade|엘레이드
-pokemon|3|Weavile|포푸니라
-pokemon|3|Mamoswine|맘모꾸리
-pokemon|3|Rotom|로토무
-pokemon|3|Spiritomb|화강돌
-pokemon|3|Leafeon|리피아
-pokemon|3|Glaceon|글레이시아
-pokemon|3|Snivy|주리비얀
-pokemon|3|Tepig|뚜꾸리
-pokemon|3|Oshawott|수댕이
-pokemon|3|Zorua|조로아
-pokemon|3|Zoroark|조로아크
-pokemon|3|Reshiram|레시라무
-pokemon|3|Zekrom|제크로무
-pokemon|3|Kyurem|큐레무
-pokemon|3|Froakie|개구마르
-pokemon|3|Greninja|개굴닌자
-pokemon|3|Fennekin|푸호꼬
-pokemon|3|Chespin|도치마론
-pokemon|3|Sylveon|님피아
-pokemon|3|Xerneas|제르네아스
-pokemon|3|Yveltal|이벨타르
-pokemon|3|Zygarde|지가르데
-pokemon|3|Rowlet|나몰빼미
-pokemon|3|Litten|냐오불
-pokemon|3|Popplio|누리공
-pokemon|3|Decidueye|모크나이퍼
-pokemon|3|Incineroar|어흥염
-pokemon|3|Primarina|누리레느
-pokemon|3|Mimikyu|따라큐
-pokemon|3|Lycanroc|루가루암
-pokemon|3|Solgaleo|솔가레오
-pokemon|3|Lunala|루나아라
-pokemon|3|Grookey|흥나숭
-pokemon|3|Scorbunny|염버니
-pokemon|3|Sobble|울머기
-pokemon|3|Rillaboom|고릴타
-pokemon|3|Cinderace|라비드
-pokemon|3|Inteleon|인텔리레온
-pokemon|3|Zacian|자시안
-pokemon|3|Zamazenta|자마젠타
-pokemon|3|Eternatus|무한다이노
-pokemon|3|Corviknight|아머까오
-pokemon|3|Dragapult|드래펄트
-pokemon|3|Sprigatito|나오하
-pokemon|3|Fuecoco|뜨아거
-pokemon|3|Quaxly|꾸왁스
-pokemon|3|Meowscarada|마스카나
-pokemon|3|Skeledirge|라우드본
-pokemon|3|Quaquaval|웨이니발
-pokemon|3|Koraidon|코라이돈
-pokemon|3|Miraidon|미라이돈
-character|1|Mickey Mouse|미키 마우스
-character|1|Minnie Mouse|미니 마우스
-character|1|Donald Duck|도널드 덕
-character|1|Goofy|구피
-character|1|Winnie the Pooh|곰돌이 푸
-character|1|Tigger|티거
-character|1|Piglet|피글렛
-character|1|Eeyore|이요르
-character|1|Simba|심바
-character|1|Mufasa|무파사
-character|1|Nala|날라
-character|1|Timon|티몬
-character|1|Pumbaa|품바
-character|1|Bambi|밤비
-character|1|Dumbo|덤보
-character|1|Aladdin|알라딘
-character|1|Jasmine princess|자스민 공주
-character|1|Genie|지니
-character|1|Elsa|엘사
-character|1|Anna|안나
-character|1|Olaf|올라프
-character|1|Moana|모아나
-character|1|Mulan|뮬란
-character|1|Ariel|에리얼
-character|1|Belle|벨
-character|1|Beast|야수
-character|1|Cinderella|신데렐라
-character|1|Snow White|백설공주
-character|1|Sleeping Beauty|잠자는 숲속의 공주
-character|1|Rapunzel|라푼젤
-character|1|Pinocchio|피노키오
-character|1|Peter Pan|피터 팬
-character|1|Tinker Bell|팅커 벨
-character|1|Captain Hook|후크 선장
-character|1|Alice in Wonderland|이상한 나라의 앨리스
-character|1|Cheshire Cat|체셔 고양이
-character|1|Mad Hatter|모자 장수
-character|1|Little Red Riding Hood|빨간 모자
-character|1|Hansel and Gretel|헨젤과 그레텔
-character|1|Three Little Pigs|아기 돼지 삼형제
-character|1|Ugly Duckling|미운 오리 새끼
-character|1|Puss in Boots|장화 신은 고양이
-character|1|Santa Claus|산타클로스
-character|1|Rudolph|루돌프
-character|1|Woody|우디
-character|1|Buzz Lightyear|버즈 라이트이어
-character|1|Nemo|니모
-character|1|Dory|도리
-character|1|Shrek|슈렉
-character|1|Donkey Shrek|동키
-character|1|Minions|미니언즈
-character|1|Despicable Me Gru|그루
-character|1|Spongebob|스폰지밥
-character|1|Patrick Star|뚱이
-character|1|Squidward|징징이
-character|1|Mr. Krabs|집게사장
-character|1|Snoopy|스누피
-character|1|Charlie Brown|찰리 브라운
-character|1|Garfield|가필드
-character|1|Tom and Jerry Tom|톰
-character|1|Jerry|제리
-character|1|Bugs Bunny|벅스 바니
-character|1|Daffy Duck|대피 덕
-character|2|Tweety|트위티
-character|2|Popeye|뽀빠이
-character|2|Superman|슈퍼맨
-character|2|Batman|배트맨
-character|2|Spider-Man|스파이더맨
-character|2|Iron Man|아이언맨
-character|2|Captain America|캡틴 아메리카
-character|2|Thor|토르
-character|2|Hulk|헐크
-character|2|Wonder Woman|원더 우먼
-character|2|Joker|조커
-character|2|Harry Potter|해리 포터
-character|2|Hermione|헤르미온느
-character|2|Voldemort|볼드모트
-character|2|Gandalf|간달프
-character|2|Frodo|프로도
-character|2|Gollum|골룸
-character|2|Darth Vader|다스 베이더
-character|2|Yoda|요다
-character|2|Luke Skywalker|루크 스카이워커
-character|2|Mario|마리오
-character|2|Luigi|루이지
-character|2|Princess Peach|피치 공주
-character|2|Bowser|쿠파
-character|2|Yoshi|요시
-character|2|Donkey Kong|동키콩
-character|2|Sonic|소닉
-character|2|Kirby|커비
-character|2|Link|링크
-character|2|Zelda|젤다
-character|2|Pac-Man|팩맨
-character|2|Tetris|테트리스 블록
-character|2|Doraemon|도라에몽
-character|2|Nobita|노진구
-character|2|Shin-chan|짱구
-character|2|Detective Conan|명탐정 코난
-character|2|Totoro|토토로
-character|2|No-Face|가오나시
-character|2|Naruto|나루토
-character|2|Luffy|루피
-character|2|Goku|손오공
-character|2|Sailor Moon|세일러문
-character|2|Astro Boy|아톰
-character|2|Hello Kitty|헬로키티
-character|2|Pororo|뽀로로
-character|2|Crong|크롱
-character|2|Pinkfong|핑크퐁
-character|2|Baby Shark|아기상어
-character|2|Tayo bus|꼬마버스 타요
-character|2|Robocar Poli|로보카 폴리
-character|2|Kakao Ryan|라이언
-character|2|Kakao Apeach|어피치
-character|2|Line Brown|브라운
-character|2|Dooly|둘리
-character|3|Gildong Hong|홍길동
-character|3|Heungbu|흥부
-character|3|Nolbu|놀부
-character|3|Chunhyang|춘향
-character|3|Simcheong|심청
-character|3|Dokkaebi|도깨비
-character|3|Gumiho|구미호
-character|3|Grim Reaper|저승사자
-character|3|Sun Wukong|손오공 서유기
-character|3|Zhuge Liang|제갈량
-character|3|Robin Hood|로빈 후드
-character|3|King Arthur|아서 왕
-character|3|Dracula|드라큘라
-character|3|Frankenstein|프랑켄슈타인
-character|3|Mummy|미라
-character|3|Werewolf|늑대인간
-character|3|Ghost|유령
-character|3|Zombie|좀비
-character|3|Vampire|뱀파이어
-character|3|Mermaid|인어공주
-character|3|Fairy|요정
-character|3|Elf|엘프
-character|3|Dwarf|난쟁이
-character|3|Giant|거인
-character|3|Troll|트롤
-character|3|Goblin|고블린
-character|3|Ogre|오거
-character|3|Centaur|켄타우로스
-character|3|Phoenix|불사조
-character|3|Pegasus|페가수스
-character|3|Cerberus|케르베로스
-character|3|Medusa|메두사
-character|3|Minotaur|미노타우로스
-character|3|Zeus|제우스
-character|3|Poseidon|포세이돈
-character|3|Athena|아테나
-character|3|Hercules|헤라클레스
-character|3|Thor god|천둥의 신
-character|3|Anubis|아누비스
-body|1|Head|머리
-body|1|Hair|머리카락
-body|1|Face|얼굴
-body|1|Forehead|이마
-body|1|Eyebrow|눈썹
-body|1|Eye|눈
-body|1|Eyelash|속눈썹
-body|1|Nose|코
-body|1|Nostril|콧구멍
-body|1|Mouth|입
-body|1|Lip|입술
-body|1|Tongue|혀
-body|1|Tooth|이
-body|1|Cheek|볼
-body|1|Chin|턱
-body|1|Ear|귀
-body|1|Neck|목
-body|1|Throat|목구멍
-body|1|Shoulder|어깨
-body|1|Arm|팔
-body|1|Elbow|팔꿈치
-body|1|Wrist|손목
-body|1|Hand|손
-body|1|Palm|손바닥
-body|1|Finger|손가락
-body|1|Thumb|엄지손가락
-body|1|Fingernail|손톱
-body|1|Chest|가슴
-body|1|Back|등
-body|1|Belly|배
-body|1|Belly button|배꼽
-body|1|Waist|허리
-body|1|Hip|엉덩이
-body|1|Leg|다리
-body|1|Thigh|허벅지
-body|1|Knee|무릎
-body|1|Shin|정강이
-body|1|Ankle|발목
-body|1|Foot|발
-body|1|Heel|발뒤꿈치
-body|1|Toe|발가락
-body|2|Skin|피부
-body|2|Bone|뼈
-body|2|Muscle|근육
-body|2|Brain|뇌
-body|2|Heart|심장
-body|2|Lung|폐
-body|2|Stomach|위
-body|2|Liver|간
-body|2|Kidney|신장
-body|2|Intestine|장
-body|2|Blood|피
-body|2|Vein|정맥
-body|2|Nerve|신경
-body|2|Skull|두개골
-body|2|Rib|갈비뼈
-body|2|Spine|척추
-body|2|Joint|관절
-body|2|Fingerprint|지문
-body|2|Dimple|보조개
-body|2|Freckle|주근깨
-body|2|Mole spot|점
-body|2|Wrinkle|주름
-body|2|Scar|흉터
-body|2|Beard|수염
-body|2|Mustache|콧수염
-body|2|Eyeball|안구
-body|2|Pupil|눈동자
-body|2|Tear|눈물
-body|2|Sweat|땀
-body|2|Saliva|침
-body|2|Breath|숨
-body|2|Heartbeat|심장 박동
-body|2|Voice|목소리
-body|2|Sneeze|재채기
-body|2|Hiccup|딸꾹질
-body|3|Yawn|하품
-body|3|Cough|기침
-body|3|Fever|열
-body|3|Headache|두통
-body|3|Stomachache|복통
-body|3|Cold|감기
-body|3|Toothache|치통
-body|3|Cavity|충치
-body|3|Wisdom tooth|사랑니
-body|3|Bruise|멍
-body|3|Blister|물집
-body|3|Cast|깁스
-body|3|Stitch|봉합
-body|3|Vaccine|백신
-body|3|X-ray|엑스레이
-body|3|Prescription|처방전
-body|3|Thermometer clinical|체온계 수은
-body|3|Dream|꿈
-body|3|Nightmare|악몽
-body|3|Memory|기억
-body|3|Smile|미소
-body|3|Laughter|웃음
-body|3|Tears of joy|기쁨의 눈물
-body|3|Goosebumps|소름
-body|3|Blush|홍조
-activity|1|Soccer|축구
-activity|1|Baseball|야구
-activity|1|Basketball game|농구
-activity|1|Volleyball|배구
-activity|1|Tennis|테니스
-activity|1|Badminton|배드민턴
-activity|1|Table tennis|탁구
-activity|1|Golf|골프
-activity|1|Bowling|볼링
-activity|1|Swimming|수영
-activity|1|Running|달리기
-activity|1|Hiking|등산
-activity|1|Cycling|자전거 타기
-activity|1|Skiing|스키 타기
-activity|1|Skating|스케이팅
-activity|1|Boxing|권투
-activity|1|Taekwondo|태권도
-activity|1|Judo|유도
-activity|1|Karate|가라테
-activity|1|Kendo|검도
-activity|1|Archery|양궁
-activity|1|Fencing|펜싱
-activity|1|Wrestling|레슬링
-activity|1|Gymnastics|체조
-activity|1|Yoga|요가
-activity|1|Pilates|필라테스
-activity|1|Climbing|암벽등반
-activity|1|Surfing|서핑
-activity|1|Diving|다이빙
-activity|1|Sailing|요트 타기
-activity|1|Rowing|조정
-activity|1|Fishing|낚시
-activity|1|Camping|캠핑
-activity|1|Picnic|소풍
-activity|1|Barbecue party|바비큐 파티
-activity|1|Sledding|눈썰매 타기
-activity|1|Snowball fight|눈싸움
-activity|1|Hide and seek|숨바꼭질
-activity|1|Tag|술래잡기
-activity|1|Rock paper scissors|가위바위보
-activity|1|Jump rope game|줄넘기 놀이
-activity|1|Hopscotch|사방치기
-activity|1|Marbles game|구슬치기
-activity|1|Kite flying game|연날리기 놀이
-activity|1|Tug of war|줄다리기
-activity|1|Sack race|포대 달리기
-activity|1|Relay race|이어달리기
-activity|1|Chess game|체스 대국
-activity|1|Baduk|바둑
-activity|1|Janggi|장기
-activity|1|Hwatu|화투
-activity|1|Poker|포커
-activity|1|Mahjong|마작
-activity|1|Board game|보드게임
-activity|1|Card game|카드놀이
-activity|1|Video game|비디오 게임
-activity|1|Karaoke|노래방 놀이
-activity|1|Dancing|춤추기
-activity|2|Singing|노래하기
-activity|2|Playing piano|피아노 치기
-activity|2|Playing guitar|기타 치기
-activity|2|Drawing|그림 그리기
-activity|2|Painting|물감 칠하기
-activity|2|Pottery|도자기 빚기
-activity|2|Knitting|뜨개질
-activity|2|Sewing|바느질
-activity|2|Origami|종이접기
-activity|2|Calligraphy|서예
-activity|2|Photography|사진 찍기
-activity|2|Gardening|정원 가꾸기
-activity|2|Cooking|요리하기
-activity|2|Baking|빵 굽기
-activity|2|Reading|독서하기
-activity|2|Writing diary|일기 쓰기
-activity|2|Studying|공부하기
-activity|2|Homework|숙제
-activity|2|Exam|시험
-activity|2|Presentation|발표
-activity|2|Meeting|회의
-activity|2|Interview|면접
-activity|2|Wedding|결혼식
-activity|2|Funeral|장례식
-activity|2|Birthday party|생일 파티
-activity|2|Graduation|졸업식
-activity|2|School trip|수학여행
-activity|2|Field day|운동회
-activity|2|Festival|축제
-activity|2|Parade|퍼레이드
-activity|2|Concert|콘서트
-activity|2|Movie night|영화 감상
-activity|2|Theater play|연극
-activity|2|Circus|서커스
-activity|2|Magic show|마술 쇼
-activity|2|Fireworks festival|불꽃 축제
-activity|2|Lantern festival|연등회
-activity|2|Chuseok|추석
-activity|2|Seollal|설날
-activity|2|Christmas|크리스마스
-activity|2|Halloween|할로윈
-activity|2|Valentine's Day|밸런타인데이
-activity|2|New Year's Eve|새해 전야
-activity|2|Easter|부활절
-activity|2|Thanksgiving|추수감사절
-activity|2|Shopping|쇼핑
-activity|2|Window shopping|아이쇼핑
-activity|2|Online shopping|온라인 쇼핑
-activity|2|Travel|여행
-activity|2|Road trip|자동차 여행
-activity|2|Backpacking|배낭여행
-activity|3|Cruise trip|크루즈 여행
-activity|3|Flight|비행
-activity|3|Moving house|이사
-activity|3|Cleaning|청소
-activity|3|Laundry|빨래
-activity|3|Washing dishes|설거지
-activity|3|Cooking breakfast|아침 식사 준비
-activity|3|Brushing teeth|양치질
-activity|3|Taking a shower|샤워하기
-activity|3|Napping|낮잠
-activity|3|Sleeping|잠자기
-activity|3|Waking up|기상
-activity|3|Commuting|출퇴근
-activity|3|Waiting in line|줄서기
-activity|3|Queueing for bus|버스 기다리기
-activity|3|Chatting|수다
-activity|3|Phone call|통화
-activity|3|Texting|문자 보내기
-activity|3|Video call|화상 통화
-activity|3|Livestream|라이브 방송
-activity|3|Podcast|팟캐스트
-activity|3|Meditation|명상
-activity|3|Stretching|스트레칭
-activity|3|Massage|마사지
-activity|3|Sunbathing|일광욕
-activity|3|Stargazing|별 보기
-activity|3|Birdwatching|새 관찰
-activity|3|Treasure hunt|보물찾기
-activity|3|Scavenger hunt|스캐빈저 헌트
-activity|3|Quiz|퀴즈
-activity|3|Riddle|수수께끼
-activity|3|Twenty questions|스무고개
-activity|3|Charades|몸으로 말해요
-activity|3|Word chain game|끝말잇기
-activity|3|Tongue twister|잰말놀이
-activity|3|Magic trick|마술
+# kind | English | 한국어
+# English names are unique (a Korean name may repeat, for things that share a word); # lines are comments.
+# Pokémon: every species of the National Pokédex (1-1025) and every Mega Evolution, Z-A ones included.
+# Add a line to add a thing.
+animal|Dog|개
+animal|Cat|고양이
+animal|Cow|소
+animal|Pig|돼지
+animal|Chicken|닭
+animal|Horse|말
+animal|Rabbit|토끼
+animal|Bear|곰
+animal|Tiger|호랑이
+animal|Lion|사자
+animal|Elephant|코끼리
+animal|Monkey|원숭이
+animal|Giraffe|기린
+animal|Penguin|펭귄
+animal|Dolphin|돌고래
+animal|Whale|고래
+animal|Shark|상어
+animal|Butterfly|나비
+animal|Bee|벌
+animal|Duck|오리
+animal|Sheep|양
+animal|Frog|개구리
+animal|Snake|뱀
+animal|Fish|물고기
+animal|Bird|새
+animal|Mouse|쥐
+animal|Deer|사슴
+animal|Fox|여우
+animal|Wolf|늑대
+animal|Turtle|거북이
+animal|Crocodile|악어
+animal|Panda|판다
+animal|Goose|거위
+animal|Turkey|칠면조
+animal|Pigeon|비둘기
+animal|Sparrow|참새
+animal|Crow|까마귀
+animal|Magpie|까치
+animal|Swallow|제비
+animal|Seagull|갈매기
+animal|Calf|송아지
+animal|Puppy|강아지
+animal|Kitten|새끼 고양이
+animal|Lamb|어린 양
+animal|Ox|황소
+animal|Cockroach|바퀴벌레
+animal|Mosquito|모기
+animal|Fly|파리
+animal|Caterpillar|애벌레
+animal|Worm|지렁이
+animal|Beetle|딱정벌레
+animal|Cicada|매미
+animal|Grasshopper|메뚜기
+animal|Cricket|귀뚜라미
+animal|Crayfish|가재
+animal|Salmon|연어
+animal|Goldfish|금붕어
+animal|Squid|오징어
+animal|Clam|조개
+animal|Shrimp|새우
+animal|Cat fish|메기
+animal|Carp|잉어
+animal|Tuna|참치
+animal|Eel (fish)|뱀장어
+animal|Lizard|도마뱀
+animal|Gecko|도마뱀붙이
+animal|Toad|두꺼비
+animal|Hen|암탉
+animal|Rooster|수탉
+animal|Chick|병아리
+animal|Duckling|새끼 오리
+animal|Pony|조랑말
+animal|Baby camel|새끼 낙타
+animal|Wild boar|멧돼지
+animal|Bull|수소
+animal|Black bear|반달가슴곰
+animal|Chimpanzee|침팬지
+animal|Orangutan|오랑우탄
+animal|Baboon|개코원숭이
+animal|Hyena|하이에나
+animal|Jaguar|재규어
+animal|Puma|퓨마
+animal|Lynx|스라소니
+animal|Wolverine|울버린
+animal|Skunk|스컹크
+animal|Weasel|족제비
+animal|Ferret|페럿
+animal|Guinea pig|기니피그
+animal|Chinchilla|친칠라
+animal|Capybara|카피바라
+animal|Moose|말코손바닥사슴
+animal|Elk|엘크
+animal|Reindeer|순록
+animal|Antelope|영양
+animal|Gazelle|가젤
+animal|Buffalo|물소
+animal|Yak|야크
+animal|Alpaca|알파카
+animal|Hare|산토끼
+animal|Fruit bat|과일박쥐
+animal|Dingo|딩고
+animal|Coyote|코요테
+animal|Jackal|자칼
+animal|Panther|흑표범
+animal|Mammoth|매머드
+animal|Dinosaur|공룡
+animal|Dragon|용
+animal|Unicorn|유니콘
+animal|Owl|부엉이
+animal|Eagle|독수리
+animal|Squirrel|다람쥐
+animal|Kangaroo|캥거루
+animal|Koala|코알라
+animal|Zebra|얼룩말
+animal|Hippopotamus|하마
+animal|Rhinoceros|코뿔소
+animal|Camel|낙타
+animal|Octopus|문어
+animal|Jellyfish|해파리
+animal|Crab|게
+animal|Lobster|바닷가재
+animal|Seal|물개
+animal|Otter|수달
+animal|Hedgehog|고슴도치
+animal|Bat|박쥐
+animal|Spider|거미
+animal|Ant|개미
+animal|Snail|달팽이
+animal|Ladybug|무당벌레
+animal|Dragonfly|잠자리
+animal|Peacock|공작
+animal|Flamingo|홍학
+animal|Parrot|앵무새
+animal|Swan|백조
+animal|Goat|염소
+animal|Donkey|당나귀
+animal|Hamster|햄스터
+animal|Raccoon|너구리
+animal|Polar bear|북극곰
+animal|Gorilla|고릴라
+animal|Cheetah|치타
+animal|Leopard|표범
+animal|Falcon|매
+animal|Hawk|새매
+animal|Vulture|대머리수리
+animal|Condor|콘도르
+animal|Kingfisher|물총새
+animal|Hummingbird|벌새
+animal|Toucan|큰부리새
+animal|Cockatoo|유황앵무
+animal|Macaw|마코앵무
+animal|Canary|카나리아
+animal|Nightingale|나이팅게일
+animal|Cuckoo|뻐꾸기
+animal|Stork|황새
+animal|Crane|두루미
+animal|Heron|왜가리
+animal|Pheasant|꿩
+animal|Quail|메추라기
+animal|Emperor penguin|황제펭귄
+animal|Albatross|알바트로스
+animal|Puffin|퍼핀
+animal|Kiwi bird|키위새
+animal|Emu|에뮤
+animal|Raven|큰까마귀
+animal|Jay|어치
+animal|Robin|울새
+animal|Woodcock|멧도요
+animal|Sea turtle|바다거북
+animal|Tortoise|땅거북
+animal|Iguana|이구아나
+animal|Komodo dragon|코모도왕도마뱀
+animal|Cobra|코브라
+animal|Python|비단뱀
+animal|Anaconda|아나콘다
+animal|Rattlesnake|방울뱀
+animal|Alligator|앨리게이터
+animal|Salamander|도롱뇽
+animal|Newt|영원
+animal|Tree frog|청개구리
+animal|Bullfrog|황소개구리
+animal|Clownfish|흰동가리
+animal|Angelfish|엔젤피시
+animal|Pufferfish|복어
+animal|Swordfish|황새치
+animal|Barracuda|바라쿠다
+animal|Sturgeon|철갑상어
+animal|Trout|송어
+animal|Mackerel|고등어
+animal|Herring|청어
+animal|Anchovy|멸치
+animal|Sardine|정어리
+animal|Cod|대구
+animal|Flounder|광어
+animal|Moray eel|곰치
+animal|Piranha|피라냐
+animal|Great white shark|백상아리
+animal|Hammerhead shark|귀상어
+animal|Whale shark|고래상어
+animal|Orca|범고래
+animal|Blue whale|대왕고래
+animal|Sperm whale|향유고래
+animal|Beluga|벨루가
+animal|Manatee|매너티
+animal|Sea lion|바다사자
+animal|Sea otter|해달
+animal|Baby sea turtle|새끼 바다거북
+animal|Nautilus|앵무조개
+animal|Cuttlefish|갑오징어
+animal|Sea cucumber|해삼
+animal|Sea anemone|말미잘
+animal|Mussel|홍합
+animal|Scallop|가리비
+animal|Mantis shrimp|갯가재
+animal|Bumblebee|호박벌
+animal|Wasp|말벌
+animal|Hornet|장수말벌
+animal|Moth|나방
+animal|Stag beetle|사슴벌레
+animal|Rhinoceros beetle|장수풍뎅이
+animal|Termite|흰개미
+animal|Centipede|지네
+animal|Millipede|노래기
+animal|Tick|진드기
+animal|Flea|벼룩
+animal|Louse|이
+animal|Locust|풀무치
+animal|Earwig|집게벌레
+animal|Weevil|바구미
+animal|Dung beetle|쇠똥구리
+animal|Water strider|소금쟁이
+animal|Mayfly|하루살이
+animal|Baby ostrich|새끼 타조
+animal|Wombat|웜뱃
+animal|Tasmanian devil|태즈메이니아 데빌
+animal|Opossum|주머니쥐
+animal|Mongoose|몽구스
+animal|Badger|오소리
+animal|Marmot|마멋
+animal|Prairie dog|프레리독
+animal|Porcupine|호저
+animal|Chipmunk|줄무늬다람쥐
+animal|Gerbil|저빌
+animal|Lemming|레밍
+animal|Vole|들쥐
+animal|Baby manatee|새끼 매너티
+animal|Okapi|오카피
+animal|Warthog|혹멧돼지
+animal|Wildebeest|누
+animal|Impala|임팔라
+animal|Springbok|스프링복
+animal|Mule|노새
+animal|Shetland pony|셰틀랜드 포니
+animal|Bulldog|불독
+animal|Poodle|푸들
+animal|Husky|허스키
+animal|Golden retriever|골든 리트리버
+animal|Chihuahua|치와와
+animal|Dalmatian|달마티안
+animal|Shiba Inu|시바견
+animal|Jindo dog|진돗개
+animal|Persian cat|페르시안 고양이
+animal|Siamese cat|샴 고양이
+animal|Platypus|오리너구리
+animal|Armadillo|아르마딜로
+animal|Sloth|나무늘보
+animal|Chameleon|카멜레온
+animal|Seahorse|해마
+animal|Stingray|가오리
+animal|Axolotl|우파루파
+animal|Pangolin|천산갑
+animal|Narwhal|일각고래
+animal|Ostrich|타조
+animal|Pelican|펠리컨
+animal|Woodpecker|딱따구리
+animal|Scorpion|전갈
+animal|Praying mantis|사마귀
+animal|Firefly|반딧불이
+animal|Starfish|불가사리
+animal|Hermit crab|소라게
+animal|Walrus|바다코끼리
+animal|Llama|라마
+animal|Meerkat|미어캣
+animal|Lemur|여우원숭이
+animal|Tapir|맥
+animal|Mole|두더지
+animal|Beaver|비버
+animal|Bison|들소
+animal|Aye-aye|아이아이
+animal|Quokka|쿼카
+animal|Numbat|넘벳
+animal|Echidna|가시두더지
+animal|Bilby|빌비
+animal|Kakapo|카카포
+animal|Cassowary|화식조
+animal|Secretary bird|뱀잡이수리
+animal|Shoebill|넓적부리황새
+animal|Hoatzin|호아친
+animal|Frigatebird|군함조
+animal|Bird of paradise|극락조
+animal|Lyrebird|금조
+animal|Hornbill|코뿔새
+animal|Roadrunner|로드러너
+animal|Kookaburra|쿠카부라
+animal|Oilbird|기름쏙독새
+animal|Lammergeier|수염수리
+animal|Mudskipper|짱뚱어
+animal|Anglerfish|아귀
+animal|Oarfish|산갈치
+animal|Sunfish|개복치
+animal|Lungfish|폐어
+animal|Coelacanth|실러캔스
+animal|Lamprey|칠성장어
+animal|Hagfish|먹장어
+animal|Gar|가아
+animal|Arapaima|아라파이마
+animal|Electric eel|전기뱀장어
+animal|Leafy seadragon|리피 시드래곤
+animal|Pipefish|실고기
+animal|Blobfish|블롭피시
+animal|Horseshoe crab|투구게
+animal|Coconut crab|야자게
+animal|Spider crab|대게
+animal|Barnacle|따개비
+animal|Sea slug|갯민숭달팽이
+animal|Giant squid|대왕오징어
+animal|Vampire squid|흡혈오징어
+animal|Box jellyfish|상자해파리
+animal|Portuguese man o' war|작은부레관해파리
+animal|Tardigrade|물곰
+animal|Planarian|플라나리아
+animal|Leech|거머리
+animal|Velvet worm|유조동물
+animal|Glowworm|반딧불이 유충
+animal|Atlas moth|아틀라스나방
+animal|Goliath beetle|골리앗비단벌레
+animal|Hercules beetle|헤라클레스장수풍뎅이
+animal|Orchid mantis|난초사마귀
+animal|Walking stick|대벌레
+animal|Leafcutter ant|잎꾼개미
+animal|Army ant|군대개미
+animal|Bullet ant|총알개미
+animal|Tarantula|타란툴라
+animal|Black widow|검은과부거미
+animal|Trapdoor spider|문닫이거미
+animal|Emperor scorpion|황제전갈
+animal|Giant tortoise|코끼리거북
+animal|Gharial|가비알
+animal|Thorny devil|가시도마뱀
+animal|Frilled lizard|목도리도마뱀
+animal|Basilisk lizard|바실리스크도마뱀
+animal|Gila monster|힐라몬스터
+animal|King cobra|킹코브라
+animal|Sea snake|바다뱀
+animal|Caecilian|무족영원
+animal|Poison dart frog|독화살개구리
+animal|Glass frog|유리개구리
+animal|Pacman frog|뿔개구리
+animal|Hellbender|거대도롱뇽
+animal|Fossa|포사
+animal|Aardvark|땅돼지
+animal|Aardwolf|땅늑대
+animal|Binturong|빈투롱
+animal|Kinkajou|킨카주
+animal|Coati|코아티
+animal|Tamandua|작은개미핥기
+animal|Giant anteater|큰개미핥기
+animal|Maned wolf|갈기늑대
+animal|Dhole|승냥이
+animal|Fennec fox|사막여우
+animal|Arctic fox|북극여우
+animal|Red panda|레서판다
+animal|Snow leopard|눈표범
+animal|Clouded leopard|구름무늬표범
+animal|Sun bear|말레이곰
+animal|Sloth bear|느림보곰
+animal|Saola|사올라
+animal|Pronghorn|가지뿔영양
+animal|Musk ox|사향소
+animal|Saiga|사이가영양
+animal|Dik-dik|딕딕
+animal|Kudu|쿠두
+animal|Gnu|검은꼬리누
+animal|Tenrec|텐렉
+animal|Solenodon|솔레노돈
+animal|Dugong|듀공
+animal|Pika|우는토끼
+animal|Naked mole-rat|벌거숭이두더지쥐
+animal|Flying squirrel|날다람쥐
+animal|Sugar glider|슈가글라이더
+animal|Colugo|날원숭이
+animal|Tarsier|안경원숭이
+animal|Slow loris|느림보로리스
+animal|Proboscis monkey|코주부원숭이
+animal|Mandrill|맨드릴
+animal|Howler monkey|짖는원숭이
+animal|Capuchin|카푸친원숭이
+animal|Gibbon|긴팔원숭이
+animal|Siamang|시아망
+food|Rice|밥
+food|Bread|빵
+food|Egg|달걀
+food|Milk|우유
+food|Cheese|치즈
+food|Pizza|피자
+food|Hamburger|햄버거
+food|Ramen|라면
+food|Kimchi|김치
+food|Noodles|국수
+food|Apple|사과
+food|Banana|바나나
+food|Orange|오렌지
+food|Grapes|포도
+food|Strawberry|딸기
+food|Watermelon|수박
+food|Tomato|토마토
+food|Potato|감자
+food|Carrot|당근
+food|Onion|양파
+food|Fried chicken|치킨
+food|Ice cream|아이스크림
+food|Chocolate|초콜릿
+food|Cake|케이크
+food|Cookie|쿠키
+food|Candy|사탕
+food|Soup|국
+food|Salad|샐러드
+food|Sandwich|샌드위치
+food|Sushi|초밥
+food|Coffee|커피
+food|Tea|차
+food|Juice|주스
+food|Cucumber|오이
+food|Corn|옥수수
+food|Pork cutlet|돈가스
+food|Rice porridge|죽
+food|Fried rice|볶음밥
+food|Rice ball|주먹밥
+food|Toast|토스트
+food|Cereal|시리얼
+food|Oatmeal|오트밀
+food|Jelly|젤리
+food|Pudding|푸딩
+food|Cupcake|컵케이크
+food|Brownie|브라우니
+food|Pie|파이
+food|Muffin|머핀
+food|Bagel|베이글
+food|Hot dog|핫도그
+food|Fried egg|계란후라이
+food|Boiled egg|삶은 달걀
+food|Scrambled eggs|스크램블 에그
+food|Omelet|오믈렛
+food|Meatball|미트볼
+food|Ham|햄
+food|Tuna sandwich|참치 샌드위치
+food|Spaghetti sauce|토마토 소스
+food|Ketchup|케첩
+food|Mayonnaise|마요네즈
+food|Mustard|겨자
+food|Soy sauce|간장
+food|Salt|소금
+food|Sugar|설탕
+food|Pepper spice|후추
+food|Vinegar|식초
+food|Cooking oil|식용유
+food|Sesame oil|참기름
+food|Red pepper paste|고추장
+food|Soybean paste|된장
+food|Peach juice|복숭아 주스
+food|Orange juice|오렌지 주스
+food|Apple juice|사과 주스
+food|Lemonade|레모네이드
+food|Cola|콜라
+food|Soda|사이다
+food|Beer|맥주
+food|Wine|와인
+food|Milk tea|밀크티
+food|Green tea|녹차
+food|Hot chocolate|핫초코
+food|Smoothie|스무디
+food|Milkshake|밀크셰이크
+food|Water melon juice|수박 주스
+food|Grapefruit|자몽
+food|Melon|멜론
+food|Plum|자두
+food|Blueberry|블루베리
+food|Raspberry|라즈베리
+food|Tangerine|귤
+food|Coconut|코코넛
+food|Dried persimmon|곶감
+food|Chestnut|밤
+food|Walnut|호두
+food|Cashew|캐슈넛
+food|Pistachio|피스타치오
+food|Raisin|건포도
+food|Lettuce|상추
+food|Spinach|시금치
+food|Radish|무
+food|Eggplant|가지
+food|Green onion|대파
+food|Bean sprouts|콩나물
+food|Bell pepper|파프리카
+food|Zucchini|애호박
+food|Celery|셀러리
+food|Peas|완두콩
+food|Green beans|강낭콩
+food|Soybean|콩
+food|Cheese pizza|치즈피자
+food|Pepperoni pizza|페퍼로니 피자
+food|Cheeseburger|치즈버거
+food|Fried shrimp|새우튀김
+food|Tempura|튀김
+food|Yakitori|꼬치구이
+food|Skewer|꼬치
+food|Pork ribs|갈비
+food|Beef|소고기
+food|Pork|돼지고기
+food|Chicken breast|닭가슴살
+food|Fish cake|어묵
+food|Fish stew|매운탕
+food|Kimchi stew|김치찌개
+food|Soybean paste stew|된장찌개
+food|Seaweed soup|미역국
+food|Beef soup|설렁탕
+food|Ginseng chicken soup|삼계탕
+food|Rice cake soup|떡국
+food|Dumpling soup|만둣국
+food|Spicy noodle soup|짬뽕
+food|Sweet and sour pork|탕수육
+food|Hallabong|한라봉
+food|Apricot|살구
+food|Fig|무화과
+food|Date|대추야자
+food|Guava|구아바
+food|Papaya|파파야
+food|Passion fruit|패션프루트
+food|Dragon fruit|용과
+food|Star fruit|스타프루트
+food|Plantain|플랜틴
+food|Blackberry|블랙베리
+food|Cranberry|크랜베리
+food|Gooseberry|구스베리
+food|Olive|올리브
+food|Beet|비트
+food|Turnip|순무
+food|Parsnip|파스닙
+food|Leek|리크
+food|Asparagus|아스파라거스
+food|Cauliflower|콜리플라워
+food|Kale|케일
+food|Brussels sprouts|방울양배추
+food|Artichoke heart|아티초크 속
+food|Okra|오크라
+food|Yam|마
+food|Taro|토란
+food|Lotus root|연근
+food|Burdock|우엉
+food|Bellflower root|도라지
+food|Fernbrake|고사리 나물
+food|Perilla leaf|깻잎
+food|Chives|부추
+food|Mugwort|쑥
+food|Shepherd's purse|냉이
+food|Sesame|참깨
+food|Sunflower seed|해바라기씨
+food|Pumpkin seed|호박씨
+food|Hazelnut|헤이즐넛
+food|Pecan|피칸
+food|Macadamia|마카다미아
+food|Basil|바질
+food|Parsley|파슬리
+food|Mint|민트
+food|Rosemary|로즈마리
+food|Thyme|타임
+food|Cinnamon|계피
+food|Nutmeg|육두구
+food|Clove|정향
+food|Curry powder|카레가루
+food|Turmeric|강황
+food|Paprika powder|파프리카 가루
+food|Tteokbokki|떡볶이
+food|Bibimbap|비빔밥
+food|Gimbap|김밥
+food|Dumpling|만두
+food|Pancake|팬케이크
+food|Waffle|와플
+food|Donut|도넛
+food|Pasta|파스타
+food|Spaghetti|스파게티
+food|Steak|스테이크
+food|Sausage|소시지
+food|Bacon|베이컨
+food|Yogurt|요거트
+food|Butter|버터
+food|Honey|꿀
+food|Jam|잼
+food|Peanut|땅콩
+food|Almond|아몬드
+food|Mushroom|버섯
+food|Broccoli|브로콜리
+food|Cabbage|양배추
+food|Chili pepper|고추
+food|Garlic|마늘
+food|Ginger|생강
+food|Lemon|레몬
+food|Peach|복숭아
+food|Pineapple|파인애플
+food|Mango|망고
+food|Kiwi|키위
+food|Cherry|체리
+food|Pear|배
+food|Persimmon|감
+food|Pumpkin|호박
+food|Sweet potato|고구마
+food|Tofu|두부
+food|Seaweed|김
+food|Popcorn|팝콘
+food|French fries|감자튀김
+food|Curry|카레
+food|Jajangmyeon|짜장면
+food|Cold noodles|냉면
+food|Grilled pork belly|삼겹살
+food|Bulgogi|불고기
+food|Japchae|잡채
+food|Bossam|보쌈
+food|Galbijjim|갈비찜
+food|Dakgalbi|닭갈비
+food|Haejangguk|해장국
+food|Sundubu stew|순두부찌개
+food|Budae stew|부대찌개
+food|Gamjatang|감자탕
+food|Spicy cold noodles|비빔냉면
+food|Kalguksu|칼국수
+food|Sujebi|수제비
+food|Jjolmyeon|쫄면
+food|Kongguksu|콩국수
+food|Bibim guksu|비빔국수
+food|Soondae|순대
+food|Dakbal|닭발
+food|Gopchang|곱창
+food|Yukhoe|육회
+food|Hobak-juk|호박죽
+food|Patjuk|팥죽
+food|Songpyeon|송편
+food|Yakgwa|약과
+food|Yugwa|유과
+food|Bingsu|빙수
+food|Hoeddeok|호떡 반죽
+food|Pajeon|파전
+food|Kimchi pancake|김치전
+food|Mung bean pancake|빈대떡
+food|Gyeran-jjim|계란찜
+food|Eomuk-tang|어묵탕
+food|Ssam|쌈
+food|Banchan|반찬
+food|Jeotgal|젓갈
+food|Kkakdugi|깍두기
+food|Baek-kimchi|백김치
+food|Chonggak kimchi|총각김치
+food|Dongchimi|동치미
+food|Pickled radish|단무지
+food|Pickled plum|매실절임
+food|Plum tea|매실차
+food|Citron tea|유자차
+food|Ginger tea|생강차
+food|Barley tea|보리차
+food|Corn silk tea|옥수수차
+food|Sikhye rice drink|단술
+food|Makgeolli|막걸리
+food|Soju|소주
+food|Whisky|위스키
+food|Vodka|보드카
+food|Champagne|샴페인
+food|Cocktail|칵테일
+food|Espresso|에스프레소
+food|Latte|라떼
+food|Cappuccino|카푸치노
+food|Americano|아메리카노
+food|Mocha|모카
+food|Matcha|말차
+food|Bubble tea|버블티
+food|Japanese ramen|일본 라멘
+food|Udon|우동
+food|Soba|소바
+food|Okonomiyaki|오코노미야키
+food|Takoyaki|타코야키
+food|Tonkatsu|돈카츠 정식
+food|Gyudon|규동
+food|Onigiri|오니기리
+food|Miso soup|미소국
+food|Sashimi|회
+food|Maki roll|마키
+food|Dim sum|딤섬
+food|Peking duck|베이징덕
+food|Mapo tofu|마파두부
+food|Kung pao chicken|깐풍기
+food|Fried noodles|볶음면
+food|Spring roll|춘권
+food|Pad thai|팟타이
+food|Tom yum|똠얌꿍
+food|Pho|쌀국수
+food|Banh mi|반미
+food|Nasi goreng|나시고렝
+food|Satay|사테
+food|Naan|난
+food|Samosa|사모사
+food|Butter chicken|버터치킨
+food|Tandoori chicken|탄두리 치킨
+food|Falafel|팔라펠
+food|Shawarma|샤와르마
+food|Gyro|기로스
+food|Moussaka|무사카
+food|Lasagna|라자냐
+food|Gnocchi|뇨키
+food|Carbonara|카르보나라
+food|Bolognese|볼로네제
+food|Pesto|페스토
+food|Bruschetta|브루스케타
+food|Focaccia|포카치아
+food|Calzone|칼조네
+food|Ciabatta|치아바타
+food|Pretzel|프레첼
+food|Schnitzel|슈니첼
+food|Bratwurst|브라트부어스트
+food|Sauerkraut|사워크라우트
+food|Goulash|굴라시
+food|Borscht|보르시
+food|Pierogi|피에로기
+food|Crepe|크레페
+food|Quiche|키슈
+food|Escargot|에스카르고
+food|Foie gras|푸아그라
+food|Eclair|에클레어
+food|Madeleine|마들렌
+food|Churros|츄러스
+food|Nachos|나초
+food|Quesadilla|케사디아
+food|Guacamole|과카몰리
+food|Salsa|살사
+food|Chili con carne|칠리
+food|Enchilada|엔칠라다
+food|Fajita|파히타
+food|Barbecue ribs|바비큐 립
+food|Mac and cheese|맥앤치즈
+food|Meatloaf|미트로프
+food|Clam chowder|클램차우더
+food|Corn dog|콘도그
+food|Apple pie|애플파이
+food|Pumpkin pie|펌킨파이
+food|Cheesecake|치즈케이크
+food|Pancake syrup|메이플 시럽
+food|Bagel cream cheese|크림치즈 베이글
+food|Granola|그래놀라
+food|Trail mix|트레일 믹스
+food|Beef jerky|육포
+food|Dried squid|오징어포
+food|Rice cracker|쌀과자
+food|Potato chips|감자칩
+food|Pretzel stick|스틱 과자
+food|Marshmallow|마시멜로
+food|Lollipop|막대사탕
+food|Gum|껌
+food|Caramel|캐러멜
+food|Cotton candy|솜사탕
+food|Nougat|누가
+food|Fudge|퍼지
+food|Gummy bear|곰젤리
+food|Jelly bean|젤리빈
+food|Wafer|웨하스
+food|Biscuit|비스킷
+food|Cracker|크래커
+food|Scone|스콘
+food|Crumpet|크럼핏
+food|Danish pastry|데니시
+food|Strudel|슈트루델
+food|Baklava|바클라바
+food|Turkish delight|터키쉬 딜라이트
+food|Avocado|아보카도
+food|Artichoke|아티초크
+food|Pomegranate|석류
+food|Lychee|리치
+food|Durian|두리안
+food|Caviar|캐비아
+food|Truffle|트러플
+food|Croissant|크루아상
+food|Tiramisu|티라미수
+food|Macaron|마카롱
+food|Baguette|바게트
+food|Burrito|부리토
+food|Taco|타코
+food|Kebab|케밥
+food|Hummus|후무스
+food|Ratatouille|라따뚜이
+food|Paella|빠에야
+food|Risotto|리조또
+food|Fondue|퐁뒤
+food|Oyster|굴
+food|Sea urchin|성게
+food|Abalone|전복
+food|Eel|장어
+food|Rice cake|떡
+food|Sikhye|식혜
+food|Hotteok|호떡
+food|Fish-shaped pastry|붕어빵
+food|Braised aged kimchi|묵은지찜
+food|Hongeo|홍어
+food|Gaebul|개불
+food|Sannakji|산낙지
+food|Mung bean jelly|청포묵
+food|Acorn jelly|도토리묵
+food|Gungjung tteokbokki|궁중떡볶이
+food|Sinseollo|신선로
+food|Gujeolpan|구절판
+food|Tteok-galbi|떡갈비
+food|Honey cookie|한과
+food|Dasik|다식
+food|Yaksik|약식
+food|Misutgaru|미숫가루
+food|Sujeonggwa|수정과
+food|Omija tea|오미자차
+food|Jujube tea|대추차
+food|Ssanghwa tea|쌍화차
+food|Dongdongju|동동주
+food|Bokbunja wine|복분자주
+food|Baeksaju|백세주
+food|Cheongju|청주
+food|Sake|사케
+food|Umeshu|매실주
+food|Mochi|모찌
+food|Dango|경단
+food|Taiyaki|타이야키
+food|Dorayaki|도라야키
+food|Natto|낫토
+food|Unagi don|장어덮밥
+food|Kaiseki|가이세키
+food|Shabu-shabu|샤부샤부
+food|Sukiyaki|스키야키
+food|Oden|오뎅
+food|Tsukemen|츠케멘
+food|Xiaolongbao|샤오롱바오
+food|Hot pot|훠궈
+food|Zongzi|쭝쯔
+food|Century egg|피단
+food|Char siu|차슈
+food|Congee|광동죽
+food|Laksa|락사
+food|Rendang|렌당
+food|Gado-gado|가도가도
+food|Bibingka|비빙카
+food|Adobo|아도보
+food|Sinigang|시니강
+food|Lechon|레촌
+food|Tikka masala|티카 마살라
+food|Biryani|비리야니
+food|Dosa|도사
+food|Idli|이들리
+food|Paneer|파니르
+food|Lassi|라씨
+food|Chai|차이
+food|Gulab jamun|굴랍자문
+food|Jalebi|잘레비
+food|Kebab doner|되네르 케밥
+food|Baba ganoush|바바가누쉬
+food|Tabbouleh|타불레
+food|Dolma|돌마
+food|Kofta|코프타
+food|Shakshuka|샥슈카
+food|Couscous|쿠스쿠스
+food|Tagine|타진
+food|Injera|인제라
+food|Jollof rice|졸로프 라이스
+food|Biltong|빌통
+food|Feijoada|페이조아다
+food|Ceviche|세비체
+food|Empanada|엠파나다
+food|Arepa|아레파
+food|Tamale|타말레
+food|Mole sauce|몰레
+food|Pozole|포솔레
+food|Churrasco|슈하스코
+food|Poutine|푸틴
+food|Pavlova|파블로바
+food|Haggis|해기스
+food|Fish and chips|피시앤칩스
+food|Yorkshire pudding|요크셔푸딩
+food|Bangers and mash|방거스 앤 매시
+food|Smorrebrod|스뫼레브뢰
+food|Gravlax|그라블락스
+food|Pickled herring|절인 청어
+food|Raclette|라클레트
+food|Cassoulet|카술레
+food|Bouillabaisse|부야베스
+food|Coq au vin|코코뱅
+food|Ratatouille stew|라따뚜이 스튜
+food|Tarte tatin|타르트 타탱
+food|Macaron pistachio|피스타치오 마카롱
+food|Opera cake|오페라 케이크
+food|Mille-feuille|밀푀유
+food|Profiterole|프로피테롤
+food|Panna cotta|판나코타
+food|Cannoli|칸놀리
+food|Gelato|젤라토
+food|Affogato|아포가토
+food|Prosciutto|프로슈토
+food|Salami|살라미
+food|Mozzarella|모차렐라
+food|Parmesan|파르메산
+food|Gorgonzola|고르곤졸라
+food|Brie|브리
+food|Camembert|카망베르
+food|Gouda|고다
+food|Feta|페타
+food|Halloumi|할루미
+food|Ricotta|리코타
+food|Mascarpone|마스카르포네
+food|Saffron|사프란
+food|Wasabi|와사비
+food|Truffle chocolate|트러플 초콜릿
+food|Terrine|테린
+food|Garlic butter snails|버터 달팽이
+food|Frog legs|개구리 다리
+food|Octopus salad|문어 샐러드
+food|Sea bream|도미
+food|Pufferfish sashimi|복어회
+food|Monkfish|아귀찜
+food|Braised sea cucumber|해삼 요리
+food|Bird's nest soup|제비집 수프
+food|Shark fin soup|샥스핀
+food|Roast duck|오리구이
+food|Suckling pig|새끼돼지구이
+thing|Umbrella|우산
+thing|Bicycle|자전거
+thing|Telephone|전화기
+thing|Clock|시계
+thing|Book|책
+thing|Toothbrush|칫솔
+thing|Chair|의자
+thing|Table|탁자
+thing|Bed|침대
+thing|Door|문
+thing|Window|창문
+thing|Key|열쇠
+thing|Pen|펜
+thing|Pencil|연필
+thing|Scissors|가위
+thing|Cup|컵
+thing|Spoon|숟가락
+thing|Bottle|병
+thing|Bag|가방
+thing|Shoes|신발
+thing|Hat|모자
+thing|Glasses|안경
+thing|Television|텔레비전
+thing|Computer|컴퓨터
+thing|Car|자동차
+thing|Bus|버스
+thing|Train|기차
+thing|Airplane|비행기
+thing|Ball|공
+thing|Mirror|거울
+thing|Lamp|전등
+thing|Towel|수건
+thing|Soap|비누
+thing|Camera|카메라
+thing|Guitar|기타
+thing|Piano|피아노
+thing|Ring|반지
+thing|Wristwatch|손목시계
+thing|Refrigerator|냉장고
+thing|Backpack|배낭
+thing|Spoon and fork set|수저
+thing|Toilet|변기
+thing|Sink|싱크대
+thing|Bathtub|욕조
+thing|Shower|샤워기
+thing|Faucet|수도꼭지
+thing|Trash can|쓰레기통
+thing|Dustpan|쓰레받기
+thing|Mop|걸레
+thing|Sponge|스펀지
+thing|Detergent|세제
+thing|Shampoo|샴푸
+thing|Hair dryer|헤어드라이어
+thing|Toilet paper|휴지
+thing|Tissue|티슈
+thing|Nail clipper|손톱깎이
+thing|Cotton swab|면봉
+thing|Mask|마스크
+thing|Slippers|슬리퍼
+thing|Sandals|샌들
+thing|Boots|부츠
+thing|Sneakers|운동화
+thing|Raincoat|우비
+thing|Jacket|재킷
+thing|Coat|코트
+thing|Sweater|스웨터
+thing|T-shirt|티셔츠
+thing|Shirt|셔츠
+thing|Pants|바지
+thing|Jeans|청바지
+thing|Skirt|치마
+thing|Dress|원피스
+thing|Pajamas|잠옷
+thing|Underwear|속옷
+thing|Uniform|교복
+thing|Tie|넥타이
+thing|Suit|양복
+thing|Cap|야구모자
+thing|Hairpin|머리핀
+thing|Hair tie|머리끈
+thing|Earrings|귀걸이
+thing|Bracelet|팔찌
+thing|Handkerchief|손수건
+thing|Umbrella stand|우산꽂이
+thing|Doormat|현관 매트
+thing|Doorbell|초인종
+thing|Door lock|자물쇠
+thing|Elevator|엘리베이터
+thing|Stairs|계단
+thing|Escalator|에스컬레이터
+thing|Fan|선풍기
+thing|Air conditioner|에어컨
+thing|Heater|히터
+thing|Humidifier|가습기
+thing|Rice cooker|밥솥
+thing|Gas stove|가스레인지
+thing|Oven|오븐
+thing|Blender|믹서기
+thing|Cutting board|도마
+thing|Ladle|국자
+thing|Pot|냄비
+thing|Teapot|찻주전자
+thing|Mug|머그컵
+thing|Glass cup|유리컵
+thing|Straw|빨대
+thing|Thermos|보온병
+thing|Lunch box|도시락
+thing|Tray|쟁반
+thing|Apron|앞치마
+thing|Trash bag|쓰레기봉투
+thing|Plastic bag|비닐봉지
+thing|Paper bag|종이봉투
+thing|Box|상자
+thing|Rope|밧줄
+thing|String|끈
+thing|Tape|테이프
+thing|Glue|풀
+thing|Paper|종이
+thing|Crayon|크레용
+thing|Marker|사인펜
+thing|Paintbrush|붓
+thing|Palette|팔레트
+thing|Canvas|캔버스
+thing|Easel|이젤
+thing|Blackboard|칠판
+thing|Chalk|분필
+thing|Desk|책상
+thing|Schoolbag|책가방
+thing|Textbook|교과서
+thing|Dictionary|사전
+thing|Newspaper|신문
+thing|Magazine|잡지
+thing|Comic book|만화책
+thing|Map|지도
+thing|Globe|지구본
+thing|Calendar|달력
+thing|Alarm clock|알람시계
+thing|Photo|사진
+thing|Picture frame|액자
+thing|Postcard|엽서
+thing|Letter|편지
+thing|Gift|선물
+thing|Birthday cake|생일 케이크
+thing|Toy|장난감
+thing|Doll|인형
+thing|Teddy bear|곰인형
+thing|Lego|레고
+thing|Puzzle|퍼즐
+thing|Playing cards|카드
+thing|Dice|주사위
+thing|Chess|체스
+thing|Go stones|바둑돌
+thing|Jump rope|줄넘기
+thing|Swing|그네
+thing|Slide|미끄럼틀
+thing|Seesaw|시소
+thing|Soccer ball|축구공
+thing|Basketball|농구공
+thing|Baseball bat|야구방망이
+thing|Tennis racket|테니스 라켓
+thing|Badminton racket|배드민턴 라켓
+thing|Ping-pong paddle|탁구채
+thing|Swimsuit|수영복
+thing|Goggles|물안경
+thing|Life jacket|구명조끼
+thing|Fishing rod|낚싯대
+thing|Sleeping bag|침낭
+thing|Campfire|모닥불
+thing|Smartphone|스마트폰
+thing|Laptop|노트북
+thing|Tablet|태블릿
+thing|Charger|충전기
+thing|Earphones|이어폰
+thing|Speaker|스피커
+thing|Radio|라디오
+thing|Printer|프린터
+thing|Router|공유기
+thing|USB drive|USB 메모리
+thing|Game console|게임기
+thing|Game controller|게임 패드
+thing|Taxi|택시
+thing|Motorcycle|오토바이
+thing|Truck|트럭
+thing|Ambulance|구급차
+thing|Fire truck|소방차
+thing|Police car|경찰차
+thing|Subway|지하철
+thing|Boat|배
+thing|Ship|큰 배
+thing|Helicopter|헬리콥터
+thing|Rocket|로켓
+thing|Wheelchair|휠체어
+thing|Stroller|유모차
+thing|Scooter|킥보드
+thing|Traffic light|신호등
+thing|Road sign|표지판
+thing|Mailbox|우체통
+thing|Bench|벤치
+thing|Fountain|분수
+thing|Calculator|계산기
+thing|Stapler|스테이플러
+thing|Ruler|자
+thing|Eraser|지우개
+thing|Notebook|공책
+thing|Envelope|봉투
+thing|Stamp|우표
+thing|Wallet|지갑
+thing|Headphones|헤드폰
+thing|Microphone|마이크
+thing|Keyboard|키보드
+thing|Computer mouse|마우스
+thing|Remote control|리모컨
+thing|Battery|건전지
+thing|Flashlight|손전등
+thing|Candle|양초
+thing|Matchstick|성냥
+thing|Hammer|망치
+thing|Screwdriver|드라이버
+thing|Saw|톱
+thing|Ladder|사다리
+thing|Broom|빗자루
+thing|Bucket|양동이
+thing|Vacuum cleaner|청소기
+thing|Washing machine|세탁기
+thing|Microwave oven|전자레인지
+thing|Toaster|토스터
+thing|Kettle|주전자
+thing|Frying pan|프라이팬
+thing|Knife|칼
+thing|Fork|포크
+thing|Chopsticks|젓가락
+thing|Plate|접시
+thing|Bowl|그릇
+thing|Pillow|베개
+thing|Blanket|이불
+thing|Curtain|커튼
+thing|Carpet|카펫
+thing|Sofa|소파
+thing|Bookshelf|책장
+thing|Tent|텐트
+thing|Kite|연
+thing|Balloon|풍선
+thing|Drum|북
+thing|Violin|바이올린
+thing|Trumpet|트럼펫
+thing|Skateboard|스케이트보드
+thing|Helmet|헬멧
+thing|Sunglasses|선글라스
+thing|Necklace|목걸이
+thing|Scarf|목도리
+thing|Gloves|장갑
+thing|Socks|양말
+thing|Belt|허리띠
+thing|Button|단추
+thing|Zipper|지퍼
+thing|Thermometer|체온계
+thing|Bandage|반창고
+thing|Toothpaste|치약
+thing|Comb|빗
+thing|Razor|면도기
+thing|Perfume|향수
+thing|Lipstick|립스틱
+thing|Timer|타이머
+thing|Stopwatch|스톱워치
+thing|Barometer|기압계
+thing|Thermostat|온도조절기
+thing|Smoke detector|화재경보기
+thing|Fire extinguisher|소화기
+thing|First aid kit|구급상자
+thing|Crutch|목발
+thing|Cane|지팡이
+thing|Hearing aid|보청기
+thing|Contact lens|콘택트렌즈
+thing|Braces|치아 교정기
+thing|Blood pressure monitor|혈압계
+thing|Wrench|렌치
+thing|Pliers|펜치
+thing|Electric drill|전동 드릴
+thing|Chainsaw|전기톱
+thing|Axe|도끼
+thing|Shovel|삽
+thing|Rake|갈퀴
+thing|Hoe|호미
+thing|Sickle|낫
+thing|Watering can|물뿌리개
+thing|Wheelbarrow|손수레
+thing|Lawn mower|잔디깎이
+thing|Hose|호스
+thing|Flowerpot|화분
+thing|Scarecrow|허수아비
+thing|Birdhouse|새집
+thing|Fishing net|그물
+thing|Anchor|닻
+thing|Sail|돛
+thing|Steering wheel|핸들
+thing|Tire|타이어
+thing|Car horn|경적
+thing|Seat belt|안전벨트
+thing|Rearview mirror|백미러
+thing|Wiper|와이퍼
+thing|Engine|엔진
+thing|Gas pump|주유기
+thing|Electric car|전기차
+thing|Charging station|충전소
+thing|Solar panel|태양광 패널
+thing|Wind turbine|풍력발전기
+thing|Light bulb|전구
+thing|Plug|플러그
+thing|Extension cord|멀티탭
+thing|Switch|스위치
+thing|Fuse|퓨즈
+thing|Magnet|자석
+thing|Lens|렌즈
+thing|Prism|프리즘
+thing|Tripod|삼각대
+thing|Binoculars|쌍안경
+thing|Film camera|필름 카메라
+thing|Instant camera|폴라로이드
+thing|Projector|프로젝터
+thing|Cassette tape|카세트테이프
+thing|Vinyl record|레코드판
+thing|Record player|턴테이블
+thing|Jukebox|주크박스
+thing|Walkie-talkie|무전기
+thing|Drone|드론
+thing|Robot|로봇
+thing|Robot vacuum|로봇청소기
+thing|3D printer|3D 프린터
+thing|Smartwatch|스마트워치
+thing|VR headset|VR 헤드셋
+thing|Barcode scanner|바코드 스캐너
+thing|Cash register|계산대
+thing|Vending machine|자판기
+thing|ATM|현금인출기
+thing|Credit card|신용카드
+thing|Coin|동전
+thing|Banknote|지폐
+thing|Piggy bank|저금통
+thing|Safe|금고
+thing|Passport|여권
+thing|ID card|신분증
+thing|Ticket|표
+thing|Suitcase|여행가방
+thing|Luggage cart|짐수레
+thing|Flag|깃발
+thing|Banner|현수막
+thing|Trophy|트로피
+thing|Medal|메달
+thing|Crown|왕관
+thing|Throne|왕좌
+thing|Sword|검
+thing|Shield|방패
+thing|Bow and arrow|활과 화살
+thing|Spear|창
+thing|Armor|갑옷
+thing|Knight helmet|투구
+thing|Cannon|대포
+thing|Catapult|투석기
+thing|Treasure chest|보물상자
+thing|Pirate flag|해적기
+thing|Magic wand|마술봉
+thing|Crystal ball|수정구
+thing|Cauldron|가마솥
+thing|Witch broom|마법 빗자루
+thing|Top hat|실크햇
+thing|Wig|가발
+thing|Carnival mask|가면
+thing|Costume|의상
+thing|Fireworks|불꽃놀이
+thing|Sparkler|폭죽
+thing|Rattle|딸랑이
+thing|Pacifier|젖꼭지
+thing|Diaper|기저귀
+thing|Baby bottle|젖병
+thing|Crib|아기 침대
+thing|High chair|유아용 의자
+thing|Bunk bed|이층 침대
+thing|Futon|요
+thing|Hammock|해먹
+thing|Rocking chair|흔들의자
+thing|Bean bag|빈백
+thing|Wardrobe|옷장
+thing|Dresser|서랍장
+thing|Nightstand|협탁
+thing|Vanity table|화장대
+thing|Shoe rack|신발장
+thing|Coat rack|옷걸이
+thing|Hanger|행거
+thing|Iron (clothes)|다리미
+thing|Ironing board|다림판
+thing|Clothespin|빨래집게
+thing|Laundry basket|빨래 바구니
+thing|Needle|바늘
+thing|Thread|실
+thing|Yarn|털실
+thing|Knitting needles|뜨개바늘
+thing|Pin cushion|바늘꽂이
+thing|Measuring tape|줄자
+thing|Spirit level|수평계
+thing|Protractor|각도기
+thing|Drawing compass|컴퍼스
+thing|Pencil case|필통
+thing|Pencil sharpener|연필깎이
+thing|Highlighter|형광펜
+thing|Whiteboard|화이트보드
+thing|Bulletin board|게시판
+thing|Folder|파일철
+thing|Binder|바인더
+thing|Clipboard|클립보드
+thing|Hole punch|펀치
+thing|Rubber band|고무줄
+thing|Sticky note|포스트잇
+thing|Paper shredder|파쇄기
+thing|Photocopier|복사기
+thing|Fax machine|팩스
+thing|Cello|첼로
+thing|Flute|플루트
+thing|Clarinet|클라리넷
+thing|Saxophone|색소폰
+thing|Oboe|오보에
+thing|Bassoon|바순
+thing|Harp|하프
+thing|Xylophone|실로폰
+thing|Tambourine|탬버린
+thing|Triangle|트라이앵글
+thing|Cymbals|심벌즈
+thing|Castanets|캐스터네츠
+thing|Ukulele|우쿨렐레
+thing|Banjo|밴조
+thing|Mandolin|만돌린
+thing|Electric guitar|전자기타
+thing|Bass guitar|베이스 기타
+thing|Synthesizer|신시사이저
+thing|Organ|오르간
+thing|Recorder|리코더
+thing|Gayageum|가야금
+thing|Geomungo|거문고
+thing|Haegeum|해금
+thing|Janggu|장구
+thing|Buk|북통
+thing|Kkwaenggwari|꽹과리
+thing|Daegeum|대금
+thing|Hand fan|부채
+thing|Hanbok|한복
+thing|Gat|갓
+thing|Folding screen|병풍
+thing|Mortar|절구
+thing|Millstone|맷돌
+thing|Earthenware jar|항아리
+thing|Rice paddle|주걱
+thing|Straw shoes|짚신
+thing|Gourd dipper|바가지
+thing|Brazier|화로
+thing|Marbles|구슬
+thing|Spinning top|팽이
+thing|Yut sticks|윷
+thing|Kite flying|연날리기
+thing|Hula hoop|훌라후프
+thing|Frisbee|프리스비
+thing|Slingshot|새총
+thing|Water gun|물총
+thing|Bubble wand|비눗방울
+thing|Snow sled|눈썰매
+thing|Ice skates|스케이트
+thing|Ski|스키
+thing|Snowboard|스노보드
+thing|Surfboard|서핑보드
+thing|Kayak|카약
+thing|Canoe|카누
+thing|Rowboat|노 젓는 배
+thing|Sailboat|범선
+thing|Yacht|요트
+thing|Cruise ship|유람선
+thing|Ferry|여객선
+thing|Tugboat|예인선
+thing|Aircraft carrier|항공모함
+thing|Space shuttle|우주왕복선
+thing|Satellite|인공위성
+thing|Space station|우주정거장
+thing|Space telescope|우주망원경
+thing|Spacesuit|우주복
+thing|Lunar rover|월면차
+thing|Sauna|사우나
+thing|Massage chair|안마의자
+thing|Dumbbell|아령
+thing|Treadmill|러닝머신
+thing|Yoga mat|요가 매트
+thing|Punching bag|샌드백
+thing|Boxing gloves|권투 글러브
+thing|Golf club|골프채
+thing|Golf ball|골프공
+thing|Bowling ball|볼링공
+thing|Bowling pin|볼링핀
+thing|Billiard cue|당구 큐
+thing|Dartboard|다트판
+thing|Pinball machine|핀볼 기계
+thing|Arcade machine|오락기
+thing|Slot machine|슬롯머신
+thing|Roulette wheel|룰렛
+thing|Domino|도미노
+thing|Jigsaw puzzle|직소 퍼즐
+thing|Rubik's cube|큐브
+thing|Kendama|켄다마
+thing|Fidget spinner|핸드 스피너
+thing|Snow globe|스노볼
+thing|Music box|오르골
+thing|Rotary phone|다이얼 전화기
+thing|Payphone|공중전화
+thing|Pager|삐삐
+thing|Floppy disk|플로피 디스크
+thing|CD|시디
+thing|DVD|디브이디
+thing|VHS tape|비디오테이프
+thing|Walkman|워크맨
+thing|Gramophone|축음기
+thing|Telegraph|전신기
+thing|Quill|깃펜
+thing|Inkwell|잉크병
+thing|Scroll|두루마리
+thing|Seal stamp|도장
+thing|Candlestick|촛대
+thing|Chandelier|샹들리에
+thing|Oil lamp|기름등
+thing|Torch|횃불
+thing|Pocket watch|회중시계
+thing|Monocle|외알안경
+thing|Cloak|망토
+thing|Corset|코르셋
+thing|Kimono|기모노
+thing|Sari|사리
+thing|Poncho|판초
+thing|Beret|베레모
+thing|Cowboy hat|카우보이 모자
+thing|Chef hat|요리사 모자
+thing|Hard hat|안전모
+thing|Safety vest|안전조끼
+thing|Lab coat|실험복
+thing|Diploma|졸업장
+thing|Graduation cap|학사모
+thing|Name tag|명찰
+thing|Badge|배지
+thing|Whistle|호루라기
+thing|Megaphone|확성기
+thing|Siren|사이렌
+thing|Handcuffs|수갑
+thing|Gavel|판사 망치
+thing|Scales of justice|저울
+thing|Bathroom scale|체중계
+thing|Kitchen scale|주방 저울
+thing|Measuring cup|계량컵
+thing|Rolling pin|밀대
+thing|Whisk|거품기
+thing|Colander|체
+thing|Grater|강판
+thing|Peeler|필러
+thing|Can opener|깡통따개
+thing|Bottle opener|병따개
+thing|Corkscrew|와인 오프너
+thing|Nutcracker|호두까기
+thing|Tongs|집게
+thing|Spatula|뒤집개
+thing|Mortar and pestle|막자사발
+thing|Steamer|찜기
+thing|Wok|웍
+thing|Pressure cooker|압력솥
+thing|Slow cooker|슬로우쿠커
+thing|Air fryer|에어프라이어
+thing|Coffee maker|커피머신
+thing|Coffee grinder|커피 그라인더
+thing|Tea strainer|차 거름망
+thing|Ice cube tray|얼음 틀
+thing|Cooler box|아이스박스
+thing|Picnic mat|돗자리
+thing|Parasol|양산
+thing|Folding fan|접이식 부채
+thing|Handwarmer|손난로
+thing|Hot water bottle|물주머니
+thing|Earmuffs|귀마개
+thing|Neck pillow|목베개
+thing|Eye mask|안대
+thing|Pill case|약통
+thing|Compass|나침반
+thing|Telescope|망원경
+thing|Microscope|현미경
+thing|Hourglass|모래시계
+thing|Abacus|주판
+thing|Typewriter|타자기
+thing|Sewing machine|재봉틀
+thing|Anvil|모루
+thing|Lantern|등불
+thing|Sundial|해시계
+thing|Metronome|메트로놈
+thing|Harmonica|하모니카
+thing|Accordion|아코디언
+thing|Boomerang|부메랑
+thing|Yo-yo|요요
+thing|Kaleidoscope|만화경
+thing|Periscope|잠망경
+thing|Stethoscope|청진기
+thing|Parachute|낙하산
+thing|Submarine|잠수함
+thing|Trampoline|트램펄린
+thing|Hot air balloon|열기구
+thing|Magnifying glass|돋보기
+thing|Paper clip|클립
+thing|Safety pin|안전핀
+thing|Thimble|골무
+thing|Astrolabe|아스트롤라베
+thing|Sextant|육분의
+thing|Armillary sphere|혼천의
+thing|Water clock|물시계
+thing|Cuckoo clock|뻐꾸기시계
+thing|Orrery|태양계의
+thing|Zoetrope|조트로프
+thing|Magic lantern|환등기
+thing|Enigma machine|에니그마
+thing|Slide rule|계산자
+thing|Difference engine|차분기관
+thing|Loom|베틀
+thing|Spinning wheel|물레
+thing|Potter's wheel|도자기 물레
+thing|Bellows|풀무
+thing|Crucible|도가니
+thing|Alembic|증류기
+thing|Retort|레토르트
+thing|Bunsen burner|분젠 버너
+thing|Test tube|시험관
+thing|Petri dish|페트리 접시
+thing|Beaker|비커
+thing|Pipette|피펫
+thing|Centrifuge|원심분리기
+thing|Seismograph|지진계
+thing|Geiger counter|가이거 계수기
+thing|Oscilloscope|오실로스코프
+thing|Tesla coil|테슬라 코일
+thing|Particle accelerator|입자가속기
+thing|Space probe|우주 탐사선
+thing|Airship|비행선
+thing|Zeppelin|제플린
+thing|Glider|글라이더
+thing|Hang glider|행글라이더
+thing|Paraglider|패러글라이더
+thing|Biplane|복엽기
+thing|Seaplane|수상비행기
+thing|Hovercraft|호버크라프트
+thing|Bathyscaphe|심해잠수정
+thing|Diving bell|잠수종
+thing|Snorkel|스노클
+thing|Harpoon|작살
+thing|Trident|삼지창
+thing|Totem pole|토템 폴
+thing|Dreamcatcher|드림캐처
+thing|Tomahawk|토마호크
+thing|Longbow|장궁
+thing|Crossbow|석궁
+thing|Trebuchet|트레뷰셋
+thing|Battering ram|공성퇴
+thing|Drawbridge|도개교
+thing|Portcullis|내리닫이 쇠창살
+thing|Gargoyle|가고일
+thing|Stained glass|스테인드글라스
+thing|Pipe organ|파이프 오르간
+thing|Church bell|교회 종
+thing|Prayer wheel|마니차
+thing|Rosary|묵주
+thing|Incense burner|향로
+thing|Gong|징
+thing|Singing bowl|싱잉볼
+thing|Prayer beads|염주
+thing|Wind chime|풍경
+thing|Stone lantern|석등
+thing|Torii gate|도리이
+thing|Lucky cat|마네키네코
+thing|Daruma doll|달마 인형
+thing|Matryoshka|마트료시카
+thing|Samovar|사모바르
+thing|Faberge egg|파베르제 달걀
+thing|Venetian mask|베네치아 가면
+thing|Bagpipes|백파이프
+thing|Alphorn|알펜호른
+thing|Didgeridoo|디저리두
+thing|Sitar|시타르
+thing|Tabla|타블라
+thing|Erhu|얼후
+thing|Pipa|비파
+thing|Guzheng|고쟁
+thing|Shamisen|샤미센
+thing|Koto|고토
+thing|Shakuhachi|샤쿠하치
+thing|Taiko drum|타이코
+thing|Steel drum|스틸드럼
+thing|Djembe|젬베
+thing|Panpipes|팬파이프
+thing|Theremin|테레민
+thing|Hurdy-gurdy|하디거디
+thing|Tuning fork|소리굽쇠
+thing|Conductor's baton|지휘봉
+thing|Music stand|보면대
+thing|Sheet music|악보
+thing|Grandfather clock|괘종시계
+thing|Weather vane|풍향계
+thing|Anemometer|풍속계
+thing|Rain gauge|우량계
+thing|Hygrometer|습도계
+thing|Altimeter|고도계
+thing|Chronometer|크로노미터
+thing|Message in a bottle|유리병 편지
+thing|Buoy|부표
+thing|Life ring|구명환
+thing|Ship's wheel|선박 키
+thing|Ship's bell|선종
+thing|Telegraph key|전신 키
+thing|Signal flags|수기 신호기
+place|School|학교
+place|Hospital|병원
+place|Library|도서관
+place|Park|공원
+place|Beach|해변
+place|Mountain|산
+place|River|강
+place|Sea|바다
+place|Airport|공항
+place|Train station|기차역
+place|Supermarket|슈퍼마켓
+place|Restaurant|식당
+place|Bank|은행
+place|Post office|우체국
+place|Cinema|영화관
+place|Zoo|동물원
+place|Museum|박물관
+place|Kitchen|부엌
+place|Bathroom|화장실
+place|Bedroom|침실
+place|Playground|놀이터
+place|Farm|농장
+place|Forest|숲
+place|Desert|사막
+place|Island|섬
+place|South Korea|대한민국
+place|Japan|일본
+place|China|중국
+place|United States|미국
+place|Canada|캐나다
+place|Mexico|멕시코
+place|Brazil|브라질
+place|Argentina|아르헨티나
+place|United Kingdom|영국
+place|France|프랑스
+place|Germany|독일
+place|Italy|이탈리아
+place|Spain|스페인
+place|Russia|러시아
+place|India|인도
+place|Australia|호주
+place|Egypt|이집트
+place|Thailand|태국
+place|Vietnam|베트남
+place|Turkey (country)|터키
+place|Lighthouse|등대
+place|Bridge|다리
+place|Tunnel|터널
+place|Castle|성
+place|Temple|절
+place|Church|교회
+place|Stadium|경기장
+place|Aquarium|수족관
+place|Amusement park|놀이공원
+place|Pharmacy|약국
+place|Barbershop|이발소
+place|Bakery|빵집
+place|Convenience store|편의점
+place|Gas station|주유소
+place|Parking lot|주차장
+place|Harbor|항구
+place|Waterfall|폭포
+place|Volcano|화산
+place|Cave|동굴
+place|Lake|호수
+place|Market|시장
+place|Theater|극장
+place|Laboratory|실험실
+place|Factory|공장
+place|Greenhouse|온실
+place|North Korea|북한
+place|Mongolia|몽골
+place|Taiwan|대만
+place|Philippines|필리핀
+place|Indonesia|인도네시아
+place|Malaysia|말레이시아
+place|Singapore|싱가포르
+place|Cambodia|캄보디아
+place|Laos|라오스
+place|Myanmar|미얀마
+place|Nepal|네팔
+place|Bhutan|부탄
+place|Bangladesh|방글라데시
+place|Sri Lanka|스리랑카
+place|Pakistan|파키스탄
+place|Afghanistan|아프가니스탄
+place|Iran|이란
+place|Iraq|이라크
+place|Israel|이스라엘
+place|Saudi Arabia|사우디아라비아
+place|United Arab Emirates|아랍에미리트
+place|Qatar|카타르
+place|Jordan|요르단
+place|Lebanon|레바논
+place|Syria|시리아
+place|Kazakhstan|카자흐스탄
+place|Uzbekistan|우즈베키스탄
+place|Ukraine|우크라이나
+place|Poland|폴란드
+place|Czech Republic|체코
+place|Hungary|헝가리
+place|Romania|루마니아
+place|Bulgaria|불가리아
+place|Greece|그리스
+place|Austria|오스트리아
+place|Switzerland|스위스
+place|Netherlands|네덜란드
+place|Belgium|벨기에
+place|Portugal|포르투갈
+place|Ireland|아일랜드
+place|Iceland|아이슬란드
+place|Norway|노르웨이
+place|Sweden|스웨덴
+place|Finland|핀란드
+place|Denmark|덴마크
+place|Estonia|에스토니아
+place|Croatia|크로아티아
+place|Serbia|세르비아
+place|Cuba|쿠바
+place|Jamaica|자메이카
+place|Peru|페루
+place|Chile|칠레
+place|Colombia|콜롬비아
+place|Venezuela|베네수엘라
+place|Ecuador|에콰도르
+place|Bolivia|볼리비아
+place|Uruguay|우루과이
+place|Paraguay|파라과이
+place|Panama|파나마
+place|Costa Rica|코스타리카
+place|Morocco|모로코
+place|Algeria|알제리
+place|Tunisia|튀니지
+place|Libya|리비아
+place|Ethiopia|에티오피아
+place|Kenya|케냐
+place|Tanzania|탄자니아
+place|Nigeria|나이지리아
+place|Ghana|가나
+place|South Africa|남아프리카공화국
+place|Madagascar|마다가스카르
+place|New Zealand|뉴질랜드
+place|Fiji|피지
+place|Maldives|몰디브
+place|Seoul|서울
+place|Busan|부산
+place|Incheon|인천
+place|Daegu|대구
+place|Daejeon|대전
+place|Gwangju|광주
+place|Jeju Island|제주도
+place|Gyeongju|경주
+place|Suwon|수원
+place|Ulsan|울산
+place|Chuncheon|춘천
+place|Sokcho|속초
+place|Jeonju|전주
+place|Tokyo|도쿄
+place|Osaka|오사카
+place|Kyoto|교토
+place|Sapporo|삿포로
+place|Beijing|베이징
+place|Shanghai|상하이
+place|Hong Kong|홍콩
+place|Bangkok|방콕
+place|Hanoi|하노이
+place|Manila|마닐라
+place|Jakarta|자카르타
+place|Delhi|델리
+place|Mumbai|뭄바이
+place|Dubai|두바이
+place|Istanbul|이스탄불
+place|Cairo|카이로
+place|Moscow|모스크바
+place|London|런던
+place|Paris|파리
+place|Berlin|베를린
+place|Rome|로마
+place|Madrid|마드리드
+place|Barcelona|바르셀로나
+place|Amsterdam|암스테르담
+place|Vienna|빈
+place|Prague|프라하
+place|Venice|베네치아
+place|Florence|피렌체
+place|Athens|아테네
+place|Lisbon|리스본
+place|New York|뉴욕
+place|Los Angeles|로스앤젤레스
+place|San Francisco|샌프란시스코
+place|Las Vegas|라스베이거스
+place|Chicago|시카고
+place|Washington D.C.|워싱턴 D.C.
+place|Hawaii|하와이
+place|Toronto|토론토
+place|Vancouver|밴쿠버
+place|Rio de Janeiro|리우데자네이루
+place|Buenos Aires|부에노스아이레스
+place|Sydney|시드니
+place|Melbourne|멜버른
+place|Eiffel Tower|에펠탑
+place|Statue of Liberty|자유의 여신상
+place|Big Ben|빅벤
+place|Colosseum|콜로세움
+place|Great Wall of China|만리장성
+place|Taj Mahal|타지마할
+place|Machu Picchu|마추픽추
+place|Sydney Opera House|시드니 오페라 하우스
+place|Leaning Tower of Pisa|피사의 사탑
+place|Pyramids of Giza|기자의 피라미드
+place|Sphinx|스핑크스
+place|Golden Gate Bridge|금문교
+place|Mount Fuji|후지산
+place|Niagara Falls|나이아가라 폭포
+place|Grand Canyon|그랜드 캐니언
+place|Great Barrier Reef|그레이트 배리어 리프
+place|Angkor Wat|앙코르와트
+place|Petra|페트라
+place|Stonehenge|스톤헨지
+place|Acropolis|아크로폴리스
+place|Louvre|루브르 박물관
+place|Buckingham Palace|버킹엄 궁전
+place|Tower Bridge|타워 브리지
+place|Empire State Building|엠파이어 스테이트 빌딩
+place|Times Square|타임스 스퀘어
+place|Central Park|센트럴 파크
+place|White House|백악관
+place|Hollywood sign|할리우드 사인
+place|Mount Rushmore|러시모어 산
+place|Burj Khalifa|부르즈 할리파
+place|Forbidden City|자금성
+place|Terracotta Army|병마용
+place|Kremlin|크렘린
+place|Red Square|붉은 광장
+place|Sagrada Familia|사그라다 파밀리아
+place|Neuschwanstein Castle|노이슈반슈타인 성
+place|Versailles|베르사유 궁전
+place|Notre-Dame|노트르담 대성당
+place|Arc de Triomphe|개선문
+place|Brandenburg Gate|브란덴부르크 문
+place|Tokyo Tower|도쿄 타워
+place|Tokyo Skytree|도쿄 스카이트리
+place|Fushimi Inari|후시미 이나리
+place|Gyeongbokgung|경복궁
+place|Changdeokgung|창덕궁
+place|Namsan Tower|남산타워
+place|Lotte World Tower|롯데월드타워
+place|Bulguksa|불국사
+place|Seokguram|석굴암
+place|Haeinsa|해인사
+place|Hwaseong Fortress|수원화성
+place|Bukchon Hanok Village|북촌 한옥마을
+place|Han River|한강
+place|Hallasan|한라산
+place|Seoraksan|설악산
+place|Baekdusan|백두산
+place|Dokdo|독도
+place|Ulleungdo|울릉도
+place|Gwanghwamun|광화문
+place|Dongdaemun|동대문
+place|Myeongdong|명동
+place|Gangnam|강남
+place|Hongdae|홍대
+place|Itaewon|이태원
+place|Haeundae|해운대
+place|Gamcheon Culture Village|감천문화마을
+place|Nami Island|남이섬
+place|Everland|에버랜드
+place|Lotte World|롯데월드
+place|Disneyland|디즈니랜드
+place|Universal Studios|유니버설 스튜디오
+place|Mount Everest|에베레스트
+place|Mount Kilimanjaro|킬리만자로
+place|Amazon River|아마존강
+place|Nile River|나일강
+place|Sahara Desert|사하라 사막
+place|Dead Sea|사해
+place|Antarctica|남극
+place|North Pole|북극점
+place|Bermuda Triangle|버뮤다 삼각지대
+place|Panama Canal|파나마 운하
+place|Suez Canal|수에즈 운하
+place|Berlin Wall|베를린 장벽
+place|Vatican|바티칸
+place|Santorini|산토리니
+place|Bali|발리
+place|Maldives resort|몰디브 리조트
+place|Venice canal|베네치아 운하
+place|Swiss Alps|알프스
+place|Yellowstone|옐로스톤
+place|Alcatraz|알카트라즈
+place|Pentagon|펜타곤
+place|Hagia Sophia|아야 소피아
+place|Blue Mosque|블루 모스크
+place|Alhambra|알함브라 궁전
+place|Tower of London|런던 탑
+place|Westminster Abbey|웨스트민스터 사원
+place|London Eye|런던 아이
+place|Trevi Fountain|트레비 분수
+place|Spanish Steps|스페인 계단
+place|Pantheon|판테온
+place|Duomo|두오모
+place|Rialto Bridge|리알토 다리
+place|Observatory|천문대
+place|Planetarium|천체투영관
+place|Monastery|수도원
+place|Pyramid|피라미드
+place|Canyon|협곡
+place|Glacier|빙하
+place|Oasis|오아시스
+place|Igloo|이글루
+place|Windmill|풍차
+place|Fortress|요새
+place|Palace|궁전
+place|Subway station|지하철역
+place|Bunker|벙커
+place|Cathedral|대성당
+place|Mosque|모스크
+place|Synagogue|유대교 회당
+place|Shrine|신사
+place|Monastery temple|사찰
+place|Graveyard|묘지
+place|Town hall|시청
+place|Courthouse|법원
+place|Police station|경찰서
+place|Fire station|소방서
+place|Prison|감옥
+place|Embassy|대사관
+place|Parliament|국회의사당
+place|Palace garden|궁궐 정원
+place|University|대학교
+place|Kindergarten|유치원
+place|Classroom|교실
+place|Gym|체육관
+place|Swimming pool|수영장
+place|Sports field|운동장
+place|Tennis court|테니스장
+place|Golf course|골프장
+place|Ski resort|스키장
+place|Skating rink|스케이트장
+place|Race track|경주장
+place|Bowling alley|볼링장
+place|Karaoke room|노래방
+place|PC room PC|방
+place|Arcade|오락실
+place|Escape room|방탈출 카페
+place|Cafe|카페
+place|Bar|술집
+place|Pub|펍
+place|Night market|야시장
+place|Food court|푸드코트
+place|Department store|백화점
+place|Shopping mall|쇼핑몰
+place|Bookstore|서점
+place|Flower shop|꽃집
+place|Butcher shop|정육점
+place|Fish market|수산시장
+place|Traditional market|재래시장
+place|Laundromat|빨래방
+place|Hair salon|미용실
+place|Spa|스파
+place|Public bath|대중목욕탕
+place|Sauna jjimjilbang|찜질방
+place|Clinic|의원
+place|Dental clinic|치과
+place|Veterinary clinic|동물병원
+place|Pet shop|애완동물 가게
+place|Nursery|어린이집
+place|Nursing home|요양원
+place|Orphanage|보육원
+place|Hotel|호텔
+place|Motel|모텔
+place|Hostel|호스텔
+place|Guesthouse|게스트하우스
+place|Hanok stay|한옥 스테이
+place|Campsite|캠핑장
+place|Cabin|오두막
+place|Lodge|산장
+place|Apartment|아파트
+place|Villa|빌라
+place|Mansion|저택
+place|Studio apartment|원룸
+place|Rooftop|옥상
+place|Basement|지하실
+place|Attic|다락방
+place|Garage|차고
+place|Balcony|발코니
+place|Living room|거실
+place|Dining room|식당방
+place|Laundry room|세탁실
+place|Pantry|식료품 창고
+place|Garden|정원
+place|Backyard|뒷마당
+place|Courtyard|안뜰
+place|Porch|현관
+place|Hallway|복도
+place|Cellar|지하 저장고
+place|Warehouse|창고
+place|Barn|헛간
+place|Stable|마구간
+place|Chicken coop|닭장
+place|Fish farm|양식장
+place|Orchard|과수원
+place|Rice field|논
+place|Vegetable field|밭
+place|Vineyard|포도밭
+place|Tea plantation|차밭
+place|Pasture|목초지
+place|Greenhouse farm|비닐하우스
+place|Ranch|목장
+place|Dam|댐
+place|Power plant|발전소
+place|Nuclear plant|원자력 발전소
+place|Oil rig|석유 시추선
+place|Mine|광산
+place|Quarry|채석장
+place|Construction site|공사장
+place|Shipyard|조선소
+place|Port crane|항만 크레인
+place|Bus stop|버스 정류장
+place|Bus terminal|버스 터미널
+place|Subway platform|지하철 승강장
+place|Highway rest stop|휴게소
+place|Toll gate|톨게이트
+place|Crosswalk|횡단보도
+place|Overpass|육교
+place|Underpass|지하도
+place|Intersection|사거리
+place|Alley|골목
+place|Roundabout|회전교차로
+place|Airport runway|활주로
+place|Control tower|관제탑
+place|Heliport|헬기장
+place|Launch pad|발사대
+place|Space center|우주센터
+place|Science museum|과학관
+place|Art gallery|미술관
+place|Concert hall|콘서트홀
+place|Opera house|오페라 하우스
+place|Movie studio|영화 스튜디오
+place|TV station|방송국
+place|Radio station|라디오 방송국
+place|Newspaper office|신문사
+place|Post sorting center|우편 집중국
+place|Data center|데이터센터
+place|Cell tower|기지국
+place|Weather station|기상 관측소
+place|Research station|연구기지
+place|Botanical garden|식물원
+place|Arboretum|수목원
+place|Safari park|사파리
+place|Wildlife reserve|야생동물 보호구역
+place|National park|국립공원
+place|Nature trail|산책로
+place|Hiking trail|등산로
+place|Summit|정상
+place|Campfire site|야영지
+place|Picnic area|소풍 장소
+place|Riverside|강변
+place|Lakeside|호숫가
+place|Seaside|바닷가
+place|Pier|부두
+place|Dock|선착장
+place|Fishing spot|낚시터
+place|Tidal flat|갯벌
+place|Coral reef|산호초
+place|Underwater cave|해저 동굴
+place|Hot spring|온천
+place|Geyser field|간헐천 지대
+place|Ice cave|얼음 동굴
+place|Salt flat|소금 평원
+place|Rainforest|열대우림
+place|Savanna|사바나
+place|Tundra|툰드라
+place|Steppe|초원
+place|Swamp|늪
+place|Marsh|습지
+place|Delta|삼각주
+place|Peninsula|반도
+place|Cape|곶
+place|Bay|만
+place|Strait|해협
+place|Archipelago|군도
+place|Atoll|환초
+place|Plateau|고원
+place|Valley|계곡
+place|Hill|언덕
+place|Cliff|절벽
+place|Ravine|협곡 골짜기
+job|Teacher|선생님
+job|Doctor|의사
+job|Nurse|간호사
+job|Police officer|경찰관
+job|Firefighter|소방관
+job|Cook|요리사
+job|Farmer|농부
+job|Driver|운전사
+job|Pilot|조종사
+job|Singer|가수
+job|Painter|화가
+job|Writer|작가
+job|Student|학생
+job|Baker|제빵사
+job|Hairdresser|미용사
+job|Dentist|치과의사
+job|Soldier|군인
+job|Athlete|운동선수
+job|Actor|배우
+job|Scientist|과학자
+job|Programmer|프로그래머
+job|Designer|디자이너
+job|Animator|애니메이터
+job|Game developer|게임 개발자
+job|Data scientist|데이터 과학자
+job|Teacher assistant|조교
+job|Professor|교수
+job|Principal|교장
+job|Nanny|보모
+job|Babysitter|베이비시터
+job|Social worker|사회복지사
+job|Counselor|상담사
+job|Psychologist|심리학자
+job|Psychiatrist|정신과 의사
+job|Surgeon|외과의사
+job|Pediatrician|소아과 의사
+job|Paramedic|응급구조사
+job|Midwife|조산사
+job|Radiologist|방사선사
+job|Physical therapist|물리치료사
+job|Optician|안경사
+job|Chef|셰프
+job|Waiter|웨이터
+job|Bartender|바텐더
+job|Butcher|정육점 주인
+job|Fishmonger|생선 장수
+job|Greengrocer|채소 장수
+job|Cashier|계산원
+job|Shopkeeper|가게 주인
+job|Salesperson|판매원
+job|Delivery driver|배달원
+job|Courier|택배기사
+job|Postman|우체부
+job|Taxi driver|택시기사
+job|Bus driver|버스기사
+job|Train conductor|열차 승무원
+job|Flight attendant|승무원
+job|Air traffic controller|항공관제사
+job|Sailor|선원
+job|Captain|선장
+job|Fisherman|어부
+job|Lighthouse keeper|등대지기
+job|Diver|잠수부
+job|Miner|광부
+job|Construction worker|건설 노동자
+job|Bricklayer|벽돌공
+job|Painter and decorator|도장공
+job|Welder|용접공
+job|Locksmith|열쇠 수리공
+job|Roofer|지붕장이
+job|Window cleaner|유리창 청소부
+job|Janitor|청소부
+job|Security guard|경비원
+job|Detective|탐정
+job|Spy|스파이
+job|Prosecutor|검사
+job|Notary|공증인
+job|Banker|은행원
+job|Stockbroker|증권 중개인
+job|Economist|경제학자
+job|Auditor|감사관
+job|Tax officer|세무공무원
+job|Politician|정치인
+job|Mayor|시장
+job|President|대통령
+job|Diplomat|외교관
+job|Ambassador|대사
+job|Engineer|엔지니어
+job|Architect|건축가
+job|Lawyer|변호사
+job|Judge|판사
+job|Journalist|기자
+job|Photographer|사진작가
+job|Barista|바리스타
+job|Carpenter|목수
+job|Plumber|배관공
+job|Electrician|전기기술자
+job|Mechanic|정비사
+job|Librarian|사서
+job|Accountant|회계사
+job|Veterinarian|수의사
+job|Pharmacist|약사
+job|Astronaut|우주비행사
+job|Magician|마술사
+job|Clown|광대
+job|Referee|심판
+job|Tailor|재단사
+job|King|왕
+job|Queen|여왕
+job|Prince|왕자
+job|Princess|공주
+job|Knight|기사
+job|Samurai|사무라이
+job|Ninja|닌자
+job|Pirate|해적
+job|Cowboy|카우보이
+job|Gladiator|검투사
+job|Monk|승려
+job|Priest|신부
+job|Pastor|목사
+job|Nun|수녀
+job|Shaman|무당
+job|Fortune teller|점쟁이
+job|Astrologer|점성술사
+job|Wizard|마법사
+job|Witch|마녀
+job|Alchemist|연금술사
+job|Inventor|발명가
+job|Explorer|탐험가
+job|Mountaineer|산악인
+job|Park ranger|산림 감시원
+job|Zookeeper|사육사
+job|Animal trainer|조련사
+job|Dog walker|반려견 산책사
+job|Florist|플로리스트
+job|Gardener|정원사
+job|Forester|임업인
+job|Cattle rancher|목장주
+job|Beekeeper honey|양봉업자
+job|Winemaker|와인 제조자
+job|Brewer|양조업자
+job|Tea master|다도가
+job|Potter|도공
+job|Sculptor|조각가
+job|Weaver|직조공
+job|Goldsmith|금세공사
+job|Jeweler|보석상
+job|Watchmaker|시계 수리공
+job|Shoemaker|구두 수선공
+job|Tailor dress|양장점 주인
+job|Fashion model|패션 모델
+job|Makeup artist|메이크업 아티스트
+job|Stylist|스타일리스트
+job|Barber|이발사
+job|Tattoo artist|타투이스트
+job|Cartoonist|만화가
+job|Illustrator|일러스트레이터
+job|Poet|시인
+job|Novelist|소설가
+job|Screenwriter|시나리오 작가
+job|Editor|편집자
+job|Publisher|출판인
+job|Translator|번역가
+job|Announcer|아나운서
+job|News anchor|앵커
+job|DJ|디제이
+job|Archaeologist|고고학자
+job|Sommelier|소믈리에
+job|Interpreter|통역사
+job|Puppeteer|인형극 연출가
+job|Blacksmith|대장장이
+job|Beekeeper|양봉가
+job|Lifeguard|인명구조원
+job|Shepherd|양치기
+job|Mime|마임 배우
+job|Auctioneer|경매인
+job|Radio host|라디오 진행자
+job|YouTuber|유튜버
+job|Streamer|스트리머
+job|Comedian|코미디언
+job|Voice actor|성우
+job|Movie director|영화감독
+job|Cinematographer|촬영감독
+job|Stuntman|스턴트맨
+job|Dancer|무용수
+job|Ballerina|발레리나
+job|Choreographer|안무가
+job|Conductor|지휘자
+job|Composer|작곡가
+job|Pianist|피아니스트
+job|Violinist|바이올리니스트
+job|Rapper|래퍼
+job|Idol trainee|연습생
+job|Referee soccer|축구 심판
+job|Coach|코치
+job|Personal trainer|헬스 트레이너
+job|Swimmer|수영선수
+job|Marathon runner|마라톤 선수
+job|Golfer|골퍼
+job|Gamer pro|프로게이머
+job|Chess grandmaster|체스 그랜드마스터
+job|Baduk player|바둑기사
+job|Mathematician|수학자
+job|Physicist|물리학자
+job|Chemist|화학자
+job|Biologist|생물학자
+job|Geologist|지질학자
+job|Meteorologist|기상학자
+job|Oceanographer|해양학자
+job|Astronomer|천문학자
+job|Paleontologist|고생물학자
+job|Historian|역사학자
+job|Linguist|언어학자
+job|Philosopher|철학자
+job|Curator|큐레이터
+job|Tour guide|관광 가이드
+job|Interpreter conference|동시통역사
+nature|Tree|나무
+nature|Flower|꽃
+nature|Grass|풀
+nature|Rose|장미
+nature|Sunflower|해바라기
+nature|Cloud|구름
+nature|Rain|비
+nature|Snow|눈
+nature|Sun|해
+nature|Moon|달
+nature|Star|별
+nature|Rainbow|무지개
+nature|Wind|바람
+nature|Stone|돌
+nature|Sand|모래
+nature|Leaf|잎
+nature|Fire|불
+nature|Water|물
+nature|Ice|얼음
+nature|Lightning|번개
+nature|Oak|참나무
+nature|Willow|버드나무
+nature|Birch|자작나무
+nature|Ginkgo|은행나무
+nature|Cedar|삼나무
+nature|Cypress|편백나무
+nature|Palm tree|야자나무
+nature|Baobab|바오바브나무
+nature|Redwood|레드우드
+nature|Apple tree|사과나무
+nature|Persimmon tree|감나무
+nature|Plum blossom|매화
+nature|Magnolia|목련
+nature|Azalea|진달래
+nature|Forsythia|개나리
+nature|Camellia|동백
+nature|Hydrangea|수국
+nature|Lilac|라일락
+nature|Lavender|라벤더
+nature|Jasmine|재스민
+nature|Daisy|데이지
+nature|Dandelion|민들레
+nature|Clover|클로버
+nature|Lily|백합
+nature|Iris|붓꽃
+nature|Daffodil|수선화
+nature|Violet|제비꽃
+nature|Morning glory|나팔꽃
+nature|Cosmos|코스모스
+nature|Chrysanthemum|국화
+nature|Peony|모란
+nature|Carnation|카네이션
+nature|Poppy|양귀비
+nature|Lotus flower|연꽃 송이
+nature|Rice plant|벼
+nature|Wheat|밀
+nature|Barley|보리
+nature|Bamboo shoot|죽순
+nature|Ivy|담쟁이덩굴
+nature|Vine|덩굴
+nature|Seaweed sea|바닷말
+nature|Mushroom wild|야생 버섯
+nature|Acorn|도토리
+nature|Pine cone|솔방울
+nature|Seed|씨앗
+nature|Root|뿌리
+nature|Branch|나뭇가지
+nature|Bark|나무껍질
+nature|Thorn|가시
+nature|Pollen|꽃가루
+nature|Nectar|꿀
+nature|Spring|봄
+nature|Summer|여름
+nature|Autumn|가을
+nature|Winter|겨울
+nature|Morning|아침
+nature|Noon|한낮
+nature|Evening|저녁
+nature|Night|밤
+nature|Dawn|새벽
+nature|Sunset|노을
+nature|Sunrise|일출
+nature|Full moon|보름달
+nature|Crescent moon|초승달
+nature|Shooting star|별똥별
+nature|Milky Way|은하수
+nature|Sky|하늘
+nature|Thunder|천둥
+nature|Typhoon|태풍
+nature|Hurricane|허리케인
+nature|Blizzard|눈보라
+nature|Drizzle|이슬비
+nature|Rain shower|소나기
+nature|Monsoon|장마
+nature|Flood|홍수
+nature|Drought|가뭄
+nature|Heat wave|폭염
+nature|Cold wave|한파
+nature|Yellow dust|황사
+nature|Smog|스모그
+nature|Mist|안개비
+nature|Icicle|고드름
+nature|Snowman|눈사람
+nature|Snowflake|눈송이
+nature|Puddle|물웅덩이
+nature|Stream|시냇물
+nature|Pond|연못
+nature|Ocean|대양
+nature|Wave|파도
+nature|Tide|조수
+nature|Whirlpool|소용돌이
+nature|Iceberg|빙산
+nature|Shore|해안
+nature|Cliffside|해안 절벽
+nature|Boulder|바위
+nature|Pebble|조약돌
+nature|Gravel|자갈
+nature|Mud|진흙
+nature|Clay|점토
+nature|Soil|흙
+nature|Dust|먼지
+nature|Ash|재
+nature|Smoke|연기
+nature|Flame|불꽃
+nature|Ember|불씨
+nature|Lava|용암
+nature|Magma|마그마
+nature|Crater|분화구
+nature|Fossil|화석
+nature|Amber|호박
+nature|Pearl|진주
+nature|Shell|조개껍데기
+nature|Coral piece|산호 조각
+nature|Driftwood|유목
+nature|Moss rock|이끼 낀 바위
+nature|Tulip|튤립
+nature|Cherry blossom|벚꽃
+nature|Bamboo|대나무
+nature|Cactus|선인장
+nature|Pine tree|소나무
+nature|Maple tree|단풍나무
+nature|Fog|안개
+nature|Tornado|토네이도
+nature|Earthquake|지진
+nature|Comet|혜성
+nature|Planet|행성
+nature|Galaxy|은하
+nature|Shadow|그림자
+nature|Echo|메아리
+nature|Dew|이슬
+nature|Frost|서리
+nature|Hail|우박
+nature|Coral|산호
+nature|Aurora|오로라
+nature|Solar eclipse|일식
+nature|Black hole|블랙홀
+nature|Meteor|유성
+nature|Mirage|신기루
+nature|Geyser|간헐천
+nature|Quicksand|유사
+nature|Orchid|난초
+nature|Fern|고사리
+nature|Moss|이끼
+nature|Lotus|연꽃
+nature|Kelp|다시마
+nature|Diamond|다이아몬드
+nature|Ruby|루비
+nature|Sapphire|사파이어
+nature|Emerald|에메랄드
+nature|Amethyst|자수정
+nature|Topaz|토파즈
+nature|Opal|오팔
+nature|Jade|옥
+nature|Quartz|석영
+nature|Granite|화강암
+nature|Marble|대리석
+nature|Limestone|석회암
+nature|Basalt|현무암
+nature|Obsidian|흑요석
+nature|Gold|금
+nature|Silver|은
+nature|Copper|구리
+nature|Iron (metal)|철
+nature|Aluminum|알루미늄
+nature|Mercury|수은
+nature|Coal|석탄
+nature|Salt crystal|소금 결정
+nature|Sulfur|황
+nature|Mercury planet|수성
+nature|Venus|금성
+nature|Earth|지구
+nature|Mars|화성
+nature|Jupiter|목성
+nature|Saturn|토성
+nature|Uranus|천왕성
+nature|Neptune|해왕성
+nature|Pluto|명왕성
+nature|Asteroid|소행성
+nature|Nebula|성운
+nature|Supernova|초신성
+nature|Pulsar|펄서
+nature|Quasar|퀘이사
+nature|Wormhole|웜홀
+nature|Big Bang|빅뱅
+nature|Sun spot|흑점
+nature|Solar flare|태양 플레어
+nature|Lunar eclipse|월식
+nature|Moon crater|달 크레이터
+nature|Constellation|별자리
+nature|Orion|오리온자리
+nature|Big Dipper|북두칠성
+nature|North Star|북극성
+nature|Southern Cross|남십자성
+nature|Zodiac|황도 12궁
+nature|Gravity|중력
+nature|Magnetism|자기장
+nature|Electricity|전기
+nature|Static electricity|정전기
+nature|Sound wave|음파
+nature|Echo canyon|메아리 계곡
+nature|Light (visible)|빛
+nature|Rainbow double|쌍무지개
+nature|Shadow puppet|그림자 인형
+nature|Reflection|반사
+nature|Mirage desert|사막 신기루
+nature|Halo|달무리
+nature|Sun dog|환일
+nature|Glacier crevasse|빙하 틈
+nature|Permafrost|영구동토
+nature|Fjord|피오르
+nature|Mangrove|맹그로브
+nature|Peat bog|이탄 습지
+nature|Sand dune|모래언덕
+nature|Oasis palm|오아시스 야자
+nature|Rock arch|자연 아치
+nature|Stalactite|종유석
+nature|Stalagmite|석순
+nature|Sinkhole|싱크홀
+nature|Hot spring pool|온천 웅덩이
+nature|Mud volcano|진흙 화산
+nature|Underwater volcano|해저 화산
+nature|Tectonic plate|판
+nature|Fault line|단층
+nature|Tsunami|쓰나미
+nature|Avalanche|눈사태
+nature|Landslide|산사태
+nature|Wildfire|산불
+nature|Lightning rod|피뢰침
+nature|Ball lightning|구상 번개
+nature|Tornado funnel|용오름
+nature|Sandstorm|모래폭풍
+nature|Dust devil|먼지 회오리
+nature|Ocean current|해류
+nature|El Nino|엘니뇨
+nature|Ozone layer|오존층
+nature|Greenhouse gas|온실가스
+nature|Carbon dioxide|이산화탄소
+nature|Oxygen|산소
+nature|Hydrogen|수소
+nature|Nitrogen|질소
+nature|Helium|헬륨
+nature|Neon|네온
+nature|Atom|원자
+nature|Molecule|분자
+nature|Cell|세포
+nature|Virus|바이러스
+nature|Bacteria|박테리아
+nature|Microbe|미생물
+nature|Plankton|플랑크톤
+nature|Algae|조류
+nature|Lichen|지의류
+nature|Yeast|효모
+nature|Spore|포자
+character|Mickey Mouse|미키 마우스
+character|Minnie Mouse|미니 마우스
+character|Donald Duck|도널드 덕
+character|Goofy|구피
+character|Winnie the Pooh|곰돌이 푸
+character|Tigger|티거
+character|Piglet|피글렛
+character|Eeyore|이요르
+character|Simba|심바
+character|Mufasa|무파사
+character|Nala|날라
+character|Timon|티몬
+character|Pumbaa|품바
+character|Bambi|밤비
+character|Dumbo|덤보
+character|Aladdin|알라딘
+character|Jasmine princess|자스민 공주
+character|Genie|지니
+character|Elsa|엘사
+character|Anna|안나
+character|Olaf|올라프
+character|Moana|모아나
+character|Mulan|뮬란
+character|Ariel|에리얼
+character|Belle|벨
+character|Beast|야수
+character|Cinderella|신데렐라
+character|Snow White|백설공주
+character|Sleeping Beauty|잠자는 숲속의 공주
+character|Rapunzel|라푼젤
+character|Pinocchio|피노키오
+character|Peter Pan|피터 팬
+character|Tinker Bell|팅커 벨
+character|Captain Hook|후크 선장
+character|Alice in Wonderland|이상한 나라의 앨리스
+character|Cheshire Cat|체셔 고양이
+character|Mad Hatter|모자 장수
+character|Little Red Riding Hood|빨간 모자
+character|Hansel and Gretel|헨젤과 그레텔
+character|Three Little Pigs|아기 돼지 삼형제
+character|Ugly Duckling|미운 오리 새끼
+character|Puss in Boots|장화 신은 고양이
+character|Santa Claus|산타클로스
+character|Rudolph|루돌프
+character|Woody|우디
+character|Buzz Lightyear|버즈 라이트이어
+character|Nemo|니모
+character|Dory|도리
+character|Shrek|슈렉
+character|Donkey Shrek|동키
+character|Minions|미니언즈
+character|Despicable Me Gru|그루
+character|Spongebob|스폰지밥
+character|Patrick Star|뚱이
+character|Squidward|징징이
+character|Mr. Krabs|집게사장
+character|Snoopy|스누피
+character|Charlie Brown|찰리 브라운
+character|Garfield|가필드
+character|Tom and Jerry Tom|톰
+character|Jerry|제리
+character|Bugs Bunny|벅스 바니
+character|Daffy Duck|대피 덕
+character|Tweety|트위티
+character|Popeye|뽀빠이
+character|Superman|슈퍼맨
+character|Batman|배트맨
+character|Spider-Man|스파이더맨
+character|Iron Man|아이언맨
+character|Captain America|캡틴 아메리카
+character|Thor|토르
+character|Hulk|헐크
+character|Wonder Woman|원더 우먼
+character|Joker|조커
+character|Harry Potter|해리 포터
+character|Hermione|헤르미온느
+character|Voldemort|볼드모트
+character|Gandalf|간달프
+character|Frodo|프로도
+character|Gollum|골룸
+character|Darth Vader|다스 베이더
+character|Yoda|요다
+character|Luke Skywalker|루크 스카이워커
+character|Mario|마리오
+character|Luigi|루이지
+character|Princess Peach|피치 공주
+character|Bowser|쿠파
+character|Yoshi|요시
+character|Donkey Kong|동키콩
+character|Sonic|소닉
+character|Kirby|커비
+character|Link|링크
+character|Zelda|젤다
+character|Pac-Man|팩맨
+character|Tetris|테트리스 블록
+character|Doraemon|도라에몽
+character|Nobita|노진구
+character|Shin-chan|짱구
+character|Detective Conan|명탐정 코난
+character|Totoro|토토로
+character|No-Face|가오나시
+character|Naruto|나루토
+character|Luffy|루피
+character|Goku|손오공
+character|Sailor Moon|세일러문
+character|Astro Boy|아톰
+character|Hello Kitty|헬로키티
+character|Pororo|뽀로로
+character|Crong|크롱
+character|Pinkfong|핑크퐁
+character|Baby Shark|아기상어
+character|Tayo bus|꼬마버스 타요
+character|Robocar Poli|로보카 폴리
+character|Kakao Ryan|라이언
+character|Kakao Apeach|어피치
+character|Line Brown|브라운
+character|Dooly|둘리
+character|Gildong Hong|홍길동
+character|Heungbu|흥부
+character|Nolbu|놀부
+character|Chunhyang|춘향
+character|Simcheong|심청
+character|Dokkaebi|도깨비
+character|Gumiho|구미호
+character|Grim Reaper|저승사자
+character|Sun Wukong|손오공 서유기
+character|Zhuge Liang|제갈량
+character|Robin Hood|로빈 후드
+character|King Arthur|아서 왕
+character|Dracula|드라큘라
+character|Frankenstein|프랑켄슈타인
+character|Mummy|미라
+character|Werewolf|늑대인간
+character|Ghost|유령
+character|Zombie|좀비
+character|Vampire|뱀파이어
+character|Mermaid|인어공주
+character|Fairy|요정
+character|Elf|엘프
+character|Dwarf|난쟁이
+character|Giant|거인
+character|Troll|트롤
+character|Goblin|고블린
+character|Ogre|오거
+character|Centaur|켄타우로스
+character|Phoenix|불사조
+character|Pegasus|페가수스
+character|Cerberus|케르베로스
+character|Medusa|메두사
+character|Minotaur|미노타우로스
+character|Zeus|제우스
+character|Poseidon|포세이돈
+character|Athena|아테나
+character|Hercules|헤라클레스
+character|Thor god|천둥의 신
+character|Anubis|아누비스
+body|Head|머리
+body|Hair|머리카락
+body|Face|얼굴
+body|Forehead|이마
+body|Eyebrow|눈썹
+body|Eye|눈
+body|Eyelash|속눈썹
+body|Nose|코
+body|Nostril|콧구멍
+body|Mouth|입
+body|Lip|입술
+body|Tongue|혀
+body|Tooth|이
+body|Cheek|볼
+body|Chin|턱
+body|Ear|귀
+body|Neck|목
+body|Throat|목구멍
+body|Shoulder|어깨
+body|Arm|팔
+body|Elbow|팔꿈치
+body|Wrist|손목
+body|Hand|손
+body|Palm|손바닥
+body|Finger|손가락
+body|Thumb|엄지손가락
+body|Fingernail|손톱
+body|Chest|가슴
+body|Back|등
+body|Belly|배
+body|Belly button|배꼽
+body|Waist|허리
+body|Hip|엉덩이
+body|Leg|다리
+body|Thigh|허벅지
+body|Knee|무릎
+body|Shin|정강이
+body|Ankle|발목
+body|Foot|발
+body|Heel|발뒤꿈치
+body|Toe|발가락
+body|Skin|피부
+body|Bone|뼈
+body|Muscle|근육
+body|Brain|뇌
+body|Heart|심장
+body|Lung|폐
+body|Stomach|위
+body|Liver|간
+body|Kidney|신장
+body|Intestine|장
+body|Blood|피
+body|Vein|정맥
+body|Nerve|신경
+body|Skull|두개골
+body|Rib|갈비뼈
+body|Spine|척추
+body|Joint|관절
+body|Fingerprint|지문
+body|Dimple|보조개
+body|Freckle|주근깨
+body|Mole spot|점
+body|Wrinkle|주름
+body|Scar|흉터
+body|Beard|수염
+body|Mustache|콧수염
+body|Eyeball|안구
+body|Pupil|눈동자
+body|Tear|눈물
+body|Sweat|땀
+body|Saliva|침
+body|Breath|숨
+body|Heartbeat|심장 박동
+body|Voice|목소리
+body|Sneeze|재채기
+body|Hiccup|딸꾹질
+body|Yawn|하품
+body|Cough|기침
+body|Fever|열
+body|Headache|두통
+body|Stomachache|복통
+body|Cold|감기
+body|Toothache|치통
+body|Cavity|충치
+body|Wisdom tooth|사랑니
+body|Bruise|멍
+body|Blister|물집
+body|Cast|깁스
+body|Stitch|봉합
+body|Vaccine|백신
+body|X-ray|엑스레이
+body|Prescription|처방전
+body|Thermometer clinical|체온계 수은
+body|Dream|꿈
+body|Nightmare|악몽
+body|Memory|기억
+body|Smile|미소
+body|Laughter|웃음
+body|Tears of joy|기쁨의 눈물
+body|Goosebumps|소름
+body|Blush|홍조
+activity|Soccer|축구
+activity|Baseball|야구
+activity|Basketball game|농구
+activity|Volleyball|배구
+activity|Tennis|테니스
+activity|Badminton|배드민턴
+activity|Table tennis|탁구
+activity|Golf|골프
+activity|Bowling|볼링
+activity|Swimming|수영
+activity|Running|달리기
+activity|Hiking|등산
+activity|Cycling|자전거 타기
+activity|Skiing|스키 타기
+activity|Skating|스케이팅
+activity|Boxing|권투
+activity|Taekwondo|태권도
+activity|Judo|유도
+activity|Karate|가라테
+activity|Kendo|검도
+activity|Archery|양궁
+activity|Fencing|펜싱
+activity|Wrestling|레슬링
+activity|Gymnastics|체조
+activity|Yoga|요가
+activity|Pilates|필라테스
+activity|Climbing|암벽등반
+activity|Surfing|서핑
+activity|Diving|다이빙
+activity|Sailing|요트 타기
+activity|Rowing|조정
+activity|Fishing|낚시
+activity|Camping|캠핑
+activity|Picnic|소풍
+activity|Barbecue party|바비큐 파티
+activity|Sledding|눈썰매 타기
+activity|Snowball fight|눈싸움
+activity|Hide and seek|숨바꼭질
+activity|Tag|술래잡기
+activity|Rock paper scissors|가위바위보
+activity|Jump rope game|줄넘기 놀이
+activity|Hopscotch|사방치기
+activity|Marbles game|구슬치기
+activity|Kite flying game|연날리기 놀이
+activity|Tug of war|줄다리기
+activity|Sack race|포대 달리기
+activity|Relay race|이어달리기
+activity|Chess game|체스 대국
+activity|Baduk|바둑
+activity|Janggi|장기
+activity|Hwatu|화투
+activity|Poker|포커
+activity|Mahjong|마작
+activity|Board game|보드게임
+activity|Card game|카드놀이
+activity|Video game|비디오 게임
+activity|Karaoke|노래방 놀이
+activity|Dancing|춤추기
+activity|Singing|노래하기
+activity|Playing piano|피아노 치기
+activity|Playing guitar|기타 치기
+activity|Drawing|그림 그리기
+activity|Painting|물감 칠하기
+activity|Pottery|도자기 빚기
+activity|Knitting|뜨개질
+activity|Sewing|바느질
+activity|Origami|종이접기
+activity|Calligraphy|서예
+activity|Photography|사진 찍기
+activity|Gardening|정원 가꾸기
+activity|Cooking|요리하기
+activity|Baking|빵 굽기
+activity|Reading|독서하기
+activity|Writing diary|일기 쓰기
+activity|Studying|공부하기
+activity|Homework|숙제
+activity|Exam|시험
+activity|Presentation|발표
+activity|Meeting|회의
+activity|Interview|면접
+activity|Wedding|결혼식
+activity|Funeral|장례식
+activity|Birthday party|생일 파티
+activity|Graduation|졸업식
+activity|School trip|수학여행
+activity|Field day|운동회
+activity|Festival|축제
+activity|Parade|퍼레이드
+activity|Concert|콘서트
+activity|Movie night|영화 감상
+activity|Theater play|연극
+activity|Circus|서커스
+activity|Magic show|마술 쇼
+activity|Fireworks festival|불꽃 축제
+activity|Lantern festival|연등회
+activity|Chuseok|추석
+activity|Seollal|설날
+activity|Christmas|크리스마스
+activity|Halloween|할로윈
+activity|Valentine's Day|밸런타인데이
+activity|New Year's Eve|새해 전야
+activity|Easter|부활절
+activity|Thanksgiving|추수감사절
+activity|Shopping|쇼핑
+activity|Window shopping|아이쇼핑
+activity|Online shopping|온라인 쇼핑
+activity|Travel|여행
+activity|Road trip|자동차 여행
+activity|Backpacking|배낭여행
+activity|Cruise trip|크루즈 여행
+activity|Flight|비행
+activity|Moving house|이사
+activity|Cleaning|청소
+activity|Laundry|빨래
+activity|Washing dishes|설거지
+activity|Cooking breakfast|아침 식사 준비
+activity|Brushing teeth|양치질
+activity|Taking a shower|샤워하기
+activity|Napping|낮잠
+activity|Sleeping|잠자기
+activity|Waking up|기상
+activity|Commuting|출퇴근
+activity|Waiting in line|줄서기
+activity|Queueing for bus|버스 기다리기
+activity|Chatting|수다
+activity|Phone call|통화
+activity|Texting|문자 보내기
+activity|Video call|화상 통화
+activity|Livestream|라이브 방송
+activity|Podcast|팟캐스트
+activity|Meditation|명상
+activity|Stretching|스트레칭
+activity|Massage|마사지
+activity|Sunbathing|일광욕
+activity|Stargazing|별 보기
+activity|Birdwatching|새 관찰
+activity|Treasure hunt|보물찾기
+activity|Scavenger hunt|스캐빈저 헌트
+activity|Quiz|퀴즈
+activity|Riddle|수수께끼
+activity|Twenty questions|스무고개
+activity|Charades|몸으로 말해요
+activity|Word chain game|끝말잇기
+activity|Tongue twister|잰말놀이
+activity|Magic trick|마술
+pokemon|Bulbasaur|이상해씨
+pokemon|Ivysaur|이상해풀
+pokemon|Venusaur|이상해꽃
+pokemon|Charmander|파이리
+pokemon|Charmeleon|리자드
+pokemon|Charizard|리자몽
+pokemon|Squirtle|꼬부기
+pokemon|Wartortle|어니부기
+pokemon|Blastoise|거북왕
+pokemon|Caterpie|캐터피
+pokemon|Metapod|단데기
+pokemon|Butterfree|버터플
+pokemon|Weedle|뿔충이
+pokemon|Kakuna|딱충이
+pokemon|Beedrill|독침붕
+pokemon|Pidgey|구구
+pokemon|Pidgeotto|피죤
+pokemon|Pidgeot|피죤투
+pokemon|Rattata|꼬렛
+pokemon|Raticate|레트라
+pokemon|Spearow|깨비참
+pokemon|Fearow|깨비드릴조
+pokemon|Ekans|아보
+pokemon|Arbok|아보크
+pokemon|Pikachu|피카츄
+pokemon|Raichu|라이츄
+pokemon|Sandshrew|모래두지
+pokemon|Sandslash|고지
+pokemon|Nidoran (Female)|니드런♀
+pokemon|Nidorina|니드리나
+pokemon|Nidoqueen|니드퀸
+pokemon|Nidoran (Male)|니드런♂
+pokemon|Nidorino|니드리노
+pokemon|Nidoking|니드킹
+pokemon|Clefairy|삐삐
+pokemon|Clefable|픽시
+pokemon|Vulpix|식스테일
+pokemon|Ninetales|나인테일
+pokemon|Jigglypuff|푸린
+pokemon|Wigglytuff|푸크린
+pokemon|Zubat|주뱃
+pokemon|Golbat|골뱃
+pokemon|Oddish|뚜벅쵸
+pokemon|Gloom|냄새꼬
+pokemon|Vileplume|라플레시아
+pokemon|Paras|파라스
+pokemon|Parasect|파라섹트
+pokemon|Venonat|콘팡
+pokemon|Venomoth|도나리
+pokemon|Diglett|디그다
+pokemon|Dugtrio|닥트리오
+pokemon|Meowth|나옹
+pokemon|Persian|페르시온
+pokemon|Psyduck|고라파덕
+pokemon|Golduck|골덕
+pokemon|Mankey|망키
+pokemon|Primeape|성원숭
+pokemon|Growlithe|가디
+pokemon|Arcanine|윈디
+pokemon|Poliwag|발챙이
+pokemon|Poliwhirl|슈륙챙이
+pokemon|Poliwrath|강챙이
+pokemon|Abra|캐이시
+pokemon|Kadabra|윤겔라
+pokemon|Alakazam|후딘
+pokemon|Machop|알통몬
+pokemon|Machoke|근육몬
+pokemon|Machamp|괴력몬
+pokemon|Bellsprout|모다피
+pokemon|Weepinbell|우츠동
+pokemon|Victreebel|우츠보트
+pokemon|Tentacool|왕눈해
+pokemon|Tentacruel|독파리
+pokemon|Geodude|꼬마돌
+pokemon|Graveler|데구리
+pokemon|Golem|딱구리
+pokemon|Ponyta|포니타
+pokemon|Rapidash|날쌩마
+pokemon|Slowpoke|야돈
+pokemon|Slowbro|야도란
+pokemon|Magnemite|코일
+pokemon|Magneton|레어코일
+pokemon|Farfetch’d|파오리
+pokemon|Doduo|두두
+pokemon|Dodrio|두트리오
+pokemon|Seel|쥬쥬
+pokemon|Dewgong|쥬레곤
+pokemon|Grimer|질퍽이
+pokemon|Muk|질뻐기
+pokemon|Shellder|셀러
+pokemon|Cloyster|파르셀
+pokemon|Gastly|고오스
+pokemon|Haunter|고우스트
+pokemon|Gengar|팬텀
+pokemon|Onix|롱스톤
+pokemon|Drowzee|슬리프
+pokemon|Hypno|슬리퍼
+pokemon|Krabby|크랩
+pokemon|Kingler|킹크랩
+pokemon|Voltorb|찌리리공
+pokemon|Electrode|붐볼
+pokemon|Exeggcute|아라리
+pokemon|Exeggutor|나시
+pokemon|Cubone|탕구리
+pokemon|Marowak|텅구리
+pokemon|Hitmonlee|시라소몬
+pokemon|Hitmonchan|홍수몬
+pokemon|Lickitung|내루미
+pokemon|Koffing|또가스
+pokemon|Weezing|또도가스
+pokemon|Rhyhorn|뿔카노
+pokemon|Rhydon|코뿌리
+pokemon|Chansey|럭키
+pokemon|Tangela|덩쿠리
+pokemon|Kangaskhan|캥카
+pokemon|Horsea|쏘드라
+pokemon|Seadra|시드라
+pokemon|Goldeen|콘치
+pokemon|Seaking|왕콘치
+pokemon|Staryu|별가사리
+pokemon|Starmie|아쿠스타
+pokemon|Mr. Mime|마임맨
+pokemon|Scyther|스라크
+pokemon|Jynx|루주라
+pokemon|Electabuzz|에레브
+pokemon|Magmar|마그마
+pokemon|Pinsir|쁘사이저
+pokemon|Tauros|켄타로스
+pokemon|Magikarp|잉어킹
+pokemon|Gyarados|갸라도스
+pokemon|Lapras|라프라스
+pokemon|Ditto|메타몽
+pokemon|Eevee|이브이
+pokemon|Vaporeon|샤미드
+pokemon|Jolteon|쥬피썬더
+pokemon|Flareon|부스터
+pokemon|Porygon|폴리곤
+pokemon|Omanyte|암나이트
+pokemon|Omastar|암스타
+pokemon|Kabuto|투구
+pokemon|Kabutops|투구푸스
+pokemon|Aerodactyl|프테라
+pokemon|Snorlax|잠만보
+pokemon|Articuno|프리져
+pokemon|Zapdos|썬더
+pokemon|Moltres|파이어
+pokemon|Dratini|미뇽
+pokemon|Dragonair|신뇽
+pokemon|Dragonite|망나뇽
+pokemon|Mewtwo|뮤츠
+pokemon|Mew|뮤
+pokemon|Chikorita|치코리타
+pokemon|Bayleef|베이리프
+pokemon|Meganium|메가니움
+pokemon|Cyndaquil|브케인
+pokemon|Quilava|마그케인
+pokemon|Typhlosion|블레이범
+pokemon|Totodile|리아코
+pokemon|Croconaw|엘리게이
+pokemon|Feraligatr|장크로다일
+pokemon|Sentret|꼬리선
+pokemon|Furret|다꼬리
+pokemon|Hoothoot|부우부
+pokemon|Noctowl|야부엉
+pokemon|Ledyba|레디바
+pokemon|Ledian|레디안
+pokemon|Spinarak|페이검
+pokemon|Ariados|아리아도스
+pokemon|Crobat|크로뱃
+pokemon|Chinchou|초라기
+pokemon|Lanturn|랜턴
+pokemon|Pichu|피츄
+pokemon|Cleffa|삐
+pokemon|Igglybuff|푸푸린
+pokemon|Togepi|토게피
+pokemon|Togetic|토게틱
+pokemon|Natu|네이티
+pokemon|Xatu|네이티오
+pokemon|Mareep|메리프
+pokemon|Flaaffy|보송송
+pokemon|Ampharos|전룡
+pokemon|Bellossom|아르코
+pokemon|Marill|마릴
+pokemon|Azumarill|마릴리
+pokemon|Sudowoodo|꼬지모
+pokemon|Politoed|왕구리
+pokemon|Hoppip|통통코
+pokemon|Skiploom|두코
+pokemon|Jumpluff|솜솜코
+pokemon|Aipom|에이팜
+pokemon|Sunkern|해너츠
+pokemon|Sunflora|해루미
+pokemon|Yanma|왕자리
+pokemon|Wooper|우파
+pokemon|Quagsire|누오
+pokemon|Espeon|에브이
+pokemon|Umbreon|블래키
+pokemon|Murkrow|니로우
+pokemon|Slowking|야도킹
+pokemon|Misdreavus|무우마
+pokemon|Unown|안농
+pokemon|Wobbuffet|마자용
+pokemon|Girafarig|키링키
+pokemon|Pineco|피콘
+pokemon|Forretress|쏘콘
+pokemon|Dunsparce|노고치
+pokemon|Gligar|글라이거
+pokemon|Steelix|강철톤
+pokemon|Snubbull|블루
+pokemon|Granbull|그랑블루
+pokemon|Qwilfish|침바루
+pokemon|Scizor|핫삼
+pokemon|Shuckle|단단지
+pokemon|Heracross|헤라크로스
+pokemon|Sneasel|포푸니
+pokemon|Teddiursa|깜지곰
+pokemon|Ursaring|링곰
+pokemon|Slugma|마그마그
+pokemon|Magcargo|마그카르고
+pokemon|Swinub|꾸꾸리
+pokemon|Piloswine|메꾸리
+pokemon|Corsola|코산호
+pokemon|Remoraid|총어
+pokemon|Octillery|대포무노
+pokemon|Delibird|딜리버드
+pokemon|Mantine|만타인
+pokemon|Skarmory|무장조
+pokemon|Houndour|델빌
+pokemon|Houndoom|헬가
+pokemon|Kingdra|킹드라
+pokemon|Phanpy|코코리
+pokemon|Donphan|코리갑
+pokemon|Porygon2|폴리곤2
+pokemon|Stantler|노라키
+pokemon|Smeargle|루브도
+pokemon|Tyrogue|배루키
+pokemon|Hitmontop|카포에라
+pokemon|Smoochum|뽀뽀라
+pokemon|Elekid|에레키드
+pokemon|Magby|마그비
+pokemon|Miltank|밀탱크
+pokemon|Blissey|해피너스
+pokemon|Raikou|라이코
+pokemon|Entei|앤테이
+pokemon|Suicune|스이쿤
+pokemon|Larvitar|애버라스
+pokemon|Pupitar|데기라스
+pokemon|Tyranitar|마기라스
+pokemon|Lugia|루기아
+pokemon|Ho-Oh|칠색조
+pokemon|Celebi|세레비
+pokemon|Treecko|나무지기
+pokemon|Grovyle|나무돌이
+pokemon|Sceptile|나무킹
+pokemon|Torchic|아차모
+pokemon|Combusken|영치코
+pokemon|Blaziken|번치코
+pokemon|Mudkip|물짱이
+pokemon|Marshtomp|늪짱이
+pokemon|Swampert|대짱이
+pokemon|Poochyena|포챠나
+pokemon|Mightyena|그라에나
+pokemon|Zigzagoon|지그제구리
+pokemon|Linoone|직구리
+pokemon|Wurmple|개무소
+pokemon|Silcoon|실쿤
+pokemon|Beautifly|뷰티플라이
+pokemon|Cascoon|카스쿤
+pokemon|Dustox|독케일
+pokemon|Lotad|연꽃몬
+pokemon|Lombre|로토스
+pokemon|Ludicolo|로파파
+pokemon|Seedot|도토링
+pokemon|Nuzleaf|잎새코
+pokemon|Shiftry|다탱구
+pokemon|Taillow|테일로
+pokemon|Swellow|스왈로
+pokemon|Wingull|갈모매
+pokemon|Pelipper|패리퍼
+pokemon|Ralts|랄토스
+pokemon|Kirlia|킬리아
+pokemon|Gardevoir|가디안
+pokemon|Surskit|비구술
+pokemon|Masquerain|비나방
+pokemon|Shroomish|버섯꼬
+pokemon|Breloom|버섯모
+pokemon|Slakoth|게을로
+pokemon|Vigoroth|발바로
+pokemon|Slaking|게을킹
+pokemon|Nincada|토중몬
+pokemon|Ninjask|아이스크
+pokemon|Shedinja|껍질몬
+pokemon|Whismur|소곤룡
+pokemon|Loudred|노공룡
+pokemon|Exploud|폭음룡
+pokemon|Makuhita|마크탕
+pokemon|Hariyama|하리뭉
+pokemon|Azurill|루리리
+pokemon|Nosepass|코코파스
+pokemon|Skitty|에나비
+pokemon|Delcatty|델케티
+pokemon|Sableye|깜까미
+pokemon|Mawile|입치트
+pokemon|Aron|가보리
+pokemon|Lairon|갱도라
+pokemon|Aggron|보스로라
+pokemon|Meditite|요가랑
+pokemon|Medicham|요가램
+pokemon|Electrike|썬더라이
+pokemon|Manectric|썬더볼트
+pokemon|Plusle|플러시
+pokemon|Minun|마이농
+pokemon|Volbeat|볼비트
+pokemon|Illumise|네오비트
+pokemon|Roselia|로젤리아
+pokemon|Gulpin|꼴깍몬
+pokemon|Swalot|꿀꺽몬
+pokemon|Carvanha|샤프니아
+pokemon|Sharpedo|샤크니아
+pokemon|Wailmer|고래왕자
+pokemon|Wailord|고래왕
+pokemon|Numel|둔타
+pokemon|Camerupt|폭타
+pokemon|Torkoal|코터스
+pokemon|Spoink|피그점프
+pokemon|Grumpig|피그킹
+pokemon|Spinda|얼루기
+pokemon|Trapinch|톱치
+pokemon|Vibrava|비브라바
+pokemon|Flygon|플라이곤
+pokemon|Cacnea|선인왕
+pokemon|Cacturne|밤선인
+pokemon|Swablu|파비코
+pokemon|Altaria|파비코리
+pokemon|Zangoose|쟝고
+pokemon|Seviper|세비퍼
+pokemon|Lunatone|루나톤
+pokemon|Solrock|솔록
+pokemon|Barboach|미꾸리
+pokemon|Whiscash|메깅
+pokemon|Corphish|가재군
+pokemon|Crawdaunt|가재장군
+pokemon|Baltoy|오뚝군
+pokemon|Claydol|점토도리
+pokemon|Lileep|릴링
+pokemon|Cradily|릴리요
+pokemon|Anorith|아노딥스
+pokemon|Armaldo|아말도
+pokemon|Feebas|빈티나
+pokemon|Milotic|밀로틱
+pokemon|Castform|캐스퐁
+pokemon|Kecleon|켈리몬
+pokemon|Shuppet|어둠대신
+pokemon|Banette|다크펫
+pokemon|Duskull|해골몽
+pokemon|Dusclops|미라몽
+pokemon|Tropius|트로피우스
+pokemon|Chimecho|치렁
+pokemon|Absol|앱솔
+pokemon|Wynaut|마자
+pokemon|Snorunt|눈꼬마
+pokemon|Glalie|얼음귀신
+pokemon|Spheal|대굴레오
+pokemon|Sealeo|씨레오
+pokemon|Walrein|씨카이저
+pokemon|Clamperl|진주몽
+pokemon|Huntail|헌테일
+pokemon|Gorebyss|분홍장이
+pokemon|Relicanth|시라칸
+pokemon|Luvdisc|사랑동이
+pokemon|Bagon|아공이
+pokemon|Shelgon|쉘곤
+pokemon|Salamence|보만다
+pokemon|Beldum|메탕
+pokemon|Metang|메탕구
+pokemon|Metagross|메타그로스
+pokemon|Regirock|레지락
+pokemon|Regice|레지아이스
+pokemon|Registeel|레지스틸
+pokemon|Latias|라티아스
+pokemon|Latios|라티오스
+pokemon|Kyogre|가이오가
+pokemon|Groudon|그란돈
+pokemon|Rayquaza|레쿠쟈
+pokemon|Jirachi|지라치
+pokemon|Deoxys|테오키스
+pokemon|Turtwig|모부기
+pokemon|Grotle|수풀부기
+pokemon|Torterra|토대부기
+pokemon|Chimchar|불꽃숭이
+pokemon|Monferno|파이숭이
+pokemon|Infernape|초염몽
+pokemon|Piplup|팽도리
+pokemon|Prinplup|팽태자
+pokemon|Empoleon|엠페르트
+pokemon|Starly|찌르꼬
+pokemon|Staravia|찌르버드
+pokemon|Staraptor|찌르호크
+pokemon|Bidoof|비버니
+pokemon|Bibarel|비버통
+pokemon|Kricketot|귀뚤뚜기
+pokemon|Kricketune|귀뚤톡크
+pokemon|Shinx|꼬링크
+pokemon|Luxio|럭시오
+pokemon|Luxray|렌트라
+pokemon|Budew|꼬몽울
+pokemon|Roserade|로즈레이드
+pokemon|Cranidos|두개도스
+pokemon|Rampardos|램펄드
+pokemon|Shieldon|방패톱스
+pokemon|Bastiodon|바리톱스
+pokemon|Burmy|도롱충이
+pokemon|Wormadam|도롱마담
+pokemon|Mothim|나메일
+pokemon|Combee|세꿀버리
+pokemon|Vespiquen|비퀸
+pokemon|Pachirisu|파치리스
+pokemon|Buizel|브이젤
+pokemon|Floatzel|플로젤
+pokemon|Cherubi|체리버
+pokemon|Cherrim|체리꼬
+pokemon|Shellos|깝질무
+pokemon|Gastrodon|트리토돈
+pokemon|Ambipom|겟핸보숭
+pokemon|Drifloon|흔들풍손
+pokemon|Drifblim|둥실라이드
+pokemon|Buneary|이어롤
+pokemon|Lopunny|이어롭
+pokemon|Mismagius|무우마직
+pokemon|Honchkrow|돈크로우
+pokemon|Glameow|나옹마
+pokemon|Purugly|몬냥이
+pokemon|Chingling|랑딸랑
+pokemon|Stunky|스컹뿡
+pokemon|Skuntank|스컹탱크
+pokemon|Bronzor|동미러
+pokemon|Bronzong|동탁군
+pokemon|Bonsly|꼬지지
+pokemon|Mime Jr.|흉내내
+pokemon|Happiny|핑복
+pokemon|Chatot|페라페
+pokemon|Spiritomb|화강돌
+pokemon|Gible|딥상어동
+pokemon|Gabite|한바이트
+pokemon|Garchomp|한카리아스
+pokemon|Munchlax|먹고자
+pokemon|Riolu|리오르
+pokemon|Lucario|루카리오
+pokemon|Hippopotas|히포포타스
+pokemon|Hippowdon|하마돈
+pokemon|Skorupi|스콜피
+pokemon|Drapion|드래피온
+pokemon|Croagunk|삐딱구리
+pokemon|Toxicroak|독개굴
+pokemon|Carnivine|무스틈니
+pokemon|Finneon|형광어
+pokemon|Lumineon|네오라이트
+pokemon|Mantyke|타만타
+pokemon|Snover|눈쓰개
+pokemon|Abomasnow|눈설왕
+pokemon|Weavile|포푸니라
+pokemon|Magnezone|자포코일
+pokemon|Lickilicky|내룸벨트
+pokemon|Rhyperior|거대코뿌리
+pokemon|Tangrowth|덩쿠림보
+pokemon|Electivire|에레키블
+pokemon|Magmortar|마그마번
+pokemon|Togekiss|토게키스
+pokemon|Yanmega|메가자리
+pokemon|Leafeon|리피아
+pokemon|Glaceon|글레이시아
+pokemon|Gliscor|글라이온
+pokemon|Mamoswine|맘모꾸리
+pokemon|Porygon-Z|폴리곤Z
+pokemon|Gallade|엘레이드
+pokemon|Probopass|대코파스
+pokemon|Dusknoir|야느와르몽
+pokemon|Froslass|눈여아
+pokemon|Rotom|로토무
+pokemon|Uxie|유크시
+pokemon|Mesprit|엠라이트
+pokemon|Azelf|아그놈
+pokemon|Dialga|디아루가
+pokemon|Palkia|펄기아
+pokemon|Heatran|히드런
+pokemon|Regigigas|레지기가스
+pokemon|Giratina|기라티나
+pokemon|Cresselia|크레세리아
+pokemon|Phione|피오네
+pokemon|Manaphy|마나피
+pokemon|Darkrai|다크라이
+pokemon|Shaymin|쉐이미
+pokemon|Arceus|아르세우스
+pokemon|Victini|비크티니
+pokemon|Snivy|주리비얀
+pokemon|Servine|샤비
+pokemon|Serperior|샤로다
+pokemon|Tepig|뚜꾸리
+pokemon|Pignite|차오꿀
+pokemon|Emboar|염무왕
+pokemon|Oshawott|수댕이
+pokemon|Dewott|쌍검자비
+pokemon|Samurott|대검귀
+pokemon|Patrat|보르쥐
+pokemon|Watchog|보르그
+pokemon|Lillipup|요테리
+pokemon|Herdier|하데리어
+pokemon|Stoutland|바랜드
+pokemon|Purrloin|쌔비냥
+pokemon|Liepard|레파르다스
+pokemon|Pansage|야나프
+pokemon|Simisage|야나키
+pokemon|Pansear|바오프
+pokemon|Simisear|바오키
+pokemon|Panpour|앗차프
+pokemon|Simipour|앗차키
+pokemon|Munna|몽나
+pokemon|Musharna|몽얌나
+pokemon|Pidove|콩둘기
+pokemon|Tranquill|유토브
+pokemon|Unfezant|켄호로우
+pokemon|Blitzle|줄뮤마
+pokemon|Zebstrika|제브라이카
+pokemon|Roggenrola|단굴
+pokemon|Boldore|암트르
+pokemon|Gigalith|기가이어스
+pokemon|Woobat|또르박쥐
+pokemon|Swoobat|맘박쥐
+pokemon|Drilbur|두더류
+pokemon|Excadrill|몰드류
+pokemon|Audino|다부니
+pokemon|Timburr|으랏차
+pokemon|Gurdurr|토쇠골
+pokemon|Conkeldurr|노보청
+pokemon|Tympole|동챙이
+pokemon|Palpitoad|두까비
+pokemon|Seismitoad|두빅굴
+pokemon|Throh|던지미
+pokemon|Sawk|타격귀
+pokemon|Sewaddle|두르보
+pokemon|Swadloon|두르쿤
+pokemon|Leavanny|모아머
+pokemon|Venipede|마디네
+pokemon|Whirlipede|휠구
+pokemon|Scolipede|펜드라
+pokemon|Cottonee|소미안
+pokemon|Whimsicott|엘풍
+pokemon|Petilil|치릴리
+pokemon|Lilligant|드레디어
+pokemon|Basculin|배쓰나이
+pokemon|Sandile|깜눈크
+pokemon|Krokorok|악비르
+pokemon|Krookodile|악비아르
+pokemon|Darumaka|달막화
+pokemon|Darmanitan|불비달마
+pokemon|Maractus|마라카치
+pokemon|Dwebble|돌살이
+pokemon|Crustle|암팰리스
+pokemon|Scraggy|곤율랭
+pokemon|Scrafty|곤율거니
+pokemon|Sigilyph|심보러
+pokemon|Yamask|데스마스
+pokemon|Cofagrigus|데스니칸
+pokemon|Tirtouga|프로토가
+pokemon|Carracosta|늑골라
+pokemon|Archen|아켄
+pokemon|Archeops|아케오스
+pokemon|Trubbish|깨봉이
+pokemon|Garbodor|더스트나
+pokemon|Zorua|조로아
+pokemon|Zoroark|조로아크
+pokemon|Minccino|치라미
+pokemon|Cinccino|치라치노
+pokemon|Gothita|고디탱
+pokemon|Gothorita|고디보미
+pokemon|Gothitelle|고디모아젤
+pokemon|Solosis|유니란
+pokemon|Duosion|듀란
+pokemon|Reuniclus|란쿨루스
+pokemon|Ducklett|꼬지보리
+pokemon|Swanna|스완나
+pokemon|Vanillite|바닐프티
+pokemon|Vanillish|바닐리치
+pokemon|Vanilluxe|배바닐라
+pokemon|Deerling|사철록
+pokemon|Sawsbuck|바라철록
+pokemon|Emolga|에몽가
+pokemon|Karrablast|딱정곤
+pokemon|Escavalier|슈바르고
+pokemon|Foongus|깜놀버슬
+pokemon|Amoonguss|뽀록나
+pokemon|Frillish|탱그릴
+pokemon|Jellicent|탱탱겔
+pokemon|Alomomola|맘복치
+pokemon|Joltik|파쪼옥
+pokemon|Galvantula|전툴라
+pokemon|Ferroseed|철시드
+pokemon|Ferrothorn|너트령
+pokemon|Klink|기어르
+pokemon|Klang|기기어르
+pokemon|Klinklang|기기기어르
+pokemon|Tynamo|저리어
+pokemon|Eelektrik|저리릴
+pokemon|Eelektross|저리더프
+pokemon|Elgyem|리그레
+pokemon|Beheeyem|벰크
+pokemon|Litwick|불켜미
+pokemon|Lampent|램프라
+pokemon|Chandelure|샹델라
+pokemon|Axew|터검니
+pokemon|Fraxure|액슨도
+pokemon|Haxorus|액스라이즈
+pokemon|Cubchoo|코고미
+pokemon|Beartic|툰베어
+pokemon|Cryogonal|프리지오
+pokemon|Shelmet|쪼마리
+pokemon|Accelgor|어지리더
+pokemon|Stunfisk|메더
+pokemon|Mienfoo|비조푸
+pokemon|Mienshao|비조도
+pokemon|Druddigon|크리만
+pokemon|Golett|골비람
+pokemon|Golurk|골루그
+pokemon|Pawniard|자망칼
+pokemon|Bisharp|절각참
+pokemon|Bouffalant|버프론
+pokemon|Rufflet|수리둥보
+pokemon|Braviary|워글
+pokemon|Vullaby|벌차이
+pokemon|Mandibuzz|버랜지나
+pokemon|Heatmor|앤티골
+pokemon|Durant|아이앤트
+pokemon|Deino|모노두
+pokemon|Zweilous|디헤드
+pokemon|Hydreigon|삼삼드래
+pokemon|Larvesta|활화르바
+pokemon|Volcarona|불카모스
+pokemon|Cobalion|코바르온
+pokemon|Terrakion|테라키온
+pokemon|Virizion|비리디온
+pokemon|Tornadus|토네로스
+pokemon|Thundurus|볼트로스
+pokemon|Reshiram|레시라무
+pokemon|Zekrom|제크로무
+pokemon|Landorus|랜드로스
+pokemon|Kyurem|큐레무
+pokemon|Keldeo|케르디오
+pokemon|Meloetta|메로엣타
+pokemon|Genesect|게노세크트
+pokemon|Chespin|도치마론
+pokemon|Quilladin|도치보구
+pokemon|Chesnaught|브리가론
+pokemon|Fennekin|푸호꼬
+pokemon|Braixen|테르나
+pokemon|Delphox|마폭시
+pokemon|Froakie|개구마르
+pokemon|Frogadier|개굴반장
+pokemon|Greninja|개굴닌자
+pokemon|Bunnelby|파르빗
+pokemon|Diggersby|파르토
+pokemon|Fletchling|화살꼬빈
+pokemon|Fletchinder|불화살빈
+pokemon|Talonflame|파이어로
+pokemon|Scatterbug|분이벌레
+pokemon|Spewpa|분떠도리
+pokemon|Vivillon|비비용
+pokemon|Litleo|레오꼬
+pokemon|Pyroar|화염레오
+pokemon|Flabébé|플라베베
+pokemon|Floette|플라엣테
+pokemon|Florges|플라제스
+pokemon|Skiddo|메이클
+pokemon|Gogoat|고고트
+pokemon|Pancham|판짱
+pokemon|Pangoro|부란다
+pokemon|Furfrou|트리미앙
+pokemon|Espurr|냐스퍼
+pokemon|Meowstic|냐오닉스
+pokemon|Honedge|단칼빙
+pokemon|Doublade|쌍검킬
+pokemon|Aegislash|킬가르도
+pokemon|Spritzee|슈쁘
+pokemon|Aromatisse|프레프티르
+pokemon|Swirlix|나룸퍼프
+pokemon|Slurpuff|나루림
+pokemon|Inkay|오케이징
+pokemon|Malamar|칼라마네로
+pokemon|Binacle|거북손손
+pokemon|Barbaracle|거북손데스
+pokemon|Skrelp|수레기
+pokemon|Dragalge|드래캄
+pokemon|Clauncher|완철포
+pokemon|Clawitzer|블로스터
+pokemon|Helioptile|목도리키텔
+pokemon|Heliolisk|일레도리자드
+pokemon|Tyrunt|티고라스
+pokemon|Tyrantrum|견고라스
+pokemon|Amaura|아마루스
+pokemon|Aurorus|아마루르가
+pokemon|Sylveon|님피아
+pokemon|Hawlucha|루차불
+pokemon|Dedenne|데덴네
+pokemon|Carbink|멜리시
+pokemon|Goomy|미끄메라
+pokemon|Sliggoo|미끄네일
+pokemon|Goodra|미끄래곤
+pokemon|Klefki|클레피
+pokemon|Phantump|나목령
+pokemon|Trevenant|대로트
+pokemon|Pumpkaboo|호바귀
+pokemon|Gourgeist|펌킨인
+pokemon|Bergmite|꽁어름
+pokemon|Avalugg|크레베이스
+pokemon|Noibat|음뱃
+pokemon|Noivern|음번
+pokemon|Xerneas|제르네아스
+pokemon|Yveltal|이벨타르
+pokemon|Zygarde|지가르데
+pokemon|Diancie|디안시
+pokemon|Hoopa|후파
+pokemon|Volcanion|볼케니온
+pokemon|Rowlet|나몰빼미
+pokemon|Dartrix|빼미스로우
+pokemon|Decidueye|모크나이퍼
+pokemon|Litten|냐오불
+pokemon|Torracat|냐오히트
+pokemon|Incineroar|어흥염
+pokemon|Popplio|누리공
+pokemon|Brionne|키요공
+pokemon|Primarina|누리레느
+pokemon|Pikipek|콕코구리
+pokemon|Trumbeak|크라파
+pokemon|Toucannon|왕큰부리
+pokemon|Yungoos|영구스
+pokemon|Gumshoos|형사구스
+pokemon|Grubbin|턱지충이
+pokemon|Charjabug|전지충이
+pokemon|Vikavolt|투구뿌논
+pokemon|Crabrawler|오기지게
+pokemon|Crabominable|모단단게
+pokemon|Oricorio|춤추새
+pokemon|Cutiefly|에블리
+pokemon|Ribombee|에리본
+pokemon|Rockruff|암멍이
+pokemon|Lycanroc|루가루암
+pokemon|Wishiwashi|약어리
+pokemon|Mareanie|시마사리
+pokemon|Toxapex|더시마사리
+pokemon|Mudbray|머드나기
+pokemon|Mudsdale|만마드
+pokemon|Dewpider|물거미
+pokemon|Araquanid|깨비물거미
+pokemon|Fomantis|짜랑랑
+pokemon|Lurantis|라란티스
+pokemon|Morelull|자마슈
+pokemon|Shiinotic|마셰이드
+pokemon|Salandit|야도뇽
+pokemon|Salazzle|염뉴트
+pokemon|Stufful|포곰곰
+pokemon|Bewear|이븐곰
+pokemon|Bounsweet|달콤아
+pokemon|Steenee|달무리나
+pokemon|Tsareena|달코퀸
+pokemon|Comfey|큐아링
+pokemon|Oranguru|하랑우탄
+pokemon|Passimian|내던숭이
+pokemon|Wimpod|꼬시레
+pokemon|Golisopod|갑주무사
+pokemon|Sandygast|모래꿍
+pokemon|Palossand|모래성이당
+pokemon|Pyukumuku|해무기
+pokemon|Type: Null|타입:널
+pokemon|Silvally|실버디
+pokemon|Minior|메테노
+pokemon|Komala|자말라
+pokemon|Turtonator|폭거북스
+pokemon|Togedemaru|토게데마루
+pokemon|Mimikyu|따라큐
+pokemon|Bruxish|치갈기
+pokemon|Drampa|할비롱
+pokemon|Dhelmise|타타륜
+pokemon|Jangmo-o|짜랑꼬
+pokemon|Hakamo-o|짜랑고우
+pokemon|Kommo-o|짜랑고우거
+pokemon|Tapu Koko|카푸꼬꼬꼭
+pokemon|Tapu Lele|카푸나비나
+pokemon|Tapu Bulu|카푸브루루
+pokemon|Tapu Fini|카푸느지느
+pokemon|Cosmog|코스모그
+pokemon|Cosmoem|코스모움
+pokemon|Solgaleo|솔가레오
+pokemon|Lunala|루나아라
+pokemon|Nihilego|텅비드
+pokemon|Buzzwole|매시붕
+pokemon|Pheromosa|페로코체
+pokemon|Xurkitree|전수목
+pokemon|Celesteela|철화구야
+pokemon|Kartana|종이신도
+pokemon|Guzzlord|악식킹
+pokemon|Necrozma|네크로즈마
+pokemon|Magearna|마기아나
+pokemon|Marshadow|마샤도
+pokemon|Poipole|베베놈
+pokemon|Naganadel|아고용
+pokemon|Stakataka|차곡차곡
+pokemon|Blacephalon|두파팡
+pokemon|Zeraora|제라오라
+pokemon|Meltan|멜탄
+pokemon|Melmetal|멜메탈
+pokemon|Grookey|흥나숭
+pokemon|Thwackey|채키몽
+pokemon|Rillaboom|고릴타
+pokemon|Scorbunny|염버니
+pokemon|Raboot|래비풋
+pokemon|Cinderace|에이스번
+pokemon|Sobble|울머기
+pokemon|Drizzile|누겔레온
+pokemon|Inteleon|인텔리레온
+pokemon|Skwovet|탐리스
+pokemon|Greedent|요씽리스
+pokemon|Rookidee|파라꼬
+pokemon|Corvisquire|파크로우
+pokemon|Corviknight|아머까오
+pokemon|Blipbug|두루지벌레
+pokemon|Dottler|레돔벌레
+pokemon|Orbeetle|이올브
+pokemon|Nickit|훔처우
+pokemon|Thievul|폭슬라이
+pokemon|Gossifleur|꼬모카
+pokemon|Eldegoss|백솜모카
+pokemon|Wooloo|우르
+pokemon|Dubwool|배우르
+pokemon|Chewtle|깨물부기
+pokemon|Drednaw|갈가부기
+pokemon|Yamper|멍파치
+pokemon|Boltund|펄스멍
+pokemon|Rolycoly|탄동
+pokemon|Carkol|탄차곤
+pokemon|Coalossal|석탄산
+pokemon|Applin|과사삭벌레
+pokemon|Flapple|애프룡
+pokemon|Appletun|단지래플
+pokemon|Silicobra|모래뱀
+pokemon|Sandaconda|사다이사
+pokemon|Cramorant|윽우지
+pokemon|Arrokuda|찌로꼬치
+pokemon|Barraskewda|꼬치조
+pokemon|Toxel|일레즌
+pokemon|Toxtricity|스트린더
+pokemon|Sizzlipede|태우지네
+pokemon|Centiskorch|다태우지네
+pokemon|Clobbopus|때때무노
+pokemon|Grapploct|케오퍼스
+pokemon|Sinistea|데인차
+pokemon|Polteageist|포트데스
+pokemon|Hatenna|몸지브림
+pokemon|Hattrem|손지브림
+pokemon|Hatterene|브리무음
+pokemon|Impidimp|메롱꿍
+pokemon|Morgrem|쏘겨모
+pokemon|Grimmsnarl|오롱털
+pokemon|Obstagoon|가로막구리
+pokemon|Perrserker|나이킹
+pokemon|Cursola|산호르곤
+pokemon|Sirfetch’d|창파나이트
+pokemon|Mr. Rime|마임꽁꽁
+pokemon|Runerigus|데스판
+pokemon|Milcery|마빌크
+pokemon|Alcremie|마휘핑
+pokemon|Falinks|대여르
+pokemon|Pincurchin|찌르성게
+pokemon|Snom|누니머기
+pokemon|Frosmoth|모스노우
+pokemon|Stonjourner|돌헨진
+pokemon|Eiscue|빙큐보
+pokemon|Indeedee|에써르
+pokemon|Morpeko|모르페코
+pokemon|Cufant|끼리동
+pokemon|Copperajah|대왕끼리동
+pokemon|Dracozolt|파치래곤
+pokemon|Arctozolt|파치르돈
+pokemon|Dracovish|어래곤
+pokemon|Arctovish|어치르돈
+pokemon|Duraludon|두랄루돈
+pokemon|Dreepy|드라꼰
+pokemon|Drakloak|드래런치
+pokemon|Dragapult|드래펄트
+pokemon|Zacian|자시안
+pokemon|Zamazenta|자마젠타
+pokemon|Eternatus|무한다이노
+pokemon|Kubfu|치고마
+pokemon|Urshifu|우라오스
+pokemon|Zarude|자루도
+pokemon|Regieleki|레지에레키
+pokemon|Regidrago|레지드래고
+pokemon|Glastrier|블리자포스
+pokemon|Spectrier|레이스포스
+pokemon|Calyrex|버드렉스
+pokemon|Wyrdeer|신비록
+pokemon|Kleavor|사마자르
+pokemon|Ursaluna|다투곰
+pokemon|Basculegion|대쓰여너
+pokemon|Sneasler|포푸니크
+pokemon|Overqwil|장침바루
+pokemon|Enamorus|러브로스
+pokemon|Sprigatito|나오하
+pokemon|Floragato|나로테
+pokemon|Meowscarada|마스카나
+pokemon|Fuecoco|뜨아거
+pokemon|Crocalor|악뜨거
+pokemon|Skeledirge|라우드본
+pokemon|Quaxly|꾸왁스
+pokemon|Quaxwell|아꾸왁
+pokemon|Quaquaval|웨이니발
+pokemon|Lechonk|맛보돈
+pokemon|Oinkologne|퍼퓨돈
+pokemon|Tarountula|타랜툴라
+pokemon|Spidops|트래피더
+pokemon|Nymble|콩알뚜기
+pokemon|Lokix|엑스레그
+pokemon|Pawmi|빠모
+pokemon|Pawmo|빠모트
+pokemon|Pawmot|빠르모트
+pokemon|Tandemaus|두리쥐
+pokemon|Maushold|파밀리쥐
+pokemon|Fidough|쫀도기
+pokemon|Dachsbun|바우첼
+pokemon|Smoliv|미니브
+pokemon|Dolliv|올리뇨
+pokemon|Arboliva|올리르바
+pokemon|Squawkabilly|시비꼬
+pokemon|Nacli|베베솔트
+pokemon|Naclstack|스태솔트
+pokemon|Garganacl|콜로솔트
+pokemon|Charcadet|카르본
+pokemon|Armarouge|카디나르마
+pokemon|Ceruledge|파라블레이즈
+pokemon|Tadbulb|빈나두
+pokemon|Bellibolt|찌리배리
+pokemon|Wattrel|찌리비
+pokemon|Kilowattrel|찌리비크
+pokemon|Maschiff|오라티프
+pokemon|Mabosstiff|마피티프
+pokemon|Shroodle|땃쭈르
+pokemon|Grafaiai|태깅구르
+pokemon|Bramblin|그푸리
+pokemon|Brambleghast|공푸리
+pokemon|Toedscool|들눈해
+pokemon|Toedscruel|육파리
+pokemon|Klawf|절벼게
+pokemon|Capsakid|캡싸이
+pokemon|Scovillain|스코빌런
+pokemon|Rellor|구르데
+pokemon|Rabsca|베라카스
+pokemon|Flittle|하느라기
+pokemon|Espathra|클레스퍼트라
+pokemon|Tinkatink|어리짱
+pokemon|Tinkatuff|벼리짱
+pokemon|Tinkaton|두드리짱
+pokemon|Wiglett|바다그다
+pokemon|Wugtrio|바닥트리오
+pokemon|Bombirdier|떨구새
+pokemon|Finizen|맨돌핀
+pokemon|Palafin|돌핀맨
+pokemon|Varoom|부르롱
+pokemon|Revavroom|부르르룸
+pokemon|Cyclizar|모토마
+pokemon|Orthworm|꿈트렁
+pokemon|Glimmet|초롱순
+pokemon|Glimmora|킬라플로르
+pokemon|Greavard|망망이
+pokemon|Houndstone|묘두기
+pokemon|Flamigo|꼬이밍고
+pokemon|Cetoddle|터벅고래
+pokemon|Cetitan|우락고래
+pokemon|Veluza|가비루사
+pokemon|Dondozo|어써러셔
+pokemon|Tatsugiri|싸리용
+pokemon|Annihilape|저승갓숭
+pokemon|Clodsire|토오
+pokemon|Farigiraf|키키링
+pokemon|Dudunsparce|노고고치
+pokemon|Kingambit|대도각참
+pokemon|Great Tusk|위대한엄니
+pokemon|Scream Tail|우렁찬꼬리
+pokemon|Brute Bonnet|사나운버섯
+pokemon|Flutter Mane|날개치는머리
+pokemon|Slither Wing|땅을기는날개
+pokemon|Sandy Shocks|모래털가죽
+pokemon|Iron Treads|무쇠바퀴
+pokemon|Iron Bundle|무쇠보따리
+pokemon|Iron Hands|무쇠손
+pokemon|Iron Jugulis|무쇠머리
+pokemon|Iron Moth|무쇠독나방
+pokemon|Iron Thorns|무쇠가시
+pokemon|Frigibax|드니차
+pokemon|Arctibax|드니꽁
+pokemon|Baxcalibur|드닐레이브
+pokemon|Gimmighoul|모으령
+pokemon|Gholdengo|타부자고
+pokemon|Wo-Chien|총지엔
+pokemon|Chien-Pao|파오젠
+pokemon|Ting-Lu|딩루
+pokemon|Chi-Yu|위유이
+pokemon|Roaring Moon|고동치는달
+pokemon|Iron Valiant|무쇠무인
+pokemon|Koraidon|코라이돈
+pokemon|Miraidon|미라이돈
+pokemon|Walking Wake|굽이치는물결
+pokemon|Iron Leaves|무쇠잎새
+pokemon|Dipplin|과미르
+pokemon|Poltchageist|차데스
+pokemon|Sinistcha|그우린차
+pokemon|Okidogi|조타구
+pokemon|Munkidori|이야후
+pokemon|Fezandipiti|기로치
+pokemon|Ogerpon|오거폰
+pokemon|Archaludon|브리두라스
+pokemon|Hydrapple|과미드라
+pokemon|Gouging Fire|꿰뚫는화염
+pokemon|Raging Bolt|날뛰는우레
+pokemon|Iron Boulder|무쇠암석
+pokemon|Iron Crown|무쇠감투
+pokemon|Terapagos|테라파고스
+pokemon|Pecharunt|복숭악동
+pokemon|Mega Venusaur|메가이상해꽃
+pokemon|Mega Charizard X|메가리자몽X
+pokemon|Mega Charizard Y|메가리자몽Y
+pokemon|Mega Blastoise|메가거북왕
+pokemon|Mega Beedrill|메가독침붕
+pokemon|Mega Pidgeot|메가피죤투
+pokemon|Mega Raichu X|메가라이츄X
+pokemon|Mega Raichu Y|메가라이츄Y
+pokemon|Mega Clefable|메가픽시
+pokemon|Mega Alakazam|메가후딘
+pokemon|Mega Victreebel|메가우츠보트
+pokemon|Mega Slowbro|메가야도란
+pokemon|Mega Gengar|메가팬텀
+pokemon|Mega Kangaskhan|메가캥카
+pokemon|Mega Starmie|메가아쿠스타
+pokemon|Mega Pinsir|메가쁘사이저
+pokemon|Mega Gyarados|메가갸라도스
+pokemon|Mega Aerodactyl|메가프테라
+pokemon|Mega Dragonite|메가망나뇽
+pokemon|Mega Mewtwo X|메가뮤츠X
+pokemon|Mega Mewtwo Y|메가뮤츠Y
+pokemon|Mega Meganium|메가메가니움
+pokemon|Mega Feraligatr|메가장크로다일
+pokemon|Mega Ampharos|메가전룡
+pokemon|Mega Steelix|메가강철톤
+pokemon|Mega Scizor|메가핫삼
+pokemon|Mega Heracross|메가헤라크로스
+pokemon|Mega Skarmory|메가무장조
+pokemon|Mega Houndoom|메가헬가
+pokemon|Mega Tyranitar|메가마기라스
+pokemon|Mega Sceptile|메가나무킹
+pokemon|Mega Blaziken|메가번치코
+pokemon|Mega Swampert|메가대짱이
+pokemon|Mega Gardevoir|메가가디안
+pokemon|Mega Sableye|메가깜까미
+pokemon|Mega Mawile|메가입치트
+pokemon|Mega Aggron|메가보스로라
+pokemon|Mega Medicham|메가요가램
+pokemon|Mega Manectric|메가썬더볼트
+pokemon|Mega Sharpedo|메가샤크니아
+pokemon|Mega Camerupt|메가폭타
+pokemon|Mega Altaria|메가파비코리
+pokemon|Mega Banette|메가다크펫
+pokemon|Mega Chimecho|메가치렁
+pokemon|Mega Absol|메가앱솔
+pokemon|Mega Absol Z|메가앱솔Z
+pokemon|Mega Glalie|메가얼음귀신
+pokemon|Mega Salamence|메가보만다
+pokemon|Mega Metagross|메가메타그로스
+pokemon|Mega Latias|메가라티아스
+pokemon|Mega Latios|메가라티오스
+pokemon|Mega Rayquaza|메가레쿠쟈
+pokemon|Mega Staraptor|메가찌르호크
+pokemon|Mega Lopunny|메가이어롭
+pokemon|Mega Garchomp|메가한카리아스
+pokemon|Mega Garchomp Z|메가한카리아스Z
+pokemon|Mega Lucario|메가루카리오
+pokemon|Mega Lucario Z|메가루카리오Z
+pokemon|Mega Abomasnow|메가눈설왕
+pokemon|Mega Gallade|메가엘레이드
+pokemon|Mega Froslass|메가눈여아
+pokemon|Mega Heatran|메가히드런
+pokemon|Mega Darkrai|메가다크라이
+pokemon|Mega Emboar|메가염무왕
+pokemon|Mega Excadrill|메가몰드류
+pokemon|Mega Audino|메가다부니
+pokemon|Mega Scolipede|메가펜드라
+pokemon|Mega Scrafty|메가곤율거니
+pokemon|Mega Eelektross|메가저리더프
+pokemon|Mega Chandelure|메가샹델라
+pokemon|Mega Golurk|메가골루그
+pokemon|Mega Chesnaught|메가브리가론
+pokemon|Mega Delphox|메가마폭시
+pokemon|Mega Greninja|메가개굴닌자
+pokemon|Mega Pyroar|메가화염레오
+pokemon|Mega Floette|메가플라엣테
+pokemon|Mega Meowstic (Male)|메가냐오닉스 (수컷)
+pokemon|Mega Meowstic (Female)|메가냐오닉스 (암컷)
+pokemon|Mega Malamar|메가칼라마네로
+pokemon|Mega Barbaracle|메가거북손데스
+pokemon|Mega Dragalge|메가드래캄
+pokemon|Mega Hawlucha|메가루차불
+pokemon|Mega Zygarde|메가지가르데
+pokemon|Mega Diancie|메가디안시
+pokemon|Mega Crabominable|메가모단단게
+pokemon|Mega Golisopod|메가갑주무사
+pokemon|Mega Drampa|메가할비롱
+pokemon|Mega Magearna|메가마기아나
+pokemon|Mega Magearna (Original Color)|메가마기아나 (500년 전의 색)
+pokemon|Mega Zeraora|메가제라오라
+pokemon|Mega Falinks|메가대여르
+pokemon|Mega Scovillain|메가스코빌런
+pokemon|Mega Glimmora|메가킬라플로르
+pokemon|Mega Tatsugiri (Curly Form)|메가싸리용 (젖은 모습)
+pokemon|Mega Tatsugiri (Droopy Form)|메가싸리용 (늘어진 모습)
+pokemon|Mega Tatsugiri (Stretchy Form)|메가싸리용 (뻗은 모습)
+pokemon|Mega Baxcalibur|메가드닐레이브
