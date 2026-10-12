@@ -43,7 +43,7 @@ test("a settings file from elsewhere turns nothing off by accident", () => {
 
 test("a feature that is part of another is off with it, its own switch kept", () => {
   const parts = FEATURES.filter((def) => def.needs).map((def) => `${def.id}<${def.needs}`);
-  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillFind<skillsTab", "skillAdvice<skillsTab", "launcherApps<launcherTab", "launcherFavicons<launcherTab", "decidePresets<decide", "decideRemember<decide", "musicPlayer<spotify", "compactSong<spotify", "spotifyDance<spotify", "songAnnounce<spotify", "weather<clock"]);
+  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillFind<skillsTab", "skillAdvice<skillsTab", "launcherApps<launcherTab", "launcherFavicons<launcherTab", "decide<jev", "decidePresets<decide", "decideRemember<decide", "twenty<jev", "musicPlayer<spotify", "compactSong<spotify", "spotifyDance<spotify", "songAnnounce<spotify", "weather<clock"]);
   const settings = off("clock");
   assert.equal(featureOn(settings, "weather"), false);
   assert.equal(featureSwitch(settings, "weather"), true);
@@ -76,16 +76,22 @@ test("the header shows the launcher's and the skills' tabs while they are on", (
   const tabs = header.el.find(".tab");
   const shown = () => tabs.map((tab) => tab.style.display !== "none");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, true, true]);
+  assert.deepEqual(shown(), [true, true, true, true, true, true, true]);
   State.settings = off("launcherTab");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, false, true, true]);
+  assert.deepEqual(shown(), [true, true, true, false, true, true, true]);
   State.settings = off("skillsTab");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, false, true]);
+  assert.deepEqual(shown(), [true, true, true, true, false, true, true]);
   State.settings = off("decide");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, true, false]);
+  assert.deepEqual(shown(), [true, true, true, true, true, false, true]);
+  State.settings = off("twenty");
+  header.sync();
+  assert.deepEqual(shown(), [true, true, true, true, true, true, false]);
+  State.settings = off("jev");
+  header.sync();
+  assert.deepEqual(shown(), [true, true, true, true, true, false, false], "the JEV tabs wait for the JEV account");
   State.settings = { ...DEFAULT_SETTINGS };
 });
 
@@ -184,7 +190,7 @@ test("the code only checks features that are declared", async () => {
 
 test("the header's tabs and the island's checks follow the declarations, in order", async () => {
   const { featureTabs } = await import("../src/core/features.ts");
-  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills", "decide"]);
+  assert.deepEqual(featureTabs().map((f) => f.tab.view), ["launcher", "skills", "decide", "twenty"]);
 });
 
 test("Spotify off takes its pill and the music features with it, and keeps what was declared", async () => {

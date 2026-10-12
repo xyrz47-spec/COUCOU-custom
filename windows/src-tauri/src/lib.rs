@@ -41,6 +41,7 @@ mod spotify;
 mod taktus;
 mod task_runner;
 mod tray;
+mod twenty;
 mod weather;
 #[cfg(windows)]
 mod webview_drop;
@@ -899,6 +900,10 @@ pub fn run() {
             task_projects,
             task_reveal,
             jev::jev_decide,
+            twenty::twenty_new,
+            twenty::twenty_ask,
+            twenty::twenty_guess,
+            twenty::twenty_give_up,
             jev::jev_check_key,
             launcher::launcher_status,
             skills::skills_list,

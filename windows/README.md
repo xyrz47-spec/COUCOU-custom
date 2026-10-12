@@ -226,7 +226,7 @@ side (tray, errors) embeds the same two files.
 
 ## Features: turning parts of Coucou on and off
 
-Settings → **Features** lists what this build adds, by module — Claude Code (chat, plan usage), Claude skills (the tab, plugin skills, finding skills, suggestions), Launcher (the tab, installed apps, website icons), JEV (Decide, its presets, remembering the options), Music · Spotify (the pill, the big player, the song in the compact island, Mochi dancing, announcing songs), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
+Settings → **Features** lists what this build adds, by module — Claude Code (chat, plan usage), Claude skills (the tab, plugin skills, finding skills, suggestions), Launcher (the tab, installed apps, website icons), JEV (the account, Decide with its presets and memory, Twenty questions), Music · Spotify (the pill, the big player, the song in the compact island, Mochi dancing, announcing songs), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
 
 For whoever adds or removes a feature, it is declared in one place and checked where it plugs in:
 
@@ -241,6 +241,12 @@ For whoever adds or removes a feature, it is declared in one place and checked w
 Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, the island's **Decide** tab (Settings → Features → *Decide tab*) answers the everyday "what should I eat / drink / do?": say how you feel ("tired, something warm"), list a few options — one per line or separated by commas, or fill them from a preset (meal, drink, activity) — and press Decide (`Enter` in the feeling box, `Ctrl+Enter` in the options box). JEV ranks your options with a share for each; it picks among them and makes none up.
 
 What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the feeling and the options typed, and only when you press Decide. The feeling is never kept; the options are kept in the window's storage only while *Remember the last options* is on. Without a key nothing is sent. The one typed question (a Choice over your options) is in `src-tauri/src/jev.rs`.
+
+## JEV: twenty questions
+
+The island's **Twenty questions** tab (Settings → Features → *Twenty questions tab*, which needs the JEV account and its key) plays the old game with Coucou as the one who thinks: pick a kind — an animal, a food, an object, anything — and Coucou thinks of one of 18 things. Ask yes/no questions, up to twenty; JEV answers each with a typed *Noul* question ("is this statement true?") about the secret, which the tab shows as Yes / Probably yes / Not sure / Probably not / No. "I know it!" turns the box into a guess, which costs a question too; whether it names the secret is also JEV's call, so a translation or a synonym counts. The secret stays in the Rust side (`src-tauri/src/twenty.rs`) until the game is over, so the page cannot peek.
+
+What leaves the PC, to `api.typesafe.ai`: for each question, the secret's name and your question (for a guess, the secret and your guess) — nothing else. Without a key no game starts.
 
 ## Task mode
 

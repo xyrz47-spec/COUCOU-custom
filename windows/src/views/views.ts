@@ -3,7 +3,7 @@
 // identically.
 
 import { h, svg, clear, dot } from "./dom";
-import { ICONS } from "./icons";
+import { ICONS, STROKED_ICONS } from "./icons";
 import { Ticker } from "./ticker";
 import { State, type AgentTask } from "../core/state";
 import { washRGBA, type IslandViewName, type Wash } from "../core/layout";
@@ -26,6 +26,7 @@ import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spot
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
 import { featureOn, featureTabs } from "../core/features";
 import { buildDecide } from "./decide";
+import { buildTwenty } from "./twenty";
 import { buildLauncher } from "./launcher";
 import { buildSkills } from "./skills";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
@@ -121,7 +122,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
     el: h(
       "button",
       { class: "tab", title: tl(def.tab!.title), onclick: () => go(def.tab!.view as IslandViewName) },
-      svg((ICONS as Record<string, string>)[def.tab!.icon], 13),
+      svg((ICONS as Record<string, string>)[def.tab!.icon], 13, STROKED_ICONS.has(def.tab!.icon) ? { stroke: 1.8 } : {}),
     ),
   }));
 
@@ -935,6 +936,7 @@ export function buildViews(
   map.set("launcher", buildLauncher(actions));
   map.set("skills", buildSkills(actions));
   map.set("decide", buildDecide(actions));
+  map.set("twenty", buildTwenty(actions));
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));

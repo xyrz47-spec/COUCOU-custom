@@ -99,8 +99,16 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
     name: N_("Website icons"),
     about: N_("A site's own icon on its launcher tile, fetched from that site once. Off, the site is not asked and the tile keeps its mini Mochi."),
   },
+  jev: {
+    name: N_("JEV account"), page: N_("JEV"),
+    about: N_("TypeSafe's JEV: the page for your API key. The JEV tabs below need it, and are off with it."),
+  },
+  twenty: {
+    name: N_("Twenty questions tab"), tab: N_("Twenty questions"),
+    about: N_("The island's twenty-questions tab: Coucou thinks of an animal, a food or an object, and JEV answers your yes/no questions. Needs your TypeSafe API key."),
+  },
   decide: {
-    name: N_("Decide tab"), tab: N_("Decide"), page: N_("JEV"),
+    name: N_("Decide tab"), tab: N_("Decide"),
     about: N_("The island's decide tab: say how you feel, list a few options — what to eat, drink or do — and JEV ranks them. Needs your TypeSafe API key."),
   },
   decidePresets: {

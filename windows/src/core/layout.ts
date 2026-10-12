@@ -26,7 +26,8 @@ export type IslandViewName =
   | "wardrobe"
   | "launcher"
   | "skills"
-  | "decide";
+  | "decide"
+  | "twenty";
 
 export type BotStateName =
   | "idle"
@@ -101,6 +102,8 @@ export const VIEW_LAYOUTS: Record<IslandViewName, ViewLayout> = {
   // A list to read and a field to type in: as tall as the chat, the whole width (no Mochi).
   skills: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
   // A feeling, a few options and their ranking: as tall as the skills tab (no Mochi).
+  // Twenty questions: a question to type and the answers so far, as tall as the skills tab (no Mochi).
+  twenty: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
   decide: { height: 300, botX: 54, botY: null, botDiameter: 46, agentMode: "none" },
 };
 

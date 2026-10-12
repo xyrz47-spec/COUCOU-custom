@@ -1262,7 +1262,7 @@ export class Island {
     // island is allowed to take keyboard focus.
     if (this.lastSyncedView !== State.view) {
       // …and the skills tab, for its search field.
-      const typing = (view: IslandViewName | null) => view === "prompt" || view === "skills" || view === "decide";
+      const typing = (view: IslandViewName | null) => view === "prompt" || view === "skills" || view === "decide" || view === "twenty";
       const wasTyping = typing(this.lastSyncedView);
       this.lastSyncedView = State.view;
       if (typing(State.view)) {

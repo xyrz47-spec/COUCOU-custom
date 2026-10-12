@@ -127,7 +127,7 @@ fn status_message(status: u16) -> String {
 }
 
 /// One call to JEV with `body`; the whole response.
-async fn call(key: &str, body: &Value) -> Result<Value, String> {
+pub(crate) async fn call(key: &str, body: &Value) -> Result<Value, String> {
     let url = Url::parse(ENDPOINT).map_err(|e| e.to_string())?;
     let response = net::client(&url, TIMEOUT)?
         .post(url)

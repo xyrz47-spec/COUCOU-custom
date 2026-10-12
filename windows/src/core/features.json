@@ -68,16 +68,21 @@
       "needs": "launcherTab"
     },
     {
+      "id": "jev",
+      "group": "jev",
+      "settingsPage": {
+        "id": "jev",
+        "color": "#7FD6C2"
+      }
+    },
+    {
       "id": "decide",
       "group": "jev",
+      "needs": "jev",
       "tab": {
         "view": "decide",
         "icon": "check",
         "order": 3
-      },
-      "settingsPage": {
-        "id": "jev",
-        "color": "#7FD6C2"
       }
     },
     {
@@ -89,6 +94,16 @@
       "id": "decideRemember",
       "group": "jev",
       "needs": "decide"
+    },
+    {
+      "id": "twenty",
+      "group": "jev",
+      "needs": "jev",
+      "tab": {
+        "view": "twenty",
+        "icon": "question",
+        "order": 4
+      }
     },
     {
       "id": "spotify",

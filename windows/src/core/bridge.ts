@@ -181,6 +181,13 @@ export const Bridge = {
   // ── JEV (src-tauri/src/jev.rs) ────────────────────────────────────────────
   /** Which option suits the person best, by JEV. Throws with the reason (feature off, no key, the call failed). */
   jevDecide: (feeling: string, options: string[]) => callOrThrow<JevDecision>("jev_decide", { feeling, options }),
+  // ── Twenty questions, answered by JEV (src-tauri/src/twenty.rs) ───────────
+  /** Coucou thinks of something of this kind: animal, food, thing or any. The secret stays in Rust. */
+  twentyNew: (kind: string) => callOrThrow<{ total: number }>("twenty_new", { kind }),
+  twentyAsk: (question: string) => callOrThrow<TwentyAnswer>("twenty_ask", { question }),
+  twentyGuess: (guess: string) => callOrThrow<TwentyGuess>("twenty_guess", { guess }),
+  /** Gives up: the secret, in English. */
+  twentyGiveUp: () => callOrThrow<string>("twenty_give_up"),
   /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
   jevCheckKey: () => callOrThrow<string>("jev_check_key"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
@@ -349,6 +356,25 @@ export interface JevDecision {
   ranking: { option: string; share: number }[];
   /** 0 to 1: how sure JEV is of the first. */
   confidence: number;
+}
+
+export type TwentyLabel = "yes" | "probablyYes" | "unsure" | "probablyNo" | "no";
+
+export interface TwentyAnswer {
+  label: TwentyLabel;
+  asked: number;
+  left: number;
+  /** The questions ran out: the game is over and `secret` is told. */
+  over: boolean;
+  secret: string | null;
+}
+
+export interface TwentyGuess {
+  correct: boolean;
+  asked: number;
+  left: number;
+  over: boolean;
+  secret: string | null;
 }
 
 export interface SkillGroup {
