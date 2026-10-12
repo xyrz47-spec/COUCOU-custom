@@ -42,7 +42,7 @@ test("the tab starts at the choice of a kind and asks nothing by itself", () => 
   view.sync();
   const [levels, chips] = view.el.find(".sk-chips");
   assert.equal(chips.style.display, "");
-  assert.equal(chips.children.length, 7, "six kinds and anything");
+  assert.equal(chips.children.length, 11, "ten kinds and anything");
   assert.equal(levels.children.length, 4, "the levels");
   assert.equal(view.el.find(".sk-top")[0].style.display, "none", "no box to type in before a game");
   assert.equal(view.el.find(".sk-empty").length, 1);

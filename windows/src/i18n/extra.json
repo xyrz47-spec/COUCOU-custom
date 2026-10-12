@@ -6423,6 +6423,54 @@
    "ru": "Я загадал одно из {n} понятий.",
    "id": "Aku memikirkan satu dari {n} hal.",
    "ko": "{n}가지 중 하나를 떠올렸어요."
+  },
+  "A Pokémon": {
+   "zh-Hans": "一只宝可梦",
+   "hi": "एक पोकेमॉन",
+   "es": "Un Pokémon",
+   "ar": "بوكيمون",
+   "fr": "Un Pokémon",
+   "bn": "একটি পোকেমন",
+   "pt-BR": "Um Pokémon",
+   "ru": "Покемон",
+   "id": "Pokémon",
+   "ko": "포켓몬"
+  },
+  "A character": {
+   "zh-Hans": "一个角色",
+   "hi": "एक किरदार",
+   "es": "Un personaje",
+   "ar": "شخصية",
+   "fr": "Un personnage",
+   "bn": "একটি চরিত্র",
+   "pt-BR": "Um personagem",
+   "ru": "Персонаж",
+   "id": "Karakter",
+   "ko": "캐릭터"
+  },
+  "A body part": {
+   "zh-Hans": "一个身体部位",
+   "hi": "शरीर का एक अंग",
+   "es": "Una parte del cuerpo",
+   "ar": "جزء من الجسم",
+   "fr": "Une partie du corps",
+   "bn": "শরীরের একটি অংশ",
+   "pt-BR": "Uma parte do corpo",
+   "ru": "Часть тела",
+   "id": "Bagian tubuh",
+   "ko": "신체 부위"
+  },
+  "An activity": {
+   "zh-Hans": "一项活动",
+   "hi": "एक गतिविधि",
+   "es": "Una actividad",
+   "ar": "نشاط",
+   "fr": "Une activité",
+   "bn": "একটি কার্যকলাপ",
+   "pt-BR": "Uma atividade",
+   "ru": "Занятие",
+   "id": "Aktivitas",
+   "ko": "활동"
   }
  }
 }

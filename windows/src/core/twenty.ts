@@ -13,6 +13,10 @@ export const KINDS: readonly { id: string; label: string }[] = [
   { id: "place", label: N_("A place") },
   { id: "job", label: N_("A job") },
   { id: "nature", label: N_("Something in nature") },
+  { id: "pokemon", label: N_("A Pokémon") },
+  { id: "character", label: N_("A character") },
+  { id: "body", label: N_("A body part") },
+  { id: "activity", label: N_("An activity") },
   { id: "any", label: N_("Anything") },
 ];
 

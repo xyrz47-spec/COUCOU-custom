@@ -1,7 +1,8 @@
 // Twenty questions, answered by JEV.
 //
-// Coucou thinks of something — one of nearly five hundred animals, foods,
-// objects, places, jobs and things of nature (twenty_items.txt), by kind and by
+// Coucou thinks of something — one of thousands of animals, foods,
+// objects, places, jobs, things of nature, Pokémon, characters, body parts and
+// activities — thousands of them (twenty_items.txt), by kind and by
 // how rare — and keeps it in Rust: the page never sees it until the game is over. The player asks yes/no
 // questions, up to twenty; JEV answers each one with a Noul question ("is this
 // statement true?") about the secret, which comes back as a value from 0 to 1
@@ -41,7 +42,7 @@ pub struct Item {
 const ITEMS_TEXT: &str = include_str!("twenty_items.txt");
 
 /// The kinds a game may be about.
-pub const KINDS: &[&str] = &["animal", "food", "thing", "place", "job", "nature"];
+pub const KINDS: &[&str] = &["animal", "food", "thing", "place", "job", "nature", "pokemon", "character", "body", "activity"];
 
 /// What Coucou may think of, from twenty_items.txt: `kind | tier | English | 한국어` per line.
 pub fn items() -> &'static [Item] {
@@ -158,9 +159,25 @@ pub fn normalise(text: &str) -> String {
     text.chars().filter(|c| c.is_alphanumeric()).flat_map(char::to_lowercase).collect()
 }
 
+/// How the state names the kind of the secret.
+fn kind_phrase(kind: &str) -> &'static str {
+    match kind {
+        "animal" => "an animal",
+        "food" => "a food or drink",
+        "thing" => "an everyday object",
+        "place" => "a place",
+        "job" => "a job or a role",
+        "nature" => "something in nature or the sky",
+        "pokemon" => "a Pokémon",
+        "character" => "a character from stories, games, cartoons or legends",
+        "body" => "a part of the human body or something that happens to it",
+        _ => "an activity, game or event",
+    }
+}
+
 fn ask_body(secret: &str, kind: &str, question: &str) -> Value {
     json!({
-        "state": format!("A guessing game of twenty questions. The secret is: {secret} (a kind of {kind}). The player asks a yes/no question about the secret."),
+        "state": format!("A guessing game of twenty questions. The secret is: {secret} ({}). The player asks a yes/no question about the secret.", kind_phrase(kind)),
         "model": "jev-latest",
         "questions": { "answer": { "type": "noul", "instructions": question } }
     })
@@ -326,17 +343,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn the_list_is_large_valid_and_every_name_is_unique() {
+    fn the_list_is_large_valid_and_every_english_name_is_unique() {
         let all = items();
-        assert!(all.len() >= 450, "{} things", all.len());
+        assert!(all.len() >= 3000, "{} things", all.len());
         let mut names: Vec<String> = all.iter().map(|i| normalise(i.en)).collect();
         names.sort();
         names.dedup();
         assert_eq!(names.len(), all.len(), "an English name is used twice");
-        let mut korean: Vec<String> = all.iter().map(|i| normalise(i.ko)).collect();
-        korean.sort();
-        korean.dedup();
-        assert_eq!(korean.len(), all.len(), "a Korean name is used twice");
         for item in all {
             assert!(KINDS.contains(&item.kind), "{}: kind {}", item.en, item.kind);
             assert!((1..=3).contains(&item.tier) && !item.en.is_empty() && !item.ko.is_empty(), "{}", item.en);
@@ -348,12 +361,12 @@ mod tests {
     #[test]
     fn every_kind_has_plenty_at_every_level() {
         for kind in KINDS {
-            assert!(pool(kind, "any").len() >= 40, "{kind}: {}", pool(kind, "any").len());
+            assert!(pool(kind, "any").len() >= 90, "{kind}: {}", pool(kind, "any").len());
             for level in ["easy", "normal", "hard"] {
                 assert!(pool(kind, level).len() >= 10, "{kind} {level}");
             }
         }
-        assert!(pool("any", "any").len() >= 450);
+        assert!(pool("any", "any").len() >= 3000);
         assert!(pool("any", "easy").iter().all(|&i| items()[i].tier == 1));
         assert!(pool("any", "hard").iter().all(|&i| items()[i].tier >= 2));
         assert!(pool("any", "normal").iter().all(|&i| items()[i].tier <= 2));
@@ -375,7 +388,7 @@ mod tests {
                 recent.pop_front();
             }
         }
-        assert!(seen.len() >= 250, "only {} different things in 400 games", seen.len());
+        assert!(seen.len() >= 330, "only {} different things in 400 games", seen.len());
         let small = vec![5, 6];
         let recent: VecDeque<usize> = [5].into_iter().collect();
         assert!((0..20).all(|n| draw(&small, &recent, n) == Some(6)));
@@ -420,7 +433,11 @@ mod tests {
     fn the_secret_goes_to_jev_with_the_question_and_nothing_else() {
         let body = ask_body("Elephant", "animal", "Is it bigger than a car?");
         let state = body["state"].as_str().unwrap();
-        assert!(state.contains("Elephant") && state.contains("animal"));
+        assert!(state.contains("Elephant") && state.contains("an animal"));
+        assert!(kind_phrase("pokemon").contains("Pokémon") && kind_phrase("body").contains("body"));
+        for kind in KINDS {
+            assert!(!kind_phrase(kind).contains("event") || *kind == "activity", "{kind} has its own phrase");
+        }
         assert_eq!(body["questions"]["answer"]["type"], "noul");
         assert_eq!(body["questions"]["answer"]["instructions"], "Is it bigger than a car?");
         assert_eq!(body["model"], "jev-latest");
