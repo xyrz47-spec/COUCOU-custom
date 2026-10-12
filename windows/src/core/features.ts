@@ -79,6 +79,10 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
     name: N_("Skills picked by Claude Code"),
     about: N_("In the skills tab, Claude Code says what to add and what to remove for a project. Each ask counts against your plan."),
   },
+  approvalRisk: {
+    name: N_("Risk check by JEV"), page: N_("JEV"),
+    about: N_("When an agent asks permission, JEV (TypeSafe's model) adds one line to the card: routine, worth reading, or could change or send things. Advice only, with your TypeSafe API key; nothing is sent without one."),
+  },
   launcherTab: {
     name: N_("Launcher tab"), tab: N_("Launcher"), page: N_("Launcher"),
     about: N_("The island's grid tab: your websites and apps, one click each, with the apps installed on this PC to search and add."),

@@ -6,6 +6,7 @@
     { "id": "skillsTab", "group": "claude", "tab": { "view": "skills", "icon": "star", "order": 2 } },
     { "id": "pluginSkills", "group": "claude", "needs": "skillsTab" },
     { "id": "skillAdvice", "group": "claude", "needs": "skillsTab" },
+    { "id": "approvalRisk", "group": "claude", "settingsPage": { "id": "jev", "color": "#7FD6C2" } },
     {
       "id": "launcherTab", "group": "launcher",
       "tab": { "view": "launcher", "icon": "grid", "order": 1 },

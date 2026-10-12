@@ -18,6 +18,7 @@ mod i18n;
 mod identity;
 mod integrations;
 mod island;
+mod jev;
 mod launcher;
 mod local_chat;
 mod log;
@@ -897,6 +898,8 @@ pub fn run() {
             task_cancel,
             task_projects,
             task_reveal,
+            jev::jev_assess,
+            jev::jev_check_key,
             launcher::launcher_status,
             skills::skills_list,
             skills::skill_set_enabled,

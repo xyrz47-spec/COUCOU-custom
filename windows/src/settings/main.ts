@@ -24,6 +24,7 @@ import {
 import { h, clear } from "../views/dom";
 import { drawSelects } from "../views/select";
 import { agentsSection } from "./agents";
+import { jevSection } from "./jev";
 import { launcherSection } from "./launcher";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
@@ -1839,6 +1840,7 @@ async function render() {
   // A feature turned off (Settings → Features) takes its section, or its page, with it.
   // The pages features bring with them (core/features.json, settingsPage): there while the feature is on.
   const featureSections: Record<string, () => HTMLElement[]> = {
+    jev: () => [jevSection()],
     launcher: () => [launcherSection(() => settings, save, (redraw) => declaredViews.push(redraw))],
   };
   const featurePages: Page[] = FEATURES.filter((f) => f.settingsPage && featureOn(settings, f.id) && featureSections[f.settingsPage.id])

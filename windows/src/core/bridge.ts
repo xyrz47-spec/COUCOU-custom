@@ -178,6 +178,11 @@ export const Bridge = {
 
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
+  // ── JEV (src-tauri/src/jev.rs) ────────────────────────────────────────────
+  /** JEV's risk for a permission request; throws when nothing is asked (feature off, no key) or the call fails. */
+  jevAssess: (tool: string, command: string) => callOrThrow<JevRisk>("jev_assess", { tool, command }),
+  /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
+  jevCheckKey: () => callOrThrow<string>("jev_check_key"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
   launcherStatus: () => call<boolean[]>("launcher_status"),
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
@@ -336,6 +341,17 @@ export interface SkillAdvice {
   add: (FoundSkill & { dest: string; reason: string })[];
   remove: { path: string; name: string; dest: string; reason: string }[];
   note: string;
+}
+
+/** What JEV makes of a permission request (src-tauri/src/jev.rs). */
+export interface JevRisk {
+  level: "low" | "medium" | "high" | "unsure";
+  destructive: number;
+  exfiltration: number;
+  /** read_only, edit_files, run_code, network or system; empty when JEV did not say. */
+  scope: string;
+  score: number;
+  confidence: number;
 }
 
 export interface SkillGroup {

@@ -236,6 +236,12 @@ For whoever adds or removes a feature, it is declared in one place and checked w
 
 `tests/features.test.mjs` fails when a declaration has no words, names a parent, icon or pill that does not exist, or when the code checks a feature that is not declared. To remove a feature, delete its entry, its words and its code.
 
+## JEV: a second opinion on permission requests
+
+Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, and Settings → Features → *Risk check by JEV* on, each permission card from an agent gets one more line from JEV: *looks routine*, *worth reading before you allow*, or *could change or send things you may not want*, with what the request mainly does (reads, edits project files, runs code, uses the network, touches the system). It is advice only: it never allows or denies, never delays the card, and the two buttons stay the only way to decide. Without a key nothing is sent.
+
+What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the tool's name and the line the card shows (the command, file path or address), with keys and tokens masked and cut to 1,500 characters — never file contents, your prompt or the project's path. JEV is asked four typed questions in one call (destroys or overwrites, sends data away or reveals secrets, what it mainly does, how risky to allow unread); the thresholds that turn the answers into a level are in `src-tauri/src/jev.rs`.
+
 ## Task mode
 
 The **Task** chip next to the chat's model button hands the next message to
