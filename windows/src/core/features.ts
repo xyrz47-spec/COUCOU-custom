@@ -8,7 +8,7 @@
 import { N_ } from "../i18n/i18n";
 
 export type FeatureId =
-  | "claudeChat" | "skillsTab" | "pluginSkills" | "skillAdvice" | "launcherTab"
+  | "claudeChat" | "skillsTab" | "pluginSkills" | "skillAdvice" | "launcherTab" | "valorantReview"
   | "musicPlayer" | "compactSong" | "clock" | "weather" | "motion";
 
 export type FeatureGroup = "claude" | "tabs" | "compact" | "look";
@@ -52,6 +52,10 @@ export const FEATURES: readonly FeatureDef[] = [
   {
     id: "launcherTab", group: "tabs", name: N_("Launcher tab"), page: "launcher",
     about: N_("The island's grid tab: your websites and apps, one click each, with the apps installed on this PC to search and add."),
+  },
+  {
+    id: "valorantReview", group: "tabs", name: N_("Valorant match reviews"), page: "valorant",
+    about: N_("A settings page for the reviews of your Valorant matches, kept on this PC: read them, add a note, delete one or all."),
   },
   {
     id: "musicPlayer", group: "tabs", name: N_("Big music player"),

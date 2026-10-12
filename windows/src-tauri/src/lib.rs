@@ -37,6 +37,7 @@ mod skills;
 mod sounds;
 mod spotify;
 mod taktus;
+mod valorant;
 mod task_runner;
 mod tray;
 mod weather;
@@ -897,6 +898,10 @@ pub fn run() {
             task_projects,
             task_reveal,
             launcher::launcher_status,
+            valorant::valorant_reviews,
+            valorant::valorant_review_note,
+            valorant::valorant_review_delete,
+            valorant::valorant_reviews_delete_all,
             skills::skills_list,
             skills::skill_set_enabled,
             skills::skill_reveal,

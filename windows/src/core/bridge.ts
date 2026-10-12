@@ -178,6 +178,11 @@ export const Bridge = {
 
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
+  // ── Valorant match reviews, kept locally (src-tauri/src/valorant.rs) ──────
+  valorantReviews: () => call<ValorantReviewList>("valorant_reviews"),
+  valorantReviewNote: (id: string, note: string) => callOrThrow<void>("valorant_review_note", { id, note }),
+  valorantReviewDelete: (id: string) => callOrThrow<number>("valorant_review_delete", { id }),
+  valorantReviewsDeleteAll: () => callOrThrow<number>("valorant_reviews_delete_all"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
   launcherStatus: () => call<boolean[]>("launcher_status"),
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
@@ -336,6 +341,36 @@ export interface SkillAdvice {
   add: (FoundSkill & { dest: string; reason: string })[];
   remove: { path: string; name: string; dest: string; reason: string }[];
   note: string;
+}
+
+/** One moment of a Valorant review: what was seen, what is inferred, how sure. */
+export interface ValorantFinding {
+  startMs: number;
+  endMs: number;
+  category: string;
+  fact: string;
+  inference: string;
+  reasoning: string;
+  alternative: string;
+  uncertainty: string;
+  drill: string;
+}
+
+export interface ValorantReview {
+  id: string;
+  createdAt: number;
+  videoMs: number;
+  didWell: string[];
+  topIssues: string[];
+  nextGoal: string;
+  findings: ValorantFinding[];
+  userNote: string;
+}
+
+export interface ValorantReviewList {
+  reviews: ValorantReview[];
+  /** Files in the reviews folder that are not valid reviews: kept, not read. */
+  skipped: number;
 }
 
 export interface SkillGroup {
