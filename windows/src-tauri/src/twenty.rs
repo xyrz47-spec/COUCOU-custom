@@ -14,7 +14,7 @@
 // the secret's name and the player's question — nothing else is sent. Without a
 // key, or with the feature off, no game starts.
 
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 use std::sync::{Mutex, OnceLock};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -160,11 +160,39 @@ fn kind_phrase(kind: &str) -> &'static str {
     }
 }
 
+/// What is known of each Pokémon, from pokemon_facts.txt: `English name | facts` per line (generation,
+/// types, abilities with their effects, evolution, size, stats, Pokédex entry). JEV answers from these,
+/// so "is it from before Generation 4?" or "has it a skin ability?" is not left to its memory.
+pub fn facts_of(name: &str) -> Option<&'static str> {
+    static FACTS: OnceLock<HashMap<&'static str, &'static str>> = OnceLock::new();
+    FACTS
+        .get_or_init(|| {
+            include_str!("pokemon_facts.txt")
+                .lines()
+                .filter_map(|line| line.split_once('|'))
+                .map(|(name, facts)| (name.trim(), facts.trim()))
+                .collect()
+        })
+        .get(name)
+        .copied()
+}
+
 fn ask_body(secret: &str, kind: &str, question: &str) -> Value {
+    let mut state = format!(
+        "A guessing game of twenty questions. The secret is: {secret} ({}). The player asks a yes/no question about the secret, \
+         in any language. Judge it as an expert who knows this subject well, from the facts below when there are any and from \
+         general knowledge otherwise. Be decisive: answer true or false, and stay undecided only when the question is \
+         ambiguous or nobody could know.",
+        kind_phrase(kind)
+    );
+    if let Some(facts) = (kind == "pokemon").then(|| facts_of(secret)).flatten() {
+        state.push_str("\nFacts about the secret (authoritative): ");
+        state.push_str(facts);
+    }
     json!({
-        "state": format!("A guessing game of twenty questions. The secret is: {secret} ({}). The player asks a yes/no question about the secret.", kind_phrase(kind)),
+        "state": state,
         "model": "jev-latest",
-        "questions": { "answer": { "type": "noul", "instructions": question } }
+        "questions": { "answer": { "type": "noul", "instructions": format!("Is this true of the secret? {question}") } }
     })
 }
 
@@ -354,6 +382,22 @@ mod tests {
     }
 
     #[test]
+    fn jev_gets_the_facts_of_a_pokemon_so_it_need_not_remember_them() {
+        for i in pool("pokemon") {
+            assert!(facts_of(items()[i].en).is_some(), "no facts for {}", items()[i].en);
+        }
+        let body = ask_body("Rhyhorn", "pokemon", "4세대 전 포켓몬이야?");
+        let state = body["state"].as_str().unwrap();
+        assert!(state.contains("Generation 1 (Kanto)") && state.contains("before Generation 4"), "{state}");
+        assert!(state.contains("Rock Head") && state.contains("Evolution: basic"));
+        let skin = ask_body("Mega Dragonite", "pokemon", "스킨 특성이 있어?");
+        assert!(facts_of("Sylveon").unwrap().contains("Pixilate") && facts_of("Sylveon").unwrap().contains("'Skin' ability"));
+        assert!(skin["state"].as_str().unwrap().contains("Mega Evolution of Dragonite"));
+        let plain = ask_body("Elephant", "animal", "Is it big?");
+        assert!(!plain["state"].as_str().unwrap().contains("Facts about"));
+    }
+
+    #[test]
     fn every_pokemon_is_in_the_pool_with_its_megas() {
         let names: Vec<&str> = pool("pokemon").iter().map(|&i| items()[i].en).collect();
         let species = names.iter().filter(|n| !n.starts_with("Mega ")).count();
@@ -429,7 +473,7 @@ mod tests {
             assert!(!kind_phrase(kind).contains("event") || *kind == "activity", "{kind} has its own phrase");
         }
         assert_eq!(body["questions"]["answer"]["type"], "noul");
-        assert_eq!(body["questions"]["answer"]["instructions"], "Is it bigger than a car?");
+        assert!(body["questions"]["answer"]["instructions"].as_str().unwrap().ends_with("Is it bigger than a car?"));
         assert_eq!(body["model"], "jev-latest");
         let same = same_body("Elephant", "코끼리");
         assert!(same["state"].as_str().unwrap().contains("코끼리"));
