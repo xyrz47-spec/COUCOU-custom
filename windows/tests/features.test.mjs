@@ -76,16 +76,13 @@ test("the header shows the launcher's and the skills' tabs while they are on", (
   const tabs = header.el.find(".tab");
   const shown = () => tabs.map((tab) => tab.style.display !== "none");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, true, true]);
+  assert.deepEqual(shown(), [true, true, true, true, true]);
   State.settings = off("launcherTab");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, false, true, true]);
+  assert.deepEqual(shown(), [true, true, true, false, true]);
   State.settings = off("skillsTab");
   header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, false, true]);
-  State.settings = off("valorantReview");
-  header.sync();
-  assert.deepEqual(shown(), [true, true, true, true, true, false]);
+  assert.deepEqual(shown(), [true, true, true, true, false]);
   State.settings = { ...DEFAULT_SETTINGS };
 });
 

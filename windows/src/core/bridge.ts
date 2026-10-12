@@ -178,23 +178,6 @@ export const Bridge = {
 
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
-  // ── Valorant match reviews, kept locally (src-tauri/src/valorant.rs) ──────
-  valorantReviews: () => call<ValorantReviewList>("valorant_reviews"),
-  /** What an analysis would send and to whom; nothing is sent. Throws with the reason when the events are not usable. */
-  valorantAnalysisPlan: (events: ValorantEvents) => callOrThrow<ValorantPlan>("valorant_analysis_plan", { events }),
-  /** Sends the events to the chat provider picked in Settings, after the user confirmed the plan. */
-  valorantAnalyse: (events: ValorantEvents, confirmed: boolean) =>
-    callOrThrow<ValorantReview>("valorant_analyse", { events, confirmed }),
-  valorantNotes: () => call<string>("valorant_notes"),
-  valorantNotesSet: (text: string) => callOrThrow<void>("valorant_notes_set", { text }),
-  valorantRecorderStatus: () => call<ValorantRecorderStatus>("valorant_recorder_status"),
-  valorantRecordings: () => call<ValorantRecording[]>("valorant_recordings"),
-  /** One recording by name, or all of them (`null`). */
-  valorantRecordingsDelete: (name: string | null) => callOrThrow<number>("valorant_recordings_delete", { name }),
-  valorantRecordingsReveal: () => call<void>("valorant_recordings_reveal"),
-  valorantReviewNote: (id: string, note: string) => callOrThrow<void>("valorant_review_note", { id, note }),
-  valorantReviewDelete: (id: string) => callOrThrow<number>("valorant_review_delete", { id }),
-  valorantReviewsDeleteAll: () => callOrThrow<number>("valorant_reviews_delete_all"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
   launcherStatus: () => call<boolean[]>("launcher_status"),
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
@@ -353,74 +336,6 @@ export interface SkillAdvice {
   add: (FoundSkill & { dest: string; reason: string })[];
   remove: { path: string; name: string; dest: string; reason: string }[];
   note: string;
-}
-
-/** One moment of a Valorant review: what was seen, what is inferred, how sure. */
-export interface ValorantFinding {
-  startMs: number;
-  endMs: number;
-  category: string;
-  fact: string;
-  inference: string;
-  reasoning: string;
-  alternative: string;
-  uncertainty: string;
-  drill: string;
-  /** The guide section it is judged against (`POS-1`…), or `NOTES`. */
-  guide: string;
-}
-
-export interface ValorantReview {
-  id: string;
-  createdAt: number;
-  videoMs: number;
-  didWell: string[];
-  topIssues: string[];
-  nextGoal: string;
-  findings: ValorantFinding[];
-  userNote: string;
-}
-
-/** What the video processing layer saw in a match, each with its time. */
-export interface ValorantEvents {
-  videoMs: number;
-  events: { atMs: number; kind: string; detail: string }[];
-}
-
-/** One step of an analysis: who is asked and what is sent. */
-export interface ValorantStepPlan {
-  provider: string;
-  model: string;
-  /** The events leave this PC. */
-  external: boolean;
-  estimatedTokens: number;
-}
-
-export interface ValorantPlan {
-  /** Step 1: the options. */
-  options: ValorantStepPlan;
-  /** Step 2: the judgement. */
-  judge: ValorantStepPlan;
-  tokenLimit: number;
-}
-
-/** The recorder's state (src-tauri/src/recorder.rs). */
-export interface ValorantRecorderStatus {
-  state: "off" | "waiting" | "recording" | "noFfmpeg" | "lowDisk" | "failed";
-  file: string;
-  detail: string;
-}
-
-export interface ValorantRecording {
-  name: string;
-  bytes: number;
-  modified: number;
-}
-
-export interface ValorantReviewList {
-  reviews: ValorantReview[];
-  /** Files in the reviews folder that are not valid reviews: kept, not read. */
-  skipped: number;
 }
 
 export interface SkillGroup {

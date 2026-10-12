@@ -26,7 +26,6 @@ import { buildSpotifyCard, buildSpotifyPill, type SpotifyPillHost } from "./spot
 import { SPOTIFY_ID, Spotify, setSpotifyPlayer } from "../core/spotify";
 import { featureOn } from "../core/features";
 import { buildLauncher } from "./launcher";
-import { buildValorant } from "./valorant";
 import { buildSkills } from "./skills";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
@@ -117,7 +116,6 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 13));
   const tabApps = h("button", { class: "tab", title: tl("Launcher"), onclick: () => go("launcher") }, svg(ICONS.grid, 13));
   const tabSkills = h("button", { class: "tab", title: tl("Skills"), onclick: () => go("skills") }, svg(ICONS.star, 13));
-  const tabValorant = h("button", { class: "tab", title: tl("Valorant"), onclick: () => go("valorant") }, svg(ICONS.record, 13));
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 14));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 14));
@@ -136,7 +134,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { id: "header" },
-    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, tabApps, tabSkills, tabValorant),
+    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, tabApps, tabSkills),
     h("div", { class: "header-actions" }, planPills, gearBtn, soundBtn),
   );
   const headerActions = el.lastElementChild as HTMLElement;
@@ -150,11 +148,9 @@ export function buildHeader(actions: ViewActions): ViewHost {
       tabDrop.classList.toggle("on", v === "upload");
       tabApps.classList.toggle("on", v === "launcher");
       tabSkills.classList.toggle("on", v === "skills");
-      tabValorant.classList.toggle("on", v === "valorant");
       // Tabs of this build, each a switch in Settings → Features.
       tabApps.style.display = featureOn(State.settings, "launcherTab") ? "" : "none";
       tabSkills.style.display = featureOn(State.settings, "skillsTab") ? "" : "none";
-      tabValorant.style.display = featureOn(State.settings, "valorantReview") ? "" : "none";
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
       gearBtn.append(svg(v === "settings" ? ICONS.gearFill : ICONS.gear, 14));
@@ -930,7 +926,6 @@ export function buildViews(
   map.set("wardrobe", buildWardrobe(actions));
   map.set("launcher", buildLauncher(actions));
   map.set("skills", buildSkills(actions));
-  map.set("valorant", buildValorant(actions));
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));

@@ -1440,8 +1440,7 @@ export class Island {
     document.documentElement.classList.toggle("still", !featureOn(State.settings, "motion"));
     const gone =
       (State.view === "launcher" && !featureOn(State.settings, "launcherTab")) ||
-      (State.view === "skills" && !featureOn(State.settings, "skillsTab")) ||
-      (State.view === "valorant" && !featureOn(State.settings, "valorantReview"));
+      (State.view === "skills" && !featureOn(State.settings, "skillsTab"));
     if (gone) {
       if (State.mode === "expanded") this.setView(State.defaultView());
       else State.view = State.defaultView();
