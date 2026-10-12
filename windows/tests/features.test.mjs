@@ -181,7 +181,8 @@ test("the code only checks features that are declared", async () => {
     return statSync(path).isDirectory() ? walk(path) : path.endsWith(".ts") ? [path] : [];
   });
   const used = [];
-  for (const file of walk(new URL("../src", import.meta.url).pathname)) {
+  const { fileURLToPath } = await import("node:url");
+  for (const file of walk(fileURLToPath(new URL("../src", import.meta.url)))) {
     for (const m of readFileSync(file, "utf8").matchAll(/\b(?:featureOn|featureSwitch|featureDef)\([^,)]*,?\s*"(\w+)"\)/g)) used.push([file, m[1]]);
   }
   assert.ok(used.length > 10);
