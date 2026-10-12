@@ -20,6 +20,7 @@ mod island;
 mod launcher;
 mod local_chat;
 mod log;
+mod menu;
 mod net;
 mod openai_compat;
 mod pipe;
@@ -897,6 +898,8 @@ pub fn run() {
             task_projects,
             task_reveal,
             launcher::launcher_status,
+            menu::menu_provider,
+            menu::menu_recommend,
             skills::skills_list,
             skills::skill_set_enabled,
             skills::skill_reveal,

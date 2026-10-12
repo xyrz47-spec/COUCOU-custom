@@ -25,6 +25,7 @@ import { h, clear } from "../views/dom";
 import { drawSelects } from "../views/select";
 import { agentsSection } from "./agents";
 import { launcherSection } from "./launcher";
+import { menuSection } from "./menu";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
 import {
@@ -1831,6 +1832,9 @@ async function render() {
     { id: "pills", label: t("Active pills"), color: "#9ADBB3", sections: [activePillsSection(connected), integrationsSection(present)] },
     ...(featureOn(settings, "launcherTab")
       ? [{ id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save, (redraw) => declaredViews.push(redraw))] }]
+      : []),
+    ...(featureOn(settings, "menuTab")
+      ? [{ id: "menu", label: t("Menu"), color: "#F5C58A", sections: [menuSection(() => settings, save)] }]
       : []),
     { id: "general", label: t("General"), color: "#BDB2F7", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EBD58A", sections: [shortcutsSection(shortcutReport)] },

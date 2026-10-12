@@ -8,7 +8,7 @@
 import { N_ } from "../i18n/i18n";
 
 export type FeatureId =
-  | "claudeChat" | "skillsTab" | "pluginSkills" | "skillAdvice" | "launcherTab"
+  | "claudeChat" | "skillsTab" | "pluginSkills" | "skillAdvice" | "launcherTab" | "menuTab"
   | "musicPlayer" | "compactSong" | "clock" | "weather" | "motion";
 
 export type FeatureGroup = "claude" | "tabs" | "compact" | "look";
@@ -52,6 +52,10 @@ export const FEATURES: readonly FeatureDef[] = [
   {
     id: "launcherTab", group: "tabs", name: N_("Launcher tab"), page: "launcher",
     about: N_("The island's grid tab: your websites and apps, one click each, with the apps installed on this PC to search and add."),
+  },
+  {
+    id: "menuTab", group: "tabs", name: N_("Menu tab"), page: "menu",
+    about: N_("The island's menu tab: say how you feel like eating and get about five dishes back, from the chat provider or the one you pick (a JEV server goes in as the Custom server)."),
   },
   {
     id: "musicPlayer", group: "tabs", name: N_("Big music player"),

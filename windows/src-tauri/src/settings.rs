@@ -21,6 +21,8 @@ pub struct Settings {
     /// Hovering the island opens it all the way, and it folds again shortly
     /// after the pointer leaves (the Mac's "Open on hover"). Off by default.
     pub open_on_hover: bool,
+    /// The chat provider that answers the Menu tab (menu.rs); empty: the chat's own. A JEV server is the custom one.
+    pub menu_provider: String,
     pub absence_interval: f64,
     pub active_integrations: Vec<String>,
     /// The always-on workspace pill (src/core/pills.ts checks it is one).
@@ -152,6 +154,7 @@ impl Default for Settings {
             auto_close_interval: 15.0,
             show_compact_island: true,
             open_on_hover: false,
+            menu_provider: String::new(),
             absence_interval: 180.0,
             active_integrations: vec![
                 "integration_resend".into(),
@@ -450,6 +453,7 @@ mod tests {
   "autoCloseInterval": 30.0,
   "showCompactIsland": false,
   "openOnHover": true,
+  "menuProvider": "custom",
   "absenceInterval": 60.0,
   "activeIntegrations": ["integration_notion"],
   "mainPill": "agent_cursor",
@@ -891,6 +895,7 @@ mod tests {
                 "autoCloseInterval",
                 "showCompactIsland",
                 "openOnHover",
+                "menuProvider",
                 "absenceInterval",
                 "activeIntegrations",
                 "mainPill",
