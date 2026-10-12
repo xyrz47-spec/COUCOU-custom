@@ -4,6 +4,7 @@
 // what is inferred and how sure that is, what else could have been done, and
 // one drill. The user can add a note to a review and delete one or all of them.
 
+import { providerDef, PROVIDERS } from "../core/providers";
 import { Bridge, onEvent, type ValorantRecorderStatus, type ValorantEvents, type ValorantPlan, type ValorantReview } from "../core/bridge";
 import type { Settings } from "../core/state";
 import { clear, h } from "../views/dom";
@@ -125,6 +126,16 @@ export function valorantSection(current: () => Settings, save: () => Promise<voi
   void Bridge.valorantRecorderStatus().then((s) => { recState.textContent = recText(s ?? null); });
   void onEvent<ValorantRecorderStatus>("valorant-recorder", (s) => { recState.textContent = recText(s); });
 
+  // ── Who judges (valorant_judge.rs) ──────────────────────────────────────────
+  const judge = h("select", { class: "sk-where" }) as HTMLSelectElement;
+  judge.append(h("option", { value: "", text: t("Same as the chat") }));
+  for (const def of PROVIDERS) judge.append(h("option", { value: def.id, text: def.name }));
+  judge.value = current().valorantJudge ?? "";
+  judge.addEventListener("change", () => {
+    current().valorantJudge = judge.value;
+    void save();
+  });
+
   // ── The player's own reference notes ────────────────────────────────────────
   const notesBox = h("textarea", {
     placeholder: t("Notes from pro or Radiant players you want the review to use"), style: "width:100%;min-height:72px",
@@ -155,14 +166,11 @@ export function valorantSection(current: () => Settings, save: () => Promise<voi
       .then((p: ValorantPlan) => {
         say("");
         parsed = events;
-        plan.textContent = t("{provider} · {model} — about {tokens} tokens ({limit} at most). {where}", {
-          provider: p.provider,
-          model: p.model || "?",
-          tokens: p.estimatedTokens,
-          limit: p.tokenLimit,
-          where: p.external ? t("The events leave this PC.") : t("The events stay on this PC."),
-        });
-        send.disabled = p.estimatedTokens > p.tokenLimit;
+        const line = (label: string, step: ValorantPlan["options"]) =>
+          `${label}: ${providerDef(step.provider).name} · ${step.model || "?"} — ${t("about {tokens} tokens", { tokens: step.estimatedTokens })} — ${step.external ? t("The events leave this PC.") : t("The events stay on this PC.")}`;
+        plan.textContent = [line(t("1 · Options"), p.options), line(t("2 · Judgement"), p.judge)].join("\n");
+        plan.style.whiteSpace = "pre-line";
+        send.disabled = p.options.estimatedTokens > p.tokenLimit;
         send.style.display = "";
       })
       .catch((err) => say(String(err)));
@@ -203,6 +211,12 @@ export function valorantSection(current: () => Settings, save: () => Promise<voi
       text: t("Only the game's window is captured, with no sound, by ffmpeg (it has to be installed). It starts when the window appears and stops when it closes, at 90 minutes, or when the drive is nearly full. The lobby is in the same window, so a recording holds more than one match."),
     }),
     recState,
+    h("h2", {}, h("span", { text: t("Who judges") })),
+    h("div", {
+      class: "hint",
+      text: t("A language model (the chat provider of Settings → Chat, Claude for instance) lists the options for each decision. The judge compares what the player did with those options, given the events before and after. A JEV server goes in as the Custom server."),
+    }),
+    h("div", { class: "row" }, h("span", { text: t("Judge") }), judge),
     h("h2", {}, h("span", { text: t("Reference notes") })),
     h("div", {
       class: "hint",
@@ -212,7 +226,7 @@ export function valorantSection(current: () => Settings, save: () => Promise<voi
     h("h2", {}, h("span", { text: t("Analyse a match") })),
     h("div", {
       class: "hint",
-      text: t("Paste the events of a match. The analysis uses the chat provider picked in Settings → Chat (a JEV server goes there as a custom server); nothing is sent until you confirm."),
+      text: t("Paste the events of a match. The options come from the chat provider and the judgement from the judge above; nothing is sent until you confirm."),
     }),
     eventsBox,
     h("div", { class: "row" }, check, send),

@@ -126,6 +126,8 @@ export interface Settings {
   openOnHover: boolean;
   /** Record the VALORANT window while the game runs (src-tauri/src/recorder.rs). */
   valorantRecord: boolean;
+  /** The chat provider that judges a Valorant match's decisions; "" is the chat's own (valorant_judge.rs). */
+  valorantJudge: string;
   absenceInterval: number;
   /** Declared pills next to the main one (at most 4), in the order they were added. */
   activeIntegrations: string[];
@@ -221,6 +223,7 @@ export const DEFAULT_SETTINGS: Settings = {
   showCompactIsland: true,
   openOnHover: false,
   valorantRecord: false,
+  valorantJudge: "",
   absenceInterval: 180,
   activeIntegrations: [
     "integration_resend", "integration_n8n", "integration_vercel", "integration_github",

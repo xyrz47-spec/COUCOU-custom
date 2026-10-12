@@ -39,6 +39,7 @@ mod sounds;
 mod spotify;
 mod taktus;
 mod valorant;
+mod valorant_judge;
 mod task_runner;
 mod tray;
 mod weather;
@@ -899,8 +900,8 @@ pub fn run() {
             task_projects,
             task_reveal,
             launcher::launcher_status,
-            valorant::valorant_analysis_plan,
-            valorant::valorant_analyse,
+            valorant_judge::valorant_analysis_plan,
+            valorant_judge::valorant_analyse,
             recorder::valorant_recorder_status,
             recorder::valorant_recordings,
             recorder::valorant_recordings_delete,

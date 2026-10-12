@@ -23,6 +23,8 @@ pub struct Settings {
     pub open_on_hover: bool,
     /// Record the VALORANT window while the game runs (recorder.rs). Off until the user turns it on.
     pub valorant_record: bool,
+    /// The chat provider that judges a Valorant match's decisions (valorant_judge.rs); empty: the chat's own.
+    pub valorant_judge: String,
     pub absence_interval: f64,
     pub active_integrations: Vec<String>,
     /// The always-on workspace pill (src/core/pills.ts checks it is one).
@@ -155,6 +157,7 @@ impl Default for Settings {
             show_compact_island: true,
             open_on_hover: false,
             valorant_record: false,
+            valorant_judge: String::new(),
             absence_interval: 180.0,
             active_integrations: vec![
                 "integration_resend".into(),
@@ -454,6 +457,7 @@ mod tests {
   "showCompactIsland": false,
   "openOnHover": true,
   "valorantRecord": true,
+  "valorantJudge": "custom",
   "absenceInterval": 60.0,
   "activeIntegrations": ["integration_notion"],
   "mainPill": "agent_cursor",
@@ -896,6 +900,7 @@ mod tests {
                 "showCompactIsland",
                 "openOnHover",
                 "valorantRecord",
+                "valorantJudge",
                 "absenceInterval",
                 "activeIntegrations",
                 "mainPill",

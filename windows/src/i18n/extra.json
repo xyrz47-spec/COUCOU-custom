@@ -5500,18 +5500,6 @@
    "id": "Analisis pertandingan",
    "ko": "경기 분석"
   },
-  "Paste the events of a match. The analysis uses the chat provider picked in Settings → Chat (a JEV server goes there as a custom server); nothing is sent until you confirm.": {
-   "zh-Hans": "粘贴一场对局的事件。分析使用在设置 → 聊天中选择的提供商(JEV 服务器可作为自定义服务器填入);确认前不会发送任何内容。",
-   "hi": "किसी मैच के इवेंट पेस्ट करें। विश्लेषण सेटिंग्स → चैट में चुने प्रदाता से होता है (JEV सर्वर कस्टम सर्वर के रूप में वहाँ जाता है); आपकी पुष्टि तक कुछ नहीं भेजा जाता।",
-   "es": "Pega los eventos de una partida. El análisis usa el proveedor elegido en Ajustes → Chat (un servidor JEV va ahí como servidor personalizado); no se envía nada hasta que confirmes.",
-   "ar": "الصق أحداث مباراة. يستخدم التحليل مزوّد الدردشة المختار في الإعدادات ← الدردشة (يُضاف خادم JEV هناك كخادم مخصص)؛ لا يُرسل شيء حتى تؤكد.",
-   "fr": "Collez les événements d'une partie. L'analyse utilise le fournisseur choisi dans Réglages → Chat (un serveur JEV s'y met comme serveur personnalisé) ; rien n'est envoyé avant votre confirmation.",
-   "bn": "একটি ম্যাচের ইভেন্ট পেস্ট করুন। বিশ্লেষণ সেটিংস → চ্যাটে বেছে নেওয়া প্রদানকারী ব্যবহার করে (JEV সার্ভার সেখানে কাস্টম সার্ভার হিসেবে যায়); আপনি নিশ্চিত না করা পর্যন্ত কিছু পাঠানো হয় না।",
-   "pt-BR": "Cole os eventos de uma partida. A análise usa o provedor escolhido em Ajustes → Chat (um servidor JEV entra lá como servidor personalizado); nada é enviado até você confirmar.",
-   "ru": "Вставьте события матча. Анализ использует провайдера, выбранного в Настройки → Чат (сервер JEV указывается там как свой сервер); пока вы не подтвердите, ничего не отправляется.",
-   "id": "Tempel peristiwa sebuah pertandingan. Analisis memakai penyedia yang dipilih di Pengaturan → Obrolan (server JEV dimasukkan di sana sebagai server khusus); tidak ada yang dikirim sebelum Anda mengonfirmasi.",
-   "ko": "경기 이벤트를 붙여 넣으세요. 분석은 설정 → 채팅에서 고른 제공자를 사용하며(JEV 서버는 거기에 사용자 지정 서버로 넣습니다), 확인하기 전에는 아무것도 전송되지 않습니다."
-  },
   "Show what would be sent": {
    "zh-Hans": "显示将要发送的内容",
    "hi": "क्या भेजा जाएगा दिखाएँ",
@@ -5559,18 +5547,6 @@
    "ru": "События — некорректный JSON.",
    "id": "Peristiwa bukan JSON yang valid.",
    "ko": "이벤트가 올바른 JSON이 아닙니다."
-  },
-  "{provider} · {model} — about {tokens} tokens ({limit} at most). {where}": {
-   "zh-Hans": "{provider} · {model} — 约 {tokens} 个 token(最多 {limit})。{where}",
-   "hi": "{provider} · {model} — लगभग {tokens} टोकन (अधिकतम {limit})। {where}",
-   "es": "{provider} · {model} — unos {tokens} tokens (máximo {limit}). {where}",
-   "ar": "{provider} · {model} — حوالي {tokens} رمزًا (الحد الأقصى {limit}). {where}",
-   "fr": "{provider} · {model} — environ {tokens} jetons ({limit} au plus). {where}",
-   "bn": "{provider} · {model} — প্রায় {tokens} টোকেন (সর্বোচ্চ {limit})। {where}",
-   "pt-BR": "{provider} · {model} — cerca de {tokens} tokens (no máximo {limit}). {where}",
-   "ru": "{provider} · {model} — около {tokens} токенов (не более {limit}). {where}",
-   "id": "{provider} · {model} — sekitar {tokens} token (maksimal {limit}). {where}",
-   "ko": "{provider} · {model} — 약 {tokens} 토큰 (최대 {limit}). {where}"
   },
   "The events leave this PC.": {
    "zh-Hans": "事件将离开这台电脑。",
@@ -5823,6 +5799,102 @@
    "ru": "Заметки про-игроков или Radiant, которые должен учитывать разбор",
    "id": "Catatan pemain pro atau Radiant yang ingin dipakai ulasan",
    "ko": "리뷰가 참고할 프로 또는 레디언트 플레이어의 노트"
+  },
+  "Paste the events of a match. The options come from the chat provider and the judgement from the judge above; nothing is sent until you confirm.": {
+   "zh-Hans": "粘贴一场对局的事件。选项由聊天提供商生成,评判由上面的评判者完成;确认前不会发送任何内容。",
+   "hi": "किसी मैच के इवेंट पेस्ट करें। विकल्प चैट प्रदाता से और फ़ैसला ऊपर के जज से आता है; आपकी पुष्टि तक कुछ नहीं भेजा जाता।",
+   "es": "Pega los eventos de una partida. Las opciones vienen del proveedor del chat y el juicio del juez de arriba; no se envía nada hasta que confirmes.",
+   "ar": "الصق أحداث مباراة. الخيارات من مزوّد الدردشة والحكم من الحكم أعلاه؛ لا يُرسل شيء حتى تؤكد.",
+   "fr": "Collez les événements d'une partie. Les options viennent du fournisseur du chat et le jugement du juge ci-dessus ; rien n'est envoyé avant votre confirmation.",
+   "bn": "একটি ম্যাচের ইভেন্ট পেস্ট করুন। বিকল্প আসে চ্যাট প্রদানকারী থেকে এবং বিচার উপরের জাজ থেকে; আপনি নিশ্চিত না করা পর্যন্ত কিছু পাঠানো হয় না।",
+   "pt-BR": "Cole os eventos de uma partida. As opções vêm do provedor do chat e o julgamento do juiz acima; nada é enviado até você confirmar.",
+   "ru": "Вставьте события матча. Варианты даёт провайдер чата, а оценку — судья выше; пока вы не подтвердите, ничего не отправляется.",
+   "id": "Tempel peristiwa sebuah pertandingan. Pilihan berasal dari penyedia obrolan dan penilaian dari juri di atas; tidak ada yang dikirim sebelum Anda mengonfirmasi.",
+   "ko": "경기 이벤트를 붙여 넣으세요. 선택지는 채팅 제공자가, 판단은 위의 심판이 맡으며, 확인하기 전에는 아무것도 전송되지 않습니다."
+  },
+  "about {tokens} tokens": {
+   "zh-Hans": "约 {tokens} 个 token",
+   "hi": "लगभग {tokens} टोकन",
+   "es": "unos {tokens} tokens",
+   "ar": "حوالي {tokens} رمزًا",
+   "fr": "environ {tokens} jetons",
+   "bn": "প্রায় {tokens} টোকেন",
+   "pt-BR": "cerca de {tokens} tokens",
+   "ru": "около {tokens} токенов",
+   "id": "sekitar {tokens} token",
+   "ko": "약 {tokens} 토큰"
+  },
+  "1 · Options": {
+   "zh-Hans": "1 · 选项",
+   "hi": "1 · विकल्प",
+   "es": "1 · Opciones",
+   "ar": "1 · الخيارات",
+   "fr": "1 · Options",
+   "bn": "1 · বিকল্প",
+   "pt-BR": "1 · Opções",
+   "ru": "1 · Варианты",
+   "id": "1 · Pilihan",
+   "ko": "1 · 선택지"
+  },
+  "2 · Judgement": {
+   "zh-Hans": "2 · 评判",
+   "hi": "2 · फ़ैसला",
+   "es": "2 · Juicio",
+   "ar": "2 · الحكم",
+   "fr": "2 · Jugement",
+   "bn": "2 · বিচার",
+   "pt-BR": "2 · Julgamento",
+   "ru": "2 · Оценка",
+   "id": "2 · Penilaian",
+   "ko": "2 · 판단"
+  },
+  "Same as the chat": {
+   "zh-Hans": "与聊天相同",
+   "hi": "चैट जैसा ही",
+   "es": "Igual que el chat",
+   "ar": "نفس الدردشة",
+   "fr": "Comme le chat",
+   "bn": "চ্যাটের মতোই",
+   "pt-BR": "Igual ao chat",
+   "ru": "Как в чате",
+   "id": "Sama dengan obrolan",
+   "ko": "채팅과 동일"
+  },
+  "Who judges": {
+   "zh-Hans": "谁来评判",
+   "hi": "कौन जज करे",
+   "es": "Quién juzga",
+   "ar": "من يحكم",
+   "fr": "Qui juge",
+   "bn": "কে বিচার করবে",
+   "pt-BR": "Quem julga",
+   "ru": "Кто оценивает",
+   "id": "Siapa yang menilai",
+   "ko": "누가 판단하나"
+  },
+  "Judge": {
+   "zh-Hans": "评判者",
+   "hi": "जज",
+   "es": "Juez",
+   "ar": "الحكم",
+   "fr": "Juge",
+   "bn": "জাজ",
+   "pt-BR": "Juiz",
+   "ru": "Судья",
+   "id": "Juri",
+   "ko": "심판"
+  },
+  "A language model (the chat provider of Settings → Chat, Claude for instance) lists the options for each decision. The judge compares what the player did with those options, given the events before and after. A JEV server goes in as the Custom server.": {
+   "zh-Hans": "语言模型(设置 → 聊天中的提供商,例如 Claude)为每个决策列出选项。评判者结合前后事件,把玩家的实际操作与这些选项比较。JEV 服务器作为自定义服务器填入。",
+   "hi": "एक भाषा मॉडल (सेटिंग्स → चैट का प्रदाता, जैसे Claude) हर फ़ैसले के विकल्प बनाता है। जज पहले और बाद के इवेंट देखकर खिलाड़ी के कदम की तुलना इन विकल्पों से करता है। JEV सर्वर कस्टम सर्वर के रूप में जाता है।",
+   "es": "Un modelo de lenguaje (el proveedor del chat en Ajustes → Chat, por ejemplo Claude) enumera las opciones de cada decisión. El juez compara lo que hizo el jugador con esas opciones, con los eventos de antes y después. Un servidor JEV se pone como servidor personalizado.",
+   "ar": "يسرد نموذج لغوي (مزوّد الدردشة في الإعدادات ← الدردشة، مثل Claude) الخيارات لكل قرار. ويقارن الحكم ما فعله اللاعب بهذه الخيارات في ضوء الأحداث قبله وبعده. يُضاف خادم JEV كخادم مخصص.",
+   "fr": "Un modèle de langage (le fournisseur du chat dans Réglages → Chat, Claude par exemple) liste les options pour chaque décision. Le juge compare ce que le joueur a fait à ces options, d'après les événements avant et après. Un serveur JEV se met comme serveur personnalisé.",
+   "bn": "একটি ভাষা মডেল (সেটিংস → চ্যাটের প্রদানকারী, যেমন Claude) প্রতিটি সিদ্ধান্তের বিকল্প তালিকাভুক্ত করে। জাজ আগে-পরের ইভেন্ট দেখে খেলোয়াড়ের কাজকে ওই বিকল্পগুলোর সঙ্গে তুলনা করে। JEV সার্ভার কাস্টম সার্ভার হিসেবে যায়।",
+   "pt-BR": "Um modelo de linguagem (o provedor do chat em Ajustes → Chat, como o Claude) lista as opções de cada decisão. O juiz compara o que o jogador fez com essas opções, considerando os eventos antes e depois. Um servidor JEV entra como servidor personalizado.",
+   "ru": "Языковая модель (провайдер чата из Настройки → Чат, например Claude) перечисляет варианты для каждого решения. Судья сравнивает действие игрока с этими вариантами с учётом событий до и после. Сервер JEV указывается как свой сервер.",
+   "id": "Model bahasa (penyedia obrolan di Pengaturan → Obrolan, misalnya Claude) mendaftar pilihan untuk tiap keputusan. Juri membandingkan tindakan pemain dengan pilihan itu berdasarkan peristiwa sebelum dan sesudahnya. Server JEV dimasukkan sebagai server khusus.",
+   "ko": "언어 모델(설정 → 채팅의 제공자, 예: Claude)이 각 결정의 선택지를 나열합니다. 심판은 전후 이벤트를 바탕으로 플레이어의 행동을 그 선택지와 비교합니다. JEV 서버는 사용자 지정 서버로 넣습니다."
   }
  }
 }

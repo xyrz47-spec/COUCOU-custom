@@ -387,13 +387,20 @@ export interface ValorantEvents {
   events: { atMs: number; kind: string; detail: string }[];
 }
 
-export interface ValorantPlan {
+/** One step of an analysis: who is asked and what is sent. */
+export interface ValorantStepPlan {
   provider: string;
   model: string;
   /** The events leave this PC. */
   external: boolean;
-  characters: number;
   estimatedTokens: number;
+}
+
+export interface ValorantPlan {
+  /** Step 1: the options. */
+  options: ValorantStepPlan;
+  /** Step 2: the judgement. */
+  judge: ValorantStepPlan;
   tokenLimit: number;
 }
 
