@@ -431,6 +431,7 @@ struct TwentyIslandView: View {
         if let secret = game.revealed {
             let name = secret.name(TwentyData.language)
             HStack(spacing: 14) {
+                TwentyPicture(item: secret, artwork: state.twentyPicturesEnabled)
                 VStack(alignment: .leading, spacing: 1) {
                     Text(game.won ? String(localized: "You got it in \(game.asked) questions!") : String(localized: "Better luck next time."))
                         .font(.system(size: 11, weight: .medium))
@@ -448,7 +449,7 @@ struct TwentyIslandView: View {
                 Spacer(minLength: 8)
                 JevButton(title: String(localized: "New game"), kind: .primary) { game.backToStart() }
             }
-            .padding(.horizontal, 16).padding(.vertical, 12)
+            .padding(.leading, 10).padding(.trailing, 16).padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 14).fill(LinearGradient(
                     colors: game.won ? [JevStyle.green.opacity(0.3), JevStyle.cyan.opacity(0.14)] : [JevStyle.indigo.opacity(0.28), Color(hex: "#F472B6").opacity(0.16)],
@@ -481,6 +482,39 @@ struct TwentyIslandView: View {
         case .unsure:            return JevStyle.dim
         case .wrongGuess:        return JevStyle.amber
         }
+    }
+}
+
+/// The secret's picture on the reveal card: its emoji, or a Pokémon's artwork once it has loaded.
+private struct TwentyPicture: View {
+    let item: TwentyItem
+    let artwork: Bool
+    @State private var shown = false
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 16).fill(Color.white.opacity(0.08))
+            if artwork, let url = item.artURL {
+                AsyncImage(url: url) { phase in
+                    if let image = phase.image {
+                        image.resizable().scaledToFit().shadow(color: .black.opacity(0.45), radius: 5, y: 4)
+                    } else {
+                        emoji
+                    }
+                }
+            } else {
+                emoji
+            }
+        }
+        .frame(width: 76, height: 76)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .scaleEffect(shown ? 1 : 0.6)
+        .opacity(shown ? 1 : 0)
+        .onAppear { withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { shown = true } }
+    }
+
+    private var emoji: some View {
+        Text(item.emoji).font(.system(size: 44))
     }
 }
 

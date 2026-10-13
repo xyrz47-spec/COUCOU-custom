@@ -904,6 +904,7 @@ pub fn run() {
             twenty::twenty_ask,
             twenty::twenty_guess,
             twenty::twenty_give_up,
+            twenty::twenty_picture,
             jev::jev_check_key,
             launcher::launcher_status,
             skills::skills_list,

@@ -15,6 +15,29 @@ struct TwentyItem: Equatable {
     let names: [String]
     var en: String { names[0] }
 
+    /// The emoji that shows it: its own (twenty_pictures.txt), else its kind's.
+    var emoji: String {
+        if let own = TwentyData.pictures[en]?.emoji, !own.isEmpty { return own }
+        switch kind {
+        case "animal":    return "🐾"
+        case "food":      return "🍽️"
+        case "thing":     return "📦"
+        case "place":     return "📍"
+        case "job":       return "💼"
+        case "nature":    return "🌿"
+        case "pokemon":   return "⚪"
+        case "character": return "🎭"
+        case "body":      return "🫀"
+        default:          return "🎲"
+        }
+    }
+
+    /// A Pokémon's official artwork, in PokeAPI's pictures on GitHub.
+    var artURL: URL? {
+        guard let id = TwentyData.pictures[en]?.art, !id.isEmpty, id.allSatisfy(\.isNumber) else { return nil }
+        return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
+    }
+
     /// The name in `lang`, else the English one.
     func name(_ lang: String) -> String {
         guard let i = TwentyData.langs.firstIndex(of: lang), i < names.count else { return en }
@@ -48,6 +71,19 @@ enum TwentyData {
         for line in text.split(separator: "\n") {
             guard let bar = line.firstIndex(of: "|") else { continue }
             out[String(line[..<bar]).trimmingCharacters(in: .whitespaces)] = String(line[line.index(after: bar)...]).trimmingCharacters(in: .whitespaces)
+        }
+        return out
+    }()
+
+    /// twenty_pictures.txt: `English | emoji | PokeAPI id` per line.
+    static let pictures: [String: (emoji: String, art: String)] = {
+        guard let url = Bundle.main.url(forResource: "twenty_pictures", withExtension: "txt"),
+              let text = try? String(contentsOf: url, encoding: .utf8) else { return [:] }
+        var out: [String: (emoji: String, art: String)] = [:]
+        for line in text.split(separator: "\n") where !line.hasPrefix("#") {
+            let parts = line.split(separator: "|", omittingEmptySubsequences: false).map { $0.trimmingCharacters(in: .whitespaces) }
+            guard parts.count >= 2 else { continue }
+            out[parts[0]] = (parts[1], parts.count > 2 ? parts[2] : "")
         }
         return out
     }()

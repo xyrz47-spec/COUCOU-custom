@@ -188,6 +188,8 @@ export const Bridge = {
   twentyGuess: (guess: string) => callOrThrow<TwentyGuess>("twenty_guess", { guess }),
   /** Gives up: the secret, in English and Korean. */
   twentyGiveUp: () => callOrThrow<TwentySecret>("twenty_give_up"),
+  /** The secret's picture once the game is over (a data URL), or null when it has none. */
+  twentyPicture: () => call<string | null>("twenty_picture"),
   /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
   jevCheckKey: () => callOrThrow<string>("jev_check_key"),
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
@@ -361,6 +363,10 @@ export interface JevDecision {
 /** What Coucou had in mind, told when the game is over. */
 export interface TwentySecret {
   en: string;
+  /** An emoji that shows it. */
+  emoji: string;
+  /** A picture can be fetched with twentyPicture() (a Pokémon's artwork). */
+  art: boolean;
   /** The name in each interface language, by its code (twenty.rs LANGS). */
   names: Record<string, string>;
 }

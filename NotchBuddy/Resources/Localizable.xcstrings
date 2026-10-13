@@ -32135,6 +32135,146 @@
           }
         }
       }
+    },
+    "Pokémon pictures": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صور بوكيمون"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পোকেমন ছবি"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokémon pictures"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imágenes de Pokémon"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Images de Pokémon"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पोकेमॉन चित्र"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gambar Pokémon"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "포켓몬 그림"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imagens de Pokémon"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Картинки покемонов"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "宝可梦图片"
+          }
+        }
+      }
+    },
+    "When the secret is a Pokémon, its official artwork shows as the game ends, fetched then from PokeAPI's pictures on GitHub. Off, nothing is fetched and an emoji of its type shows instead.": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عندما يكون السر بوكيمون، تظهر رسمته الرسمية عند انتهاء اللعبة، وتُجلب حينها من صور PokeAPI على GitHub. عند الإيقاف لا يُجلب شيء ويظهر رمز تعبيري لنوعه بدلًا منها."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "গোপন জিনিসটি পোকেমন হলে খেলা শেষে তার অফিসিয়াল ছবি দেখা যায়, যা তখনই GitHub-এ PokeAPI-এর ছবি থেকে আনা হয়। বন্ধ থাকলে কিছুই আনা হয় না, তার বদলে তার ধরনের একটি ইমোজি দেখা যায়।"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When the secret is a Pokémon, its official artwork shows as the game ends, fetched then from PokeAPI's pictures on GitHub. Off, nothing is fetched and an emoji of its type shows instead."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuando el secreto es un Pokémon, su ilustración oficial aparece al terminar la partida, descargada entonces de las imágenes de PokeAPI en GitHub. Desactivado, no se descarga nada y se muestra un emoji de su tipo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand le secret est un Pokémon, son illustration officielle s'affiche à la fin de la partie, récupérée alors depuis les images de PokeAPI sur GitHub. Désactivé, rien n'est récupéré et un emoji de son type s'affiche à la place."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जब रहस्य कोई पोकेमॉन हो, तो खेल खत्म होने पर उसका आधिकारिक चित्र दिखता है, जो उसी समय GitHub पर PokeAPI की तस्वीरों से लाया जाता है। बंद होने पर कुछ भी नहीं लाया जाता और उसकी जगह उसके प्रकार का इमोजी दिखता है।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jika rahasianya Pokémon, gambar resminya muncul saat permainan berakhir, diambil saat itu dari gambar PokeAPI di GitHub. Jika dimatikan, tidak ada yang diambil dan emoji tipenya ditampilkan sebagai gantinya."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정답이 포켓몬이면 게임이 끝날 때 공식 일러스트가 나옵니다. 이때 GitHub의 PokeAPI 그림에서 불러옵니다. 끄면 아무것도 불러오지 않고 대신 타입 이모지가 나옵니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando o segredo é um Pokémon, sua arte oficial aparece no fim do jogo, baixada na hora das imagens do PokeAPI no GitHub. Desligado, nada é baixado e aparece um emoji do tipo dele."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Если загадан покемон, в конце игры показывается его официальный рисунок, загружаемый в этот момент из картинок PokeAPI на GitHub. Если выключено, ничего не загружается, а вместо рисунка показывается эмодзи его типа."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当答案是宝可梦时，游戏结束时会显示它的官方插画，届时从 GitHub 上的 PokeAPI 图片获取。关闭后不会获取任何内容，改为显示其属性的表情符号。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

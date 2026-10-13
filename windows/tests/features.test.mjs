@@ -43,7 +43,7 @@ test("a settings file from elsewhere turns nothing off by accident", () => {
 
 test("a feature that is part of another is off with it, its own switch kept", () => {
   const parts = FEATURES.filter((def) => def.needs).map((def) => `${def.id}<${def.needs}`);
-  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillFind<skillsTab", "skillAdvice<skillsTab", "launcherApps<launcherTab", "launcherFavicons<launcherTab", "decide<jev", "decidePresets<decide", "decideRemember<decide", "twenty<jev", "musicPlayer<spotify", "compactSong<spotify", "spotifyDance<spotify", "songAnnounce<spotify", "weather<clock"]);
+  assert.deepEqual(parts, ["pluginSkills<skillsTab", "skillFind<skillsTab", "skillAdvice<skillsTab", "launcherApps<launcherTab", "launcherFavicons<launcherTab", "decide<jev", "decidePresets<decide", "decideRemember<decide", "twenty<jev", "twentyPictures<twenty", "musicPlayer<spotify", "compactSong<spotify", "spotifyDance<spotify", "songAnnounce<spotify", "weather<clock"]);
   const settings = off("clock");
   assert.equal(featureOn(settings, "weather"), false);
   assert.equal(featureSwitch(settings, "weather"), true);

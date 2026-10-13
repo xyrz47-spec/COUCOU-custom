@@ -1994,7 +1994,7 @@ place|Skating rink|스케이트장|溜冰场|स्केटिंग रिं�
 place|Race track|경주장|赛道|रेस ट्रैक|circuito|حلبة سباق|circuit|রেস ট্র্যাক|autódromo|гоночная трасса|sirkuit balap
 place|Bowling alley|볼링장|保龄球馆|बॉलिंग एली|bolera|صالة بولينغ|bowling|বোলিং অ্যালি|boliche|боулинг|arena bowling
 place|Karaoke room|노래방|KTV包厢|कराओके रूम|karaoke|غرفة كاريوكي|salle de karaoké|কারাওকে রুম|karaokê|караоке|karaoke
-place|PC room PC|방|网吧|गेमिंग कैफ़े|cibercafé|مقهى إنترنت|cybercafé|গেমিং ক্যাফে|lan house|компьютерный клуб|warnet
+place|PC room|PC방|网吧|गेमिंग कैफ़े|cibercafé|مقهى إنترنت|cybercafé|গেমিং ক্যাফে|lan house|компьютерный клуб|warnet
 place|Arcade|오락실|游戏厅|आर्केड|salón recreativo|صالة ألعاب|salle d'arcade|আর্কেড|fliperama|игровые автоматы|arena permainan
 place|Escape room|방탈출 카페|密室逃脱|एस्केप रूम|escape room|غرفة الهروب|escape game|এস্কেপ রুম|escape room|квест-комната|escape room
 place|Cafe|카페|咖啡馆|कैफ़े|cafetería|مقهى|café|ক্যাফে|cafeteria|кафе|kafe

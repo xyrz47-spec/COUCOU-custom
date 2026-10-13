@@ -45,6 +45,55 @@ impl Item {
     }
 }
 
+/// The picture of each thing, from twenty_pictures.txt: `English | emoji | PokeAPI id` per line. The emoji
+/// may be empty (the kind's own then shows); the id, for a Pokémon, names its official artwork.
+fn pictures() -> &'static HashMap<&'static str, (&'static str, Option<&'static str>)> {
+    static PICTURES: OnceLock<HashMap<&'static str, (&'static str, Option<&'static str>)>> = OnceLock::new();
+    PICTURES.get_or_init(|| {
+        include_str!("twenty_pictures.txt")
+            .lines()
+            .filter(|l| !l.trim().is_empty() && !l.starts_with('#'))
+            .filter_map(|line| {
+                let mut parts = line.split('|').map(str::trim);
+                let (en, emoji, art) = (parts.next()?, parts.next()?, parts.next().unwrap_or(""));
+                Some((en, (emoji, (!art.is_empty()).then_some(art))))
+            })
+            .collect()
+    })
+}
+
+/// The emoji for a kind, when a thing has none of its own.
+fn kind_emoji(kind: &str) -> &'static str {
+    match kind {
+        "animal" => "🐾",
+        "food" => "🍽️",
+        "thing" => "📦",
+        "place" => "📍",
+        "job" => "💼",
+        "nature" => "🌿",
+        "pokemon" => "⚪",
+        "character" => "🎭",
+        "body" => "🫀",
+        _ => "🎲",
+    }
+}
+
+impl Item {
+    /// The emoji that shows this thing: its own, else its kind's.
+    pub fn emoji(&self) -> &'static str {
+        pictures().get(self.en).map(|p| p.0).filter(|e| !e.is_empty()).unwrap_or_else(|| kind_emoji(self.kind))
+    }
+
+    /// The URL of a Pokémon's official artwork (PokeAPI's pictures on GitHub).
+    pub fn art_url(&self) -> Option<String> {
+        let id = pictures().get(self.en)?.1?;
+        id.bytes().all(|b| b.is_ascii_digit()).then(|| format!("{ART_BASE}{id}.png"))
+    }
+}
+
+const ART_BASE: &str = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
+const ART_LIMIT: usize = 2 * 1024 * 1024;
+
 /// The interface languages, in the order of the columns of twenty_items.txt (src/i18n/i18n.ts LANGUAGE_CODES).
 pub const LANGS: &[&str] = &["en", "ko", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"];
 
@@ -255,13 +304,17 @@ pub struct Started {
 #[serde(rename_all = "camelCase")]
 pub struct Secret {
     pub en: String,
+    /// An emoji that shows it (style: the reveal card).
+    pub emoji: String,
+    /// There is a picture to fetch with `twenty_picture` (a Pokémon, with Pokémon pictures on).
+    pub art: bool,
     /// The name in each interface language, by its code.
     pub names: std::collections::BTreeMap<String, String>,
 }
 
 fn secret_of(item: usize) -> Secret {
     let it = &items()[item];
-    Secret { en: it.en.to_string(), names: LANGS.iter().map(|l| (l.to_string(), it.name(l).to_string())).collect() }
+    Secret { en: it.en.to_string(), emoji: it.emoji().to_string(), art: it.art_url().is_some(), names: LANGS.iter().map(|l| (l.to_string(), it.name(l).to_string())).collect() }
 }
 
 #[derive(Serialize)]
@@ -367,6 +420,34 @@ pub async fn twenty_guess(shared: State<'_, Shared>, guess: String) -> Result<Gu
     })
 }
 
+/// The picture of the secret once the game is over, as a data URL: a Pokémon's official artwork, fetched
+/// now from PokeAPI's pictures on GitHub. None for anything else, or with Pokémon pictures off.
+#[tauri::command]
+pub async fn twenty_picture(shared: State<'_, Shared>) -> Result<Option<String>, String> {
+    if !crate::features::on(&shared.settings.lock().unwrap(), "twentyPictures") {
+        return Ok(None);
+    }
+    let url = {
+        let game = GAME.lock().unwrap();
+        match game.as_ref() {
+            Some(g) if g.over => items()[g.item].art_url(),
+            _ => return Err("No game is over.".into()),
+        }
+    };
+    let Some(url) = url else { return Ok(None) };
+    let url = reqwest::Url::parse(&url).map_err(|e| e.to_string())?;
+    let response = crate::net::client(&url, std::time::Duration::from_secs(15))?
+        .get(url)
+        .send()
+        .await
+        .map_err(|e| format!("Network error: {e}"))?;
+    if !response.status().is_success() {
+        return Ok(None);
+    }
+    let bytes = crate::net::read_capped(response, ART_LIMIT).await?;
+    Ok(bytes.starts_with(b"\x89PNG").then(|| format!("data:image/png;base64,{}", crate::claude::base64_for(&bytes))))
+}
+
 /// Gives up: the secret is told and the game ends.
 #[tauri::command]
 pub fn twenty_give_up() -> Result<Secret, String> {
@@ -449,6 +530,26 @@ mod tests {
             let own = everyday.iter().filter(|i| i.name(lang) != i.en).count();
             assert!(own * 100 >= everyday.len() * 60, "{lang}: {own} of {} differ from English", everyday.len());
         }
+    }
+
+    #[test]
+    fn every_thing_has_an_emoji_and_every_pokemon_its_artwork() {
+        for item in items() {
+            assert!(!item.emoji().is_empty(), "{}", item.en);
+        }
+        for name in pictures().keys() {
+            assert!(items().iter().any(|i| i.en == *name), "twenty_pictures.txt names {name}, which is not a thing");
+        }
+        for i in pool("pokemon") {
+            let url = items()[i].art_url().unwrap_or_else(|| panic!("no artwork for {}", items()[i].en));
+            assert!(url.starts_with(ART_BASE) && url.ends_with(".png"));
+        }
+        assert_eq!(find("Pikachu").art_url().unwrap(), format!("{ART_BASE}25.png"));
+        assert_eq!(find("Mega Charizard X").art_url().unwrap(), format!("{ART_BASE}10034.png"));
+        assert_eq!(find("Charizard").emoji(), "🔥", "a Pokémon's emoji is its first type's");
+        assert!(find("Elephant").art_url().is_none(), "only Pokémon have artwork");
+        let secret = secret_of(items().iter().position(|i| i.en == "Pikachu").unwrap());
+        assert!(secret.art && secret.emoji == "⚡");
     }
 
     #[test]

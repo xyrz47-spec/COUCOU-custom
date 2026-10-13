@@ -107,6 +107,10 @@ const TEXT: Record<string, { name: string; about: string; tab?: string; page?: s
     name: N_("Twenty questions tab"), tab: N_("Twenty questions"),
     about: N_("The island's twenty-questions tab: Coucou thinks of an animal, a food or an object, and JEV answers your yes/no questions. Needs your TypeSafe API key."),
   },
+  twentyPictures: {
+    name: N_("Pokémon pictures"),
+    about: N_("When the secret is a Pokémon, its official artwork shows as the game ends, fetched then from PokeAPI's pictures on GitHub. Off, nothing is fetched and an emoji of its type shows instead."),
+  },
   decide: {
     name: N_("Decide tab"), tab: N_("Decide"),
     about: N_("The island's decide tab: say how you feel, list a few options — what to eat, drink or do — and JEV ranks them. Needs your TypeSafe API key."),

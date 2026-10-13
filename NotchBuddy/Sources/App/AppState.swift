@@ -275,6 +275,10 @@ final class AppState: ObservableObject {
     @Published var twentyTabEnabled: Bool = UserDefaults.standard.object(forKey: "twentyTabEnabled") as? Bool ?? true {
         didSet { UserDefaults.standard.set(twentyTabEnabled, forKey: "twentyTabEnabled") }
     }
+    // A Pokémon's artwork when the game ends, fetched then from PokeAPI's pictures on GitHub.
+    @Published var twentyPicturesEnabled: Bool = UserDefaults.standard.object(forKey: "twentyPicturesEnabled") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(twentyPicturesEnabled, forKey: "twentyPicturesEnabled") }
+    }
 
     @Published var openOnHover: Bool = false {
         didSet { UserDefaults.standard.set(openOnHover, forKey: "openOnHover") }

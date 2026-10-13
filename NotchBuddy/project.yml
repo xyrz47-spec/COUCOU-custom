@@ -128,6 +128,8 @@ targets:
         buildPhase: resources
       - path: ../windows/src-tauri/src/pokemon_facts.txt
         buildPhase: resources
+      - path: ../windows/src-tauri/src/twenty_pictures.txt
+        buildPhase: resources
     info:
       path: Resources/Info.plist
       properties:
@@ -210,6 +212,8 @@ targets:
       - path: ../windows/src-tauri/src/twenty_items.txt
         buildPhase: resources
       - path: ../windows/src-tauri/src/pokemon_facts.txt
+        buildPhase: resources
+      - path: ../windows/src-tauri/src/twenty_pictures.txt
         buildPhase: resources
     info:
       path: Resources/InfoAppStore.plist

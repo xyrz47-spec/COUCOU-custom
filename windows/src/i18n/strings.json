@@ -3242,6 +3242,18 @@
    "id": "Plugin tidak terpasang",
    "ko": "플러그인 설치 안 됨"
   },
+  "Pokémon pictures": {
+   "zh-Hans": "宝可梦图片",
+   "hi": "पोकेमॉन चित्र",
+   "es": "Imágenes de Pokémon",
+   "ar": "صور بوكيمون",
+   "fr": "Images de Pokémon",
+   "bn": "পোকেমন ছবি",
+   "pt-BR": "Imagens de Pokémon",
+   "ru": "Картинки покемонов",
+   "id": "Gambar Pokémon",
+   "ko": "포켓몬 그림"
+  },
   "Previous": {
    "zh-Hans": "上一首",
    "hi": "पिछला",
@@ -4657,6 +4669,18 @@
    "ru": "Когда включено, Coucou слушает слово активации « OK Coucou ». Распознавание речи работает полностью на устройстве — никакие аудиозаписи или транскрипции не покидают ваш Mac.",
    "id": "Saat diaktifkan, Coucou mendengarkan kata pengaktif « OK Coucou ». Pengenalan ucapan berjalan sepenuhnya di perangkat — tidak ada audio atau transkrip yang meninggalkan Mac Anda.",
    "ko": "켜 두면 Coucou가 호출어 « OK Coucou »를 듣습니다. 음성 인식은 전부 기기 안에서 이루어지며, 오디오나 받아쓴 내용은 Mac 밖으로 나가지 않습니다."
+  },
+  "When the secret is a Pokémon, its official artwork shows as the game ends, fetched then from PokeAPI's pictures on GitHub. Off, nothing is fetched and an emoji of its type shows instead.": {
+   "zh-Hans": "当答案是宝可梦时，游戏结束时会显示它的官方插画，届时从 GitHub 上的 PokeAPI 图片获取。关闭后不会获取任何内容，改为显示其属性的表情符号。",
+   "hi": "जब रहस्य कोई पोकेमॉन हो, तो खेल खत्म होने पर उसका आधिकारिक चित्र दिखता है, जो उसी समय GitHub पर PokeAPI की तस्वीरों से लाया जाता है। बंद होने पर कुछ भी नहीं लाया जाता और उसकी जगह उसके प्रकार का इमोजी दिखता है।",
+   "es": "Cuando el secreto es un Pokémon, su ilustración oficial aparece al terminar la partida, descargada entonces de las imágenes de PokeAPI en GitHub. Desactivado, no se descarga nada y se muestra un emoji de su tipo.",
+   "ar": "عندما يكون السر بوكيمون، تظهر رسمته الرسمية عند انتهاء اللعبة، وتُجلب حينها من صور PokeAPI على GitHub. عند الإيقاف لا يُجلب شيء ويظهر رمز تعبيري لنوعه بدلًا منها.",
+   "fr": "Quand le secret est un Pokémon, son illustration officielle s'affiche à la fin de la partie, récupérée alors depuis les images de PokeAPI sur GitHub. Désactivé, rien n'est récupéré et un emoji de son type s'affiche à la place.",
+   "bn": "গোপন জিনিসটি পোকেমন হলে খেলা শেষে তার অফিসিয়াল ছবি দেখা যায়, যা তখনই GitHub-এ PokeAPI-এর ছবি থেকে আনা হয়। বন্ধ থাকলে কিছুই আনা হয় না, তার বদলে তার ধরনের একটি ইমোজি দেখা যায়।",
+   "pt-BR": "Quando o segredo é um Pokémon, sua arte oficial aparece no fim do jogo, baixada na hora das imagens do PokeAPI no GitHub. Desligado, nada é baixado e aparece um emoji do tipo dele.",
+   "ru": "Если загадан покемон, в конце игры показывается его официальный рисунок, загружаемый в этот момент из картинок PokeAPI на GitHub. Если выключено, ничего не загружается, а вместо рисунка показывается эмодзи его типа.",
+   "id": "Jika rahasianya Pokémon, gambar resminya muncul saat permainan berakhir, diambil saat itu dari gambar PokeAPI di GitHub. Jika dimatikan, tidak ada yang diambil dan emoji tipenya ditampilkan sebagai gantinya.",
+   "ko": "정답이 포켓몬이면 게임이 끝날 때 공식 일러스트가 나옵니다. 이때 GitHub의 PokeAPI 그림에서 불러옵니다. 끄면 아무것도 불러오지 않고 대신 타입 이모지가 나옵니다."
   },
   "Which pill do you want to add?": {
    "zh-Hans": "要添加哪个胶囊？",

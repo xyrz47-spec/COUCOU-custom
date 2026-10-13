@@ -50,6 +50,12 @@ struct JevSettingsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Toggle(String(localized: "Decide tab"), isOn: $state.decideTabEnabled)
                 Toggle(String(localized: "Twenty questions tab"), isOn: $state.twentyTabEnabled)
+                Toggle(String(localized: "Pokémon pictures"), isOn: $state.twentyPicturesEnabled)
+                    .disabled(!state.twentyTabEnabled)
+                Text(String(localized: "When the secret is a Pokémon, its official artwork shows as the game ends, fetched then from PokeAPI's pictures on GitHub. Off, nothing is fetched and an emoji of its type shows instead."))
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(6)

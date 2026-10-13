@@ -39,6 +39,36 @@ test("the secret is told in the interface language with the English beside it", 
   assert.equal(secretText(secret, "ru"), "Elephant", "a missing name falls back to English");
 });
 
+test("with Pokémon pictures off, the emoji stays and nothing is fetched", async () => {
+  const { internals } = await import("./tauri.mjs");
+  const { DEFAULT_SETTINGS } = await import("../src/core/state.ts");
+  const before = internals.invoke;
+  const asked = [];
+  internals.invoke = async (cmd, args) => {
+    asked.push(cmd);
+    if (cmd === "twenty_new") return { total: 20, pool: 10 };
+    if (cmd === "twenty_give_up") return { en: "Pikachu", emoji: "⚡", art: true, names: { en: "Pikachu" } };
+    if (cmd === "twenty_picture") return "data:image/png;base64,AAAA";
+    return before(cmd, args);
+  };
+  const tick = () => new Promise((r) => setTimeout(r, 0));
+  try {
+    State.settings = { ...DEFAULT_SETTINGS, disabledFeatures: ["twentyPictures"] };
+    const view = buildTwenty({ blip() {} });
+    view.el.find(".tq-kind")[0].fire("click");
+    await tick();
+    view.el.find(".tq-btn").find((b) => b.classList.contains("danger")).fire("click");
+    await tick();
+    await tick();
+    assert.equal(view.el.find(".tq-pic")[0].textContent, "⚡");
+    assert.equal(view.el.find("IMG").length, 0);
+    assert.ok(!asked.includes("twenty_picture"));
+  } finally {
+    internals.invoke = before;
+    State.settings = { ...State.settings, disabledFeatures: [] };
+  }
+});
+
 test("the tab starts at the choice of a kind and asks nothing by itself", () => {
   State.view = "twenty";
   const view = buildTwenty({ blip() {} });
@@ -60,7 +90,8 @@ test("a game: twenty dots coloured by the answers, then the secret on its card i
       return { total: 20, pool: 1122 };
     }
     if (cmd === "twenty_ask") return { label: answers.shift(), asked: 2 - answers.length, left: 18 + answers.length, over: false, secret: null };
-    if (cmd === "twenty_give_up") return { en: "Rhydon", names: { en: "Rhydon", ko: "코뿌리" } };
+    if (cmd === "twenty_give_up") return { en: "Rhydon", emoji: "⛰️", art: true, names: { en: "Rhydon", ko: "코뿌리" } };
+    if (cmd === "twenty_picture") return "data:image/png;base64,iVBORw0KGgo=";
     return before(cmd, args);
   };
   const tick = () => new Promise((r) => setTimeout(r, 0));
@@ -86,6 +117,10 @@ test("a game: twenty dots coloured by the answers, then the secret on its card i
     view.el.find(".tq-btn").find((b) => b.classList.contains("danger")).fire("click");
     await tick();
     assert.equal(view.el.find(".tq-card-name")[0].textContent, "Rhydon");
+    await tick();
+    const img = view.el.find("IMG")[0];
+    assert.ok(img, "the Pokémon's artwork replaces its emoji once fetched");
+    assert.equal(img.getAttribute("src"), "data:image/png;base64,iVBORw0KGgo=");
     assert.equal(view.el.find(".tq-ask")[0].style.display, "none", "no more questions once it is over");
   } finally {
     internals.invoke = before;

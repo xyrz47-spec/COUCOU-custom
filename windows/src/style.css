@@ -4719,10 +4719,36 @@ html[data-dir="rtl"] #views :is(.bubble, .reply .md-p, .reply .md-h, .reply .md-
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px 16px;
+  padding: 10px 16px 10px 10px;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.28), rgba(244, 114, 182, 0.16));
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* The secret's picture: its emoji, or a Pokémon's artwork. */
+.tq-pic {
+  flex: 0 0 76px;
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  font: 44px/1 "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", var(--font);
+  overflow: hidden;
+  animation: tq-pop 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.tq-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+}
+
+@keyframes tq-pop {
+  from { transform: scale(0.6); opacity: 0; }
 }
 
 .tq-card.won {

@@ -14,6 +14,8 @@
 
 import { Bridge, type TwentyLabel, type TwentySecret } from "../core/bridge";
 import { KINDS, answerText, progress, secretName } from "../core/twenty";
+import { featureOn } from "../core/features";
+import { State } from "../core/state";
 import { clear, h } from "./dom";
 import type { ViewActions, ViewHost } from "./views";
 import { t, tl } from "../i18n/i18n";
@@ -106,13 +108,31 @@ export function buildTwenty(actions: ViewActions): ViewHost {
     }
   }
 
+  /** The secret's picture: its emoji, then, for a Pokémon with "Pokémon pictures" on, its artwork once fetched. */
+  let picture: { secret: TwentySecret; src: string | null } | null = null;
+
+  function loadPicture(secret: TwentySecret) {
+    if (picture?.secret === secret) return;
+    picture = { secret, src: null };
+    if (!secret.art || !featureOn(State.settings, "twentyPictures")) return;
+    const asked = picture;
+    void Bridge.twentyPicture().then((src) => {
+      if (picture !== asked || !src) return;
+      asked.src = src;
+      drawReveal();
+    });
+  }
+
   function drawReveal() {
     clear(reveal);
     if (phase !== "over" || !ending) return;
     const secret = ending.secret;
     const name = secret ? secretName(secret) : "?";
+    if (secret) loadPicture(secret);
+    const art = picture && picture.secret === secret ? picture.src : null;
     reveal.append(
       h("div", { class: `tq-card ${ending.won ? "won" : "lost"}` },
+        h("div", { class: "tq-pic" }, art ? h("img", { src: art, alt: name }) : h("span", { text: secret?.emoji ?? "❔" })),
         h("div", { class: "tq-card-text" },
           h("div", { class: "tq-card-label", text: ending.won ? t("You got it in {n} questions!", { n: ending.asked }) : t("Better luck next time.") }),
           h("div", { class: "tq-card-name", text: name }),
