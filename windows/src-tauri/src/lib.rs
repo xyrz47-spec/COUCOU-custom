@@ -10,6 +10,7 @@ mod claude_plan;
 mod codex_plan;
 mod config_file;
 mod desktop;
+mod features;
 mod files;
 mod github;
 mod hooks;
@@ -17,6 +18,7 @@ mod i18n;
 mod identity;
 mod integrations;
 mod island;
+mod jev;
 mod launcher;
 mod local_chat;
 mod log;
@@ -39,6 +41,7 @@ mod spotify;
 mod taktus;
 mod task_runner;
 mod tray;
+mod twenty;
 mod weather;
 #[cfg(windows)]
 mod webview_drop;
@@ -107,6 +110,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         settings.skill_folders.truncate(skills::MAX_NAMED);
         // As many as src/core/features.ts keeps (MAX_DISABLED).
         settings.disabled_features.truncate(32);
+        settings.enabled_features.truncate(32);
         skills::set_named_folders(&settings.skill_folders);
         *current = settings;
         (screen_changed, autostart_changed, shortcuts_changed)
@@ -127,7 +131,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         island::apply_geometry(&app, &settings.screen, collapsed);
     }
     integrations::settings_saved(&app, &settings.active_integrations);
-    spotify::sync(&app, &settings.active_integrations);
+    spotify::sync(&app, &features::allowed_pills(&settings, &settings.active_integrations));
     if shortcuts_changed {
         shortcuts::apply(&app, &settings.shortcuts);
     }
@@ -896,6 +900,14 @@ pub fn run() {
             task_cancel,
             task_projects,
             task_reveal,
+            jev::jev_decide,
+            twenty::twenty_new,
+            twenty::twenty_ask,
+            twenty::twenty_guess,
+            twenty::twenty_give_up,
+            twenty::twenty_picture,
+            jev::jev_check_key,
+            launcher::launcher_status,
             skills::skills_list,
             skills::skill_set_enabled,
             skills::skill_reveal,
@@ -1006,7 +1018,7 @@ pub fn run() {
             hooks::ensure_hook_exe(&handle);
             pipe::start(handle.clone());
             integrations::start(handle.clone());
-            spotify::sync(&handle, &loaded.active_integrations);
+            spotify::sync(&handle, &features::allowed_pills(&loaded, &loaded.active_integrations));
             shortcuts::apply(&handle, &loaded.shortcuts);
             Ok(())
         })

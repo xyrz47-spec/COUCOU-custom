@@ -1,0 +1,159 @@
+{
+  "_about": "The feature manifest. One entry per feature of this build: what it is part of, what it plugs into. Read by src/core/features.ts (the island and the settings window) and by src-tauri/src/features.rs. Names and descriptions are text, kept beside the code that shows them (features.ts). A feature that has a `needs` is a part of that one: off with it. To add a feature: an entry here, its text in features.ts, then call featureOn(settings, id) where it plugs in. To remove one: delete the entry and its text.",
+  "groups": [
+    "claude",
+    "skills",
+    "launcher",
+    "jev",
+    "music",
+    "time",
+    "look"
+  ],
+  "features": [
+    {
+      "id": "claudeChat",
+      "group": "claude",
+      "page": "chat",
+      "anchor": "claudeChat"
+    },
+    {
+      "id": "planUsage",
+      "group": "claude"
+    },
+    {
+      "id": "skillsTab",
+      "group": "skills",
+      "tab": {
+        "view": "skills",
+        "icon": "star",
+        "order": 2
+      }
+    },
+    {
+      "id": "pluginSkills",
+      "group": "skills",
+      "needs": "skillsTab"
+    },
+    {
+      "id": "skillFind",
+      "group": "skills",
+      "needs": "skillsTab"
+    },
+    {
+      "id": "skillAdvice",
+      "group": "skills",
+      "needs": "skillsTab"
+    },
+    {
+      "id": "launcherTab",
+      "group": "launcher",
+      "tab": {
+        "view": "launcher",
+        "icon": "grid",
+        "order": 1
+      },
+      "settingsPage": {
+        "id": "launcher",
+        "color": "#E8AEE6"
+      }
+    },
+    {
+      "id": "launcherApps",
+      "group": "launcher",
+      "needs": "launcherTab"
+    },
+    {
+      "id": "launcherFavicons",
+      "group": "launcher",
+      "needs": "launcherTab"
+    },
+    {
+      "id": "jev",
+      "group": "jev",
+      "settingsPage": {
+        "id": "jev",
+        "color": "#7FD6C2"
+      }
+    },
+    {
+      "id": "decide",
+      "group": "jev",
+      "needs": "jev",
+      "tab": {
+        "view": "decide",
+        "icon": "check",
+        "order": 3
+      }
+    },
+    {
+      "id": "decidePresets",
+      "group": "jev",
+      "needs": "decide"
+    },
+    {
+      "id": "decideRemember",
+      "group": "jev",
+      "needs": "decide"
+    },
+    {
+      "id": "twenty",
+      "group": "jev",
+      "needs": "jev",
+      "tab": {
+        "view": "twenty",
+        "icon": "question",
+        "order": 4
+      }
+    },
+    {
+      "id": "twentyPictures",
+      "group": "jev",
+      "needs": "twenty",
+      "optIn": true
+    },
+    {
+      "id": "spotify",
+      "group": "music",
+      "pills": [
+        "integration_spotify"
+      ]
+    },
+    {
+      "id": "musicPlayer",
+      "group": "music",
+      "needs": "spotify"
+    },
+    {
+      "id": "compactSong",
+      "group": "music",
+      "needs": "spotify"
+    },
+    {
+      "id": "spotifyDance",
+      "group": "music",
+      "needs": "spotify"
+    },
+    {
+      "id": "songAnnounce",
+      "group": "music",
+      "needs": "spotify"
+    },
+    {
+      "id": "clock",
+      "group": "time",
+      "page": "general",
+      "anchor": "clock"
+    },
+    {
+      "id": "weather",
+      "group": "time",
+      "needs": "clock",
+      "page": "general",
+      "anchor": "weather"
+    },
+    {
+      "id": "motion",
+      "group": "look"
+    }
+  ]
+}

@@ -181,6 +181,7 @@ struct SettingsView: View {
                         SettingsSidebarRow(title: "Voice",        icon: "mic.fill",                          color: "#F97316").tag("voice")
                         #endif
                         SettingsSidebarRow(title: "Shortcuts",    icon: "keyboard.fill",                     color: "#6366F1").tag("shortcuts")
+                        SettingsSidebarRow(title: "JEV",          icon: "wand.and.stars",                    color: "#22D3EE").tag("jev")
                     }
                     .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
@@ -250,6 +251,7 @@ struct SettingsView: View {
         case "integrations": return String(localized: "Integrations")
         case "voice":        return String(localized: "Voice")
         case "shortcuts":    return String(localized: "Shortcuts")
+        case "jev":          return "JEV"
         default:             return String(localized: "General")
         }
     }
@@ -264,6 +266,7 @@ struct SettingsView: View {
         case "voice":        voiceSection
         #endif
         case "shortcuts":    ShortcutsSettingsView()
+        case "jev":          JevSettingsView()
         default:             generalSection
         }
     }
@@ -433,6 +436,7 @@ struct SettingsView: View {
                     Text("Português (Brasil)").tag("pt-BR")
                     Text("Русский").tag("ru")
                     Text("Bahasa Indonesia").tag("id")
+                    Text("한국어").tag("ko")
                 }
                 .pickerStyle(.menu)
                 .labelsHidden()

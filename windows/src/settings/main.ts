@@ -13,7 +13,7 @@ import { DEFAULT_SETTINGS, type Settings } from "../core/state";
 import { CLOCK_FACES, CLOCK_FORMATS, clockFace, formatClock, isClockFormat } from "../core/clock";
 import { isAutoApprove } from "../core/auto-approve";
 import {
-  FEATURES, FEATURE_GROUPS, featureCount, featureDef, featureOn, featureSwitch, withFeature,
+  FEATURES, FEATURE_GROUPS, featureCount, featureDef, featureOn, featureSwitch, pillAllowed, withFeature, withOptIn,
   type FeatureDef, type FeatureId,
 } from "../core/features";
 import { SOUND_NAMES } from "../core/sound";
@@ -24,6 +24,7 @@ import {
 import { h, clear } from "../views/dom";
 import { drawSelects } from "../views/select";
 import { agentsSection } from "./agents";
+import { jevSection } from "./jev";
 import { launcherSection } from "./launcher";
 import { colorDot } from "./colors";
 import { renderDiff, statusDot } from "./parts";
@@ -526,7 +527,7 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
     clear(groups);
     for (const cat of PILL_CATEGORIES) {
       if (cat.id === "service") continue;
-      const pills = availablePills().filter((p) => p.category === cat.id);
+      const pills = availablePills().filter((p) => p.category === cat.id && pillAllowed(settings, p.id));
       if (pills.length === 0) continue;
       groups.append(h("div", { class: "pill-group" }, h("h3", { text: t(cat.title) }), ...pills.map(row)));
     }
@@ -914,7 +915,7 @@ function integrationsSection(present: Record<string, boolean>): HTMLElement {
   }
   declaredViews.push(updateNote);
 
-  const offered = new Set(availablePills().map((p) => p.id));
+  const offered = new Set(availablePills().filter((p) => pillAllowed(settings, p.id)).map((p) => p.id));
   for (const def of INTEGRATIONS.filter((d) => offered.has(d.id))) {
     const active = settings.activeIntegrations.includes(def.id);
     const sw = h("button", { class: active ? "switch on" : "switch" });
@@ -1329,7 +1330,8 @@ function openButton(page: string, anchor?: string): HTMLElement {
  */
 function featuresSections(cliPath: string | null, hasKey: boolean): HTMLElement[] {
   const change = (id: FeatureId, on: boolean) => {
-    settings.disabledFeatures = withFeature(settings, id, on);
+    if (featureDef(id).optIn) settings.enabledFeatures = withOptIn(settings, id, on);
+    else settings.disabledFeatures = withFeature(settings, id, on);
     if (id !== "claudeChat") return;
     // Off while the chat goes through it: back to the provider that takes a key.
     if (!on && settings.chatProvider === "claude-code") settings.chatProvider = "anthropic";
@@ -1375,7 +1377,8 @@ function featuresSections(cliPath: string | null, hasKey: boolean): HTMLElement[
       h("i", { class: "feature-mark" }),
       h("div", { class: "feature-text" }, name, h("div", { class: "hint", text: t(def.about) })),
     );
-    if (def.page && own && !held) el.append(openButton(def.page, def.anchor));
+    const own_page = def.settingsPage?.id ?? def.page;
+    if (own_page && own && !held) el.append(openButton(own_page, def.anchor));
     el.append(sw);
     return el;
   }
@@ -1411,7 +1414,19 @@ function featuresSections(cliPath: string | null, hasKey: boolean): HTMLElement[
   const groups = FEATURE_GROUPS.map((group) => {
     const rows = FEATURES.filter((def) => def.group === group.id).map(row);
     if (group.id === "claude") rows.push(autoApproveRow());
-    return h("section", {}, h("h2", {}, h("span", { text: t(group.title) })), h("div", { class: "feature-list" }, ...rows));
+    // A module's switches all at once.
+    const members = FEATURES.filter((def) => def.group === group.id);
+    const allOn = members.every((def) => featureSwitch(settings, def.id));
+    const bulk = h("button", {
+      class: "feature-open",
+      text: allOn ? t("Turn all off") : t("Turn all on"),
+      onclick: () => {
+        for (const def of members) change(def.id, !allOn);
+        void save();
+        redrawQuietly();
+      },
+    });
+    return h("section", {}, h("h2", {}, h("span", { text: t(group.title) }), bulk), h("div", { class: "feature-list" }, ...rows));
   });
 
   return [
@@ -1824,14 +1839,19 @@ async function render() {
   shortcutsListener = null;
   // One page at a time, picked in the column on the left.
   // A feature turned off (Settings → Features) takes its section, or its page, with it.
+  // The pages features bring with them (core/features.json, settingsPage): there while the feature is on.
+  const featureSections: Record<string, () => HTMLElement[]> = {
+    jev: () => [jevSection()],
+    launcher: () => [launcherSection(() => settings, save, (redraw) => declaredViews.push(redraw))],
+  };
+  const featurePages: Page[] = FEATURES.filter((f) => f.settingsPage && featureOn(settings, f.id) && featureSections[f.settingsPage.id])
+    .map((f) => ({ id: f.settingsPage!.id, label: t(f.settingsPage!.label), color: f.settingsPage!.color, sections: featureSections[f.settingsPage!.id]() }));
   const pages: Page[] = [
     { id: "features", label: t("Features"), color: "#8ED9DA", sections: featuresSections(cliPath, hasKey) },
     { id: "claude", label: "Claude Code", color: "#F5B98A", sections: [claudeSection(status), autoApproveSection(), planSection(status), agentsSection(agents)] },
     { id: "chat", label: t("Chat"), color: "#9CC4F5", sections: [...(featureOn(settings, "claudeChat") ? [claudeCodeChatSection(cliPath)] : []), apiSection(hasKey), chatProvidersSection(chatKeys, keyChanged), localSection(customKey)] },
     { id: "pills", label: t("Active pills"), color: "#9ADBB3", sections: [activePillsSection(connected), integrationsSection(present)] },
-    ...(featureOn(settings, "launcherTab")
-      ? [{ id: "launcher", label: t("Launcher"), color: "#E8AEE6", sections: [launcherSection(() => settings, save)] }]
-      : []),
+    ...featurePages,
     { id: "general", label: t("General"), color: "#BDB2F7", sections: [generalSection()] },
     { id: "shortcuts", label: t("Shortcuts"), color: "#EBD58A", sections: [shortcutsSection(shortcutReport)] },
   ];

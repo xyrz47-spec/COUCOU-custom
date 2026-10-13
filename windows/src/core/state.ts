@@ -4,7 +4,7 @@ import type { BotEmoteName, BotStateName, IslandMode, IslandViewName } from "./l
 import type { EyeShape } from "../mochi/engine";
 import {
   DEFAULT_MAIN_PILL, HOST_OS, availablePills, editorLabel, orderPills, pillDefinition,
-  sanitizeDeclared, toggleDeclared, type HostOs, type PillDefinition,
+  declaredInForce, sanitizeDeclared, toggleDeclared, type HostOs, type PillDefinition,
 } from "./pills";
 import type { CodexPlanUsage, PlanUsage } from "./plan";
 import type { ProviderId } from "./providers";
@@ -205,6 +205,8 @@ export interface Settings {
   skillFolders: string[];
   /** What Settings → Features turned off (core/features.ts); empty means everything is on. */
   disabledFeatures: string[];
+  /** The opt-in features turned on (core/features.ts): off until they are listed here. */
+  enabledFeatures: string[];
   /** Mochi on the desktop. Rust owns it: whatever the page sends back is ignored. */
   desktopMochi?: {
     onDesktop: boolean;
@@ -254,6 +256,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoApprove: "",
   skillFolders: [],
   disabledFeatures: [],
+  enabledFeatures: [],
 };
 
 type Listener = () => void;
@@ -354,9 +357,14 @@ class AppState {
     return this.stateOverride ?? this.focusTask?.state ?? "idle";
   }
 
-  /** Spotify plays on a declared pill: Mochi dances. */
+  /** Mochi dances to the music: Spotify plays, and Settings → Features lets him dance. */
+  get mochiDances(): boolean {
+    return this.spotifyPlaying && featureOn(this.settings, "spotifyDance");
+  }
+
+  /** Spotify plays on a declared pill. */
   get spotifyPlaying(): boolean {
-    return musicPlaying(Spotify.state, sanitizeDeclared(this.settings, this.os).activeIntegrations);
+    return musicPlaying(Spotify.state, declaredInForce(this.settings, this.os));
   }
 
   /**
@@ -477,7 +485,7 @@ class AppState {
    */
   isKept(id: string): boolean {
     const d = sanitizeDeclared(this.settings, this.os);
-    return id === d.mainPill || d.activeIntegrations.includes(id);
+    return id === d.mainPill || declaredInForce(this.settings, this.os).includes(id);
   }
 
   /**
@@ -488,9 +496,11 @@ class AppState {
   loadIntegrationTasks() {
     const d = sanitizeDeclared(this.settings, this.os);
     this.settings.mainPill = d.mainPill;
+    // Kept as declared, a pill of a feature turned off included: it is back when the feature is.
     this.settings.activeIntegrations = d.activeIntegrations;
+    const shown = declaredInForce(this.settings, this.os);
     for (const def of availablePills(this.os)) {
-      const shouldLoad = def.id === d.mainPill || d.activeIntegrations.includes(def.id);
+      const shouldLoad = def.id === d.mainPill || shown.includes(def.id);
       const idx = this.tasks.findIndex((t) => t.id === def.id);
       // The VS Code pill wears the editor's name when Settings → Editor is set.
       const name =

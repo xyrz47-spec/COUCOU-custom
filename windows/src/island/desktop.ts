@@ -172,7 +172,7 @@ export class DesktopLink {
       soundEnabled: State.settings.soundEnabled,
       soundVolume: State.settings.soundVolume,
       paused: State.paused,
-      dancing: desktopDances(State.spotifyPlaying, State.effectiveState),
+      dancing: desktopDances(State.mochiDances, State.effectiveState),
       tempo: DanceClock.tempo,
       beatAt: DanceClock.beatAt,
     };

@@ -118,6 +118,8 @@ pub struct Settings {
     /// means everything is on. Kept as it comes: an id this build doesn't know
     /// turns nothing off.
     pub disabled_features: Vec<String>,
+    /// The opt-in features turned on (src/core/features.ts): off until listed here.
+    pub enabled_features: Vec<String>,
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
@@ -191,6 +193,7 @@ impl Default for Settings {
             auto_approve: String::new(),
             skill_folders: Vec::new(),
             disabled_features: Vec::new(),
+            enabled_features: Vec::new(),
             desktop_mochi: DesktopMochiPref::default(),
         }
     }
@@ -484,6 +487,7 @@ mod tests {
   "autoApprove": "edits",
   "skillFolders": ["C:\\work\\shop"],
   "disabledFeatures": ["weather", "motion"],
+  "enabledFeatures": ["twentyPictures"],
   "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
 }"##;
 
@@ -925,6 +929,7 @@ mod tests {
                 "autoApprove",
                 "skillFolders",
                 "disabledFeatures",
+                "enabledFeatures",
                 "desktopMochi",
             ]
         );

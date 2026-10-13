@@ -30,6 +30,8 @@ export const ICONS = {
   // chevron.up
   chevronUp: "M5.5 15 12 8.5 18.5 15",
   chevronDown: "M5.5 9 12 15.5 18.5 9",
+  // questionmark (stroke)
+  question: "M9.2 9.3a3 3 0 1 1 4.5 2.6c-1 .6-1.7 1.2-1.7 2.5M12 17.4v.1",
   // checkmark
   check: "M5 12.5 9.5 17 19 7.5",
   // arrow.up (send)
@@ -81,3 +83,6 @@ export const ICONS = {
   volume2: "M3.5 9.5h3L11 5.8v12.4l-4.5-3.7h-3zM14.5 9.6a3.4 3.4 0 0 1 0 4.8M17 7.2a6.8 6.8 0 0 1 0 9.6",
   volume3: "M3.5 9.5h3L11 5.8v12.4l-4.5-3.7h-3zM14.5 9.6a3.4 3.4 0 0 1 0 4.8M17 7.2a6.8 6.8 0 0 1 0 9.6M19.4 4.8a10.2 10.2 0 0 1 0 14.4",
 } as const;
+
+/** Icons drawn as a line, not filled: the header's tabs draw them with a stroke. */
+export const STROKED_ICONS: ReadonlySet<string> = new Set(["question", "check"]);

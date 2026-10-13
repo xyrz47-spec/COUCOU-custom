@@ -42,3 +42,26 @@ test("a name that starts with what was typed comes first", () => {
   assert.deepEqual(names("c"), ["Calculator", "CurseForge", "Minecraft Launcher", "Visual Studio Code"]);
   assert.deepEqual(names("la"), ["Calculator", "Minecraft Launcher"]);
 });
+
+// ── Settings → Launcher follows the "add" window ─────────────────────────────
+
+test("an entry saved from the add window shows in Settings without reopening it", async () => {
+  const { launcherSection } = await import("../src/settings/launcher.ts");
+  const settings = { launcher: [{ name: "Docs", target: "https://docs.example.com" }] };
+  let redraw = () => {};
+  const section = launcherSection(() => settings, async () => {}, (fn) => { redraw = fn; });
+  const rows = () => {
+    const out = [];
+    const walk = (node) => {
+      if (node.className === "launch-list") out.push(...node.children);
+      node.children?.forEach(walk);
+    };
+    walk(section);
+    return out;
+  };
+  assert.equal(rows().length, 1);
+  // The window swaps the settings for a fresh object when the add window saves.
+  settings.launcher = [...settings.launcher, { name: "Notes", target: "https://notes.example.com" }];
+  redraw();
+  assert.equal(rows().length, 2);
+});

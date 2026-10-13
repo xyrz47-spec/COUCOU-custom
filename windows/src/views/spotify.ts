@@ -114,7 +114,7 @@ function pillButton(color: string, icon: string, onClick: () => void): HTMLEleme
  */
 export function buildSpotifyPill(task: AgentTask, onTap: () => void): SpotifyPillHost {
   const color = task.color;
-  const mini = createMiniBot(task, 24, () => State.spotifyPlaying);
+  const mini = createMiniBot(task, 24, () => State.mochiDances);
   const label = h("span", { class: "lbl", text: task.name });
   const playBtn = pillButton(color, ICONS.play, togglePlay);
   const nextBtn = pillButton(color, ICONS.forward, () => void Bridge.spotifyControl("next"));
@@ -292,7 +292,7 @@ export function buildSpotifyCard(): SpotifyCardHost {
   function syncDancer() {
     const task = State.spotifyPlayerShown ? State.tasks.find((x) => x.id === SPOTIFY_ID) : null;
     if (task && !dancer) {
-      dancer = createMiniBot(task, 26, () => State.spotifyPlaying);
+      dancer = createMiniBot(task, 26, () => State.mochiDances);
       dancer.classList.add("np-dancer");
       titleDot.replaceWith(dancer);
     } else if (!task && dancer) {

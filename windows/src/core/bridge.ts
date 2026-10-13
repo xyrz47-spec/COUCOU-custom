@@ -176,7 +176,24 @@ export const Bridge = {
   /** Sends an installed skill's folder to the system's bin. */
   skillRemove: (path: string) => callOrThrow<void>("skill_remove", { path }),
 
+  // ── JEV (src-tauri/src/jev.rs) ────────────────────────────────────────────
+  /** Which option suits the person best, by JEV. Throws with the reason (feature off, no key, the call failed). */
+  jevDecide: (feeling: string, options: string[]) => callOrThrow<JevDecision>("jev_decide", { feeling, options }),
+  /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
+  jevCheckKey: () => callOrThrow<string>("jev_check_key"),
+  // ── Twenty questions, answered by JEV (src-tauri/src/twenty.rs) ───────────
+  /** Coucou thinks of something of this kind (twenty.rs KINDS, or "any"). The secret stays in Rust. */
+  twentyNew: (kind: string) => callOrThrow<{ total: number; pool: number }>("twenty_new", { kind }),
+  twentyAsk: (question: string) => callOrThrow<TwentyAnswer>("twenty_ask", { question }),
+  twentyGuess: (guess: string) => callOrThrow<TwentyGuess>("twenty_guess", { guess }),
+  /** Gives up: the secret, named in every interface language. */
+  twentyGiveUp: () => callOrThrow<TwentySecret>("twenty_give_up"),
+  /** The secret's picture once the game is over (a data URL), or null when it has none. */
+  twentyPicture: () => call<string | null>("twenty_picture"),
+
   // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
+  /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
+  launcherStatus: () => call<boolean[]>("launcher_status"),
   /** Opens entry `index` of the saved list: a website, an app, a folder. */
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
   /** The entry's icon as RGBA pixels (base64), for a file the system has one for. */
@@ -336,12 +353,56 @@ export interface SkillAdvice {
   note: string;
 }
 
+/** JEV's ranking of the options a person typed (src-tauri/src/jev.rs). */
+export interface JevDecision {
+  /** Best first; `share` is 0 to 1 and they add up to about 1. */
+  ranking: { option: string; share: number }[];
+  /** 0 to 1: how sure JEV is of the first. */
+  confidence: number;
+}
+
+/** What Coucou had in mind, told when the game is over. */
+export interface TwentySecret {
+  en: string;
+  /** An emoji that shows it. */
+  emoji: string;
+  /** A picture can be fetched with twentyPicture() (a Pokémon's artwork). */
+  art: boolean;
+  /** The name in each interface language, by its code (twenty.rs LANGS). */
+  names: Record<string, string>;
+}
+
+export type TwentyLabel = "yes" | "probablyYes" | "unsure" | "probablyNo" | "no";
+
+export interface TwentyAnswer {
+  label: TwentyLabel;
+  asked: number;
+  left: number;
+  /** The questions ran out: the game is over and `secret` is told. */
+  over: boolean;
+  secret: TwentySecret | null;
+}
+
+export interface TwentyGuess {
+  correct: boolean;
+  asked: number;
+  left: number;
+  over: boolean;
+  secret: TwentySecret | null;
+}
+
 export interface SkillGroup {
   /** The project's folder; empty for the user's own skills. */
   project: string;
   /** The folder the skills are in. */
   root: string;
   skills: SkillInfo[];
+  /** An installed Claude Code plugin's id (`name@marketplace`); absent for a skills folder. Its skills are read-only. */
+  plugin?: string;
+  /** Whether Claude Code has that plugin turned on. */
+  pluginEnabled?: boolean;
+  /** Why a plugin's skills could not be listed; absent when they could. */
+  problem?: string;
 }
 
 export type SpotifyAction = "playPause" | "next" | "previous" | "seek" | "shuffle" | "repeat" | "volume";

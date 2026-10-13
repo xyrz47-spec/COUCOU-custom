@@ -352,6 +352,40 @@ export function buildSkills(actions: ViewActions): ViewHost {
 
   // ── Rows ────────────────────────────────────────────────────────────────────
 
+  /** A plugin's skill: shown with the plugin it comes from, turned on or off by Claude Code, not here. */
+  function pluginRow(group: SkillGroup, skill: SkillInfo): HTMLElement {
+    const plugin = group.plugin ?? "";
+    return h(
+      "div",
+      { class: skill.enabled ? "sk-row" : "sk-row off", title: plugin },
+      h("span", { class: skill.enabled ? "sk-switch on" : "sk-switch", style: "pointer-events:none;opacity:.6" }),
+      h(
+        "div",
+        { class: "sk-text" },
+        h("div", { class: "sk-name" },
+          h("span", { text: skill.name }),
+          h("span", { class: "sk-tag", text: plugin.split("@")[0] }),
+          h("span", { class: "sk-tag", text: skill.enabled ? t("Plugin") : t("Plugin off") }),
+        ),
+        h("div", { class: "sk-desc", text: skill.description, title: skill.description }),
+      ),
+    );
+  }
+
+  /** A plugin whose skills could not be listed: said, not hidden. */
+  function pluginProblemRow(group: SkillGroup): HTMLElement {
+    return h(
+      "div",
+      { class: "sk-row off", title: group.root },
+      h(
+        "div",
+        { class: "sk-text" },
+        h("div", { class: "sk-name" }, h("span", { text: (group.plugin ?? "").split("@")[0] }), h("span", { class: "sk-tag", text: t("Plugin") })),
+        h("div", { class: "sk-desc", text: t("Could not list its skills: {why}", { why: group.problem ?? "" }), title: group.root }),
+      ),
+    );
+  }
+
   function installedRow(group: SkillGroup, skill: SkillInfo): HTMLElement {
     const toggle = h("button", { class: skill.enabled ? "sk-switch on" : "sk-switch" }) as HTMLButtonElement;
     toggle.addEventListener("click", async () => {
@@ -471,6 +505,10 @@ export function buildSkills(actions: ViewActions): ViewHost {
   function draw() {
     // "Suggest" is a feature of its own (Settings → Features): off, the tab goes with its plan.
     const suggests = featureOn(State.settings, "skillAdvice");
+    // Settings → Features → "Find skills": the search of skills.sh, its tab and its field of chips.
+    const finds = featureOn(State.settings, "skillFind");
+    tabFind.style.display = finds ? "" : "none";
+    if (!finds && tab === "find") tab = "mine";
     tabPlan.style.display = suggests ? "" : "none";
     if (!suggests && tab === "plan") {
       tab = "mine";
@@ -482,7 +520,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
     verifiedBox.classList.toggle("on", verifiedOnly);
     verifiedBox.style.display = tab === "mine" ? "none" : "";
     // "Suggest" takes a sentence, not a word to filter by, and has its own buttons.
-    chips.style.display = tab === "plan" ? "none" : "";
+    chips.style.display = tab === "plan" || !finds ? "none" : "";
     ask.style.display = tab === "plan" ? "" : "none";
     ask.disabled = advising || applying;
     apply.style.display = "none";
@@ -503,11 +541,12 @@ export function buildSkills(actions: ViewActions): ViewHost {
       let total = 0;
       let on = 0;
       for (const group of groups) {
+        if (group.problem && !query) list.append(pluginProblemRow(group));
         for (const skill of group.skills) {
           total++;
           if (skill.enabled) on++;
           if (query && !skill.name.toLowerCase().includes(query) && !skill.description.toLowerCase().includes(query)) continue;
-          list.append(installedRow(group, skill));
+          list.append(group.plugin ? pluginRow(group, skill) : installedRow(group, skill));
         }
       }
       count.textContent = t("{on} of {total} on", { on, total });
@@ -585,6 +624,7 @@ export function buildSkills(actions: ViewActions): ViewHost {
       wasShown = shown;
       // "Suggest" was turned on or off in Settings → Features: its tab follows.
       if ((tabPlan.style.display !== "none") !== featureOn(State.settings, "skillAdvice")) draw();
+      if ((tabFind.style.display !== "none") !== featureOn(State.settings, "skillFind")) draw();
     },
   };
 }

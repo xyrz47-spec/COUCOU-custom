@@ -7,6 +7,7 @@
 // Mochi can dance to the song's own beat, Rust listening for it only while he
 // is seen dancing (syncDancing).
 
+import { featureOn } from "../core/features";
 import { Bridge, onEvent } from "../core/bridge";
 import type { BotEmoteName } from "../core/layout";
 import { pillDefinition } from "../core/pills";
@@ -79,7 +80,7 @@ let songs = 0;
  * music is playing.
  */
 function announceSong(island: SpotifyHost) {
-  if (!State.settings.announceSongs || State.paused || !State.spotifyPlaying) return;
+  if (!State.settings.announceSongs || !featureOn(State.settings, "songAnnounce") || State.paused || !State.spotifyPlaying) return;
   if (!island.glance(ANNOUNCE_SECONDS, songAnnounced)) return;
   // The song before was still being put away: this one takes over from it.
   if (handBack != null) window.clearTimeout(handBack);

@@ -267,6 +267,20 @@ final class AppState: ObservableObject {
 
     // Auto-close delay — persisted
     // Hovering the island opens it (folds shortly after the pointer leaves) — persisted, off by default
+    // JEV (Settings → JEV): a TypeSafe key is saved, and which of its tabs the island's header shows.
+    @Published var jevKeySaved: Bool = KeychainStore.shared.get(Jev.keyName) != nil
+    @Published var decideTabEnabled: Bool = UserDefaults.standard.object(forKey: "decideTabEnabled") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(decideTabEnabled, forKey: "decideTabEnabled") }
+    }
+    @Published var twentyTabEnabled: Bool = UserDefaults.standard.object(forKey: "twentyTabEnabled") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(twentyTabEnabled, forKey: "twentyTabEnabled") }
+    }
+    // A Pokémon's artwork when the game ends, fetched then from PokeAPI's pictures on GitHub:
+    // a service the user did not set up, so off until turned on.
+    @Published var twentyPicturesEnabled: Bool = UserDefaults.standard.object(forKey: "twentyPicturesEnabled") as? Bool ?? false {
+        didSet { UserDefaults.standard.set(twentyPicturesEnabled, forKey: "twentyPicturesEnabled") }
+    }
+
     @Published var openOnHover: Bool = false {
         didSet { UserDefaults.standard.set(openOnHover, forKey: "openOnHover") }
     }

@@ -6,6 +6,7 @@
 // shows a mini Mochi in a colour of the entry's own, as a pill does.
 
 import { Bridge } from "../core/bridge";
+import { featureOn } from "../core/features";
 import { State, type AgentTask, type LauncherItem } from "../core/state";
 import { createMiniBot, pruneMiniBots, releaseMiniBot } from "../mochi/minibots";
 import { clear, h, svg } from "./dom";
@@ -139,6 +140,8 @@ export function buildLauncher(actions: ViewActions): ViewHost {
     /** The entry's own icon: a website's from the website, a file's from the system. */
     const ownIcon = () => {
       if (isWebTarget(item.target)) {
+        // Settings → Features → "Website icons", off: the site is not asked, the mini Mochi stays.
+        if (!featureOn(State.settings, "launcherFavicons")) return;
         void siteIcon(item.target, index).then((data) => {
           if (!data) return;
           const img = h("img", { alt: "", draggable: "false" }) as HTMLImageElement;

@@ -174,7 +174,7 @@ final class IslandWindowController: NSWindowController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newView in
                 guard let self else { return }
-                if newView == .prompt {
+                if newView == .prompt || newView == .decide || newView == .twenty {
                     self.islandPanel.makeKey()
                 }
             }
@@ -1205,6 +1205,8 @@ final class IslandWindowController: NSWindowController {
 
     private func isBotHit(_ windowPoint: CGPoint) -> Bool {
         let s = AppState.shared
+        // JEV's views hide Mochi (IslandContainer): where he would sit is their text box, not him.
+        if s.mode == .expanded && (s.view == .decide || s.view == .twenty) { return false }
         let panelH = window?.frame.height ?? 320
         let panelW = window?.frame.width  ?? 720
         let (islandW, fixedH) = islandSize(mode: s.mode, view: s.view,

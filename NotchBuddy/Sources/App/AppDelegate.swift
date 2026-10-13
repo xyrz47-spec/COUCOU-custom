@@ -56,6 +56,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(withTitle: NSLocalizedString("Open Coucou", comment: ""), action: #selector(openIsland), keyEquivalent: "")
         menu.addItem(.separator())
         menu.addItem(withTitle: NSLocalizedString("Weekly recap", comment: ""), action: #selector(openWeeklyRecap), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Decide", comment: ""), action: #selector(openDecide), keyEquivalent: "")
+        menu.addItem(withTitle: NSLocalizedString("Twenty questions", comment: ""), action: #selector(openTwenty), keyEquivalent: "")
         menu.addItem(withTitle: NSLocalizedString("Settings…", comment: ""), action: #selector(openSettings), keyEquivalent: ",")
         menu.addItem(.separator())
         menu.addItem(withTitle: NSLocalizedString("Quit", comment: ""), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
@@ -77,6 +79,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func openWeeklyRecap() {
         islandController?.expand(to: .recap)
+    }
+
+    /// JEV's views need a TypeSafe key: without one, Settings → JEV opens instead.
+    @objc private func openDecide() { openJev(.decide) }
+    @objc private func openTwenty() { openJev(.twenty) }
+
+    private func openJev(_ view: IslandView) {
+        guard AppState.shared.jevKeySaved else {
+            UserDefaults.standard.set("jev", forKey: "settingsSection")
+            openSettings()
+            return
+        }
+        islandController?.fsm.openedExternally()
+        islandController?.expand(to: view)
     }
 
     private var settingsWindow: NSWindow?

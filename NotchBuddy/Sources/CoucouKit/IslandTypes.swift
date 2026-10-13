@@ -14,6 +14,8 @@ enum IslandView: String, CaseIterable {
     case searching, result, note, settings, greeting, wardrobe, recap
     case listening    // voice wake detected — "À l'écoute…" with live transcript
     case voiceResult  // voice command executed — "✓ Musique lancée" for ~2 s
+    case decide       // JEV ranks the options typed for how you feel (JevViews.swift)
+    case twenty       // twenty questions, answered by JEV (JevViews.swift)
 }
 
 // MARK: - Bot State
@@ -199,6 +201,9 @@ enum IslandConst {
         .listening:    ViewLayout(height: 160, botX: 68,  botY: nil, botDiameter: 58, agentMode: .none),
         // Voice result: same layout as listening — Mochi on left, ✓/✗ on right
         .voiceResult:  ViewLayout(height: 160, botX: 68,  botY: nil, botDiameter: 58, agentMode: .none),
+        // JEV's views: a field to type in and what comes back, the whole width (no Mochi).
+        .decide:       ViewLayout(height: 300, botX: 54,  botY: nil, botDiameter: 46, agentMode: .none),
+        .twenty:       ViewLayout(height: 300, botX: 54,  botY: nil, botDiameter: 46, agentMode: .none),
     ]
 
     // Project colors — keyed by lowercase display name or slug

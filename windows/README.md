@@ -206,9 +206,11 @@ Weekly recap** turns it off or clears it.
 
 ## Languages
 
-Coucou speaks the same ten languages as the Mac app: English, 简体中文, हिन्दी,
-Español, العربية, Français, বাংলা, Português (Brasil), Русский and Bahasa
-Indonesia. **Settings… → General → Language** picks one; **System** (the
+Coucou speaks the same eleven languages as the Mac app: English, 简体中文, हिन्दी,
+Español, العربية, Français, বাংলা, Português (Brasil), Русский, Bahasa
+Indonesia and 한국어. The Mac's catalog (`NotchBuddy/Resources/Localizable.xcstrings`)
+holds the strings both apps show; `src/i18n/extra.json` the ones only Windows and
+Linux have. **Settings… → General → Language** picks one; **System** (the
 default) follows your system's language when it is one of these, English
 otherwise. The island, the settings window and the tray menu switch at once —
 nothing restarts, and the island keeps its sessions, steps and chat.
@@ -223,6 +225,32 @@ turned into `src/i18n/strings.json` by `node scripts/gen-strings.mjs`), plus
 `src/i18n/extra.json` for what only Windows and Linux show. Both are keyed by
 the English text; a string missing in a language shows in English. The Rust
 side (tray, errors) embeds the same two files.
+
+## Features: turning parts of Coucou on and off
+
+Settings → **Features** lists what this build adds, by module — Claude Code (chat, plan usage), Claude skills (the tab, plugin skills, finding skills, suggestions), Launcher (the tab, installed apps, website icons), JEV (the account, Decide with its presets and memory, Twenty questions), Music · Spotify (the pill, the big player, the song in the compact island, Mochi dancing, announcing songs), Time and weather, Look — with a switch for each feature and one to turn a whole module on or off. A feature that is part of another (the weather needs the clock, the big player needs Spotify) goes off with it, and its own switch is kept. Turning something off removes it from the island and from the settings window and stops its work; what you had set for it is kept for when you turn it back on.
+
+For whoever adds or removes a feature, it is declared in one place and checked where it plugs in:
+
+1. `src/core/features.json` — its entry: `id`, `group`, optionally `needs` (the feature it is part of), `tab` (an island header tab: view, icon, order), `settingsPage` (a settings page of its own, there while it is on), `page`/`anchor` (a link to where its settings already are), `pills` (pills that belong to it). The Rust side reads the same file (`src-tauri/src/features.rs`).
+2. `src/core/features.ts` — its name and description (and the tab's and page's words), in the `TEXT` table.
+3. The code of the feature asks `featureOn(settings, "id")` (TypeScript) or `features::on(settings, "id")` (Rust) before it shows or works. A tab's view goes in `src/views/views.ts`, a page's sections in `featureSections` in `src/settings/main.ts`.
+
+`tests/features.test.mjs` fails when a declaration has no words, names a parent, icon or pill that does not exist, or when the code checks a feature that is not declared. To remove a feature, delete its entry, its words and its code.
+
+## JEV: helping to decide
+
+Settings → **JEV** takes a [TypeSafe](https://docs.typesafe.ai) API key (kept in the Credential Manager / Secret Service, never on disk). With a key, the island's **Decide** tab (Settings → Features → *Decide tab*) answers the everyday "what should I eat / drink / do?": say how you feel ("tired, something warm"), list a few options — one per line or separated by commas, or fill them from a preset (meal, drink, activity) — and press Decide (`Enter` in the feeling box, `Ctrl+Enter` in the options box). JEV ranks your options with a share for each; it picks among them and makes none up.
+
+What leaves the PC, to `api.typesafe.ai` (`POST /v1/systemone`, model `jev-latest`): the feeling and the options typed, and only when you press Decide. The feeling is never kept; the options are kept in the window's storage only while *Remember the last options* is on. Without a key nothing is sent. The one typed question (a Choice over your options) is in `src-tauri/src/jev.rs`.
+
+## JEV: twenty questions
+
+The island's **Twenty questions** tab (Settings → Features → *Twenty questions tab*, which needs the JEV account and its key) plays the old game with Coucou as the one who thinks: pick a kind — an animal, a food, an object, a place, a job, something in nature, a Pokémon, a character, a body part, an activity, or anything —, and Coucou thinks of one of about 4,100 things (`src-tauri/src/twenty_items.txt`, one line each with its name in each of the 11 interface languages; add a line to add a thing). The Pokémon are all 1,025 species of the National Pokédex plus every Mega Evolution, the Legends Z-A ones included, with their official names in Korean, Chinese, Spanish and French, and the international (English) one in the languages that have no official names. The draw is random and skips the last 60 things played, so a game does not repeat; when it ends, the secret is told in the interface language, with the English beside it. Ask yes/no questions, up to twenty; JEV answers each with a typed *Noul* question ("is this statement true?") about the secret, which the tab shows as Yes / Probably yes / Not sure / Probably not / No. "I know it!" turns the box into a guess, which costs a question too; whether it names the secret is also JEV's call, so a translation or a synonym counts. For a Pokémon, the question goes to JEV with that Pokémon's facts (`src-tauri/src/pokemon_facts.txt`, about 2 MB, gathered once from PokeAPI's open data and the Smogon / Pokémon Showdown competitive data, not at run time: generation, types and what they are weak to, abilities with their effects — the *Skin* ones are marked — evolution line and how each form evolves, size, base stats, gender ratio, catch rate, the moves it learns in the latest game, its Smogon tier, the Pokédex entry in English and Korean); the secret's names in every language go along too, so a question or a guess in any of them is understood, and it answers "is it from before Generation 4?" or "does it have a Skin ability?" from data and not from memory. The secret stays in the Rust side (`src-tauri/src/twenty.rs`) until the game is over, so the page cannot peek. When the game ends, the secret shows with its picture (`src-tauri/src/twenty_pictures.txt`): an emoji for about 1,200 things, the kind's own emoji for the others, and for a Pokémon its type's emoji — or, once Settings → Features → *Pokémon pictures* is turned on (it is off by default, as it reaches a service you did not set up), its official artwork, fetched as the game ends from PokeAPI's pictures on GitHub (`raw.githubusercontent.com/PokeAPI/sprites`, at most 2 MB, a PNG). That switch is the first *opt-in* feature: `"optIn": true` in `src/core/features.json` keeps a feature off until it is turned on (`settings.enabledFeatures`).
+
+The Mac app has both too (`NotchBuddy/Sources/App/Jev.swift`, `TwentyGame.swift`, `JevViews.swift`), with the same lists bundled from `src-tauri/src` and the same layout: Settings → JEV takes the key, and the Decide and Twenty questions tabs then show in the island's header (or open them from the menu bar).
+
+What leaves the PC, to `api.typesafe.ai`: for each question, the secret's name and your question (for a guess, the secret and your guess) — nothing else. Without a key no game starts.
 
 ## Task mode
 

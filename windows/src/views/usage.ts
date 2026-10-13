@@ -15,6 +15,7 @@ import {
   effectivePct, parseClaudePlan, parseCodexPlan, pillLabel, planColor, resetLabel,
   type CodexPlanUsage, type PlanUsage, type PlanWindow,
 } from "../core/plan";
+import { featureOn } from "../core/features";
 import { State } from "../core/state";
 import { clear, dot, h, svg } from "./dom";
 import { ICONS } from "./icons";
@@ -23,12 +24,12 @@ import { language, tl } from "../i18n/i18n";
 /** The Claude pill is in the header: overview, turned on, relay in. */
 export function claudePillVisible(): boolean {
   const s = State.settings;
-  return State.view === "overview" && s.showPlanInNotch && s.planRelayInstalled;
+  return State.view === "overview" && featureOn(s, "planUsage") && s.showPlanInNotch && s.planRelayInstalled;
 }
 
 /** The Codex pill is in the header: overview, turned on (nothing to install). */
 export function codexPillVisible(): boolean {
-  return State.view === "overview" && State.settings.showCodexPlanInNotch;
+  return State.view === "overview" && featureOn(State.settings, "planUsage") && State.settings.showCodexPlanInNotch;
 }
 
 /** A plan card is open and its pill is still there. */

@@ -52,6 +52,8 @@ struct IslandContainer: View {
             && (state.view == .upload || state.view == .uploading || state.view == .choose)
 
         let greetingActive = state.mode == .expanded && state.view == .greeting
+        // JEV's views take the whole card: Mochi steps aside for them.
+        let jevActive = state.mode == .expanded && (state.view == .decide || state.view == .twenty)
 
         return ZStack(alignment: .topLeading) {
             // Black island shape
@@ -102,8 +104,8 @@ struct IslandContainer: View {
                     Rectangle().frame(width: islandWidth,
                                       height: state.mode == .expanded ? 320 : islandHeight)
                 }
-                .opacity(uploadActive || greetingActive ? 0 : 1)
-                .animation(.easeInOut(duration: 0.25), value: uploadActive || greetingActive)
+                .opacity(uploadActive || greetingActive || jevActive ? 0 : 1)
+                .animation(.easeInOut(duration: 0.25), value: uploadActive || greetingActive || jevActive)
 
             CountdownBar(state: state, islandW: islandWidth)
 
@@ -459,7 +461,7 @@ struct IslandContentView: View {
                     // Views that fill available height instead of the fixed 98pt content frame:
                     // chat (prompt) is always flexible; mail is flexible only when active so
                     // it doesn't push the ZStack taller when inactive.
-                    let isTall = v == .prompt || (v == .mail && active)
+                    let isTall = v == .prompt || ((v == .mail || v == .decide || v == .twenty) && active)
                     let anim: Animation = active
                         ? .spring(response: 0.4, dampingFraction: 0.8).delay(0.16)
                         : .easeIn(duration: 0.16)
@@ -509,6 +511,13 @@ struct IslandHeader: View {
                     #endif
                 })
                 TabButton(icon: "plus", view: .upload, state: state)
+                // JEV's tabs (Settings → JEV), once a TypeSafe key is saved.
+                if state.jevKeySaved && state.decideTabEnabled {
+                    TabButton(icon: "wand.and.stars", view: .decide, state: state)
+                }
+                if state.jevKeySaved && state.twentyTabEnabled {
+                    TabButton(icon: "questionmark.bubble.fill", view: .twenty, state: state)
+                }
             }
             .padding(.leading, 14)
 
