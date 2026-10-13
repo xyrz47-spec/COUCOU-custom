@@ -48,6 +48,8 @@ export function buildTwenty(actions: ViewActions): ViewHost {
   /** How the game ended: won in this many questions, or the secret that was missed. */
   let ending: { won: boolean; asked: number; secret: TwentySecret | null } | null = null;
   let pool = 0;
+  /** Which game this is, for an answer that comes back after it was given up or replaced. */
+  let round = 0;
 
   const input = h("input", { type: "text", class: "tq-input", maxlength: "200" }) as HTMLInputElement;
   const send = h("button", { class: "tq-btn primary", onclick: () => void submit() }) as HTMLButtonElement;
@@ -109,16 +111,17 @@ export function buildTwenty(actions: ViewActions): ViewHost {
   }
 
   /** The secret's picture: its emoji, then, for a Pokémon with "Pokémon pictures" on, its artwork once fetched. */
-  let picture: { secret: TwentySecret; src: string | null } | null = null;
+  let picture: { secret: TwentySecret; img: HTMLElement | null } | null = null;
 
   function loadPicture(secret: TwentySecret) {
     if (picture?.secret === secret) return;
-    picture = { secret, src: null };
+    picture = { secret, img: null };
     if (!secret.art || !featureOn(State.settings, "twentyPictures")) return;
     const asked = picture;
     void Bridge.twentyPicture().then((src) => {
       if (picture !== asked || !src) return;
-      asked.src = src;
+      // Built once: a redraw moves this node, it does not decode the picture again.
+      asked.img = h("img", { src, alt: secret.en });
       drawReveal();
     });
   }
@@ -129,10 +132,10 @@ export function buildTwenty(actions: ViewActions): ViewHost {
     const secret = ending.secret;
     const name = secret ? secretName(secret) : "?";
     if (secret) loadPicture(secret);
-    const art = picture && picture.secret === secret ? picture.src : null;
+    const art = picture && picture.secret === secret ? picture.img : null;
     reveal.append(
       h("div", { class: `tq-card ${ending.won ? "won" : "lost"}` },
-        h("div", { class: "tq-pic" }, art ? h("img", { src: art, alt: name }) : h("span", { text: secret?.emoji ?? "❔" })),
+        h("div", { class: "tq-pic" }, art ?? h("span", { text: secret?.emoji ?? "❔" })),
         h("div", { class: "tq-card-text" },
           h("div", { class: "tq-card-label", text: ending.won ? t("You got it in {n} questions!", { n: ending.asked }) : t("Better luck next time.") }),
           h("div", { class: "tq-card-name", text: name }),
@@ -172,6 +175,8 @@ export function buildTwenty(actions: ViewActions): ViewHost {
     error = "";
     try {
       const started = await Bridge.twentyNew(kind);
+      round++;
+      busy = false;
       total = started?.total ?? 20;
       pool = started?.pool ?? 0;
       kindLabel = label;
@@ -195,9 +200,13 @@ export function buildTwenty(actions: ViewActions): ViewHost {
     busy = true;
     error = "";
     draw();
+    // Given up or replaced while JEV answered: that answer belongs to no game on screen.
+    const mine = round;
+    const stale = () => mine !== round;
     try {
       if (guessing) {
         const result = await Bridge.twentyGuess(text);
+        if (stale()) return;
         asked = result.asked;
         if (result.correct) {
           ending = { won: true, asked: result.asked, secret: result.secret };
@@ -212,6 +221,7 @@ export function buildTwenty(actions: ViewActions): ViewHost {
         guessing = false;
       } else {
         const result = await Bridge.twentyAsk(text);
+        if (stale()) return;
         asked = result.asked;
         turns.push({ text, label: result.label });
         if (result.over) {
@@ -221,6 +231,7 @@ export function buildTwenty(actions: ViewActions): ViewHost {
       }
       input.value = "";
     } catch (err) {
+      if (stale()) return;
       error = String(err).replace(/^Error:\s*/, "");
     }
     busy = false;
@@ -231,6 +242,8 @@ export function buildTwenty(actions: ViewActions): ViewHost {
   async function quit() {
     if (phase !== "play") return;
     actions.blip();
+    round++;
+    busy = false;
     try {
       const secret = await Bridge.twentyGiveUp();
       ending = { won: false, asked, secret };

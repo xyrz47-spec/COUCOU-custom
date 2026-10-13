@@ -1,7 +1,20 @@
-# The picture of each thing of twenty_items.txt: English | emoji | PokeAPI id.
-# The emoji shows when the secret is told (empty: the kind's own shows). The id, for a Pokémon, names
-# its official artwork in PokeAPI's pictures on GitHub (fetched when the game ends, if "Pokémon
-# pictures" is on); a Pokémon's emoji is its first type's.
+# The picture of each thing of twenty_items.txt: English | emoji | PokeAPI id. Read by twenty.rs and the Mac's
+# TwentyGame.swift. The emoji shows when the secret is told (empty: the kind's own shows); the id, for a
+# Pokémon, names its official artwork (fetched when the game ends, if "Pokémon pictures" is on). A
+# Pokémon's emoji is its first type's.
+# @kind lines: the emoji of a kind, for a thing with none of its own. @art: where the artwork is,
+# the id and ".png" after it.
+@animal|🐾|
+@food|🍽️|
+@thing|📦|
+@place|📍|
+@job|💼|
+@nature|🌿|
+@pokemon|⚪|
+@character|🎭|
+@body|🫀|
+@activity|🎲|
+@art|https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/|
 Dog|🐕|
 Cat|🐈|
 Cow|🐄|

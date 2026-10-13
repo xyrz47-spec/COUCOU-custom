@@ -62,20 +62,14 @@ fn pictures() -> &'static HashMap<&'static str, (&'static str, Option<&'static s
     })
 }
 
+/// A `@name` line of twenty_pictures.txt: a kind's emoji (`@animal`), or where the artwork is (`@art`).
+fn picture_meta(name: &str) -> &'static str {
+    pictures().get(format!("@{name}").as_str()).map(|p| p.0).unwrap_or("")
+}
+
 /// The emoji for a kind, when a thing has none of its own.
 fn kind_emoji(kind: &str) -> &'static str {
-    match kind {
-        "animal" => "🐾",
-        "food" => "🍽️",
-        "thing" => "📦",
-        "place" => "📍",
-        "job" => "💼",
-        "nature" => "🌿",
-        "pokemon" => "⚪",
-        "character" => "🎭",
-        "body" => "🫀",
-        _ => "🎲",
-    }
+    Some(picture_meta(kind)).filter(|e| !e.is_empty()).unwrap_or("🎲")
 }
 
 impl Item {
@@ -87,11 +81,11 @@ impl Item {
     /// The URL of a Pokémon's official artwork (PokeAPI's pictures on GitHub).
     pub fn art_url(&self) -> Option<String> {
         let id = pictures().get(self.en)?.1?;
-        id.bytes().all(|b| b.is_ascii_digit()).then(|| format!("{ART_BASE}{id}.png"))
+        let base = picture_meta("art");
+        (!base.is_empty() && id.bytes().all(|b| b.is_ascii_digit())).then(|| format!("{base}{id}.png"))
     }
 }
 
-const ART_BASE: &str = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
 const ART_LIMIT: usize = 2 * 1024 * 1024;
 
 /// The interface languages, in the order of the columns of twenty_items.txt (src/i18n/i18n.ts LANGUAGE_CODES).
@@ -155,6 +149,8 @@ pub fn draw(pool: &[usize], recent: &VecDeque<usize>, random: u64) -> Option<usi
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Game {
+    /// Which game this is: an answer that comes back after a new game began is not counted in it.
+    id: u64,
     item: usize,
     asked: usize,
     over: bool,
@@ -162,7 +158,8 @@ pub struct Game {
 
 impl Game {
     pub fn new(item: usize) -> Game {
-        Game { item, asked: 0, over: false }
+        static NEXT: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(1);
+        Game { id: NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed), item, asked: 0, over: false }
     }
     pub fn left(&self) -> usize {
         TOTAL - self.asked
@@ -306,7 +303,8 @@ pub struct Secret {
     pub en: String,
     /// An emoji that shows it (style: the reveal card).
     pub emoji: String,
-    /// There is a picture to fetch with `twenty_picture` (a Pokémon, with Pokémon pictures on).
+    /// There is a picture to fetch with `twenty_picture`: a Pokémon has artwork. Whether it is fetched is
+    /// Settings → Features → "Pokémon pictures", which `twenty_picture` and the page both check.
     pub art: bool,
     /// The name in each interface language, by its code.
     pub names: std::collections::BTreeMap<String, String>,
@@ -365,6 +363,19 @@ pub fn twenty_new(shared: State<Shared>, kind: String) -> Result<Started, String
     Ok(Started { total: TOTAL, pool: pool.len() })
 }
 
+/// The game on, and its secret: what a question or a guess is about.
+fn current() -> Result<(u64, &'static Item), String> {
+    let game = GAME.lock().unwrap();
+    let game = game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
+    Ok((game.id, &items()[game.item]))
+}
+
+/// The game `id` once JEV has answered, if it is still the one on and still open: an answer that
+/// comes back after a give-up or a new game is dropped, never counted in another game.
+fn still_on(slot: &mut Option<Game>, id: u64) -> Result<&mut Game, String> {
+    slot.as_mut().filter(|g| g.id == id && g.can_ask()).ok_or_else(|| "That game is over.".to_string())
+}
+
 /// One yes/no question about the secret.
 #[tauri::command]
 pub async fn twenty_ask(shared: State<'_, Shared>, question: String) -> Result<Answer, String> {
@@ -373,13 +384,10 @@ pub async fn twenty_ask(shared: State<'_, Shared>, question: String) -> Result<A
     if question.is_empty() {
         return Err("Ask a question first.".into());
     }
-    let item = {
-        let game = GAME.lock().unwrap();
-        &items()[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item]
-    };
+    let (id, item) = current()?;
     let noul = noul_of(&call(&key, &ask_body(item, &question)).await?, "answer")?;
     let mut slot = GAME.lock().unwrap();
-    let game = slot.as_mut().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
+    let game = still_on(&mut slot, id)?;
     game.spend();
     let over = game.over;
     Ok(Answer {
@@ -399,17 +407,14 @@ pub async fn twenty_guess(shared: State<'_, Shared>, guess: String) -> Result<Gu
     if guess.is_empty() {
         return Err("Type a guess first.".into());
     }
-    let item = {
-        let game = GAME.lock().unwrap();
-        &items()[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item]
-    };
+    let (id, item) = current()?;
     let correct = if item.names.iter().any(|n| normalise(n) == normalise(&guess)) {
         true
     } else {
         noul_of(&call(&key, &same_body(item, &guess)).await?, "same")? >= 0.8
     };
     let mut slot = GAME.lock().unwrap();
-    let game = slot.as_mut().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
+    let game = still_on(&mut slot, id)?;
     game.guess(correct);
     Ok(GuessResult {
         correct,
@@ -440,7 +445,7 @@ pub async fn twenty_picture(shared: State<'_, Shared>) -> Result<Option<String>,
         .get(url)
         .send()
         .await
-        .map_err(|e| format!("Network error: {e}"))?;
+        .map_err(|e| crate::i18n::tf("Network error: {error}", &[("error", &e.to_string())]))?;
     if !response.status().is_success() {
         return Ok(None);
     }
@@ -534,12 +539,16 @@ mod tests {
 
     #[test]
     fn every_thing_has_an_emoji_and_every_pokemon_its_artwork() {
-        for item in items() {
-            assert!(!item.emoji().is_empty(), "{}", item.en);
-        }
-        for name in pictures().keys() {
+        let own = items().iter().filter(|i| pictures().get(i.en).is_some_and(|p| !p.0.is_empty())).count();
+        assert!(own >= 2000, "only {own} things have an emoji of their own");
+        for name in pictures().keys().filter(|n| !n.starts_with('@')) {
             assert!(items().iter().any(|i| i.en == *name), "twenty_pictures.txt names {name}, which is not a thing");
         }
+        for kind in KINDS {
+            assert!(!picture_meta(kind).is_empty(), "no @{kind} emoji in twenty_pictures.txt");
+        }
+        const ART_BASE: &str = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/";
+        assert_eq!(picture_meta("art"), ART_BASE);
         for i in pool("pokemon") {
             let url = items()[i].art_url().unwrap_or_else(|| panic!("no artwork for {}", items()[i].en));
             assert!(url.starts_with(ART_BASE) && url.ends_with(".png"));
@@ -612,6 +621,19 @@ mod tests {
         assert!(draw(&small, &all_recent, 3).is_some(), "when all were recent, any may come");
         assert_eq!(draw(&[], &VecDeque::new(), 1), None);
         assert_ne!(random(), random());
+    }
+
+    #[test]
+    fn an_answer_that_comes_back_after_a_new_game_began_is_not_counted_in_it() {
+        let mut slot = Some(Game::new(0));
+        let first = slot.as_ref().unwrap().id;
+        assert!(still_on(&mut slot, first).is_ok());
+        slot = Some(Game::new(1));
+        assert!(still_on(&mut slot, first).is_err(), "the old game's answer is dropped");
+        let second = slot.as_ref().unwrap().id;
+        assert_ne!(first, second);
+        slot.as_mut().unwrap().over = true;
+        assert!(still_on(&mut slot, second).is_err(), "nor counted once the game was given up");
     }
 
     #[test]

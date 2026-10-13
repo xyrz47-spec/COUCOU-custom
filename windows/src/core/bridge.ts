@@ -176,24 +176,25 @@ export const Bridge = {
   /** Sends an installed skill's folder to the system's bin. */
   skillRemove: (path: string) => callOrThrow<void>("skill_remove", { path }),
 
-  // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
-  /** Opens entry `index` of the saved list: a website, an app, a folder. */
   // ── JEV (src-tauri/src/jev.rs) ────────────────────────────────────────────
   /** Which option suits the person best, by JEV. Throws with the reason (feature off, no key, the call failed). */
   jevDecide: (feeling: string, options: string[]) => callOrThrow<JevDecision>("jev_decide", { feeling, options }),
+  /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
+  jevCheckKey: () => callOrThrow<string>("jev_check_key"),
   // ── Twenty questions, answered by JEV (src-tauri/src/twenty.rs) ───────────
-  /** Coucou thinks of something of this kind: animal, food, thing or any. The secret stays in Rust. */
+  /** Coucou thinks of something of this kind (twenty.rs KINDS, or "any"). The secret stays in Rust. */
   twentyNew: (kind: string) => callOrThrow<{ total: number; pool: number }>("twenty_new", { kind }),
   twentyAsk: (question: string) => callOrThrow<TwentyAnswer>("twenty_ask", { question }),
   twentyGuess: (guess: string) => callOrThrow<TwentyGuess>("twenty_guess", { guess }),
-  /** Gives up: the secret, in English and Korean. */
+  /** Gives up: the secret, named in every interface language. */
   twentyGiveUp: () => callOrThrow<TwentySecret>("twenty_give_up"),
   /** The secret's picture once the game is over (a data URL), or null when it has none. */
   twentyPicture: () => call<string | null>("twenty_picture"),
-  /** Tries the saved TypeSafe key; the model's name, or the reason it did not work. */
-  jevCheckKey: () => callOrThrow<string>("jev_check_key"),
+
+  // ── The launcher tab (src-tauri/src/launcher.rs) ──────────────────────────
   /** For each saved entry: can it be opened now (a path still there, an app still installed)? */
   launcherStatus: () => call<boolean[]>("launcher_status"),
+  /** Opens entry `index` of the saved list: a website, an app, a folder. */
   launcherOpen: (index: number) => call<void>("launcher_open", { index }),
   /** The entry's icon as RGBA pixels (base64), for a file the system has one for. */
   launcherIcon: (index: number) =>

@@ -110,6 +110,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         settings.skill_folders.truncate(skills::MAX_NAMED);
         // As many as src/core/features.ts keeps (MAX_DISABLED).
         settings.disabled_features.truncate(32);
+        settings.enabled_features.truncate(32);
         skills::set_named_folders(&settings.skill_folders);
         *current = settings;
         (screen_changed, autostart_changed, shortcuts_changed)

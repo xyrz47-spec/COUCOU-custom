@@ -50,8 +50,8 @@ export function jevSection(): HTMLElement {
     status.textContent = t("Asking JEV…");
     Bridge.jevCheckKey()
       .then(() => { say(""); return refresh().then(() => { status.textContent = t("The key works."); }); })
-      .catch((err) => { say(String(err).replace(/^Error:\s*/, "")); return refresh(); })
-      .finally(() => { test.disabled = false; });
+      // refresh() sets the button again: on while a key is saved, off once there is none.
+      .catch((err) => { say(String(err).replace(/^Error:\s*/, "")); return refresh(); });
   });
 
   void refresh();

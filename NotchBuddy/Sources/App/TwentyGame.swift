@@ -15,27 +15,18 @@ struct TwentyItem: Equatable {
     let names: [String]
     var en: String { names[0] }
 
-    /// The emoji that shows it: its own (twenty_pictures.txt), else its kind's.
+    /// The emoji that shows it: its own (twenty_pictures.txt), else its kind's (`@kind` lines there).
     var emoji: String {
         if let own = TwentyData.pictures[en]?.emoji, !own.isEmpty { return own }
-        switch kind {
-        case "animal":    return "🐾"
-        case "food":      return "🍽️"
-        case "thing":     return "📦"
-        case "place":     return "📍"
-        case "job":       return "💼"
-        case "nature":    return "🌿"
-        case "pokemon":   return "⚪"
-        case "character": return "🎭"
-        case "body":      return "🫀"
-        default:          return "🎲"
-        }
+        if let ofKind = TwentyData.pictures["@" + kind]?.emoji, !ofKind.isEmpty { return ofKind }
+        return "🎲"
     }
 
-    /// A Pokémon's official artwork, in PokeAPI's pictures on GitHub.
+    /// A Pokémon's official artwork, in PokeAPI's pictures on GitHub (`@art` in twenty_pictures.txt).
     var artURL: URL? {
-        guard let id = TwentyData.pictures[en]?.art, !id.isEmpty, id.allSatisfy(\.isNumber) else { return nil }
-        return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
+        guard let id = TwentyData.pictures[en]?.art, !id.isEmpty, id.allSatisfy({ $0.isASCII && $0.isNumber }),
+              let base = TwentyData.pictures["@art"]?.emoji, !base.isEmpty else { return nil }
+        return URL(string: base + id + ".png")
     }
 
     /// The name in `lang`, else the English one.
@@ -48,8 +39,12 @@ struct TwentyItem: Equatable {
 enum TwentyData {
     /// The columns of twenty_items.txt after the kind (twenty.rs LANGS).
     static let langs = ["en", "ko", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"]
-    /// The kinds a game may be about, as twenty.rs KINDS, then "any".
-    static let kinds = ["animal", "food", "thing", "place", "job", "nature", "pokemon", "character", "body", "activity", "any"]
+    /// The kinds a game may be about, as twenty.rs KINDS, then "any", with their capsules' words.
+    static let kinds: [(id: String, label: String)] = [
+        ("animal", "An animal"), ("food", "A food"), ("thing", "An object"), ("place", "A place"),
+        ("job", "A job"), ("nature", "Something in nature"), ("pokemon", "A Pokémon"), ("character", "A character"),
+        ("body", "A body part"), ("activity", "An activity"), ("any", "Anything"),
+    ]
     static let total = 20
     static let recentCount = 60
 
@@ -165,6 +160,25 @@ enum TwentyData {
         try Jev.noul(try await Jev.call(key: key, body: sameBody(item, guess: guess)), "same") >= 0.8
     }
 
+    /// A Pokémon's artwork, as twenty.rs twenty_picture gets it: at most 2 MB, and a PNG, else nothing.
+    static func artwork(_ url: URL) async -> Data? {
+        let limit = 2 * 1024 * 1024
+        guard let fetched = try? await URLSession.shared.bytes(from: url) else { return nil }
+        let (bytes, response) = fetched
+        guard (response as? HTTPURLResponse)?.statusCode == 200,
+              response.expectedContentLength <= Int64(limit) else { return nil }
+        var data = Data()
+        do {
+            for try await byte in bytes {
+                data.append(byte)
+                if data.count > limit { return nil }
+            }
+        } catch {
+            return nil
+        }
+        return data.starts(with: [0x89, 0x50, 0x4E, 0x47]) ? data : nil
+    }
+
     /// The interface language as a code of `langs` (Settings → Language, else the system's).
     static var language: String {
         let code = Bundle.main.preferredLocalizations.first ?? "en"
@@ -215,6 +229,8 @@ final class TwentyGame: ObservableObject {
 
     private var secret: Int?
     private var recent: [Int] = []
+    /// Which game this is: an answer that comes back after a give-up or a new game is dropped.
+    private var round = 0
 
     /// The secret, once the game is over.
     var revealed: TwentyItem? {
@@ -234,6 +250,8 @@ final class TwentyGame: ObservableObject {
         recent.append(pick)
         if recent.count > TwentyData.recentCount { recent.removeFirst(recent.count - TwentyData.recentCount) }
         self.kind = kind
+        round += 1
+        busy = false
         secret = pick
         poolSize = pool.count
         asked = 0
@@ -244,6 +262,8 @@ final class TwentyGame: ObservableObject {
     }
 
     func backToStart() {
+        round += 1
+        busy = false
         phase = .start
         error = ""
     }
@@ -253,6 +273,7 @@ final class TwentyGame: ObservableObject {
         guard !text.isEmpty, !busy, phase == .play, let secret, let key = Jev.key else { return }
         let item = TwentyData.items[secret]
         let isGuess = guessing
+        let mine = round
         busy = true
         error = ""
         Task {
@@ -262,6 +283,7 @@ final class TwentyGame: ObservableObject {
                     if !correct {
                         correct = try await TwentyData.same(item, guess: text, key: key)
                     }
+                    guard mine == round, phase == .play else { return }
                     spend()
                     if correct {
                         won = true
@@ -272,10 +294,12 @@ final class TwentyGame: ObservableObject {
                     guessing = false
                 } else {
                     let noul = try await TwentyData.answer(item, question: text, key: key)
+                    guard mine == round, phase == .play else { return }
                     spend()
                     turns.append(TwentyTurn(text: text, answer: TwentyData.label(noul)))
                 }
             } catch {
+                guard mine == round else { return }
                 self.error = error.localizedDescription
             }
             busy = false
@@ -284,6 +308,8 @@ final class TwentyGame: ObservableObject {
 
     func giveUp() {
         guard phase == .play else { return }
+        round += 1
+        busy = false
         won = false
         phase = .over
     }

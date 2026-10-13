@@ -48,6 +48,8 @@ export interface FeatureDef {
   settingsPage?: { id: string; label: string; color: string };
   /** Pills (src/core/pills.ts) that are the feature's: not offered, not shown, while it is off. */
   pills: string[];
+  /** Off until turned on (settings.enabledFeatures), for what reaches a service the user did not set up. */
+  optIn: boolean;
 }
 
 interface Entry {
@@ -59,6 +61,7 @@ interface Entry {
   tab?: FeatureTab;
   settingsPage?: { id: string; color: string };
   pills?: string[];
+  optIn?: boolean;
 }
 
 /** The words of each feature, by id. Strings are English keys, shown with `t()`. */
@@ -187,6 +190,7 @@ export const FEATURES: readonly FeatureDef[] = (MANIFEST.features as Entry[]).ma
       ? { ...entry.settingsPage, label: text.page ?? text.name }
       : undefined,
     pills: entry.pills ?? [],
+    optIn: entry.optIn === true,
   };
 });
 
@@ -204,25 +208,41 @@ export function featureDef(id: FeatureId): FeatureDef {
   return FEATURES.find((f) => f.id === id)!;
 }
 
+/** The settings' two lists of switches: what was turned off, and the opt-in features turned on. */
+export type FeatureSettings = { disabledFeatures?: unknown; enabledFeatures?: unknown };
+
 /** What `settings.disabledFeatures` says, whatever shape it came in. */
-function disabled(settings: { disabledFeatures?: unknown }): readonly unknown[] {
+function disabled(settings: FeatureSettings): readonly unknown[] {
   return Array.isArray(settings.disabledFeatures) ? settings.disabledFeatures : [];
 }
 
-/** The switch itself, as Settings → Features shows it. */
-export function featureSwitch(settings: { disabledFeatures?: unknown }, id: FeatureId): boolean {
-  return !disabled(settings).includes(id);
+/** What `settings.enabledFeatures` says: the opt-in features turned on. */
+function enabled(settings: FeatureSettings): readonly unknown[] {
+  return Array.isArray(settings.enabledFeatures) ? settings.enabledFeatures : [];
+}
+
+/** The switch itself, as Settings → Features shows it: an opt-in feature is off until turned on. */
+export function featureSwitch(settings: FeatureSettings, id: FeatureId): boolean {
+  return featureDef(id).optIn ? enabled(settings).includes(id) : !disabled(settings).includes(id);
+}
+
+/** `enabledFeatures` with opt-in feature `id` turned on or off: known opt-in ids only, each once. */
+export function withOptIn(settings: FeatureSettings, id: FeatureId, on: boolean): FeatureId[] {
+  const set = new Set(enabled(settings).filter(isFeature));
+  if (on) set.add(id);
+  else set.delete(id);
+  return FEATURES.filter((f) => f.optIn && set.has(f.id)).map((f) => f.id);
 }
 
 /** The feature is in force: its switch is on, and so is the feature it is part of. */
-export function featureOn(settings: { disabledFeatures?: unknown }, id: FeatureId): boolean {
+export function featureOn(settings: FeatureSettings, id: FeatureId): boolean {
   if (!featureSwitch(settings, id)) return false;
   const needs = featureDef(id).needs;
   return needs ? featureOn(settings, needs) : true;
 }
 
 /** `disabledFeatures` with `id` turned on or off: known ids only, each once, in the catalog's order. */
-export function withFeature(settings: { disabledFeatures?: unknown }, id: FeatureId, on: boolean): FeatureId[] {
+export function withFeature(settings: FeatureSettings, id: FeatureId, on: boolean): FeatureId[] {
   const off = new Set(disabled(settings).filter(isFeature));
   if (on) off.delete(id);
   else off.add(id);
@@ -230,7 +250,7 @@ export function withFeature(settings: { disabledFeatures?: unknown }, id: Featur
 }
 
 /** How many switches are on, of how many. */
-export function featureCount(settings: { disabledFeatures?: unknown }): { on: number; of: number } {
+export function featureCount(settings: FeatureSettings): { on: number; of: number } {
   return { on: FEATURES.filter((f) => featureSwitch(settings, f.id)).length, of: FEATURES.length };
 }
 
@@ -240,6 +260,6 @@ export function featureTabs(): FeatureDef[] {
 }
 
 /** Whether pill `id` may be offered and shown: not when it belongs to a feature that is off. */
-export function pillAllowed(settings: { disabledFeatures?: unknown }, id: string): boolean {
+export function pillAllowed(settings: FeatureSettings, id: string): boolean {
   return FEATURES.every((f) => !f.pills.includes(id) || featureOn(settings, f.id));
 }

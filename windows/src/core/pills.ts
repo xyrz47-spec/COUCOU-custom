@@ -202,18 +202,21 @@ export interface Declared {
   activeIntegrations: string[];
   /** Settings → Features: a pill that belongs to a feature turned off is not used. */
   disabledFeatures?: unknown;
+  enabledFeatures?: unknown;
 }
 
 /**
- * The declaration as it may be used: a main pill this build can run (else the
+ * The declaration as it may be kept: a main pill this build can run (else the
  * default), and declared pills this build offers, without duplicates and
  * without the main pill, which never takes a slot. Same rules as
- * AppState.loadIntegrationTasks on macOS.
+ * AppState.loadIntegrationTasks on macOS. A pill whose feature is off stays
+ * declared (it is saved, and back when the feature is): `declaredInForce` is
+ * what shows.
  */
 export function sanitizeDeclared(d: Declared, os: HostOs = HOST_OS): Pick<Declared, "mainPill" | "activeIntegrations"> {
   const mains = new Set(mainPillChoices(os).map((p) => p.id));
   const mainPill = mains.has(d.mainPill) ? d.mainPill : DEFAULT_MAIN_PILL;
-  const offered = new Set(availablePills(os).filter((p) => pillAllowed(d, p.id)).map((p) => p.id));
+  const offered = new Set(availablePills(os).map((p) => p.id));
   const activeIntegrations: string[] = [];
   for (const id of d.activeIntegrations ?? []) {
     if (id !== mainPill && offered.has(id) && !activeIntegrations.includes(id)) {
@@ -221,6 +224,15 @@ export function sanitizeDeclared(d: Declared, os: HostOs = HOST_OS): Pick<Declar
     }
   }
   return { mainPill, activeIntegrations };
+}
+
+/**
+ * The declared pills that show now: those of `sanitizeDeclared` whose feature
+ * is on (Settings → Features). Checks only the declared ones, so it is cheap
+ * enough for every frame.
+ */
+export function declaredInForce(d: Declared, os: HostOs = HOST_OS): string[] {
+  return sanitizeDeclared(d, os).activeIntegrations.filter((id) => pillAllowed(d, id));
 }
 
 /**

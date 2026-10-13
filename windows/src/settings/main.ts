@@ -13,7 +13,7 @@ import { DEFAULT_SETTINGS, type Settings } from "../core/state";
 import { CLOCK_FACES, CLOCK_FORMATS, clockFace, formatClock, isClockFormat } from "../core/clock";
 import { isAutoApprove } from "../core/auto-approve";
 import {
-  FEATURES, FEATURE_GROUPS, featureCount, featureDef, featureOn, featureSwitch, pillAllowed, withFeature,
+  FEATURES, FEATURE_GROUPS, featureCount, featureDef, featureOn, featureSwitch, pillAllowed, withFeature, withOptIn,
   type FeatureDef, type FeatureId,
 } from "../core/features";
 import { SOUND_NAMES } from "../core/sound";
@@ -1330,7 +1330,8 @@ function openButton(page: string, anchor?: string): HTMLElement {
  */
 function featuresSections(cliPath: string | null, hasKey: boolean): HTMLElement[] {
   const change = (id: FeatureId, on: boolean) => {
-    settings.disabledFeatures = withFeature(settings, id, on);
+    if (featureDef(id).optIn) settings.enabledFeatures = withOptIn(settings, id, on);
+    else settings.disabledFeatures = withFeature(settings, id, on);
     if (id !== "claudeChat") return;
     // Off while the chat goes through it: back to the provider that takes a key.
     if (!on && settings.chatProvider === "claude-code") settings.chatProvider = "anthropic";

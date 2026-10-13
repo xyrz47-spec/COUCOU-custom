@@ -108,7 +108,8 @@
     {
       "id": "twentyPictures",
       "group": "jev",
-      "needs": "twenty"
+      "needs": "twenty",
+      "optIn": true
     },
     {
       "id": "spotify",

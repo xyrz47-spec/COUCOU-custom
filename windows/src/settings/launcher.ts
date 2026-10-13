@@ -65,8 +65,10 @@ export function launcherSection(
   const commit = (next: LauncherItem[]) => {
     current().launcher = next;
     openable = [];
-    void save();
-    draw();
+    // Shown at once, checked once saved: Rust answers launcher_status from its own saved list, and
+    // asked before the save lands it would flag the entries of the old list by the new one's indexes.
+    draw(false);
+    void save().then(() => checkTargets(), () => checkTargets());
   };
 
   /** Which entries could be opened when last asked; none known yet means none flagged. */

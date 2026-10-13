@@ -39,7 +39,7 @@ test("the secret is told in the interface language with the English beside it", 
   assert.equal(secretText(secret, "ru"), "Elephant", "a missing name falls back to English");
 });
 
-test("with Pokémon pictures off, the emoji stays and nothing is fetched", async () => {
+test("with Pokémon pictures off (the default), the emoji stays and nothing is fetched", async () => {
   const { internals } = await import("./tauri.mjs");
   const { DEFAULT_SETTINGS } = await import("../src/core/state.ts");
   const before = internals.invoke;
@@ -52,8 +52,9 @@ test("with Pokémon pictures off, the emoji stays and nothing is fetched", async
     return before(cmd, args);
   };
   const tick = () => new Promise((r) => setTimeout(r, 0));
+  const settingsBefore = State.settings;
   try {
-    State.settings = { ...DEFAULT_SETTINGS, disabledFeatures: ["twentyPictures"] };
+    State.settings = { ...DEFAULT_SETTINGS };
     const view = buildTwenty({ blip() {} });
     view.el.find(".tq-kind")[0].fire("click");
     await tick();
@@ -65,7 +66,7 @@ test("with Pokémon pictures off, the emoji stays and nothing is fetched", async
     assert.ok(!asked.includes("twenty_picture"));
   } finally {
     internals.invoke = before;
-    State.settings = { ...State.settings, disabledFeatures: [] };
+    State.settings = settingsBefore;
   }
 });
 
@@ -95,7 +96,10 @@ test("a game: twenty dots coloured by the answers, then the secret on its card i
     return before(cmd, args);
   };
   const tick = () => new Promise((r) => setTimeout(r, 0));
+  const { DEFAULT_SETTINGS } = await import("../src/core/state.ts");
+  const settingsBefore = State.settings;
   try {
+    State.settings = { ...DEFAULT_SETTINGS, enabledFeatures: ["twentyPictures"] };
     State.view = "twenty";
     const view = buildTwenty({ blip() {} });
     view.el.find(".tq-kind").find((k) => k.dataset.kind === "pokemon").fire("click");
@@ -122,6 +126,37 @@ test("a game: twenty dots coloured by the answers, then the secret on its card i
     assert.ok(img, "the Pokémon's artwork replaces its emoji once fetched");
     assert.equal(img.getAttribute("src"), "data:image/png;base64,iVBORw0KGgo=");
     assert.equal(view.el.find(".tq-ask")[0].style.display, "none", "no more questions once it is over");
+  } finally {
+    internals.invoke = before;
+    State.settings = settingsBefore;
+  }
+});
+
+test("an answer that comes back after a give-up is not counted in any game", async () => {
+  const { internals } = await import("./tauri.mjs");
+  const before = internals.invoke;
+  let answer;
+  internals.invoke = async (cmd, args) => {
+    if (cmd === "twenty_new") return { total: 20, pool: 10 };
+    if (cmd === "twenty_ask") return new Promise((resolve) => { answer = resolve; });
+    if (cmd === "twenty_give_up") return { en: "Cat", emoji: "🐈", art: false, names: { en: "Cat" } };
+    return before(cmd, args);
+  };
+  const tick = () => new Promise((r) => setTimeout(r, 0));
+  try {
+    const view = buildTwenty({ blip() {} });
+    view.el.find(".tq-kind")[0].fire("click");
+    await tick();
+    view.el.find(".tq-input")[0].value = "Does it bark?";
+    view.el.find(".tq-btn")[0].fire("click");
+    await tick();
+    view.el.find(".tq-btn").find((b) => b.classList.contains("danger")).fire("click");
+    await tick();
+    answer({ label: "yes", asked: 1, left: 19, over: false, secret: null });
+    await tick();
+    assert.equal(view.el.find(".tq-turn").length, 0, "the late answer is dropped");
+    assert.equal(view.el.find(".tq-card-name")[0].textContent, "Cat");
+    assert.ok(!view.el.find(".tq-dot")[0].classList.contains("yes"));
   } finally {
     internals.invoke = before;
   }

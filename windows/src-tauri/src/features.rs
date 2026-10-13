@@ -20,6 +20,9 @@ struct Feature {
     needs: Option<String>,
     #[serde(default)]
     pills: Vec<String>,
+    /// Off until turned on (settings.enabled_features).
+    #[serde(default, rename = "optIn")]
+    opt_in: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -35,6 +38,9 @@ fn manifest() -> &'static Manifest {
 }
 
 fn switch(settings: &Settings, id: &str) -> bool {
+    if manifest().features.iter().any(|f| f.id == id && f.opt_in) {
+        return settings.enabled_features.iter().any(|f| f == id);
+    }
     !settings.disabled_features.iter().any(|f| f == id)
 }
 
@@ -64,6 +70,18 @@ mod tests {
 
     fn off(ids: &[&str]) -> Settings {
         Settings { disabled_features: ids.iter().map(|s| s.to_string()).collect(), ..Settings::default() }
+    }
+
+    #[test]
+    fn an_opt_in_feature_is_off_until_turned_on() {
+        let none = Settings::default();
+        assert!(on(&none, "twenty") && !on(&none, "twentyPictures"), "Pokémon pictures reach GitHub: off by default");
+        let turned_on = Settings { enabled_features: vec!["twentyPictures".into()], ..Settings::default() };
+        assert!(on(&turned_on, "twentyPictures"));
+        let parent_off = Settings { disabled_features: vec!["twenty".into()], ..turned_on.clone() };
+        assert!(!on(&parent_off, "twentyPictures"), "still off with the tab it is part of");
+        let listed_off = Settings { disabled_features: vec!["twentyPictures".into()], ..Settings::default() };
+        assert!(!on(&listed_off, "twentyPictures"), "the other list does not turn it on");
     }
 
     #[test]

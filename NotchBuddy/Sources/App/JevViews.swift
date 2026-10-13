@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 // The two JEV views of the island (Jev.swift, TwentyGame.swift), laid out like their
@@ -299,13 +300,6 @@ struct DecideIslandView: View {
 
 // MARK: - Twenty questions
 
-/// The kinds, as twenty.rs knows them, and their capsules' words.
-private let twentyKinds: [(id: String, label: String)] = [
-    ("animal", "An animal"), ("food", "A food"), ("thing", "An object"), ("place", "A place"),
-    ("job", "A job"), ("nature", "Something in nature"), ("pokemon", "A Pokémon"), ("character", "A character"),
-    ("body", "A body part"), ("activity", "An activity"), ("any", "Anything"),
-]
-
 struct TwentyIslandView: View {
     @ObservedObject var state: AppState
     @ObservedObject private var game = TwentyGame.shared
@@ -336,8 +330,8 @@ struct TwentyIslandView: View {
                 .foregroundColor(JevStyle.ink)
                 .multilineTextAlignment(.center)
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(104), spacing: 7), count: 4), spacing: 7) {
-                ForEach(twentyKinds.indices, id: \.self) { index in
-                    let kind = twentyKinds[index]
+                ForEach(TwentyData.kinds.indices, id: \.self) { index in
+                    let kind = TwentyData.kinds[index]
                     KindCapsule(title: NSLocalizedString(kind.label, comment: "")) {
                         SoundEngine.shared.play("blip")
                         text = ""
@@ -353,7 +347,7 @@ struct TwentyIslandView: View {
     private var play: some View {
         VStack(spacing: 8) {
             HStack(spacing: 8) {
-                Text(NSLocalizedString(twentyKinds.first { $0.id == game.kind }?.label ?? "Anything", comment: ""))
+                Text(NSLocalizedString(TwentyData.kinds.first { $0.id == game.kind }?.label ?? "Anything", comment: ""))
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(Color(hex: "#C7D2FE"))
                     .padding(.horizontal, 10).padding(.vertical, 3)
@@ -485,25 +479,21 @@ struct TwentyIslandView: View {
     }
 }
 
-/// The secret's picture on the reveal card: its emoji, or a Pokémon's artwork once it has loaded.
+/// The secret's picture on the reveal card: its emoji, or a Pokémon's artwork once it has loaded
+/// (TwentyData.artwork: at most 2 MB, and a PNG, like twenty.rs on Windows and Linux).
 private struct TwentyPicture: View {
     let item: TwentyItem
     let artwork: Bool
     @State private var shown = false
+    @State private var image: NSImage?
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16).fill(Color.white.opacity(0.08))
-            if artwork, let url = item.artURL {
-                AsyncImage(url: url) { phase in
-                    if let image = phase.image {
-                        image.resizable().scaledToFit().shadow(color: .black.opacity(0.45), radius: 5, y: 4)
-                    } else {
-                        emoji
-                    }
-                }
+            if let image {
+                Image(nsImage: image).resizable().scaledToFit().shadow(color: .black.opacity(0.45), radius: 5, y: 4)
             } else {
-                emoji
+                Text(item.emoji).font(.system(size: 44))
             }
         }
         .frame(width: 76, height: 76)
@@ -511,10 +501,11 @@ private struct TwentyPicture: View {
         .scaleEffect(shown ? 1 : 0.6)
         .opacity(shown ? 1 : 0)
         .onAppear { withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { shown = true } }
-    }
-
-    private var emoji: some View {
-        Text(item.emoji).font(.system(size: 44))
+        .task(id: item.en) {
+            image = nil
+            guard artwork, let url = item.artURL, let data = await TwentyData.artwork(url) else { return }
+            image = NSImage(data: data)
+        }
     }
 }
 
