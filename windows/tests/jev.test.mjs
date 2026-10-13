@@ -46,8 +46,8 @@ test("the Decide tab starts empty, has its presets while that is on, and asks no
   State.view = "decide";
   const view = buildDecide({ blip() {} });
   view.sync();
-  assert.equal(view.el.find(".sk-empty").length, 1);
-  const chips = view.el.find(".sk-chips")[0];
+  assert.equal(view.el.find(".dc-empty").length, 1);
+  const chips = view.el.find(".dc-presets")[0];
   assert.equal(chips.style.display, "");
   assert.equal(chips.children.length, 3);
   State.settings = { ...DEFAULT_SETTINGS, disabledFeatures: ["decidePresets"] };
@@ -66,4 +66,33 @@ test("the feeling is forgotten when the tab is left", () => {
   State.view = "overview";
   view.sync();
   assert.equal(feeling.value, "");
+});
+
+test("the ranking shows the best pick on its card and the others numbered under it", async () => {
+  const { internals } = await import("./tauri.mjs");
+  const before = internals.invoke;
+  internals.invoke = async (cmd, args) => {
+    if (cmd === "jev_decide") {
+      return { ranking: [{ option: "Soup", share: 0.6 }, { option: "Salad", share: 0.3 }, { option: "Pizza", share: 0.1 }], confidence: 0.9 };
+    }
+    return before(cmd, args);
+  };
+  try {
+    State.settings = { ...DEFAULT_SETTINGS };
+    State.view = "decide";
+    const view = buildDecide({ blip() {} });
+    view.sync();
+    view.el.find("textarea")[0].value = "Soup\nSalad\nPizza";
+    view.el.find(".dc-go")[0].fire("click");
+    await new Promise((r) => setTimeout(r, 0));
+    assert.equal(view.el.find(".dc-win-name")[0].textContent, "Soup");
+    assert.equal(view.el.find(".dc-win-share")[0].textContent, "60%");
+    const rows = view.el.find(".dc-row");
+    assert.deepEqual(rows.map((r) => r.find(".dc-place")[0].textContent), ["2", "3"]);
+    assert.equal(rows[0].find(".dc-name")[0].textContent, "Salad");
+    assert.equal(view.el.find(".dc-empty").length, 0);
+    assert.equal(view.el.find(".dc-doubt").length, 0, "JEV was sure");
+  } finally {
+    internals.invoke = before;
+  }
 });

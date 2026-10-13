@@ -33,9 +33,15 @@ export function answerText(label: TwentyLabel): { text: string; mood: "ok" | "ba
   return { text: t(found.text), mood: found.mood };
 }
 
-/** The secret as the game ends: in Korean (with the English beside it) on a Korean interface, else in English. */
+/** The secret's name in the interface language, else the English one. */
+export function secretName(secret: TwentySecret, lang: string = language()): string {
+  return secret.names?.[lang] || secret.en;
+}
+
+/** The secret as the game ends: in the interface language, with the English beside it when that differs. */
 export function secretText(secret: TwentySecret, lang: string = language()): string {
-  return lang === "ko" ? `${secret.ko} (${secret.en})` : secret.en;
+  const name = secretName(secret, lang);
+  return name === secret.en ? name : `${name} (${secret.en})`;
 }
 
 /** "Question 3 of 20". */

@@ -34,15 +34,26 @@ const MAX_GUESS_CHARS: usize = 60;
 pub struct Item {
     pub kind: &'static str,
     pub en: &'static str,
-    pub ko: &'static str,
+    /// The name in each of LANGS, English first.
+    pub names: Vec<&'static str>,
 }
+
+impl Item {
+    /// The name in `lang` (one of LANGS), else the English one.
+    pub fn name(&self, lang: &str) -> &'static str {
+        LANGS.iter().position(|l| *l == lang).and_then(|i| self.names.get(i).copied()).unwrap_or(self.en)
+    }
+}
+
+/// The interface languages, in the order of the columns of twenty_items.txt (src/i18n/i18n.ts LANGUAGE_CODES).
+pub const LANGS: &[&str] = &["en", "ko", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"];
 
 const ITEMS_TEXT: &str = include_str!("twenty_items.txt");
 
 /// The kinds a game may be about.
 pub const KINDS: &[&str] = &["animal", "food", "thing", "place", "job", "nature", "pokemon", "character", "body", "activity"];
 
-/// What Coucou may think of, from twenty_items.txt: `kind | English | 한국어` per line.
+/// What Coucou may think of, from twenty_items.txt: `kind | English | 한국어 | 简体中文 | …` per line, one name per LANGS.
 pub fn items() -> &'static [Item] {
     static ITEMS: OnceLock<Vec<Item>> = OnceLock::new();
     ITEMS.get_or_init(|| {
@@ -50,9 +61,10 @@ pub fn items() -> &'static [Item] {
             .lines()
             .filter(|l| !l.trim().is_empty() && !l.starts_with('#'))
             .filter_map(|line| {
-                let mut parts = line.split('|');
-                let (kind, en, ko) = (parts.next()?, parts.next()?, parts.next()?);
-                Some(Item { kind: kind.trim(), en: en.trim(), ko: ko.trim() })
+                let mut parts = line.split('|').map(str::trim);
+                let kind = parts.next()?;
+                let names: Vec<&'static str> = parts.collect();
+                (names.len() == LANGS.len()).then(|| Item { kind, en: names[0], names })
             })
             .collect()
     })
@@ -177,13 +189,28 @@ pub fn facts_of(name: &str) -> Option<&'static str> {
         .copied()
 }
 
-fn ask_body(secret: &str, secret_ko: &str, kind: &str, question: &str) -> Value {
+/// "ko: 코끼리, fr: éléphant, …": the secret's names in the other languages, so a question or a guess in any of them is understood.
+fn other_names(item: &Item) -> String {
+    let mut seen = vec![item.en];
+    let mut out = Vec::new();
+    for (lang, name) in LANGS.iter().zip(&item.names).skip(1) {
+        if !seen.contains(name) {
+            seen.push(name);
+            out.push(format!("{lang}: {name}"));
+        }
+    }
+    out.join(", ")
+}
+
+fn ask_body(item: &Item, question: &str) -> Value {
+    let (secret, kind) = (item.en, item.kind);
     let mut state = format!(
-        "A guessing game of twenty questions. The secret is: {secret} (Korean name: {secret_ko}) ({}). The player asks a yes/no question about the secret, \
+        "A guessing game of twenty questions. The secret is: {secret} ({}); its name in other languages: {}. The player asks a yes/no question about the secret, \
          in any language. Judge it as an expert who knows this subject well, from the facts below when there are any and from \
          general knowledge otherwise. Be decisive: answer true or false, and stay undecided only when the question is \
          ambiguous or nobody could know.",
-        kind_phrase(kind)
+        kind_phrase(kind),
+        other_names(item)
     );
     if let Some(facts) = (kind == "pokemon").then(|| facts_of(secret)).flatten() {
         state.push_str("\nFacts about the secret (authoritative): ");
@@ -196,9 +223,9 @@ fn ask_body(secret: &str, secret_ko: &str, kind: &str, question: &str) -> Value 
     })
 }
 
-fn same_body(secret: &str, secret_ko: &str, guess: &str) -> Value {
+fn same_body(item: &Item, guess: &str) -> Value {
     json!({
-        "state": format!("The secret: {secret} (Korean name: {secret_ko})\nThe guess: {guess}"),
+        "state": format!("The secret: {} ({})\nThe guess: {guess}", item.en, other_names(item)),
         "model": "jev-latest",
         "questions": { "same": { "type": "noul", "instructions": "The guess names the same thing as the secret. A translation, a plural or a close synonym counts." } }
     })
@@ -228,12 +255,13 @@ pub struct Started {
 #[serde(rename_all = "camelCase")]
 pub struct Secret {
     pub en: String,
-    pub ko: String,
+    /// The name in each interface language, by its code.
+    pub names: std::collections::BTreeMap<String, String>,
 }
 
 fn secret_of(item: usize) -> Secret {
     let it = &items()[item];
-    Secret { en: it.en.to_string(), ko: it.ko.to_string() }
+    Secret { en: it.en.to_string(), names: LANGS.iter().map(|l| (l.to_string(), it.name(l).to_string())).collect() }
 }
 
 #[derive(Serialize)]
@@ -292,13 +320,11 @@ pub async fn twenty_ask(shared: State<'_, Shared>, question: String) -> Result<A
     if question.is_empty() {
         return Err("Ask a question first.".into());
     }
-    let (kind, name, name_ko) = {
+    let item = {
         let game = GAME.lock().unwrap();
-        let game = game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
-        let it = &items()[game.item];
-        (it.kind, it.en, it.ko)
+        &items()[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item]
     };
-    let noul = noul_of(&call(&key, &ask_body(name, name_ko, kind, &question)).await?, "answer")?;
+    let noul = noul_of(&call(&key, &ask_body(item, &question)).await?, "answer")?;
     let mut slot = GAME.lock().unwrap();
     let game = slot.as_mut().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
     game.spend();
@@ -320,15 +346,14 @@ pub async fn twenty_guess(shared: State<'_, Shared>, guess: String) -> Result<Gu
     if guess.is_empty() {
         return Err("Type a guess first.".into());
     }
-    let (name, name_ko) = {
+    let item = {
         let game = GAME.lock().unwrap();
-        let it = &items()[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item];
-        (it.en, it.ko)
+        &items()[game.as_ref().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?.item]
     };
-    let correct = if normalise(&guess) == normalise(name) || normalise(&guess) == normalise(name_ko) {
+    let correct = if item.names.iter().any(|n| normalise(n) == normalise(&guess)) {
         true
     } else {
-        noul_of(&call(&key, &same_body(name, name_ko, &guess)).await?, "same")? >= 0.8
+        noul_of(&call(&key, &same_body(item, &guess)).await?, "same")? >= 0.8
     };
     let mut slot = GAME.lock().unwrap();
     let game = slot.as_mut().filter(|g| g.can_ask()).ok_or("No game on: start a new one.")?;
@@ -355,6 +380,10 @@ pub fn twenty_give_up() -> Result<Secret, String> {
 mod tests {
     use super::*;
 
+    fn find(en: &str) -> &'static Item {
+        items().iter().find(|i| i.en == en).unwrap_or_else(|| panic!("no {en}"))
+    }
+
     #[test]
     fn the_list_is_large_valid_and_every_english_name_is_unique() {
         let all = items();
@@ -365,10 +394,61 @@ mod tests {
         assert_eq!(names.len(), all.len(), "an English name is used twice");
         for item in all {
             assert!(KINDS.contains(&item.kind), "{}: kind {}", item.en, item.kind);
-            assert!(!item.en.is_empty() && !item.ko.is_empty(), "{}", item.en);
+            assert_eq!(item.names.len(), LANGS.len(), "{}", item.en);
+            assert!(item.names.iter().all(|n| !n.is_empty() && !n.contains('|')), "{}: an empty name", item.en);
         }
         let lines = ITEMS_TEXT.lines().filter(|l| !l.trim().is_empty() && !l.starts_with('#')).count();
         assert_eq!(lines, all.len(), "a line of twenty_items.txt could not be read");
+    }
+
+    #[test]
+    fn every_thing_has_a_name_in_every_interface_language() {
+        let elephant = find("Elephant");
+        assert_eq!(elephant.name("ko"), "코끼리");
+        assert_eq!(elephant.name("xx"), "Elephant", "an unknown language falls back to English");
+        for lang in LANGS {
+            assert!(!elephant.name(lang).is_empty(), "{lang}");
+        }
+        let secret = secret_of(items().iter().position(|i| i.en == "Pikachu").unwrap());
+        assert_eq!(secret.names["ko"], "피카츄");
+        assert_eq!(secret.names["fr"], "Pikachu");
+        assert_eq!(secret.names.len(), LANGS.len());
+        let langs: Vec<&str> = include_str!("../../src/i18n/i18n.ts")
+            .split("LANGUAGE_CODES = [")
+            .nth(1)
+            .and_then(|rest| rest.split(']').next())
+            .unwrap()
+            .split(',')
+            .map(|code| code.trim().trim_matches('"'))
+            .collect();
+        let mut theirs = langs.clone();
+        theirs.sort();
+        let mut ours = LANGS.to_vec();
+        ours.sort();
+        assert_eq!(ours, theirs, "twenty_items.txt has a column for each interface language");
+    }
+
+    #[test]
+    fn the_names_are_written_in_each_language_s_own_script() {
+        // Everyday things (not characters or Pokémon, which may keep their own names): nearly all
+        // are written in the script of the language, so a column was not left in English.
+        let everyday: Vec<&Item> = items().iter().filter(|i| i.kind != "character" && i.kind != "pokemon").collect();
+        let scripts: [(&str, fn(char) -> bool); 6] = [
+            ("ko", |c| ('\u{AC00}'..='\u{D7A3}').contains(&c)),
+            ("zh-Hans", |c| ('\u{4E00}'..='\u{9FFF}').contains(&c)),
+            ("hi", |c| ('\u{0900}'..='\u{097F}').contains(&c)),
+            ("ar", |c| ('\u{0600}'..='\u{06FF}').contains(&c)),
+            ("bn", |c| ('\u{0980}'..='\u{09FF}').contains(&c)),
+            ("ru", |c| ('\u{0400}'..='\u{04FF}').contains(&c)),
+        ];
+        for (lang, script) in scripts {
+            let written = everyday.iter().filter(|i| i.name(lang).chars().any(script)).count();
+            assert!(written * 100 >= everyday.len() * 95, "{lang}: {written} of {}", everyday.len());
+        }
+        for lang in ["es", "fr", "pt-BR", "id"] {
+            let own = everyday.iter().filter(|i| i.name(lang) != i.en).count();
+            assert!(own * 100 >= everyday.len() * 60, "{lang}: {own} of {} differ from English", everyday.len());
+        }
     }
 
     #[test]
@@ -386,15 +466,15 @@ mod tests {
         for i in pool("pokemon") {
             assert!(facts_of(items()[i].en).is_some(), "no facts for {}", items()[i].en);
         }
-        let body = ask_body("Rhyhorn", "코뿌리", "pokemon", "4세대 전 포켓몬이야?");
+        let body = ask_body(find("Rhydon"), "4세대 전 포켓몬이야?");
         let state = body["state"].as_str().unwrap();
         assert!(state.contains("코뿌리") && state.contains("Generation 1 (Kanto)") && state.contains("before Generation 4"), "{state}");
-        assert!(state.contains("Rock Head") && state.contains("Evolution: basic"));
+        assert!(state.contains("Rock Head") && state.contains("Evolution: evolved 1 time(s); evolves from Rhyhorn"));
         assert!(state.contains("Weaknesses/resistances") && state.contains("Moves it can learn") && state.contains("Smogon singles tier"));
-        let skin = ask_body("Mega Dragonite", "메가망나뇽", "pokemon", "스킨 특성이 있어?");
+        let skin = ask_body(find("Mega Dragonite"), "스킨 특성이 있어?");
         assert!(facts_of("Sylveon").unwrap().contains("Pixilate") && facts_of("Sylveon").unwrap().contains("'Skin' ability"));
         assert!(skin["state"].as_str().unwrap().contains("Mega Evolution of Dragonite"));
-        let plain = ask_body("Elephant", "코끼리", "animal", "Is it big?");
+        let plain = ask_body(find("Elephant"), "Is it big?");
         assert!(!plain["state"].as_str().unwrap().contains("Facts about"));
     }
 
@@ -466,7 +546,7 @@ mod tests {
 
     #[test]
     fn the_secret_goes_to_jev_with_the_question_and_nothing_else() {
-        let body = ask_body("Elephant", "코끼리", "animal", "Is it bigger than a car?");
+        let body = ask_body(find("Elephant"), "Is it bigger than a car?");
         let state = body["state"].as_str().unwrap();
         assert!(state.contains("Elephant") && state.contains("an animal"));
         assert!(kind_phrase("pokemon").contains("Pokémon") && kind_phrase("body").contains("body"));
@@ -476,7 +556,7 @@ mod tests {
         assert_eq!(body["questions"]["answer"]["type"], "noul");
         assert!(body["questions"]["answer"]["instructions"].as_str().unwrap().ends_with("Is it bigger than a car?"));
         assert_eq!(body["model"], "jev-latest");
-        let same = same_body("Elephant", "코끼리", "코끼리");
+        let same = same_body(find("Elephant"), "코끼리");
         assert!(same["state"].as_str().unwrap().contains("코끼리"));
         assert!(same["questions"]["same"]["instructions"].as_str().unwrap().contains("translation"));
     }

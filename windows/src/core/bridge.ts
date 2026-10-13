@@ -361,7 +361,8 @@ export interface JevDecision {
 /** What Coucou had in mind, told when the game is over. */
 export interface TwentySecret {
   en: string;
-  ko: string;
+  /** The name in each interface language, by its code (twenty.rs LANGS). */
+  names: Record<string, string>;
 }
 
 export type TwentyLabel = "yes" | "probablyYes" | "unsure" | "probablyNo" | "no";

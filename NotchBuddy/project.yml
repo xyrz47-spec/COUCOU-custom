@@ -123,6 +123,11 @@ targets:
         type: folder
       - path: Resources/Localizable.xcstrings
         buildPhase: resources
+      # Twenty questions' lists, shared with Windows and Linux (one copy, in windows/).
+      - path: ../windows/src-tauri/src/twenty_items.txt
+        buildPhase: resources
+      - path: ../windows/src-tauri/src/pokemon_facts.txt
+        buildPhase: resources
     info:
       path: Resources/Info.plist
       properties:
@@ -153,6 +158,7 @@ targets:
           - pt-BR
           - ru
           - zh-Hans
+          - ko
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: fr.louisraille.NotchBuddy
@@ -200,6 +206,11 @@ targets:
         type: folder
       - path: Resources/Localizable.xcstrings
         buildPhase: resources
+      # Twenty questions' lists, shared with Windows and Linux (one copy, in windows/).
+      - path: ../windows/src-tauri/src/twenty_items.txt
+        buildPhase: resources
+      - path: ../windows/src-tauri/src/pokemon_facts.txt
+        buildPhase: resources
     info:
       path: Resources/InfoAppStore.plist
       properties:
@@ -227,6 +238,7 @@ targets:
           - pt-BR
           - ru
           - zh-Hans
+          - ko
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: fr.louisraille.Coucou

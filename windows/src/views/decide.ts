@@ -7,7 +7,9 @@
 // Two parts can be switched off in Settings → Features: the presets, and the
 // memory of the last options (kept in this window's storage, nowhere else).
 //
-// It reuses the skills tab's look (style.css, .sk-*): no new style.
+// Laid out as two halves (style.css, .dc-*): what you feel and the options on
+// the left, with the presets and the button; the ranking on the right, the
+// best pick on a card of its own and the others under it, each with its bar.
 
 import { Bridge, type JevDecision } from "../core/bridge";
 import { featureOn } from "../core/features";
@@ -41,25 +43,21 @@ export function buildDecide(actions: ViewActions): ViewHost {
   let busy = false;
   let error = "";
 
-  const feeling = h("input", { type: "text", class: "sk-search", placeholder: tl("How do you feel? (tired, want something warm…)"), maxlength: "200" }) as HTMLInputElement;
-  const options = h("textarea", {
-    class: "sk-search",
-    placeholder: tl("Options, one per line"),
-    style: "width:100%;height:76px;resize:none;box-sizing:border-box",
-  }) as HTMLTextAreaElement;
-  const presets = h("div", { class: "sk-chips" });
-  const go = h("button", { class: "sk-btn primary", onclick: () => void run() }) as HTMLButtonElement;
-  const note = h("div", { class: "sk-note" });
-  const list = h("div", { class: "sk-list" });
+  const feeling = h("input", { type: "text", class: "dc-input", placeholder: tl("How do you feel? (tired, want something warm…)"), maxlength: "200" }) as HTMLInputElement;
+  const options = h("textarea", { class: "dc-input dc-options", placeholder: tl("Options, one per line") }) as HTMLTextAreaElement;
+  const presets = h("div", { class: "dc-presets" });
+  const go = h("button", { class: "dc-go", onclick: () => void run() }) as HTMLButtonElement;
+  const note = h("div", { class: "dc-note" });
+  const out = h("div", { class: "dc-out" });
   const el: HTMLElement = h(
     "div",
-    { class: "view skills decide" },
-    h("div", { class: "card" }, feeling, options, h("div", { class: "sk-bar" }, presets, go), note, list),
+    { class: "view decide" },
+    h("div", { class: "card dc" }, h("div", { class: "dc-form" }, feeling, options, presets, go, note), out),
   );
 
   PRESETS.forEach((preset, index) => {
     presets.append(h("button", {
-      class: "sk-chip",
+      class: "dc-preset",
       text: tl(preset.label),
       onclick: () => {
         actions.blip();
@@ -71,31 +69,40 @@ export function buildDecide(actions: ViewActions): ViewHost {
   });
 
   function draw() {
-    // Settings → Features → "Presets": the chips are there while it is on.
+    // Settings → Features → "Presets": the capsules are there while it is on.
     presets.style.display = featureOn(State.settings, "decidePresets") ? "" : "none";
     go.disabled = busy;
     go.textContent = busy ? t("Asking JEV…") : t("Decide");
     note.textContent = error;
-    note.classList.toggle("err", error !== "");
     note.style.display = error ? "" : "none";
-    clear(list);
+    clear(out);
     if (decision) {
-      for (const row of rows(decision)) {
-        list.append(h(
+      const [best, ...others] = rows(decision);
+      if (best) {
+        out.append(h(
           "div",
-          { class: "sk-row" },
-          h(
-            "div",
-            { class: "sk-text" },
-            h("div", { class: "sk-name" }, h("span", { text: row.option }), h("span", { class: row.best ? "sk-tag ok" : "sk-tag", text: row.share })),
-            h("div", { style: `height:4px;border-radius:2px;margin-top:4px;width:${row.width}%;background:currentColor;opacity:${row.best ? 0.7 : 0.25}` }),
-          ),
+          { class: "dc-win" },
+          h("div", { class: "dc-win-label", text: t("Best pick") }),
+          h("div", { class: "dc-win-row" }, h("span", { class: "dc-win-name", text: best.option }), h("span", { class: "dc-win-share", text: best.share })),
+          h("div", { class: "dc-bar" }, h("i", { style: `width:${best.width}%` })),
         ));
       }
+      const list = h("div", { class: "dc-rank" });
+      others.forEach((row, i) => {
+        list.append(h(
+          "div",
+          { class: "dc-row" },
+          h("span", { class: "dc-place", text: String(i + 2) }),
+          h("span", { class: "dc-name", text: row.option }),
+          h("span", { class: "dc-bar small" }, h("i", { style: `width:${row.width}%` })),
+          h("span", { class: "dc-share", text: row.share }),
+        ));
+      });
+      out.append(list);
       const unsure = doubt(decision);
-      if (unsure) list.append(h("div", { class: "sk-desc", text: unsure }));
-    } else if (!busy && !error) {
-      list.append(h("div", { class: "sk-empty", text: t("List a few options and press Decide: JEV ranks them for how you feel.") }));
+      if (unsure) out.append(h("div", { class: "dc-doubt", text: unsure }));
+    } else {
+      out.append(h("div", { class: "dc-empty", text: busy ? t("Asking JEV…") : t("List a few options and press Decide: JEV ranks them for how you feel.") }));
     }
   }
 

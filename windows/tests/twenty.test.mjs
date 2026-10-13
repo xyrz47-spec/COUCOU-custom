@@ -29,20 +29,65 @@ test("the kinds are the ones Rust knows, and progress counts the question being 
   assert.equal(progress(20, 20), "Question 20 of 20", "never past the last");
 });
 
-test("the secret is told in Korean with the English beside it on a Korean interface, else in English", () => {
-  const secret = { en: "Elephant", ko: "코끼리" };
+test("the secret is told in the interface language with the English beside it", () => {
+  const secret = { en: "Elephant", names: { en: "Elephant", ko: "코끼리", fr: "Éléphant", "zh-Hans": "大象", "pt-BR": "Elephant" } };
   assert.equal(secretText(secret, "ko"), "코끼리 (Elephant)");
-  for (const lang of ["en", "fr", "zh-Hans"]) assert.equal(secretText(secret, lang), "Elephant");
+  assert.equal(secretText(secret, "fr"), "Éléphant (Elephant)");
+  assert.equal(secretText(secret, "zh-Hans"), "大象 (Elephant)");
+  assert.equal(secretText(secret, "en"), "Elephant");
+  assert.equal(secretText(secret, "pt-BR"), "Elephant", "the same name is not said twice");
+  assert.equal(secretText(secret, "ru"), "Elephant", "a missing name falls back to English");
 });
 
 test("the tab starts at the choice of a kind and asks nothing by itself", () => {
   State.view = "twenty";
   const view = buildTwenty({ blip() {} });
   view.sync();
-  const chips = view.el.find(".sk-chips")[0];
-  assert.equal(chips.style.display, "");
-  assert.equal(chips.children.length, 11, "ten kinds and anything");
-  assert.equal(view.el.find(".sk-chips").length, 1, "no choice of level");
-  assert.equal(view.el.find(".sk-top")[0].style.display, "none", "no box to type in before a game");
-  assert.equal(view.el.find(".sk-empty").length, 1);
+  assert.equal(view.el.find(".tq-start")[0].style.display, "");
+  assert.equal(view.el.find(".tq-kind").length, 11, "ten kinds and anything");
+  assert.equal(view.el.find(".tq-game")[0].style.display, "none", "no box to type in before a game");
+  assert.equal(view.el.find(".tq-title").length, 1);
+});
+
+test("a game: twenty dots coloured by the answers, then the secret on its card in the interface language", async () => {
+  const { internals } = await import("./tauri.mjs");
+  const started = [];
+  const before = internals.invoke;
+  const answers = ["yes", "no"];
+  internals.invoke = async (cmd, args) => {
+    if (cmd === "twenty_new") {
+      started.push(args);
+      return { total: 20, pool: 1122 };
+    }
+    if (cmd === "twenty_ask") return { label: answers.shift(), asked: 2 - answers.length, left: 18 + answers.length, over: false, secret: null };
+    if (cmd === "twenty_give_up") return { en: "Rhydon", names: { en: "Rhydon", ko: "코뿌리" } };
+    return before(cmd, args);
+  };
+  const tick = () => new Promise((r) => setTimeout(r, 0));
+  try {
+    State.view = "twenty";
+    const view = buildTwenty({ blip() {} });
+    view.el.find(".tq-kind").find((k) => k.dataset.kind === "pokemon").fire("click");
+    await tick();
+    assert.deepEqual(started, [{ kind: "pokemon" }], "the kind only: there is no level");
+    assert.equal(view.el.find(".tq-start")[0].style.display, "none");
+    assert.equal(view.el.find(".tq-dot").length, 20);
+    assert.equal(view.el.find(".tq-badge")[0].textContent, "A Pokémon");
+    const input = view.el.find(".tq-input")[0];
+    for (const q of ["Is it from Kanto?", "Can it fly?"]) {
+      input.value = q;
+      view.el.find(".tq-btn")[0].fire("click");
+      await tick();
+    }
+    const dots = view.el.find(".tq-dot");
+    assert.ok(dots[0].classList.contains("yes") && dots[1].classList.contains("no"));
+    assert.ok(dots[2].classList.contains("now"), "the question being asked");
+    assert.deepEqual(view.el.find(".tq-q").map((q) => q.textContent), ["Can it fly?", "Is it from Kanto?"], "the latest first");
+    view.el.find(".tq-btn").find((b) => b.classList.contains("danger")).fire("click");
+    await tick();
+    assert.equal(view.el.find(".tq-card-name")[0].textContent, "Rhydon");
+    assert.equal(view.el.find(".tq-ask")[0].style.display, "none", "no more questions once it is over");
+  } finally {
+    internals.invoke = before;
+  }
 });

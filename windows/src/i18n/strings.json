@@ -50,6 +50,90 @@
    "id": "5 jam",
    "ko": "5시간"
   },
+  "A Pokémon": {
+   "zh-Hans": "一只宝可梦",
+   "hi": "एक पोकेमॉन",
+   "es": "Un Pokémon",
+   "ar": "بوكيمون",
+   "fr": "Un Pokémon",
+   "bn": "একটি পোকেমন",
+   "pt-BR": "Um Pokémon",
+   "ru": "Покемон",
+   "id": "Pokémon",
+   "ko": "포켓몬"
+  },
+  "A body part": {
+   "zh-Hans": "一个身体部位",
+   "hi": "शरीर का एक अंग",
+   "es": "Una parte del cuerpo",
+   "ar": "جزء من الجسم",
+   "fr": "Une partie du corps",
+   "bn": "শরীরের একটি অংশ",
+   "pt-BR": "Uma parte do corpo",
+   "ru": "Часть тела",
+   "id": "Bagian tubuh",
+   "ko": "신체 부위"
+  },
+  "A character": {
+   "zh-Hans": "一个角色",
+   "hi": "एक किरदार",
+   "es": "Un personaje",
+   "ar": "شخصية",
+   "fr": "Un personnage",
+   "bn": "একটি চরিত্র",
+   "pt-BR": "Um personagem",
+   "ru": "Персонаж",
+   "id": "Karakter",
+   "ko": "캐릭터"
+  },
+  "A food": {
+   "zh-Hans": "一种食物",
+   "hi": "एक खाना",
+   "es": "Una comida",
+   "ar": "طعام",
+   "fr": "Un aliment",
+   "bn": "একটি খাবার",
+   "pt-BR": "Uma comida",
+   "ru": "Еда",
+   "id": "Makanan",
+   "ko": "음식"
+  },
+  "A job": {
+   "zh-Hans": "一种职业",
+   "hi": "एक पेशा",
+   "es": "Un oficio",
+   "ar": "مهنة",
+   "fr": "Un métier",
+   "bn": "একটি পেশা",
+   "pt-BR": "Uma profissão",
+   "ru": "Профессия",
+   "id": "Pekerjaan",
+   "ko": "직업"
+  },
+  "A key is saved.": {
+   "zh-Hans": "已保存密钥。",
+   "hi": "कुंजी सहेजी गई है।",
+   "es": "Hay una clave guardada.",
+   "ar": "تم حفظ مفتاح.",
+   "fr": "Une clé est enregistrée.",
+   "bn": "একটি কী সংরক্ষিত আছে।",
+   "pt-BR": "Há uma chave salva.",
+   "ru": "Ключ сохранён.",
+   "id": "Ada kunci tersimpan.",
+   "ko": "키가 저장되어 있습니다."
+  },
+  "A place": {
+   "zh-Hans": "一个地方",
+   "hi": "एक जगह",
+   "es": "Un lugar",
+   "ar": "مكان",
+   "fr": "Un lieu",
+   "bn": "একটি জায়গা",
+   "pt-BR": "Um lugar",
+   "ru": "Место",
+   "id": "Tempat",
+   "ko": "장소"
+  },
   "API key (AI Studio)": {
    "zh-Hans": "API 密钥 (AI Studio)",
    "hi": "API कुंजी (AI Studio)",
@@ -230,6 +314,30 @@
    "id": "Plugin Amp",
    "ko": "Amp 플러그인"
   },
+  "An activity": {
+   "zh-Hans": "一项活动",
+   "hi": "एक गतिविधि",
+   "es": "Una actividad",
+   "ar": "نشاط",
+   "fr": "Une activité",
+   "bn": "একটি কার্যকলাপ",
+   "pt-BR": "Uma atividade",
+   "ru": "Занятие",
+   "id": "Aktivitas",
+   "ko": "활동"
+  },
+  "An animal": {
+   "zh-Hans": "一种动物",
+   "hi": "एक जानवर",
+   "es": "Un animal",
+   "ar": "حيوان",
+   "fr": "Un animal",
+   "bn": "একটি প্রাণী",
+   "pt-BR": "Um animal",
+   "ru": "Животное",
+   "id": "Hewan",
+   "ko": "동물"
+  },
   "An instruction sent from the iPhone uses the model open in chat. The system prompt and conversation history apply. Instructions sent when Coucou is not running are queued and executed on next launch.": {
    "zh-Hans": "从 iPhone 发送的指令使用聊天中当前打开的模型。系统提示和对话历史适用。Coucou 未运行时发送的指令将排队，并在下次启动时执行。",
    "hi": "iPhone से भेजा गया निर्देश चैट में वर्तमान में खुले मॉडल का उपयोग करता है। सिस्टम प्रॉम्प्ट और बातचीत का इतिहास लागू होता है। Coucou चल नहीं रहे होने पर भेजे गए निर्देश कतार में रखे जाते हैं और अगली बार चालू होने पर चलाए जाते हैं।",
@@ -241,6 +349,18 @@
    "ru": "Инструкция, отправленная с iPhone, использует модель, открытую в чате. Системный промпт и история разговора применяются. Инструкции, отправленные пока Coucou не запущен, ставятся в очередь и выполняются при следующем запуске.",
    "id": "Instruksi yang dikirim dari iPhone menggunakan model yang sedang terbuka di chat. Prompt sistem dan riwayat percakapan berlaku. Instruksi yang dikirim saat Coucou tidak berjalan dimasukkan ke antrean dan dijalankan saat peluncuran berikutnya.",
    "ko": "iPhone에서 보낸 지시는 채팅에 열려 있는 모델을 사용합니다. 시스템 프롬프트와 대화 기록이 적용됩니다. Coucou가 실행 중이 아닐 때 보낸 지시는 대기열에 쌓였다가 다음 실행 때 처리됩니다."
+  },
+  "An object": {
+   "zh-Hans": "一件物品",
+   "hi": "एक वस्तु",
+   "es": "Un objeto",
+   "ar": "شيء",
+   "fr": "Un objet",
+   "bn": "একটি বস্তু",
+   "pt-BR": "Um objeto",
+   "ru": "Предмет",
+   "id": "Benda",
+   "ko": "물건"
   },
   "Anthropic API": {
    "zh-Hans": "Anthropic API",
@@ -265,6 +385,18 @@
    "ru": "Хуки Antigravity",
    "id": "Hooks Antigravity",
    "ko": "Antigravity 훅"
+  },
+  "Anything": {
+   "zh-Hans": "任何东西",
+   "hi": "कुछ भी",
+   "es": "Cualquier cosa",
+   "ar": "أي شيء",
+   "fr": "N'importe quoi",
+   "bn": "যেকোনো কিছু",
+   "pt-BR": "Qualquer coisa",
+   "ru": "Что угодно",
+   "id": "Apa saja",
+   "ko": "아무거나"
   },
   "Applies on next launch": {
    "zh-Hans": "下次启动时生效",
@@ -314,6 +446,18 @@
    "id": "Disetujui",
    "ko": "승인됨"
   },
+  "Ask": {
+   "zh-Hans": "提问",
+   "hi": "पूछें",
+   "es": "Preguntar",
+   "ar": "اسأل",
+   "fr": "Demander",
+   "bn": "জিজ্ঞেস করুন",
+   "pt-BR": "Perguntar",
+   "ru": "Спросить",
+   "id": "Tanya",
+   "ko": "묻기"
+  },
   "Ask Claude": {
    "zh-Hans": "问 Claude",
    "hi": "Claude से पूछें",
@@ -350,6 +494,18 @@
    "id": "Ajukan pertanyaan tentang ini",
    "ko": "이것에 대해 질문하기"
   },
+  "Ask a yes/no question…": {
+   "zh-Hans": "问一个是非问题…",
+   "hi": "हाँ/नहीं वाला सवाल पूछें…",
+   "es": "Haz una pregunta de sí o no…",
+   "ar": "اطرح سؤالًا بنعم أو لا…",
+   "fr": "Posez une question oui/non…",
+   "bn": "হ্যাঁ/না প্রশ্ন করুন…",
+   "pt-BR": "Faça uma pergunta de sim ou não…",
+   "ru": "Задайте вопрос «да/нет»…",
+   "id": "Ajukan pertanyaan ya/tidak…",
+   "ko": "예/아니요 질문을 하세요…"
+  },
   "Ask me anything…": {
    "zh-Hans": "问我任何事…",
    "hi": "कुछ भी पूछें…",
@@ -361,6 +517,18 @@
    "ru": "Спроси меня о чём угодно…",
    "id": "Tanyakan apa saja…",
    "ko": "무엇이든 물어보세요…"
+  },
+  "Asking JEV…": {
+   "zh-Hans": "正在询问 JEV…",
+   "hi": "JEV से पूछा जा रहा है…",
+   "es": "Preguntando a JEV…",
+   "ar": "جارٍ سؤال JEV…",
+   "fr": "Question à JEV…",
+   "bn": "JEV-কে জিজ্ঞেস করা হচ্ছে…",
+   "pt-BR": "Perguntando ao JEV…",
+   "ru": "Спрашиваю JEV…",
+   "id": "Bertanya ke JEV…",
+   "ko": "JEV에 묻는 중…"
   },
   "Attach front window": {
    "zh-Hans": "附加前端窗口",
@@ -398,6 +566,18 @@
    "id": "Otomatisasi tidak diizinkan",
    "ko": "자동화가 허용되지 않음"
   },
+  "Back to questions": {
+   "zh-Hans": "回到提问",
+   "hi": "सवालों पर लौटें",
+   "es": "Volver a las preguntas",
+   "ar": "العودة إلى الأسئلة",
+   "fr": "Retour aux questions",
+   "bn": "প্রশ্নে ফিরুন",
+   "pt-BR": "Voltar às perguntas",
+   "ru": "Назад к вопросам",
+   "id": "Kembali ke pertanyaan",
+   "ko": "질문으로 돌아가기"
+  },
   "Behavior": {
    "zh-Hans": "行为",
    "hi": "व्यवहार",
@@ -409,6 +589,30 @@
    "ru": "Поведение",
    "id": "Perilaku",
    "ko": "동작"
+  },
+  "Best pick": {
+   "zh-Hans": "最佳选择",
+   "hi": "सबसे अच्छा विकल्प",
+   "es": "Mejor opción",
+   "ar": "الخيار الأفضل",
+   "fr": "Meilleur choix",
+   "bn": "সেরা পছন্দ",
+   "pt-BR": "Melhor escolha",
+   "ru": "Лучший выбор",
+   "id": "Pilihan terbaik",
+   "ko": "최고의 선택"
+  },
+  "Better luck next time.": {
+   "zh-Hans": "下次好运。",
+   "hi": "अगली बार बेहतर किस्मत।",
+   "es": "Más suerte la próxima vez.",
+   "ar": "حظًّا أوفر في المرة القادمة.",
+   "fr": "Plus de chance la prochaine fois.",
+   "bn": "পরের বার আরও ভাগ্য সহায় হোক।",
+   "pt-BR": "Mais sorte da próxima vez.",
+   "ru": "В следующий раз повезёт.",
+   "id": "Semoga beruntung lain kali.",
+   "ko": "다음엔 더 잘될 거예요."
   },
   "Busiest day": {
    "zh-Hans": "最忙的一天",
@@ -433,6 +637,18 @@
    "ru": "КОМАНДЫ",
    "id": "PERINTAH",
    "ko": "명령"
+  },
+  "Call a friend": {
+   "zh-Hans": "给朋友打电话",
+   "hi": "दोस्त को फ़ोन करें",
+   "es": "Llamar a un amigo",
+   "ar": "الاتصال بصديق",
+   "fr": "Appeler un ami",
+   "bn": "বন্ধুকে ফোন করুন",
+   "pt-BR": "Ligar para um amigo",
+   "ru": "Позвонить другу",
+   "id": "Menelepon teman",
+   "ko": "친구에게 전화하기"
   },
   "Can't reach {name} at {url}. Is it running?": {
    "zh-Hans": "无法访问 {name}（{url}）。它正在运行吗？",
@@ -674,6 +890,18 @@
    "id": "Hooks Codex",
    "ko": "Codex 훅"
   },
+  "Coffee": {
+   "zh-Hans": "咖啡",
+   "hi": "कॉफ़ी",
+   "es": "Café",
+   "ar": "قهوة",
+   "fr": "Café",
+   "bn": "কফি",
+   "pt-BR": "Café",
+   "ru": "Кофе",
+   "id": "Kopi",
+   "ko": "커피"
+  },
   "Color": {
    "zh-Hans": "颜色",
    "hi": "रंग",
@@ -866,6 +1094,30 @@
    "id": "Kustom…",
    "ko": "사용자 지정…"
   },
+  "Decide": {
+   "zh-Hans": "决定",
+   "hi": "तय करें",
+   "es": "Decidir",
+   "ar": "قرّر",
+   "fr": "Décider",
+   "bn": "ঠিক করুন",
+   "pt-BR": "Decidir",
+   "ru": "Выбрать",
+   "id": "Putuskan",
+   "ko": "결정"
+  },
+  "Decide tab": {
+   "zh-Hans": "决定标签页",
+   "hi": "फ़ैसला टैब",
+   "es": "Pestaña Decidir",
+   "ar": "تبويب القرار",
+   "fr": "Onglet Décider",
+   "bn": "সিদ্ধান্ত ট্যাব",
+   "pt-BR": "Aba Decidir",
+   "ru": "Вкладка «Выбор»",
+   "id": "Tab Putuskan",
+   "ko": "결정 탭"
+  },
   "Default": {
    "zh-Hans": "默认",
    "hi": "डिफ़ॉल्ट",
@@ -973,6 +1225,18 @@
    "ru": "Черновик",
    "id": "Draf",
    "ko": "초안"
+  },
+  "Drink": {
+   "zh-Hans": "饮品",
+   "hi": "पेय",
+   "es": "Bebida",
+   "ar": "مشروب",
+   "fr": "Boisson",
+   "bn": "পানীয়",
+   "pt-BR": "Bebida",
+   "ru": "Напиток",
+   "id": "Minuman",
+   "ko": "음료"
   },
   "Drop a file named like one of Mochi's sounds (finish.wav, approval.mp3, greet.m4a…) in the sounds folder to replace it, then Reload.": {
    "zh-Hans": "在声音文件夹中放入与 Mochi 某个声音同名的文件（finish.wav、approval.mp3、greet.m4a…）即可替换它，然后重新载入。",
@@ -1130,6 +1394,18 @@
    "id": "Mengambil",
    "ko": "가져오기"
   },
+  "Fried chicken": {
+   "zh-Hans": "炸鸡",
+   "hi": "फ्राइड चिकन",
+   "es": "Pollo frito",
+   "ar": "دجاج مقلي",
+   "fr": "Poulet frit",
+   "bn": "ফ্রায়েড চিকেন",
+   "pt-BR": "Frango frito",
+   "ru": "Жареная курица",
+   "id": "Ayam goreng",
+   "ko": "치킨"
+  },
   "From Open-Meteo for this city, only when you ask.": {
    "zh-Hans": "仅在你询问时，从 Open-Meteo 获取该城市的天气。",
    "hi": "इस शहर के लिए Open-Meteo से, सिर्फ़ पूछने पर।",
@@ -1190,6 +1466,18 @@
    "id": "Hooks GitHub Copilot CLI",
    "ko": "GitHub Copilot CLI 훅"
   },
+  "Give at least 2 different options.": {
+   "zh-Hans": "请至少给出 2 个不同的选项。",
+   "hi": "कम से कम 2 अलग विकल्प दें।",
+   "es": "Da al menos 2 opciones distintas.",
+   "ar": "أدخل خيارين مختلفين على الأقل.",
+   "fr": "Donnez au moins 2 options différentes.",
+   "bn": "কমপক্ষে ২টি আলাদা বিকল্প দিন।",
+   "pt-BR": "Dê pelo menos 2 opções diferentes.",
+   "ru": "Укажите минимум 2 разных варианта.",
+   "id": "Berikan setidaknya 2 pilihan berbeda.",
+   "ko": "서로 다른 선택지를 2개 이상 적어 주세요."
+  },
   "Give me a sec — back to work in three seconds.": {
    "zh-Hans": "给我一秒钟——三秒后恢复工作。",
    "hi": "एक पल — तीन सेकंड में वापस काम पर।",
@@ -1201,6 +1489,18 @@
    "ru": "Секунду — вернусь к работе через три секунды.",
    "id": "Satu detik — kembali bekerja dalam tiga detik.",
    "ko": "잠깐만요 — 3초 뒤에 다시 일할게요."
+  },
+  "Give up": {
+   "zh-Hans": "放弃",
+   "hi": "हार मानें",
+   "es": "Rendirse",
+   "ar": "استسلام",
+   "fr": "Abandonner",
+   "bn": "হাল ছাড়ুন",
+   "pt-BR": "Desistir",
+   "ru": "Сдаться",
+   "id": "Menyerah",
+   "ko": "포기"
   },
   "Global shortcuts — active from any app": {
    "zh-Hans": "全局快捷键 — 在任何应用中有效",
@@ -1225,6 +1525,18 @@
    "ru": "Узел Gmail завершился по таймауту через 30с. Повторите или откройте n8n.",
    "id": "Node Gmail habis waktu setelah 30 detik. Coba lagi atau buka n8n.",
    "ko": "Gmail 노드가 30초 후 시간 초과되었습니다. 다시 시도하거나 n8n을 여세요."
+  },
+  "Go for a walk": {
+   "zh-Hans": "去散步",
+   "hi": "टहलने जाएँ",
+   "es": "Salir a caminar",
+   "ar": "الذهاب في نزهة",
+   "fr": "Aller se promener",
+   "bn": "হাঁটতে যান",
+   "pt-BR": "Sair para caminhar",
+   "ru": "Прогуляться",
+   "id": "Jalan-jalan",
+   "ko": "산책하기"
   },
   "Go to alert": {
    "zh-Hans": "跳转到警告",
@@ -1285,6 +1597,18 @@
    "ru": "Разрешено",
    "id": "Diberikan",
    "ko": "허용됨"
+  },
+  "Guess": {
+   "zh-Hans": "猜",
+   "hi": "अनुमान लगाएँ",
+   "es": "Adivinar",
+   "ar": "خمّن",
+   "fr": "Deviner",
+   "bn": "অনুমান করুন",
+   "pt-BR": "Adivinhar",
+   "ru": "Угадать",
+   "id": "Tebak",
+   "ko": "추측"
   },
   "Hermes Agent": {
    "zh-Hans": "Hermes Agent",
@@ -1454,6 +1778,54 @@
    "id": "Mengarahkan kursor ke pulau akan membukanya; pulau menutup lagi sesaat setelah kursor pergi. Klik di dalamnya agar tetap terbuka.",
    "ko": "아일랜드 위에 마우스를 올리면 열리고, 포인터가 벗어나면 잠시 후 다시 접힙니다. 안쪽을 클릭하면 열린 채로 유지됩니다."
   },
+  "How do you feel? (tired, want something warm…)": {
+   "zh-Hans": "你现在感觉如何?(累了,想吃点热的…)",
+   "hi": "आप कैसा महसूस कर रहे हैं? (थका हूँ, कुछ गरम चाहिए…)",
+   "es": "¿Cómo te sientes? (cansado, algo caliente…)",
+   "ar": "كيف تشعر؟ (متعب، أريد شيئًا دافئًا…)",
+   "fr": "Comment vous sentez-vous ? (fatigué, envie de chaud…)",
+   "bn": "কেমন লাগছে? (ক্লান্ত, গরম কিছু চাই…)",
+   "pt-BR": "Como você se sente? (cansado, algo quente…)",
+   "ru": "Как самочувствие? (устал, хочется тёплого…)",
+   "id": "Bagaimana perasaanmu? (lelah, ingin yang hangat…)",
+   "ko": "기분이 어떤가요? (피곤해요, 따뜻한 게 먹고 싶어요…)"
+  },
+  "I am thinking of one of {n} things.": {
+   "zh-Hans": "我想的是 {n} 样东西中的一个。",
+   "hi": "मैं {n} चीज़ों में से एक के बारे में सोच रहा हूँ।",
+   "es": "Estoy pensando en una de {n} cosas.",
+   "ar": "أفكّر في واحد من {n} شيئًا.",
+   "fr": "Je pense à l'une de {n} choses.",
+   "bn": "আমি {n}টি জিনিসের একটির কথা ভাবছি।",
+   "pt-BR": "Estou pensando em uma de {n} coisas.",
+   "ru": "Я загадал одно из {n} понятий.",
+   "id": "Aku memikirkan satu dari {n} hal.",
+   "ko": "{n}가지 중 하나를 떠올렸어요."
+  },
+  "I am thinking of something. What kind?": {
+   "zh-Hans": "我想到了一样东西。是哪一类?",
+   "hi": "मैं कुछ सोच रहा हूँ। किस तरह का?",
+   "es": "Estoy pensando en algo. ¿De qué tipo?",
+   "ar": "أفكّر في شيء. من أي نوع؟",
+   "fr": "Je pense à quelque chose. De quel genre ?",
+   "bn": "আমি কিছু ভাবছি। কী ধরনের?",
+   "pt-BR": "Estou pensando em algo. De que tipo?",
+   "ru": "Я кое-что загадал. Что именно?",
+   "id": "Aku memikirkan sesuatu. Jenis apa?",
+   "ko": "무언가를 떠올렸어요. 어떤 종류일까요?"
+  },
+  "I know it!": {
+   "zh-Hans": "我知道了!",
+   "hi": "मुझे पता है!",
+   "es": "¡Ya lo sé!",
+   "ar": "عرفتها!",
+   "fr": "Je sais !",
+   "bn": "আমি জানি!",
+   "pt-BR": "Já sei!",
+   "ru": "Я знаю!",
+   "id": "Aku tahu!",
+   "ko": "알겠다!"
+  },
   "Install": {
    "zh-Hans": "安装",
    "hi": "इंस्टॉल करें",
@@ -1525,6 +1897,42 @@
    "ru": "Интеграции",
    "id": "Integrasi",
    "ko": "연동"
+  },
+  "JEV is TypeSafe's model for quick, structured judgements. With a key, the Decide tab ranks the options you list for how you feel, and the Twenty questions tab lets JEV answer your yes/no questions about something Coucou thought of.": {
+   "zh-Hans": "JEV 是 TypeSafe 用于快速、结构化判断的模型。有了密钥,“决定”标签页会按你的感受为选项排序,“二十个问题”标签页让 JEV 回答你关于 Coucou 所想事物的是非问题。",
+   "hi": "JEV TypeSafe का तेज़, संरचित निर्णयों वाला मॉडल है। कुंजी के साथ \"फ़ैसला\" टैब आपके विकल्पों को आपकी भावना के हिसाब से क्रम देता है, और \"बीस सवाल\" टैब में JEV, Coucou के सोचे हुए के बारे में आपके हाँ/नहीं सवालों का जवाब देता है।",
+   "es": "JEV es el modelo de TypeSafe para juicios rápidos y estructurados. Con una clave, la pestaña Decidir ordena tus opciones según cómo te sientes y la de veinte preguntas deja que JEV responda tus preguntas de sí o no sobre algo en lo que Coucou pensó.",
+   "ar": "JEV هو نموذج TypeSafe للأحكام السريعة والمنظَّمة. بمفتاح يرتّب تبويب القرار خياراتك بحسب شعورك، ويتيح تبويب العشرين سؤالًا أن يجيب JEV عن أسئلتك بنعم أو لا حول شيء فكّر فيه Coucou.",
+   "fr": "JEV est le modèle de TypeSafe pour des jugements rapides et structurés. Avec une clé, l'onglet Décider classe vos options selon ce que vous ressentez, et l'onglet Vingt questions laisse JEV répondre à vos questions par oui ou non sur ce à quoi Coucou a pensé.",
+   "bn": "JEV হলো দ্রুত, কাঠামোবদ্ধ বিচারের জন্য TypeSafe-এর মডেল। কী থাকলে সিদ্ধান্ত ট্যাব আপনার অনুভূতি অনুযায়ী বিকল্প সাজায়, আর বিশ প্রশ্নের ট্যাবে Coucou-র ভাবা কিছু নিয়ে আপনার হ্যাঁ/না প্রশ্নের উত্তর দেয় JEV।",
+   "pt-BR": "O JEV é o modelo da TypeSafe para julgamentos rápidos e estruturados. Com uma chave, a aba Decidir ordena suas opções conforme como você se sente, e a de vinte perguntas deixa o JEV responder suas perguntas de sim ou não sobre algo em que o Coucou pensou.",
+   "ru": "JEV — модель TypeSafe для быстрых структурированных оценок. С ключом вкладка «Выбор» ранжирует ваши варианты по самочувствию, а «Двадцать вопросов» позволяет JEV отвечать на ваши вопросы «да/нет» о том, что загадал Coucou.",
+   "id": "JEV adalah model TypeSafe untuk penilaian cepat dan terstruktur. Dengan kunci, tab Putuskan mengurutkan pilihan sesuai perasaanmu, dan tab dua puluh pertanyaan membuat JEV menjawab pertanyaan ya/tidak tentang sesuatu yang dipikirkan Coucou.",
+   "ko": "JEV는 빠르고 구조화된 판단을 위한 TypeSafe의 모델입니다. 키가 있으면 결정 탭이 기분에 맞게 선택지를 정렬하고, 스무고개 탭에서는 Coucou가 떠올린 것에 대한 예/아니요 질문에 JEV가 답합니다."
+  },
+  "JEV is not very sure: the first ones are close.": {
+   "zh-Hans": "JEV 不太确定:前几名很接近。",
+   "hi": "JEV को ज़्यादा भरोसा नहीं: पहले कुछ विकल्प लगभग बराबर हैं।",
+   "es": "JEV no está muy seguro: las primeras están muy cerca.",
+   "ar": "JEV غير متأكد تمامًا: الأوائل متقاربة.",
+   "fr": "JEV n'est pas très sûr : les premières sont proches.",
+   "bn": "JEV খুব নিশ্চিত নয়: প্রথম কয়েকটি কাছাকাছি।",
+   "pt-BR": "O JEV não tem muita certeza: as primeiras estão próximas.",
+   "ru": "JEV не очень уверен: первые варианты близки.",
+   "id": "JEV kurang yakin: yang teratas berdekatan.",
+   "ko": "JEV가 확신하지 못합니다. 상위 선택지가 비슷합니다."
+  },
+  "Juice": {
+   "zh-Hans": "果汁",
+   "hi": "जूस",
+   "es": "Zumo",
+   "ar": "عصير",
+   "fr": "Jus",
+   "bn": "জুস",
+   "pt-BR": "Suco",
+   "ru": "Сок",
+   "id": "Jus",
+   "ko": "주스"
   },
   "Jump to terminal": {
    "zh-Hans": "跳转到终端",
@@ -1621,6 +2029,18 @@
    "ru": "Позволять iPhone отправлять инструкции в Claude Code",
    "id": "Biarkan iPhone saya mengirim instruksi ke Claude Code",
    "ko": "iPhone에서 Claude Code로 지시를 보낼 수 있게 하기"
+  },
+  "List a few options and press Decide: JEV ranks them for how you feel.": {
+   "zh-Hans": "列出几个选项并按“决定”:JEV 会按你的感受排序。",
+   "hi": "कुछ विकल्प लिखें और \"तय करें\" दबाएँ: JEV आपकी भावना के हिसाब से उन्हें क्रम देता है।",
+   "es": "Escribe unas opciones y pulsa Decidir: JEV las ordena según cómo te sientes.",
+   "ar": "اذكر بعض الخيارات واضغط قرّر: يرتّبها JEV بحسب شعورك.",
+   "fr": "Listez quelques options et appuyez sur Décider : JEV les classe selon ce que vous ressentez.",
+   "bn": "কয়েকটি বিকল্প লিখে \"ঠিক করুন\" চাপুন: JEV আপনার অনুভূতি অনুযায়ী সাজাবে।",
+   "pt-BR": "Liste algumas opções e aperte Decidir: o JEV as ordena conforme como você se sente.",
+   "ru": "Перечислите варианты и нажмите «Выбрать»: JEV ранжирует их по вашему самочувствию.",
+   "id": "Daftar beberapa pilihan dan tekan Putuskan: JEV mengurutkannya sesuai perasaanmu.",
+   "ko": "선택지를 몇 개 적고 '결정'을 누르면 JEV가 기분에 맞게 순위를 매깁니다."
   },
   "Listening…": {
    "zh-Hans": "我在听…",
@@ -1778,6 +2198,18 @@
    "id": "Utama: {0}",
    "ko": "기본: {0}"
   },
+  "Meal": {
+   "zh-Hans": "餐食",
+   "hi": "भोजन",
+   "es": "Comida",
+   "ar": "وجبة",
+   "fr": "Repas",
+   "bn": "খাবার",
+   "pt-BR": "Refeição",
+   "ru": "Еда",
+   "id": "Makanan",
+   "ko": "식사"
+  },
   "Microphone unavailable": {
    "zh-Hans": "麦克风不可用",
    "hi": "माइक्रोफ़ोन अनुपलब्ध",
@@ -1801,6 +2233,18 @@
    "ru": "Микрофон:",
    "id": "Mikrofon:",
    "ko": "마이크:"
+  },
+  "Milk": {
+   "zh-Hans": "牛奶",
+   "hi": "दूध",
+   "es": "Leche",
+   "ar": "حليب",
+   "fr": "Lait",
+   "bn": "দুধ",
+   "pt-BR": "Leite",
+   "ru": "Молоко",
+   "id": "Susu",
+   "ko": "우유"
   },
   "Missing recipient.": {
    "zh-Hans": "收件人缺失。",
@@ -1934,6 +2378,18 @@
    "id": "Email baru",
    "ko": "새 이메일"
   },
+  "New game": {
+   "zh-Hans": "新游戏",
+   "hi": "नया खेल",
+   "es": "Nueva partida",
+   "ar": "لعبة جديدة",
+   "fr": "Nouvelle partie",
+   "bn": "নতুন খেলা",
+   "pt-BR": "Novo jogo",
+   "ru": "Новая игра",
+   "id": "Permainan baru",
+   "ko": "새 게임"
+  },
   "Next": {
    "zh-Hans": "下一步",
    "hi": "अगला",
@@ -1981,6 +2437,18 @@
    "ru": "Следующий трек",
    "id": "Lagu berikutnya",
    "ko": "다음 곡"
+  },
+  "No": {
+   "zh-Hans": "否",
+   "hi": "नहीं",
+   "es": "No",
+   "ar": "لا",
+   "fr": "Non",
+   "bn": "না",
+   "pt-BR": "Não",
+   "ru": "Нет",
+   "id": "Tidak",
+   "ko": "아니요"
   },
   "No activity last week": {
    "zh-Hans": "上周无活动",
@@ -2042,6 +2510,18 @@
    "id": "Tidak ada detail kesalahan yang tersedia.",
    "ko": "오류 세부 정보가 없습니다."
   },
+  "No key saved: nothing is sent to TypeSafe.": {
+   "zh-Hans": "未保存密钥:不会向 TypeSafe 发送任何内容。",
+   "hi": "कोई कुंजी नहीं सहेजी: TypeSafe को कुछ नहीं भेजा जाता।",
+   "es": "Sin clave guardada: no se envía nada a TypeSafe.",
+   "ar": "لا مفتاح محفوظ: لا يُرسل شيء إلى TypeSafe.",
+   "fr": "Aucune clé enregistrée : rien n'est envoyé à TypeSafe.",
+   "bn": "কোনো কী সংরক্ষিত নেই: TypeSafe-কে কিছু পাঠানো হয় না।",
+   "pt-BR": "Sem chave salva: nada é enviado à TypeSafe.",
+   "ru": "Ключа нет: в TypeSafe ничего не отправляется.",
+   "id": "Tidak ada kunci tersimpan: tidak ada yang dikirim ke TypeSafe.",
+   "ko": "저장된 키가 없어 TypeSafe로 아무것도 전송되지 않습니다."
+  },
   "No models yet — download one in {name} first.": {
    "zh-Hans": "暂无模型 — 请先在 {name} 中下载一个。",
    "hi": "अभी कोई मॉडल नहीं — पहले {name} में एक डाउनलोड करें।",
@@ -2077,6 +2557,18 @@
    "ru": "На этом устройстве нет доступной модели распознавания речи. Установите её в Системных настройках → Клавиатура → Диктовка.",
    "id": "Tidak ada model pengenalan ucapan yang tersedia di perangkat ini. Instal satu di Pengaturan Sistem → Keyboard → Dikte.",
    "ko": "이 기기에서 사용할 수 있는 음성 인식 모델이 없어요. 시스템 설정 → 키보드 → 받아쓰기에서 설치하세요."
+  },
+  "Noodles": {
+   "zh-Hans": "面条",
+   "hi": "नूडल्स",
+   "es": "Fideos",
+   "ar": "نودلز",
+   "fr": "Nouilles",
+   "bn": "নুডলস",
+   "pt-BR": "Macarrão",
+   "ru": "Лапша",
+   "id": "Mi",
+   "ko": "면 요리"
   },
   "Not active": {
    "zh-Hans": "未激活",
@@ -2173,6 +2665,18 @@
    "ru": "Не запрошено",
    "id": "Belum diminta",
    "ko": "요청하지 않음"
+  },
+  "Not sure": {
+   "zh-Hans": "不确定",
+   "hi": "पक्का नहीं",
+   "es": "No estoy seguro",
+   "ar": "غير متأكد",
+   "fr": "Pas sûr",
+   "bn": "নিশ্চিত নই",
+   "pt-BR": "Não tenho certeza",
+   "ru": "Не уверен",
+   "id": "Tidak yakin",
+   "ko": "잘 모르겠음"
   },
   "Notch shortcuts — active when the notch is in front": {
    "zh-Hans": "岛快捷键 — 岛获得焦点时有效",
@@ -2546,6 +3050,18 @@
    "id": "Membuka Apple Music…",
    "ko": "Apple Music을 여는 중…"
   },
+  "Options, one per line": {
+   "zh-Hans": "选项,每行一个",
+   "hi": "विकल्प, हर पंक्ति में एक",
+   "es": "Opciones, una por línea",
+   "ar": "الخيارات، واحد في كل سطر",
+   "fr": "Options, une par ligne",
+   "bn": "বিকল্প, প্রতি লাইনে একটি",
+   "pt-BR": "Opções, uma por linha",
+   "ru": "Варианты, по одному в строке",
+   "id": "Pilihan, satu per baris",
+   "ko": "선택지, 한 줄에 하나"
+  },
   "Other…": {
    "zh-Hans": "其他…",
    "hi": "अन्य…",
@@ -2629,6 +3145,18 @@
    "ru": "Закрепить / открепить нотч",
    "id": "Sematkan / lepas island",
    "ko": "노치 고정 / 고정 해제"
+  },
+  "Pizza": {
+   "zh-Hans": "披萨",
+   "hi": "पिज़्ज़ा",
+   "es": "Pizza",
+   "ar": "بيتزا",
+   "fr": "Pizza",
+   "bn": "পিৎজা",
+   "pt-BR": "Pizza",
+   "ru": "Пицца",
+   "id": "Pizza",
+   "ko": "피자"
   },
   "Plan usage": {
    "zh-Hans": "计划用量",
@@ -2750,6 +3278,30 @@
    "id": "Lagu sebelumnya",
    "ko": "이전 곡"
   },
+  "Probably not": {
+   "zh-Hans": "很可能不是",
+   "hi": "शायद नहीं",
+   "es": "Probablemente no",
+   "ar": "على الأرجح لا",
+   "fr": "Probablement pas",
+   "bn": "সম্ভবত না",
+   "pt-BR": "Provavelmente não",
+   "ru": "Скорее нет",
+   "id": "Mungkin tidak",
+   "ko": "아마도 아니요"
+  },
+  "Probably yes": {
+   "zh-Hans": "很可能是",
+   "hi": "शायद हाँ",
+   "es": "Probablemente sí",
+   "ar": "على الأرجح نعم",
+   "fr": "Probablement oui",
+   "bn": "সম্ভবত হ্যাঁ",
+   "pt-BR": "Provavelmente sim",
+   "ru": "Скорее да",
+   "id": "Mungkin ya",
+   "ko": "아마도 예"
+  },
   "Projects": {
    "zh-Hans": "项目",
    "hi": "प्रोजेक्ट",
@@ -2762,6 +3314,18 @@
    "id": "Proyek",
    "ko": "프로젝트"
   },
+  "Question {n} of {total}": {
+   "zh-Hans": "第 {n} 个问题,共 {total} 个",
+   "hi": "सवाल {n}/{total}",
+   "es": "Pregunta {n} de {total}",
+   "ar": "السؤال {n} من {total}",
+   "fr": "Question {n} sur {total}",
+   "bn": "প্রশ্ন {n}/{total}",
+   "pt-BR": "Pergunta {n} de {total}",
+   "ru": "Вопрос {n} из {total}",
+   "id": "Pertanyaan {n} dari {total}",
+   "ko": "질문 {n}/{total}"
+  },
   "Quit": {
    "zh-Hans": "退出",
    "hi": "छोड़ें",
@@ -2773,6 +3337,18 @@
    "ru": "Выход",
    "id": "Keluar",
    "ko": "종료"
+  },
+  "Read": {
+   "zh-Hans": "阅读",
+   "hi": "पढ़ें",
+   "es": "Leer",
+   "ar": "القراءة",
+   "fr": "Lire",
+   "bn": "পড়ুন",
+   "pt-BR": "Ler",
+   "ru": "Почитать",
+   "id": "Membaca",
+   "ko": "독서"
   },
   "Reads": {
    "zh-Hans": "读取",
@@ -2857,6 +3433,18 @@
    "ru": "Перезагрузить звуки",
    "id": "Muat ulang suara",
    "ko": "소리 다시 불러오기"
+  },
+  "Remove": {
+   "zh-Hans": "移除",
+   "hi": "हटाएँ",
+   "es": "Quitar",
+   "ar": "إزالة",
+   "fr": "Retirer",
+   "bn": "সরান",
+   "pt-BR": "Remover",
+   "ru": "Удалить",
+   "id": "Hapus",
+   "ko": "제거"
   },
   "Remove from favorites": {
    "zh-Hans": "取消收藏",
@@ -3026,6 +3614,18 @@
    "id": "Tinjau konten di bawah sebelum mengonfirmasi.",
    "ko": "확인하기 전에 아래 내용을 검토하세요."
   },
+  "Rice dish": {
+   "zh-Hans": "米饭类",
+   "hi": "चावल का व्यंजन",
+   "es": "Plato de arroz",
+   "ar": "طبق أرز",
+   "fr": "Plat de riz",
+   "bn": "ভাতের পদ",
+   "pt-BR": "Prato de arroz",
+   "ru": "Блюдо из риса",
+   "id": "Hidangan nasi",
+   "ko": "밥 요리"
+  },
   "Runs": {
    "zh-Hans": "执行",
    "hi": "चलाता है",
@@ -3049,6 +3649,30 @@
    "ru": "СЕССИИ",
    "id": "SESI",
    "ko": "세션"
+  },
+  "Salad": {
+   "zh-Hans": "沙拉",
+   "hi": "सलाद",
+   "es": "Ensalada",
+   "ar": "سلطة",
+   "fr": "Salade",
+   "bn": "সালাদ",
+   "pt-BR": "Salada",
+   "ru": "Салат",
+   "id": "Salad",
+   "ko": "샐러드"
+  },
+  "Sandwich": {
+   "zh-Hans": "三明治",
+   "hi": "सैंडविच",
+   "es": "Sándwich",
+   "ar": "ساندويتش",
+   "fr": "Sandwich",
+   "bn": "স্যান্ডউইচ",
+   "pt-BR": "Sanduíche",
+   "ru": "Сэндвич",
+   "id": "Sandwich",
+   "ko": "샌드위치"
   },
   "Save": {
    "zh-Hans": "保存",
@@ -3362,6 +3986,18 @@
    "id": "Acak aktif",
    "ko": "셔플 켬"
   },
+  "Something in nature": {
+   "zh-Hans": "自然中的事物",
+   "hi": "प्रकृति की कोई चीज़",
+   "es": "Algo de la naturaleza",
+   "ar": "شيء من الطبيعة",
+   "fr": "Quelque chose de la nature",
+   "bn": "প্রকৃতির কিছু",
+   "pt-BR": "Algo da natureza",
+   "ru": "Что-то из природы",
+   "id": "Sesuatu di alam",
+   "ko": "자연의 것"
+  },
   "Sorry, can you say that again?": {
    "zh-Hans": "抱歉，可以再说一遍吗？",
    "hi": "माफ़ करना, फिर से बोलोगे?",
@@ -3385,6 +4021,18 @@
    "ru": "Звук",
    "id": "Suara",
    "ko": "소리"
+  },
+  "Soup": {
+   "zh-Hans": "汤",
+   "hi": "सूप",
+   "es": "Sopa",
+   "ar": "شوربة",
+   "fr": "Soupe",
+   "bn": "স্যুপ",
+   "pt-BR": "Sopa",
+   "ru": "Суп",
+   "id": "Sup",
+   "ko": "국물 요리"
   },
   "Speech recognition:": {
    "zh-Hans": "语音识别：",
@@ -3482,6 +4130,18 @@
    "id": "Berhasil",
    "ko": "성공"
   },
+  "Sushi": {
+   "zh-Hans": "寿司",
+   "hi": "सुशी",
+   "es": "Sushi",
+   "ar": "سوشي",
+   "fr": "Sushi",
+   "bn": "সুশি",
+   "pt-BR": "Sushi",
+   "ru": "Суши",
+   "id": "Sushi",
+   "ko": "초밥"
+  },
   "System": {
    "zh-Hans": "系统",
    "hi": "सिस्टम",
@@ -3518,6 +4178,18 @@
    "id": "WAKTU PEMROGRAMAN",
    "ko": "코딩 시간"
   },
+  "Take a nap": {
+   "zh-Hans": "小睡一会儿",
+   "hi": "झपकी लें",
+   "es": "Echarse una siesta",
+   "ar": "أخذ قيلولة",
+   "fr": "Faire une sieste",
+   "bn": "একটু ঘুমান",
+   "pt-BR": "Tirar uma soneca",
+   "ru": "Вздремнуть",
+   "id": "Tidur sebentar",
+   "ko": "낮잠 자기"
+  },
   "Talk to Coucou": {
    "zh-Hans": "与 Coucou 对话",
    "hi": "Coucou से बात करें",
@@ -3542,6 +4214,30 @@
    "id": "Tugas",
    "ko": "작업"
   },
+  "Tea": {
+   "zh-Hans": "茶",
+   "hi": "चाय",
+   "es": "Té",
+   "ar": "شاي",
+   "fr": "Thé",
+   "bn": "চা",
+   "pt-BR": "Chá",
+   "ru": "Чай",
+   "id": "Teh",
+   "ko": "차"
+  },
+  "Test the key": {
+   "zh-Hans": "测试密钥",
+   "hi": "कुंजी जाँचें",
+   "es": "Probar la clave",
+   "ar": "اختبار المفتاح",
+   "fr": "Tester la clé",
+   "bn": "কী পরীক্ষা করুন",
+   "pt-BR": "Testar a chave",
+   "ru": "Проверить ключ",
+   "id": "Uji kunci",
+   "ko": "키 테스트"
+  },
   "Tests": {
    "zh-Hans": "测试",
    "hi": "परीक्षण करता है",
@@ -3553,6 +4249,18 @@
    "ru": "Тестирует",
    "id": "Menguji",
    "ko": "테스트"
+  },
+  "The key works.": {
+   "zh-Hans": "密钥有效。",
+   "hi": "कुंजी काम करती है।",
+   "es": "La clave funciona.",
+   "ar": "المفتاح يعمل.",
+   "fr": "La clé fonctionne.",
+   "bn": "কী কাজ করছে।",
+   "pt-BR": "A chave funciona.",
+   "ru": "Ключ работает.",
+   "id": "Kunci berfungsi.",
+   "ko": "키가 정상 작동합니다."
   },
   "To": {
    "zh-Hans": "收件人",
@@ -3637,6 +4345,42 @@
    "ru": "Попробовать демо",
    "id": "Coba mode demo",
    "ko": "데모 모드 써 보기"
+  },
+  "Twenty questions": {
+   "zh-Hans": "二十个问题",
+   "hi": "बीस सवाल",
+   "es": "Veinte preguntas",
+   "ar": "عشرون سؤالًا",
+   "fr": "Vingt questions",
+   "bn": "বিশ প্রশ্ন",
+   "pt-BR": "Vinte perguntas",
+   "ru": "Двадцать вопросов",
+   "id": "Dua puluh pertanyaan",
+   "ko": "스무고개"
+  },
+  "Twenty questions tab": {
+   "zh-Hans": "二十个问题标签页",
+   "hi": "बीस सवाल टैब",
+   "es": "Pestaña de veinte preguntas",
+   "ar": "تبويب العشرين سؤالًا",
+   "fr": "Onglet Vingt questions",
+   "bn": "বিশ প্রশ্নের ট্যাব",
+   "pt-BR": "Aba de vinte perguntas",
+   "ru": "Вкладка «Двадцать вопросов»",
+   "id": "Tab dua puluh pertanyaan",
+   "ko": "스무고개 탭"
+  },
+  "TypeSafe API key": {
+   "zh-Hans": "TypeSafe API 密钥",
+   "hi": "TypeSafe API कुंजी",
+   "es": "Clave de API de TypeSafe",
+   "ar": "مفتاح TypeSafe API",
+   "fr": "Clé d'API TypeSafe",
+   "bn": "TypeSafe API কী",
+   "pt-BR": "Chave de API da TypeSafe",
+   "ru": "Ключ API TypeSafe",
+   "id": "Kunci API TypeSafe",
+   "ko": "TypeSafe API 키"
   },
   "Uninstall": {
    "zh-Hans": "卸载",
@@ -3806,6 +4550,18 @@
    "id": "Lemari",
    "ko": "옷장"
   },
+  "Watch a movie": {
+   "zh-Hans": "看电影",
+   "hi": "फ़िल्म देखें",
+   "es": "Ver una película",
+   "ar": "مشاهدة فيلم",
+   "fr": "Regarder un film",
+   "bn": "সিনেমা দেখুন",
+   "pt-BR": "Assistir a um filme",
+   "ru": "Посмотреть фильм",
+   "id": "Menonton film",
+   "ko": "영화 보기"
+  },
   "Watching {count} of {total}": {
    "zh-Hans": "监控 {count} / {total}",
    "hi": "{count} में से {total} देख रहे हैं",
@@ -3817,6 +4573,18 @@
    "ru": "Наблюдение: {count} из {total}",
    "id": "Melihat {count} dari {total}",
    "ko": "{total}개 중 {count}개 지켜보는 중"
+  },
+  "Water": {
+   "zh-Hans": "水",
+   "hi": "पानी",
+   "es": "Agua",
+   "ar": "ماء",
+   "fr": "Eau",
+   "bn": "পানি",
+   "pt-BR": "Água",
+   "ru": "Вода",
+   "id": "Air",
+   "ko": "물"
   },
   "Weather by voice": {
    "zh-Hans": "语音天气",
@@ -3865,6 +4633,18 @@
    "ru": "Что вы хотите с ним сделать?",
    "id": "Apa yang ingin Anda lakukan dengannya?",
    "ko": "이걸로 무엇을 할까요?"
+  },
+  "What is it?": {
+   "zh-Hans": "它是什么?",
+   "hi": "यह क्या है?",
+   "es": "¿Qué es?",
+   "ar": "ما هو؟",
+   "fr": "Qu'est-ce que c'est ?",
+   "bn": "এটা কী?",
+   "pt-BR": "O que é?",
+   "ru": "Что это?",
+   "id": "Apa itu?",
+   "ko": "정답은?"
   },
   "When enabled, Coucou listens for the wake word « OK Coucou ». Speech recognition runs entirely on-device — no audio or transcript leaves your Mac.": {
    "zh-Hans": "启用后，Coucou 会监听唤醒词« OK Coucou »。语音识别完全在设备上运行—任何音频或文字记录都不会离开您的 Mac。",
@@ -3926,6 +4706,18 @@
    "id": "Saat mendengarkan, macOS menampilkan titik mikrofon oranye di kanan atas bilah menu. Ini adalah perilaku sistem yang normal.",
    "ko": "듣는 동안 macOS가 메뉴 막대 오른쪽 위에 주황색 마이크 점을 표시합니다. 정상적인 시스템 동작이에요."
   },
+  "Work out": {
+   "zh-Hans": "锻炼",
+   "hi": "कसरत करें",
+   "es": "Hacer ejercicio",
+   "ar": "ممارسة الرياضة",
+   "fr": "Faire du sport",
+   "bn": "ব্যায়াম করুন",
+   "pt-BR": "Treinar",
+   "ru": "Потренироваться",
+   "id": "Berolahraga",
+   "ko": "운동하기"
+  },
   "Workflow stopped.": {
    "zh-Hans": "工作流已停止。",
    "hi": "वर्कफ़्लो रुक गया।",
@@ -3973,6 +4765,42 @@
    "ru": "Запишет:\n• ~/.claude/coucou/nb-hook\n• ~/.claude/settings.json (резервная копия создаётся сначала)",
    "id": "Akan menulis:\n• ~/.claude/coucou/nb-hook\n• ~/.claude/settings.json (backup dibuat terlebih dahulu)",
    "ko": "기록 대상:\n• ~/.claude/coucou/nb-hook\n• ~/.claude/settings.json (먼저 백업 생성)"
+  },
+  "Wrong guess": {
+   "zh-Hans": "猜错了",
+   "hi": "गलत अनुमान",
+   "es": "Intento fallido",
+   "ar": "تخمين خاطئ",
+   "fr": "Mauvaise réponse",
+   "bn": "ভুল অনুমান",
+   "pt-BR": "Palpite errado",
+   "ru": "Неверная догадка",
+   "id": "Tebakan salah",
+   "ko": "틀린 추측"
+  },
+  "Yes": {
+   "zh-Hans": "是",
+   "hi": "हाँ",
+   "es": "Sí",
+   "ar": "نعم",
+   "fr": "Oui",
+   "bn": "হ্যাঁ",
+   "pt-BR": "Sim",
+   "ru": "Да",
+   "id": "Ya",
+   "ko": "예"
+  },
+  "You got it in {n} questions!": {
+   "zh-Hans": "你用 {n} 个问题猜中了!",
+   "hi": "आपने {n} सवालों में पा लिया!",
+   "es": "¡Lo lograste en {n} preguntas!",
+   "ar": "أصبت في {n} من الأسئلة!",
+   "fr": "Trouvé en {n} questions !",
+   "bn": "{n}টি প্রশ্নে পেরে গেছেন!",
+   "pt-BR": "Você acertou em {n} perguntas!",
+   "ru": "Вы угадали за {n} вопросов!",
+   "id": "Kamu berhasil dalam {n} pertanyaan!",
+   "ko": "{n}번의 질문으로 맞혔어요!"
   },
   "Your answer…": {
    "zh-Hans": "您的答案…",
